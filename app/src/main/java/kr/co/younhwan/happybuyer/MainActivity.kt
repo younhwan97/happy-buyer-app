@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -54,6 +55,9 @@ class MainActivity : AppCompatActivity() {
     // 어플리케이션이 실행되고 단 1번 호출!!
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        SystemClock.sleep(1000)
+        // Splash 화면 이후로 보여질 화면을 설정
+        setTheme(R.style.Theme_HappyBuyer)
         setContentView(R.layout.activity_main)
 
         // 권한 요청
