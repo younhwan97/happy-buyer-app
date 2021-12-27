@@ -55,6 +55,7 @@ class MainActivity : AppCompatActivity() {
     // 어플리케이션이 실행되고 단 1번 호출!!
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Splash Screen Delay
         SystemClock.sleep(1000)
         // Splash 화면 이후로 보여질 화면을 설정
         setTheme(R.style.Theme_HappyBuyer)
@@ -73,7 +74,7 @@ class MainActivity : AppCompatActivity() {
         account = pref?.getString("account", "")
 
         // 액션바 -> 툴바
-        mainToolbar.title = "HappyBuyer/코코마트"
+        title = "HappyBuyer/코코마트"
         mainToolbar.setTitleTextAppearance(this, R.style.ToolbarTitleTheme)
         setSupportActionBar(mainToolbar)
 
@@ -112,7 +113,7 @@ class MainActivity : AppCompatActivity() {
     // ---- 툴바 설정
     // 툴바의 메뉴 아이템을 생성하고, 이벤트 리스너를 장착한다.
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        // 메뉴 view를 생성
+        // 메뉴 객체 생성
         menuInflater.inflate(R.menu.main_menu, menu)
 
         // 메뉴의 search view 에 이벤트 리스너 설정을 위해 객체를 얻어온다.
@@ -252,19 +253,19 @@ class MainActivity : AppCompatActivity() {
 
         when (requestFragment) {
             "home" -> {
-                mainToolbar.title = "HappyBuyer/코코마트"
+                title = "HappyBuyer/코코마트"
                 tran.replace(R.id.mainContainer, homeFragment)
             }
             "search" -> {
-                mainToolbar.title = "검색"
+                title = "검색"
                 tran.replace(R.id.mainContainer, searchFragment)
             }
             "account" -> {
-                mainToolbar.title = "내 정보"
+                title = "내 정보"
                 tran.replace(R.id.mainContainer, accountFragment)
             }
             "login" -> {
-                mainToolbar.title = "로그인/회원가입"
+                title = "로그인/회원가입"
                 tran.replace(R.id.mainContainer, accountLoginFragment)
             }
         }
