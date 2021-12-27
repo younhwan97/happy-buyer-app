@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         account = pref?.getString("account", "")
 
         // 액션바 -> 툴바
-        mainToolbar.title = "HappyBuyer/나비마트"
+        mainToolbar.title = "HappyBuyer/코코마트"
         mainToolbar.setTitleTextAppearance(this, R.style.ToolbarTitleTheme)
         setSupportActionBar(mainToolbar)
 
@@ -248,7 +248,7 @@ class MainActivity : AppCompatActivity() {
 
         when (requestFragment) {
             "home" -> {
-                mainToolbar.title = "HappyBuyer/나비마트"
+                mainToolbar.title = "HappyBuyer/코코마트"
                 tran.replace(R.id.mainContainer, homeFragment)
             }
             "search" -> {
