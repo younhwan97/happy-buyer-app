@@ -8,9 +8,9 @@
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="always|collapseActionView" />
     <item
-        android:id="@+id/alarm_item"
-        android:icon="@drawable/ic_alarm"
-        android:title="alarm"
-        app:showAsAction="ifRoom" />
+        android:id="@+id/shopping_basket_item"
+        android:icon="@drawable/ic_shopping"
+        android:title="basket"
+        app:showAsAction="always" />
 
 </menu>

@@ -18,11 +18,7 @@ import kr.co.younhwan.happybuyer.databinding.FragmentAccountLoginBinding
 class AccountFragment : Fragment() {
     lateinit var accountFragmentBinding : FragmentAccountBinding
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         accountFragmentBinding = FragmentAccountBinding.inflate(inflater)
         return accountFragmentBinding.root
     }
@@ -30,17 +26,17 @@ class AccountFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val Activity = activity as MainActivity
-        val pref = Activity.getSharedPreferences("account", AppCompatActivity.MODE_PRIVATE)
+        val act = activity as MainActivity
+        val pref = act.getSharedPreferences("account", AppCompatActivity.MODE_PRIVATE)
         val account = pref.getString("account", "")
 
         if (account.isNullOrEmpty())
-            Activity.setFragment("home")
+            act.setFragment("home")
         else
             accountFragmentBinding.accountInfo.text = account
 
         accountFragmentBinding.logoutBtn.setOnClickListener {
-            Activity.logout()
+            act.logout()
         }
     }
 }

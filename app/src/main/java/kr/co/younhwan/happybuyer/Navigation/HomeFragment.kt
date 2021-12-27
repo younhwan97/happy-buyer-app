@@ -13,7 +13,6 @@ import kr.co.younhwan.happybuyer.CategoryActivity
 import kr.co.younhwan.happybuyer.MainActivity
 import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.databinding.FragmentHomeBinding
-import kr.co.younhwan.happybuyer.databinding.ItemBinding
 import kr.co.younhwan.happybuyer.databinding.RowBinding
 
 class HomeFragment : Fragment() {
@@ -21,14 +20,14 @@ class HomeFragment : Fragment() {
     lateinit var homeFragmentBinding : FragmentHomeBinding
 
     // setting data to use
-    var imgRes = intArrayOf(
+    val imgRes = intArrayOf(
         R.drawable.category_fruit, R.drawable.category_meat, R.drawable.category_vegetable, R.drawable.category_milk, R.drawable.category_kimchi,
         R.drawable.category_fish, R.drawable.category_water, R.drawable.category_coffee,   R.drawable.category_chips, R.drawable.category_frozen,
         R.drawable.category_ramen, R.drawable.category_seasoning, R.drawable.category_rice, R.drawable.category_cleaning, R.drawable.category_tissue,
         R.drawable.category_kitchen, R.drawable.category_pet
     )
 
-    var label = arrayOf(
+    val label = arrayOf(
         "과일", "정육", "채소", "우유/유제품", "김치/반찬",
         "수산/건해산", "생수/음료", "커피/차", "과자/빙과", "냉장/냉동식품",
         "라면/즉석식품", "장/양념", "쌀/잡곡", "세탁/청소", "제지/위생",
@@ -37,21 +36,16 @@ class HomeFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         homeFragmentBinding = FragmentHomeBinding.inflate(inflater)
+
+        homeFragmentBinding.recycler.adapter = RecyclerAdapter()
+        homeFragmentBinding.recycler.layoutManager = GridLayoutManager(requireContext(), 5)
+        homeFragmentBinding.recycler.addItemDecoration(RecyclerDecoration(20))
+
         return homeFragmentBinding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val adapter1 = RecyclerAdapter()
-        homeFragmentBinding.recycler.adapter = adapter1
-        homeFragmentBinding.recycler.layoutManager = GridLayoutManager(activity as MainActivity, 5)
-        homeFragmentBinding.recycler.addItemDecoration(RecyclerDecoration(20))
-    }
-
-    // RecyclerView의 어댑터 클래스
+    // RecyclerView Adapter Class
     inner class RecyclerAdapter:RecyclerView.Adapter<RecyclerAdapter.ViewHolderClass>() {
-
         // 항목 구성을 위해 사용할 ViewHolder 객체가 필요할 때 호출되는 메서드
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderClass {
             // 항목으로 사용할 view 객체를 생성
@@ -80,11 +74,11 @@ class HomeFragment : Fragment() {
             val rowTextView = rowBinding.rowTextView
 
             override fun onClick(p0: View?) {
-                val Activity = activity as MainActivity
-                var category_intent = Intent(Activity, CategoryActivity::class.java)
+                val act= activity as MainActivity
+                val category_intent = Intent(act, CategoryActivity::class.java)
                 category_intent.putExtra("position",adapterPosition)
                 category_intent.putExtra("label",label)
-                Activity.startActivity(category_intent)
+                act.startActivity(category_intent)
             }
         }
     }

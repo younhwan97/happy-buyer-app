@@ -5,6 +5,7 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -13,7 +14,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kr.co.younhwan.happybuyer.databinding.ActivityCategoryBinding
-import kr.co.younhwan.happybuyer.databinding.ActivityMainBinding
 
 class CategoryActivity : FragmentActivity() {
     // View Binding

@@ -2,7 +2,6 @@ package kr.co.younhwan.happybuyer
 
 import android.app.AlertDialog
 import android.content.DialogInterface
-import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -58,12 +57,20 @@ class MainActivity : AppCompatActivity() {
     // 어플리케이션이 실행되고 단 1번 호출!!
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // View Binding 객체 생성
         mainActivityBinding = ActivityMainBinding.inflate(layoutInflater)
-        // Splash Screen Delay
+
+        // Splash Delay
         SystemClock.sleep(1000)
+
         // Splash 화면 이후로 보여질 화면을 설정
         setTheme(R.style.Theme_HappyBuyer)
         setContentView(mainActivityBinding.root)
+
+        // 액션바 -> 툴바
+        mainActivityBinding.mainToolbar.title = "HappyBuyer/코코마트"
+        mainActivityBinding.mainToolbar.setTitleTextAppearance(this, R.style.ToolbarTitleTheme)
+        setSupportActionBar(mainActivityBinding.mainToolbar)
 
         // 권한 요청
         requestPermissions(permissionList, 0)
@@ -76,11 +83,6 @@ class MainActivity : AppCompatActivity() {
         // account 값에 따라 보여줄 프래그먼트를 추후에 분기할 것 이다.
         pref = getSharedPreferences("account", MODE_PRIVATE)
         account = pref?.getString("account", "")
-
-        // 액션바 -> 툴바
-        title = "HappyBuyer/코코마트"
-        mainActivityBinding.mainToolbar.setTitleTextAppearance(this, R.style.ToolbarTitleTheme)
-        setSupportActionBar(mainActivityBinding.mainToolbar)
 
         // 바텀 내비게이션의 이벤트 리스너를 설정
         mainActivityBinding.bottomNavigation.setOnItemSelectedListener {
@@ -99,9 +101,9 @@ class MainActivity : AppCompatActivity() {
                     account = pref?.getString("account", "")
 
                     if (account.isNullOrEmpty())
-                        setFragment("login") // 로그인 x -> 로그인/회원가입 페이지를 노출한다.
-                     else
-                        setFragment("account") // 로그인 o -> 각 사용자의 계정 페이지를 노출한다.
+                        setFragment("login")   // 로그인 x -> 로그인/회원가입 페이지를 노출
+                    else
+                        setFragment("account") // 로그인 o -> 각 사용자의 계정 페이지를 노출
 
                     true
                 }
@@ -109,7 +111,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // 초기 화면의 프래그먼트를 설정한다.
+        // 초기 화면의 프래그먼트를 설정
         setFragment("home")
     }
 
@@ -164,7 +166,7 @@ class MainActivity : AppCompatActivity() {
             R.id.search_item -> {
                 // CollapseActionView 설정에 따라 뷰가 확장되고 TextEdit view가 나타날 것 이다.
             }
-            R.id.alarm_item -> {
+            R.id.shopping_basket_item -> {
 
             }
         }

@@ -30,11 +30,7 @@ class AccountLoginFragment : Fragment() {
     var notEnabledColor: Int? = null
     var enabledColor: Int? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         accountLoginFragmentBinding = FragmentAccountLoginBinding.inflate(inflater)
         return accountLoginFragmentBinding.root
     }
@@ -42,12 +38,12 @@ class AccountLoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val Activity = activity as MainActivity
+        val act = activity as MainActivity
 
         // 인증 문자 보내기 버튼에 관한 설정
         accountLoginFragmentBinding.certificationLayout.visibility = View.GONE
-        notEnabledColor = ContextCompat.getColor(Activity, R.color.colorDivision)
-        enabledColor = ContextCompat.getColor(Activity, R.color.colorTheme)
+        notEnabledColor = ContextCompat.getColor(act, R.color.colorDivision)
+        enabledColor = ContextCompat.getColor(act, R.color.colorTheme)
 
         accountLoginFragmentBinding.submitPhoneNumberBtn.setBackgroundColor(notEnabledColor!!)
         accountLoginFragmentBinding.confirmCertificationBtn.setBackgroundColor(notEnabledColor!!)
@@ -60,13 +56,13 @@ class AccountLoginFragment : Fragment() {
 
         accountLoginFragmentBinding.submitPhoneNumberBtn.setOnClickListener {
             // 파이어베이스 인증 함수 호출
-            Activity.sendVerificationCode(accountLoginFragmentBinding)
+            act.sendVerificationCode(accountLoginFragmentBinding)
             accountLoginFragmentBinding.certificationLayout.visibility = View.VISIBLE
             accountLoginFragmentBinding.certificationInput.editText?.requestFocus()
         }
         accountLoginFragmentBinding.confirmCertificationBtn.setOnClickListener {
             // otp 확인 함수 호출
-            Activity.verifySignInputCode(accountLoginFragmentBinding)
+            act.verifySignInputCode(accountLoginFragmentBinding)
         }
     }
 
