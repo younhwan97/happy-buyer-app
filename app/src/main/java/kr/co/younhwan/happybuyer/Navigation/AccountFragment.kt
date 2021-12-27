@@ -10,17 +10,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.fragment_account.*
 import kr.co.younhwan.happybuyer.MainActivity
 import kr.co.younhwan.happybuyer.R
+import kr.co.younhwan.happybuyer.databinding.FragmentAccountBinding
+import kr.co.younhwan.happybuyer.databinding.FragmentAccountLoginBinding
 
 class AccountFragment : Fragment() {
+    lateinit var accountFragmentBinding : FragmentAccountBinding
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_account, null)
+        accountFragmentBinding = FragmentAccountBinding.inflate(inflater)
+        return accountFragmentBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -33,9 +37,9 @@ class AccountFragment : Fragment() {
         if (account.isNullOrEmpty())
             Activity.setFragment("home")
         else
-            accountInfo.text = account
+            accountFragmentBinding.accountInfo.text = account
 
-        logoutBtn.setOnClickListener {
+        accountFragmentBinding.logoutBtn.setOnClickListener {
             Activity.logout()
         }
     }

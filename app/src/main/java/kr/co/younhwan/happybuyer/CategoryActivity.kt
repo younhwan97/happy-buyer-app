@@ -12,24 +12,28 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.android.synthetic.main.activity_category.*
-import kotlinx.android.synthetic.main.activity_category.view.*
+import kr.co.younhwan.happybuyer.databinding.ActivityCategoryBinding
+import kr.co.younhwan.happybuyer.databinding.ActivityMainBinding
 
 class CategoryActivity : FragmentActivity() {
+    // View Binding
+    lateinit var categoryActivityBinding: ActivityCategoryBinding
+
     // category view pager2에 세팅하기 위한 Fragment들을 가지고 있는 ArrayList
     val fragmentList = ArrayList<Fragment>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_category)
+        categoryActivityBinding = ActivityCategoryBinding.inflate(layoutInflater)
+        setContentView(categoryActivityBinding.root)
 
         // 액션바 -> 툴바
-        setActionBar(categoryToolbar)
+        setActionBar(categoryActivityBinding.categoryToolbar)
 
         // 툴바 세팅
         actionBar?.setHomeButtonEnabled(true)
         actionBar?.setDisplayHomeAsUpEnabled(true)
-        categoryToolbar.setTitleTextAppearance(this, R.style.ToolbarTitleTheme)
+        categoryActivityBinding.categoryToolbar.setTitleTextAppearance(this, R.style.ToolbarTitleTheme)
 
         // MainActivity로 부터 전달 받은 데이터
         val label = intent.getStringArrayExtra("label")
@@ -50,71 +54,71 @@ class CategoryActivity : FragmentActivity() {
             }
         }
 
-        categoryViewPager2.adapter = adapter1
+        categoryActivityBinding.categoryViewPager2.adapter = adapter1
 
 
         // tab과 view pager2를 연결
         var selecetdTab: TabLayout.Tab? = null
-        TabLayoutMediator(tabs, categoryViewPager2) { tab: TabLayout.Tab, i: Int ->
+        TabLayoutMediator(categoryActivityBinding.tabs, categoryActivityBinding.categoryViewPager2) { tab: TabLayout.Tab, i: Int ->
             tab.text = label[i]
             if (i == position)
                 selecetdTab = tab
         }.attach()
 
         // toolbar에 선택된 탭을 표기하도록 설정
-        tabs.selectTab(selecetdTab)
+        categoryActivityBinding.tabs.selectTab(selecetdTab)
         actionBar?.title = label[position]
         val listener1 = object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                actionBar?.title = label[tabs.getSelectedTabPosition()]
+                actionBar?.title = label[categoryActivityBinding.tabs.getSelectedTabPosition()]
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {}
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
         }
-        tabs.addOnTabSelectedListener(listener1)
+        categoryActivityBinding.tabs.addOnTabSelectedListener(listener1)
 
-        chip4.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorTheme))
-        select_list_order_chip_group.setOnCheckedChangeListener { group, checkedId ->
-            when (checkedId) {
-                R.id.chip4->{
-                    group.chip4.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorTheme))
-                    group.chip5.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-                    group.chip6.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-                    group.chip7.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-                    group.chip8.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-                }
-                R.id.chip5->{
-                    group.chip4.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-                    group.chip5.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorTheme))
-                    group.chip6.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-                    group.chip7.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-                    group.chip8.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-                }
-                R.id.chip6->{
-                    group.chip4.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-                    group.chip5.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-                    group.chip6.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorTheme))
-                    group.chip7.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-                    group.chip8.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-                }
-                R.id.chip7->{
-                    group.chip4.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-                    group.chip5.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-                    group.chip6.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-                    group.chip7.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorTheme))
-                    group.chip8.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-                }
-                R.id.chip8->{
-                    group.chip4.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-                    group.chip5.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-                    group.chip6.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-                    group.chip7.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-                    group.chip8.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorTheme))
-                }
-            }
-        }
+        categoryActivityBinding.chip4.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorTheme))
+//        categoryActivityBinding.selectListOrderChipGroup.setOnCheckedChangeListener { group, checkedId ->
+//            when (checkedId) {
+//                R.id.chip4->{
+//                    group.chip4.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorTheme))
+//                    group.chip5.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
+//                    group.chip6.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
+//                    group.chip7.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
+//                    group.chip8.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
+//                }
+//                R.id.chip5->{
+//                    group.chip4.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
+//                    group.chip5.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorTheme))
+//                    group.chip6.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
+//                    group.chip7.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
+//                    group.chip8.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
+//                }
+//                R.id.chip6->{
+//                    group.chip4.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
+//                    group.chip5.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
+//                    group.chip6.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorTheme))
+//                    group.chip7.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
+//                    group.chip8.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
+//                }
+//                R.id.chip7->{
+//                    group.chip4.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
+//                    group.chip5.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
+//                    group.chip6.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
+//                    group.chip7.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorTheme))
+//                    group.chip8.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
+//                }
+//                R.id.chip8->{
+//                    group.chip4.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
+//                    group.chip5.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
+//                    group.chip6.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
+//                    group.chip7.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
+//                    group.chip8.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorTheme))
+//                }
+//            }
+//        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

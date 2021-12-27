@@ -17,15 +17,18 @@ import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_account_login.*
 import kr.co.younhwan.happybuyer.Navigation.AccountFragment
 import kr.co.younhwan.happybuyer.Navigation.HomeFragment
 import kr.co.younhwan.happybuyer.Navigation.AccountLoginFragment
 import kr.co.younhwan.happybuyer.Navigation.SearchFragment
+import kr.co.younhwan.happybuyer.databinding.ActivityMainBinding
+import kr.co.younhwan.happybuyer.databinding.FragmentAccountLoginBinding
 import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
+    // View Binding
+    lateinit var mainActivityBinding : ActivityMainBinding
+
     // 권한 목록
     private val permissionList = arrayOf(
         android.Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -55,11 +58,12 @@ class MainActivity : AppCompatActivity() {
     // 어플리케이션이 실행되고 단 1번 호출!!
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mainActivityBinding = ActivityMainBinding.inflate(layoutInflater)
         // Splash Screen Delay
         SystemClock.sleep(1000)
         // Splash 화면 이후로 보여질 화면을 설정
         setTheme(R.style.Theme_HappyBuyer)
-        setContentView(R.layout.activity_main)
+        setContentView(mainActivityBinding.root)
 
         // 권한 요청
         requestPermissions(permissionList, 0)
@@ -75,11 +79,11 @@ class MainActivity : AppCompatActivity() {
 
         // 액션바 -> 툴바
         title = "HappyBuyer/코코마트"
-        mainToolbar.setTitleTextAppearance(this, R.style.ToolbarTitleTheme)
-        setSupportActionBar(mainToolbar)
+        mainActivityBinding.mainToolbar.setTitleTextAppearance(this, R.style.ToolbarTitleTheme)
+        setSupportActionBar(mainActivityBinding.mainToolbar)
 
         // 바텀 내비게이션의 이벤트 리스너를 설정
-        bottomNavigation.setOnItemSelectedListener {
+        mainActivityBinding.bottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.action_home -> {
                     setFragment("home")
@@ -126,13 +130,13 @@ class MainActivity : AppCompatActivity() {
         // searchView 가 펼쳐졌을 때 발생하는 이벤트를 처리하는 리스너
         val expandListener = object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
-                bottomNavigation.visibility = View.VISIBLE
-                bottomNavigation.findViewById<View>(R.id.action_home).performClick()
+                mainActivityBinding.bottomNavigation.visibility = View.VISIBLE
+                mainActivityBinding.bottomNavigation.findViewById<View>(R.id.action_home).performClick()
                 return true
             }
 
             override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
-                bottomNavigation.visibility = View.GONE
+                mainActivityBinding.bottomNavigation.visibility = View.GONE
                 setFragment("search")
                 return true
             }
@@ -173,11 +177,11 @@ class MainActivity : AppCompatActivity() {
     // -----------------------------------------------------
     // ---- 로그인, 로그아웃 및 회원가입
     // 휴대폰 번호를 입력하고 '인증문자 받기' 버튼을 클릭했을 때
-    fun sendVerificationCode() {
-        var phoneNumber = phoneNumberInput.editText?.text.toString()
+    fun sendVerificationCode(accountLoginFragmentBinding: FragmentAccountLoginBinding) {
+        var phoneNumber = accountLoginFragmentBinding.phoneNumberInput.editText?.text.toString()
         if (phoneNumber.isEmpty()) {
-            phoneNumberInput.editText?.setError("Phone number is required")
-            phoneNumberInput.editText?.requestFocus()
+            accountLoginFragmentBinding.phoneNumberInput.editText?.setError("Phone number is required")
+            accountLoginFragmentBinding.phoneNumberInput.editText?.requestFocus()
             return;
         } else {
             phoneNumber = phoneNumber.substring(1)
@@ -202,18 +206,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     // 인증 번호를 입력하고, 인증번호 확인을 클릭했을 때
-    fun verifySignInputCode() {
-        val userCode = certificationInput.editText?.text.toString() // 사용자가 입력한 코드
+    fun verifySignInputCode(accountLoginFragmentBinding: FragmentAccountLoginBinding) {
+        val userCode = accountLoginFragmentBinding.certificationInput.editText?.text.toString() // 사용자가 입력한 코드
         val credential = PhoneAuthProvider.getCredential(codeSent!!, userCode)
-        signInWithPhoneAuthCredential(credential)
+        signInWithPhoneAuthCredential(accountLoginFragmentBinding, credential)
     }
 
-    private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
+    private fun signInWithPhoneAuthCredential(accountLoginFragmentBinding: FragmentAccountLoginBinding, credential: PhoneAuthCredential) {
         mAuth?.signInWithCredential(credential)
             ?.addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // here you can open new activty
-                    val phoneNumber = phoneNumberInput.editText?.text.toString()
+                    val phoneNumber = accountLoginFragmentBinding.phoneNumberInput.editText?.text.toString()
                     val pref = getSharedPreferences("account", MODE_PRIVATE)
                     val editor = pref.edit()
                     editor.putString("account", phoneNumber)
@@ -240,7 +244,7 @@ class MainActivity : AppCompatActivity() {
                 val editor = pref.edit()
                 editor.remove("account")
                     .commit()
-                bottomNavigation.findViewById<View>(R.id.action_home).performClick()
+                mainActivityBinding.bottomNavigation.findViewById<View>(R.id.action_home).performClick()
                 Toast.makeText(this, "로그아웃에 성공하셨습니다 :)", Toast.LENGTH_SHORT).show()
             }.show()
     }

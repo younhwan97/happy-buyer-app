@@ -9,13 +9,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.row.view.*
 import kr.co.younhwan.happybuyer.CategoryActivity
 import kr.co.younhwan.happybuyer.MainActivity
 import kr.co.younhwan.happybuyer.R
+import kr.co.younhwan.happybuyer.databinding.FragmentHomeBinding
+import kr.co.younhwan.happybuyer.databinding.ItemBinding
+import kr.co.younhwan.happybuyer.databinding.RowBinding
 
 class HomeFragment : Fragment() {
+    // View Binding
+    lateinit var homeFragmentBinding : FragmentHomeBinding
+
     // setting data to use
     var imgRes = intArrayOf(
         R.drawable.category_fruit, R.drawable.category_meat, R.drawable.category_vegetable, R.drawable.category_milk, R.drawable.category_kimchi,
@@ -32,17 +36,17 @@ class HomeFragment : Fragment() {
     )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_home, null)
-        return view
+        homeFragmentBinding = FragmentHomeBinding.inflate(inflater)
+        return homeFragmentBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val adapter1 = RecyclerAdapter()
-        recycler.adapter = adapter1
-        recycler.layoutManager = GridLayoutManager(activity as MainActivity, 5)
-        recycler.addItemDecoration(RecyclerDecoration(20))
+        homeFragmentBinding.recycler.adapter = adapter1
+        homeFragmentBinding.recycler.layoutManager = GridLayoutManager(activity as MainActivity, 5)
+        homeFragmentBinding.recycler.addItemDecoration(RecyclerDecoration(20))
     }
 
     // RecyclerView의 어댑터 클래스
@@ -51,9 +55,10 @@ class HomeFragment : Fragment() {
         // 항목 구성을 위해 사용할 ViewHolder 객체가 필요할 때 호출되는 메서드
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderClass {
             // 항목으로 사용할 view 객체를 생성
-            val itemView = layoutInflater.inflate(R.layout.row,null)
-            val holder = ViewHolderClass(itemView)
-            itemView.setOnClickListener(holder)
+            val rowBinding = RowBinding.inflate(layoutInflater)
+            val holder = ViewHolderClass(rowBinding)
+            rowBinding.root.setOnClickListener(holder)
+
             return holder
         }
 
@@ -68,10 +73,11 @@ class HomeFragment : Fragment() {
         }
 
         // ViewHolder 클래스
-        inner class ViewHolderClass(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+        inner class ViewHolderClass(rowBinding: RowBinding)
+            : RecyclerView.ViewHolder(rowBinding.root), View.OnClickListener {
             // 항목 View 내부의 View 객체의 주소값을 담는다.
-            val rowImageView= itemView.rowImageView
-            val rowTextView = itemView.rowTextView
+            val rowImageView= rowBinding.rowImageView
+            val rowTextView = rowBinding.rowTextView
 
             override fun onClick(p0: View?) {
                 val Activity = activity as MainActivity

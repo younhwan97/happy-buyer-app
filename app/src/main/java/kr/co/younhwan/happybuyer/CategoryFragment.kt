@@ -7,10 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.fragment_category.*
-import kotlinx.android.synthetic.main.item.view.*
+import kr.co.younhwan.happybuyer.databinding.FragmentCategoryBinding
+import kr.co.younhwan.happybuyer.databinding.FragmentHomeBinding
+import kr.co.younhwan.happybuyer.databinding.ItemBinding
 
 class CategoryFragment:Fragment() {
+    // View Binding
+    lateinit var categoryFragmentBinding : FragmentCategoryBinding
+
     var imgRes = arrayOf(
         R.drawable.apple
     )
@@ -20,25 +24,25 @@ class CategoryFragment:Fragment() {
     )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_category, null)
-        return view
+        categoryFragmentBinding = FragmentCategoryBinding.inflate(inflater)
+        return categoryFragmentBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val adapter1 = RecyclerAdapter()
-        itemContainer.adapter = adapter1
+        categoryFragmentBinding.itemContainer.adapter = adapter1
 
-        itemContainer.layoutManager = GridLayoutManager(activity as CategoryActivity, 2)
+        categoryFragmentBinding.itemContainer.layoutManager = GridLayoutManager(activity as CategoryActivity, 2)
     }
 
     // Recycler view
     inner class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolderClass>(){
         // 항목 구성을 위한 사용할 ViewHolder 객체가 필요할 때 사용하는 메서드
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderClass {
-            val itemView = layoutInflater.inflate(R.layout.item, null)
-            val holder = ViewHolderClass(itemView)
+            val itemBinding = ItemBinding.inflate(layoutInflater)
+            val holder = ViewHolderClass(itemBinding)
             return holder
         }
         // ViewHolder를 통해 항목을 구성할 때 항목 내의 View 객체에 데이터를 세팅한다.
@@ -52,9 +56,9 @@ class CategoryFragment:Fragment() {
         }
 
         // ViewHolder 클래스
-        inner class ViewHolderClass(itemView: View): RecyclerView.ViewHolder(itemView){
-            val itemName = itemView.itemName
-            val itemImage = itemView.itemImage
+        inner class ViewHolderClass(itemBinding: ItemBinding): RecyclerView.ViewHolder(itemBinding.root){
+            val itemName = itemBinding.itemName
+            val itemImage = itemBinding.itemImage
         }
     }
 
