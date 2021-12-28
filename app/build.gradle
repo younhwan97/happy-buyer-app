@@ -56,4 +56,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-firestore-ktx'
 
+    /* kakao */
+    implementation "com.kakao.sdk:v2-user:2.8.4" // 카카오 로그인
 }

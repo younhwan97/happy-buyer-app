@@ -2,6 +2,7 @@ package kr.co.younhwan.happybuyer
 
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,12 +17,10 @@ import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import kr.co.younhwan.happybuyer.Navigation.AccountFragment
-import kr.co.younhwan.happybuyer.Navigation.HomeFragment
-import kr.co.younhwan.happybuyer.Navigation.AccountLoginFragment
-import kr.co.younhwan.happybuyer.Navigation.SearchFragment
+import com.kakao.sdk.common.util.Utility
+import com.kakao.sdk.user.UserApiClient
+import kr.co.younhwan.happybuyer.Navigation.*
 import kr.co.younhwan.happybuyer.databinding.ActivityMainBinding
-import kr.co.younhwan.happybuyer.databinding.FragmentAccountLoginBinding
 import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
@@ -40,11 +39,6 @@ class MainActivity : AppCompatActivity() {
     private val homeFragment = HomeFragment()
     private val searchFragment = SearchFragment()
     private val accountFragment = AccountFragment()
-    private val accountLoginFragment = AccountLoginFragment()
-
-    // 파이어베이스 인증
-    var mAuth: FirebaseAuth? = null
-    var codeSent: String? = null
 
     // 캐쉬데이터
     var pref: SharedPreferences? = null
@@ -53,6 +47,9 @@ class MainActivity : AppCompatActivity() {
     // 툴바의 search item
     // 추후 추후 프래그먼트 전환 시 강제로 expand 하기 위해서 필요
     var searchItem: MenuItem? = null
+
+    // kakao token
+    var kakaoAccountId : Long? = null
 
     // 어플리케이션이 실행되고 단 1번 호출!!
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,14 +72,17 @@ class MainActivity : AppCompatActivity() {
         // 권한 요청
         requestPermissions(permissionList, 0)
 
-        // 파이어베이스 인증 객체 생성
-        mAuth = FirebaseAuth.getInstance()
-
-        // 캐쉬데이터를 가져온다.
-        // 회원가입을 하지않은 사용자의 경우 account 캐쉬가 비어있을 것 이다.
-        // account 값에 따라 보여줄 프래그먼트를 추후에 분기할 것 이다.
-        pref = getSharedPreferences("account", MODE_PRIVATE)
-        account = pref?.getString("account", "")
+        // 로그인 정보 확인
+        UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
+            if (error != null) {
+                Toast.makeText(this, "토큰 정보 보기 실패", Toast.LENGTH_SHORT).show()
+                Log.d("token", "로그인 토큰이 존재하지 않습니다.")
+            }
+            else if (tokenInfo != null) {
+                Toast.makeText(this, "토큰 정보 보기 성공", Toast.LENGTH_SHORT).show()
+                kakaoAccountId= tokenInfo.id
+            }
+        }
 
         // 바텀 내비게이션의 이벤트 리스너를 설정
         mainActivityBinding.bottomNavigation.setOnItemSelectedListener {
@@ -98,12 +98,11 @@ class MainActivity : AppCompatActivity() {
                 R.id.action_account -> {
                     // 막 회원가입을 한 사용자의 경우 account 값이 비어있을 것이다.
                     // 때문에 다시한번 account 캐쉬 데이터를 얻어온다.
-                    account = pref?.getString("account", "")
-
-                    if (account.isNullOrEmpty())
-                        setFragment("login")   // 로그인 x -> 로그인/회원가입 페이지를 노출
-                    else
-                        setFragment("account") // 로그인 o -> 각 사용자의 계정 페이지를 노출
+                    if(kakaoAccountId != null){
+                        setFragment("account")
+                    } else {
+                        setFragment("login")
+                    }
 
                     true
                 }
@@ -113,6 +112,18 @@ class MainActivity : AppCompatActivity() {
 
         // 초기 화면의 프래그먼트를 설정
         setFragment("home")
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when(requestCode){
+            0 -> {
+                if(resultCode == RESULT_CANCELED){
+                    mainActivityBinding.bottomNavigation.selectedItemId = R.id.action_home
+                }
+            }
+        }
     }
 
     // -----------------------------------------------------
@@ -133,7 +144,7 @@ class MainActivity : AppCompatActivity() {
         val expandListener = object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
                 mainActivityBinding.bottomNavigation.visibility = View.VISIBLE
-                mainActivityBinding.bottomNavigation.findViewById<View>(R.id.action_home).performClick()
+                mainActivityBinding.bottomNavigation.selectedItemId = R.id.action_home
                 return true
             }
 
@@ -176,84 +187,7 @@ class MainActivity : AppCompatActivity() {
     // 툴바 설정 ----
     // -----------------------------------------------------
 
-    // -----------------------------------------------------
-    // ---- 로그인, 로그아웃 및 회원가입
-    // 휴대폰 번호를 입력하고 '인증문자 받기' 버튼을 클릭했을 때
-    fun sendVerificationCode(accountLoginFragmentBinding: FragmentAccountLoginBinding) {
-        var phoneNumber = accountLoginFragmentBinding.phoneNumberInput.editText?.text.toString()
-        if (phoneNumber.isEmpty()) {
-            accountLoginFragmentBinding.phoneNumberInput.editText?.setError("Phone number is required")
-            accountLoginFragmentBinding.phoneNumberInput.editText?.requestFocus()
-            return;
-        } else {
-            phoneNumber = phoneNumber.substring(1)
-            phoneNumber = "+82 $phoneNumber"
-        }
-
-        val options = PhoneAuthOptions.newBuilder(Firebase.auth)
-            .setPhoneNumber(phoneNumber)       // Phone number to verify
-            .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-            .setActivity(this)                 // Activity (for callback binding)
-            .setCallbacks(callbacks)          // OnVerificationStateChangedCallbacks
-            .build()
-        PhoneAuthProvider.verifyPhoneNumber(options)
-    }
-
-    private val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-        override fun onVerificationCompleted(p0: PhoneAuthCredential) {}
-        override fun onVerificationFailed(p0: FirebaseException) {}
-        override fun onCodeSent(p0: String, p1: PhoneAuthProvider.ForceResendingToken) {
-            codeSent = p0
-        }
-    }
-
-    // 인증 번호를 입력하고, 인증번호 확인을 클릭했을 때
-    fun verifySignInputCode(accountLoginFragmentBinding: FragmentAccountLoginBinding) {
-        val userCode = accountLoginFragmentBinding.certificationInput.editText?.text.toString() // 사용자가 입력한 코드
-        val credential = PhoneAuthProvider.getCredential(codeSent!!, userCode)
-        signInWithPhoneAuthCredential(accountLoginFragmentBinding, credential)
-    }
-
-    private fun signInWithPhoneAuthCredential(accountLoginFragmentBinding: FragmentAccountLoginBinding, credential: PhoneAuthCredential) {
-        mAuth?.signInWithCredential(credential)
-            ?.addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    // here you can open new activty
-                    val phoneNumber = accountLoginFragmentBinding.phoneNumberInput.editText?.text.toString()
-                    val pref = getSharedPreferences("account", MODE_PRIVATE)
-                    val editor = pref.edit()
-                    editor.putString("account", phoneNumber)
-                        .commit()
-                    setFragment("account")
-                    Toast.makeText(this, "로그인에 성공하셨습니다 :)", Toast.LENGTH_SHORT).show()
-                } else {
-                    if (task.exception is FirebaseAuthInvalidCredentialsException) {
-                        Toast.makeText(this, "Incorrect Verification Code", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                }
-            }
-        
-    }
-
-    fun logout() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("로그아웃")
-            .setMessage("정말 로그아웃 하시겠나요?")
-            .setNegativeButton("닫기", null)
-            .setPositiveButton("로그아웃") { dialogInterface: DialogInterface, i: Int ->
-                val pref = getSharedPreferences("account", MODE_PRIVATE)
-                val editor = pref.edit()
-                editor.remove("account")
-                    .commit()
-                mainActivityBinding.bottomNavigation.findViewById<View>(R.id.action_home).performClick()
-                Toast.makeText(this, "로그아웃에 성공하셨습니다 :)", Toast.LENGTH_SHORT).show()
-            }.show()
-    }
-    // 로그인, 로그아웃 및 회원가입----
-    // -----------------------------------------------------
-
-    // set Fragment
+    // Fragment Controller
     fun setFragment(requestFragment: String) {
         val tran = supportFragmentManager.beginTransaction()
 
@@ -271,8 +205,8 @@ class MainActivity : AppCompatActivity() {
                 tran.replace(R.id.mainContainer, accountFragment)
             }
             "login" -> {
-                title = "로그인/회원가입"
-                tran.replace(R.id.mainContainer, accountLoginFragment)
+                val login_intent = Intent(this, LoginActivity::class.java)
+                startActivityForResult(login_intent, 0)
             }
         }
 
