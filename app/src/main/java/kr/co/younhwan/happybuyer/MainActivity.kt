@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.SystemClock
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -35,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
     // kakao token
     var kakaoAccountId : Long? = null
-
+    var kakaoAccountNickname : String? = null
     // 어플리케이션이 실행되고 단 1번 호출!!
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +64,15 @@ class MainActivity : AppCompatActivity() {
 
             } else if (tokenInfo != null) {
                 kakaoAccountId= tokenInfo.id
+                UserApiClient.instance.me { user, error ->
+                    if (error != null) {
+                        Log.e("kakao", "사용자 정보 요청 실패", error)
+                    }
+                    else if (user != null) {
+                        kakaoAccountNickname = user.kakaoAccount?.profile?.nickname
+                        Log.d("kakao","${kakaoAccountNickname}")
+                    }
+                }
             }
         }
 
@@ -171,15 +181,15 @@ class MainActivity : AppCompatActivity() {
 
         when (requestFragment) {
             "home" -> {
-                title = "HappyBuyer/코코마트"
+                mainActivityBinding.mainToolbar.title = "HappyBuyer/코코마트"
                 tran.replace(R.id.mainContainer, homeFragment)
             }
             "search" -> {
-                title = "검색"
+                mainActivityBinding.mainToolbar.title = "검색"
                 tran.replace(R.id.mainContainer, searchFragment)
             }
             "account" -> {
-                title = "내 정보"
+                mainActivityBinding.mainToolbar.title = "내 정보"
                 tran.replace(R.id.mainContainer, accountFragment)
             }
             "login" -> {

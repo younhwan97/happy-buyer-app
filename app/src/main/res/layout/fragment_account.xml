@@ -1,99 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="10dp">
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/infoLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="15dp"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/accountInfo"
+                android:id="@+id/kakaoId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:fontFamily="@font/bm_dohyeon"
-                android:text="phoneNumber"
+                android:text="NickName"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textSize="30sp" />
 
-            <TextView
-                android:id="@+id/textView10"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:fontFamily="@font/bm_euljiro"
-                android:text="님"
-                android:textSize="18sp" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/textView11"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/bm_euljiro"
-            android:text="오늘도 즐거운 하루 보내세요:)"
-            android:textSize="18sp" />
+            android:layout_height="match_parent"
+            android:layout_marginTop="50dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/imageButton2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:background="@color/colorWhite"
+                    app:srcCompat="@drawable/heart" />
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="좋아요" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/imageButton3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:background="@color/colorWhite"
+                    app:srcCompat="@drawable/heart" />
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="알림" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/imageButton4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:background="@color/colorWhite"
+                    app:srcCompat="@drawable/heart" />
+
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="배송지 관리" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/division"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/infoLayout"
+        android:background="@color/colorDivision"
+        android:orientation="horizontal">
+
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/infoLayout"
-        android:layout_marginTop="30dp"
-        android:orientation="vertical">
+        android:layout_below="@id/division"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/border"
+        android:orientation="vertical"
+        android:padding="10dp">
 
         <TextView
-            android:id="@+id/textView12"
+            android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
-            android:text="주문 내역"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:layout_marginBottom="15dp"
+            android:text="기타"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:layout_marginBottom="5dp"
-            android:background="@color/black"
-            android:orientation="horizontal">
-
-        </LinearLayout>
-
         <TextView
-            android:id="@+id/textView13"
+            android:id="@+id/disconnectBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:text="주문 내역 보기"
-            android:textSize="16sp" />
+            android:layout_marginBottom="15dp"
+            android:text="회원 탈퇴"
+            android:textSize="18sp" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/logoutBtn"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:background="@color/colorDivision"
-            android:orientation="horizontal"></LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:text="로그아웃"
+            android:textSize="18sp" />
+
     </LinearLayout>
 
-    <Button
-        android:id="@+id/logoutBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:text="로그아웃" />
 </RelativeLayout>

@@ -10,14 +10,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.kakao.sdk.user.UserApiClient
 import kr.co.younhwan.happybuyer.MainActivity
+import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.databinding.FragmentAccountBinding
 
 class AccountFragment : Fragment() {
-    lateinit var accountFragmentBinding : FragmentAccountBinding
+    private lateinit var accountFragmentBinding : FragmentAccountBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         accountFragmentBinding = FragmentAccountBinding.inflate(inflater)
@@ -28,33 +28,44 @@ class AccountFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val act = activity as MainActivity
-        val pref = act.getSharedPreferences("account", AppCompatActivity.MODE_PRIVATE)
-        val account = pref.getString("account", "")
 
-//        if (account.isNullOrEmpty())
-//            act.setFragment("home")
-//        else
-//            accountFragmentBinding.accountInfo.text = account
-
-        if(act.kakaoAccountId != null){
-
-        }else{
-            act.setFragment("home")
-        }
+        accountFragmentBinding.kakaoId.text = if(act.kakaoAccountNickname != null) act.kakaoAccountNickname else "${act.kakaoAccountId}"
 
         accountFragmentBinding.logoutBtn.setOnClickListener {
-            // 로그아웃
-            UserApiClient.instance.logout { error ->
-                if (error != null) {
-                    Log.e("kakao", "로그아웃 실패. SDK에서 토큰 삭제됨", error)
-                }
-                else {
-                    Toast.makeText(requireContext(), "로그아웃에 성공하셨습니다.", Toast.LENGTH_SHORT).show()
-                    val main_intent = Intent(requireContext(), MainActivity::class.java)
-                    act.finish()
-                    startActivity(main_intent)
+            var builder = AlertDialog.Builder(requireContext())
+
+            builder.setMessage("로그아웃하시겠습니까?")
+            builder.setPositiveButton("확인"){ dialogInterface: DialogInterface, i: Int ->
+                UserApiClient.instance.logout { error ->
+                    if (error != null) {
+                        Log.e("kakao", "로그아웃 실패. SDK에서 토큰 삭제됨", error)
+                    }
+                    else {
+                        Toast.makeText(requireContext(), "로그아웃에 성공하셨습니다.", Toast.LENGTH_SHORT).show()
+                        val mainIntent = Intent(requireContext(), MainActivity::class.java)
+                        act.finish()
+                        startActivity(mainIntent)
+                    }
                 }
             }
+            builder.setNegativeButton("닫기", null)
+            builder.show()
+        }
+        accountFragmentBinding.disconnectBtn.setOnClickListener {
+            var builder = AlertDialog.Builder(requireContext())
+            builder.setMessage("회원 탈퇴하시겠습니까?")
+            builder.setPositiveButton("확인"){ dialogInterface: DialogInterface, i: Int ->
+                UserApiClient.instance.unlink { error ->
+                    if (error != null) {
+                        Log.e("kakao", "연결 끊기 실패", error)
+                    }
+                    else {
+                        Log.i("kakao", "연결 끊기 성공. SDK에서 토큰 삭제 됨")
+                    }
+                }
+            }
+            builder.setNegativeButton("닫기", null)
+            builder.show()
         }
     }
 }
