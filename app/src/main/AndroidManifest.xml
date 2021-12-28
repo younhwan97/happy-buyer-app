@@ -19,9 +19,6 @@
             android:name=".Navigation.LoginActivity"
             android:exported="true" />
         <activity
-            android:name=".Navigation.AccountLoginActivity"
-            android:exported="true" />
-        <activity
             android:name=".CategoryActivity"
             android:exported="true" />
         <activity

@@ -9,11 +9,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.kakao.sdk.user.UserApiClient
 import kr.co.younhwan.happybuyer.MainActivity
-import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.databinding.FragmentAccountBinding
 
 class AccountFragment : Fragment() {
@@ -49,7 +49,7 @@ class AccountFragment : Fragment() {
                     Log.e("kakao", "로그아웃 실패. SDK에서 토큰 삭제됨", error)
                 }
                 else {
-                    Log.i("kakao", "로그아웃 성공. SDK에서 토큰 삭제됨")
+                    Toast.makeText(requireContext(), "로그아웃에 성공하셨습니다.", Toast.LENGTH_SHORT).show()
                     val main_intent = Intent(requireContext(), MainActivity::class.java)
                     act.finish()
                     startActivity(main_intent)

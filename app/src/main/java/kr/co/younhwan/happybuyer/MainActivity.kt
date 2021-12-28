@@ -1,27 +1,16 @@
 package kr.co.younhwan.happybuyer
 
-import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.SystemClock
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
-import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.FirebaseException
-import com.google.firebase.auth.*
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
-import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
 import kr.co.younhwan.happybuyer.Navigation.*
 import kr.co.younhwan.happybuyer.databinding.ActivityMainBinding
-import java.util.concurrent.TimeUnit
+
 
 class MainActivity : AppCompatActivity() {
     // View Binding
@@ -39,10 +28,6 @@ class MainActivity : AppCompatActivity() {
     private val homeFragment = HomeFragment()
     private val searchFragment = SearchFragment()
     private val accountFragment = AccountFragment()
-
-    // 캐쉬데이터
-    var pref: SharedPreferences? = null
-    var account: String? = null
 
     // 툴바의 search item
     // 추후 추후 프래그먼트 전환 시 강제로 expand 하기 위해서 필요
@@ -74,12 +59,9 @@ class MainActivity : AppCompatActivity() {
 
         // 로그인 정보 확인
         UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
-            if (error != null) {
-                Toast.makeText(this, "토큰 정보 보기 실패", Toast.LENGTH_SHORT).show()
-                Log.d("token", "로그인 토큰이 존재하지 않습니다.")
-            }
-            else if (tokenInfo != null) {
-                Toast.makeText(this, "토큰 정보 보기 성공", Toast.LENGTH_SHORT).show()
+            if (error != null) { // 토큰이 없을 때 = 로그인 정보가 없을 때
+
+            } else if (tokenInfo != null) {
                 kakaoAccountId= tokenInfo.id
             }
         }
@@ -96,14 +78,10 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.action_account -> {
-                    // 막 회원가입을 한 사용자의 경우 account 값이 비어있을 것이다.
-                    // 때문에 다시한번 account 캐쉬 데이터를 얻어온다.
-                    if(kakaoAccountId != null){
+                    if(kakaoAccountId != null)
                         setFragment("account")
-                    } else {
+                    else
                         setFragment("login")
-                    }
-
                     true
                 }
                 else -> false
