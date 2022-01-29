@@ -51,4 +51,7 @@ dependencies {
 
     /* kakao */
     implementation "com.kakao.sdk:v2-user:2.8.4" // 카카오 로그인
+
+    /* okHttp */
+    implementation "com.squareup.okhttp3:okhttp:4.9.3"
 }

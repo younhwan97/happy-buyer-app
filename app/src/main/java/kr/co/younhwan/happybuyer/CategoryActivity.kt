@@ -29,13 +29,11 @@ class CategoryActivity : FragmentActivity() {
 
         // 액션바 -> 툴바
         setActionBar(categoryActivityBinding.categoryToolbar)
-
-        // 툴바 세팅
         actionBar?.setHomeButtonEnabled(true)
         actionBar?.setDisplayHomeAsUpEnabled(true)
         categoryActivityBinding.categoryToolbar.setTitleTextAppearance(this, R.style.ToolbarTitleTheme)
 
-        // MainActivity로 부터 전달 받은 데이터
+        // Main Activity로 부터 전달 받은 데이터
         val label = intent.getStringArrayExtra("label")
         val position = intent.getIntExtra("position", 0)
 
@@ -80,6 +78,19 @@ class CategoryActivity : FragmentActivity() {
         categoryActivityBinding.tabs.addOnTabSelectedListener(listener1)
 
         categoryActivityBinding.chip4.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorTheme))
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+}
+
 //        categoryActivityBinding.selectListOrderChipGroup.setOnCheckedChangeListener { group, checkedId ->
 //            when (checkedId) {
 //                R.id.chip4->{
@@ -119,15 +130,3 @@ class CategoryActivity : FragmentActivity() {
 //                }
 //            }
 //        }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
-}

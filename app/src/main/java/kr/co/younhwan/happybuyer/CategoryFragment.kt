@@ -1,6 +1,7 @@
 package kr.co.younhwan.happybuyer
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,19 +11,22 @@ import androidx.recyclerview.widget.RecyclerView
 import kr.co.younhwan.happybuyer.databinding.FragmentCategoryBinding
 import kr.co.younhwan.happybuyer.databinding.FragmentHomeBinding
 import kr.co.younhwan.happybuyer.databinding.ItemBinding
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import kotlin.concurrent.thread
 
 class CategoryFragment:Fragment() {
     // View Binding
     lateinit var categoryFragmentBinding : FragmentCategoryBinding
 
     var imgRes = arrayOf(
-        R.drawable.apple
+        R.drawable.apple, R.drawable.apple,
     )
 
     var testName = arrayOf(
-       "사과"
+       "사과", "바나나"
     )
-
+    
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         categoryFragmentBinding = FragmentCategoryBinding.inflate(inflater)
         return categoryFragmentBinding.root
@@ -35,6 +39,22 @@ class CategoryFragment:Fragment() {
         categoryFragmentBinding.itemContainer.adapter = adapter1
 
         categoryFragmentBinding.itemContainer.layoutManager = GridLayoutManager(activity as CategoryActivity, 2)
+
+        /* server */
+//        thread {
+//            val site = "http://192.168.0.5:3000"
+//            val client = OkHttpClient()
+//
+//            val request = Request.Builder().url(site).get().build()
+//            val response = client.newCall(request).execute()
+//
+//            if(response.isSuccessful){
+//                val result = response.body?.string()
+//                Log.d("server","$result")
+//            }else{
+//                Log.d("server","실패")
+//            }
+//        }
     }
 
     // Recycler view

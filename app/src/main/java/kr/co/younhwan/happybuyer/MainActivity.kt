@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
     // kakao token
     var kakaoAccountId : Long? = null
     var kakaoAccountNickname : String? = null
+
     // 어플리케이션이 실행되고 단 1번 호출!!
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
