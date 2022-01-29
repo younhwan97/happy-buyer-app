@@ -13,11 +13,14 @@ import kr.co.younhwan.happybuyer.databinding.FragmentHomeBinding
 import kr.co.younhwan.happybuyer.databinding.ItemBinding
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import org.json.JSONArray
+import org.json.JSONObject
+import java.util.*
 import kotlin.concurrent.thread
 
 class CategoryFragment:Fragment() {
     // View Binding
-    lateinit var categoryFragmentBinding : FragmentCategoryBinding
+    private lateinit var categoryFragmentBinding : FragmentCategoryBinding
 
     var imgRes = arrayOf(
         R.drawable.apple, R.drawable.apple,
@@ -26,7 +29,9 @@ class CategoryFragment:Fragment() {
     var testName = arrayOf(
        "사과", "바나나"
     )
-    
+
+    private var category:String? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         categoryFragmentBinding = FragmentCategoryBinding.inflate(inflater)
         return categoryFragmentBinding.root
@@ -40,21 +45,32 @@ class CategoryFragment:Fragment() {
 
         categoryFragmentBinding.itemContainer.layoutManager = GridLayoutManager(activity as CategoryActivity, 2)
 
+        category = arguments?.getString("category")
+
         /* server */
-//        thread {
-//            val site = "http://192.168.0.5:3000"
-//            val client = OkHttpClient()
-//
-//            val request = Request.Builder().url(site).get().build()
-//            val response = client.newCall(request).execute()
-//
-//            if(response.isSuccessful){
-//                val result = response.body?.string()
-//                Log.d("server","$result")
-//            }else{
-//                Log.d("server","실패")
-//            }
-//        }
+        thread {
+            val site = "http://172.20.10.9/products/api/app/read?category=${category}"
+            val client = OkHttpClient()
+
+            val request = Request.Builder().url(site).get().build()
+            val response = client.newCall(request).execute()
+
+            if(response.isSuccessful){
+                val resultText = response.body?.string()!!.trim()
+                val json = JSONObject(resultText)
+                val data = JSONArray(json["data"].toString())
+
+                for (i in 0 until data.length()){
+                    val obj = data.getJSONObject(i)
+                    val productId = obj.getInt("product_id")
+                    val productStatus = obj.getString("status")
+                    val productCategory = obj.getString("category")
+                    val productName = obj.getString("name")
+                    val productPrice = obj.getInt("price")
+                    val productImageUrl = obj.getString("image_url")
+                }
+            }
+        }
     }
 
     // Recycler view
@@ -65,6 +81,7 @@ class CategoryFragment:Fragment() {
             val holder = ViewHolderClass(itemBinding)
             return holder
         }
+
         // ViewHolder를 통해 항목을 구성할 때 항목 내의 View 객체에 데이터를 세팅한다.
         override fun onBindViewHolder(holder: ViewHolderClass, position: Int) {
             holder.itemImage.setImageResource(imgRes[position])
