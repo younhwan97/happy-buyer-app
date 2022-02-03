@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         android.Manifest.permission.ACCESS_NETWORK_STATE
     )
 
-    // MainActivity 에서 사용할 프래그먼트 test
+    // MainActivity 에서 사용할 프래그먼트
     private val homeFragment = HomeFragment()
     private val searchFragment = SearchFragment()
     private val accountFragment = AccountFragment()
