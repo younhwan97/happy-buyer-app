@@ -2,13 +2,12 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/search_item"
+        android:id="@+id/search_item_in_main"
         android:icon="@drawable/ic_search2"
         android:title="search"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="always|collapseActionView" />
+        app:showAsAction="always" />
     <item
-        android:id="@+id/shopping_basket_item"
+        android:id="@+id/basket_item_in_main"
         android:icon="@drawable/ic_shopping"
         android:title="basket"
         app:showAsAction="always" />

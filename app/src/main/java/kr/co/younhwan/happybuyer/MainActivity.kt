@@ -7,7 +7,6 @@ import android.os.SystemClock
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import com.kakao.sdk.user.UserApiClient
 import kr.co.younhwan.happybuyer.Navigation.*
 import kr.co.younhwan.happybuyer.databinding.ActivityMainBinding
@@ -26,7 +25,7 @@ class MainActivity : AppCompatActivity() {
 
     // MainActivity 에서 사용할 프래그먼트 wetwerqewr
     private val homeFragment = HomeFragment()
-    private val searchFragment = SearchFragment()
+    private val favoriteFragment = FavoriteFragment()
     private val accountFragment = AccountFragment()
 
     // 툴바의 search item
@@ -51,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(mainActivityBinding.root)
 
         // 액션바 -> 툴바
-        mainActivityBinding.mainToolbar.title = "HappyBuyer/코코마트"
+        mainActivityBinding.mainToolbar.title = "코코마트"
         mainActivityBinding.mainToolbar.setTitleTextAppearance(this, R.style.ToolbarTitleTheme)
         setSupportActionBar(mainActivityBinding.mainToolbar)
 
@@ -83,8 +82,8 @@ class MainActivity : AppCompatActivity() {
                     setFragment("home")
                     true
                 }
-                R.id.action_search -> {
-                    searchItem?.expandActionView()
+                R.id.action_favorite -> {
+                    setFragment("favorite")
                     true
                 }
                 R.id.action_account -> {
@@ -98,7 +97,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // 초기 화면의 프래그먼트를 설정
+        // 첫 프래그먼트 설정
         setFragment("home")
     }
 
@@ -116,57 +115,19 @@ class MainActivity : AppCompatActivity() {
 
     // -----------------------------------------------------
     // ---- 툴바 설정
-    // 툴바의 메뉴 아이템을 생성하고, 이벤트 리스너를 장착한다.
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        // 메뉴 객체 생성
-        menuInflater.inflate(R.menu.main_menu, menu)
-
-        // 메뉴의 search view 에 이벤트 리스너 설정을 위해 객체를 얻어온다.
-        searchItem = menu?.findItem(R.id.search_item)
-        val searchView = searchItem?.actionView as androidx.appcompat.widget.SearchView
-
-        // setting search view
-        searchView.queryHint = "검색어를 입력하세요."
-
-        // searchView 가 펼쳐졌을 때 발생하는 이벤트를 처리하는 리스너
-        val expandListener = object : MenuItem.OnActionExpandListener {
-            override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
-                mainActivityBinding.bottomNavigation.visibility = View.VISIBLE
-                mainActivityBinding.bottomNavigation.selectedItemId = R.id.action_home
-                return true
-            }
-
-            override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
-                mainActivityBinding.bottomNavigation.visibility = View.GONE
-                setFragment("search")
-                return true
-            }
-        }
-
-        // searchView 에 text 가 입력 됐을 때 발생하는 이벤트를 처리하는 리스너
-        val inputListener = object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return true
-            }
-
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return true
-            }
-        }
-
-        searchItem?.setOnActionExpandListener(expandListener)
-        searchView.setOnQueryTextListener(inputListener)
+        menuInflater.inflate(R.menu.main_menu, menu) // 메뉴 객체 생성 및 부착(적용)
         return true
     }
 
-    // 툴바가 클릭됐을 때 발생하는 이벤트
+    // 툴바의 아이템이 클릭됐을 때 발생하는 이벤트
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.search_item -> {
-                // CollapseActionView 설정에 따라 뷰가 확장되고 TextEdit view가 나타날 것 이다.
+            R.id.search_item_in_main -> {
+                setFragment("search")
             }
-            R.id.shopping_basket_item -> {
-
+            R.id.basket_item_in_main -> {
+                setFragment("basket")
             }
         }
 
@@ -176,25 +137,33 @@ class MainActivity : AppCompatActivity() {
     // -----------------------------------------------------
 
     // Fragment Controller
-    fun setFragment(requestFragment: String) {
+    private fun setFragment(requestFragment: String) {
         val tran = supportFragmentManager.beginTransaction()
 
         when (requestFragment) {
             "home" -> {
-                mainActivityBinding.mainToolbar.title = "HappyBuyer/코코마트"
+                mainActivityBinding.mainToolbar.title = "코코마트"
                 tran.replace(R.id.mainContainer, homeFragment)
             }
-            "search" -> {
-                mainActivityBinding.mainToolbar.title = "검색"
-                tran.replace(R.id.mainContainer, searchFragment)
+            "favorite" -> {
+                mainActivityBinding.mainToolbar.title = "관심"
+                tran.replace(R.id.mainContainer, favoriteFragment)
             }
             "account" -> {
                 mainActivityBinding.mainToolbar.title = "내 정보"
                 tran.replace(R.id.mainContainer, accountFragment)
             }
             "login" -> {
-                val login_intent = Intent(this, LoginActivity::class.java)
-                startActivityForResult(login_intent, 0)
+                val loginIntent = Intent(this, LoginActivity::class.java)
+                startActivityForResult(loginIntent, 0)
+            }
+            "search" -> {
+                val searchIntent = Intent(this, SearchActivity::class.java)
+                startActivity(searchIntent)
+            }
+            "basket" -> {
+                val basketIntent = Intent(this, BasketActivity::class.java)
+                startActivity(basketIntent)
             }
         }
 

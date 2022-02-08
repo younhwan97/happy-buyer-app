@@ -1,6 +1,5 @@
 package kr.co.younhwan.happybuyer
 
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import kr.co.younhwan.happybuyer.databinding.FragmentCategoryBinding
 import kr.co.younhwan.happybuyer.databinding.ItemBinding
 import okhttp3.OkHttpClient
@@ -17,16 +17,14 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.text.DecimalFormat
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.concurrent.thread
+
 
 class CategoryFragment:Fragment() {
     // View Binding
     private lateinit var categoryFragmentBinding : FragmentCategoryBinding
 
     val productIdList = ArrayList<Int>()
-    val productStatusList = ArrayList<String>()
-    val productCategoryList = ArrayList<String>()
     val productPriceList = ArrayList<Int>()
     val productNameList = ArrayList<String>()
     val productImageUriList = ArrayList<String>()
@@ -35,8 +33,8 @@ class CategoryFragment:Fragment() {
 
         categoryFragmentBinding = FragmentCategoryBinding.inflate(inflater)
 
-        val adapter1 = RecyclerAdapter()
-        categoryFragmentBinding.itemContainer.adapter = adapter1
+        val adapter = RecyclerAdapter()
+        categoryFragmentBinding.itemContainer.adapter = adapter
         categoryFragmentBinding.itemContainer.layoutManager = GridLayoutManager(activity as CategoryActivity, 3)
         getProductList(true)
 
@@ -45,29 +43,54 @@ class CategoryFragment:Fragment() {
 
     // Recycler view
     inner class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolderClass>(){
-        // 항목 구성을 위한 사용할 ViewHolder 객체가 필요할 때 사용하는 메서드
+        // 항목 구성을 위한 사용할 ViewHolder 객체가 필요할 때 사용되는 메서드
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderClass {
             val itemBinding = ItemBinding.inflate(layoutInflater)
-            val holder = ViewHolderClass(itemBinding)
-            return holder
-        }
-
-        // ViewHolder를 통해 항목을 구성할 때 항목 내의 View 객체에 데이터를 세팅한다.
-        override fun onBindViewHolder(holder: ViewHolderClass, position: Int) {
-            holder.itemImage.setImageURI(Uri.parse(productImageUriList[position]))
-            holder.itemName.text = productNameList[position]
-            holder.itemPrice.text = DecimalFormat("#,###").format(productPriceList[position])
+            return ViewHolderClass(itemBinding)
         }
 
         override fun getItemCount(): Int {
-            return productNameList.size
+            return productIdList.size
         }
 
+        // ViewHolder 를 이용해 항목 내의 객체에 데이터를 셋팅
+        override fun onBindViewHolder(holder: ViewHolderClass, position: Int) {
+            val url = productImageUriList[position]
+            Glide.with(holder.itemView.context).load(url).into(holder.itemImage)
+
+            holder.itemName.text = productNameList[position]
+            holder.itemPrice.text = DecimalFormat("#,###").format(productPriceList[position])
+
+            // Set click event listener
+            holder.hearBtn.setOnClickListener {
+
+            }
+
+            holder.shoppingCartBtn.setOnClickListener {
+
+            }
+
+            holder.itemName.setOnClickListener {
+
+            }
+
+            holder.itemImage.setOnClickListener {
+
+            }
+
+            holder.itemPrice.setOnClickListener {
+
+            }
+        }
+        
         // ViewHolder 클래스
-        inner class ViewHolderClass(itemBinding: ItemBinding): RecyclerView.ViewHolder(itemBinding.root){
+        inner class ViewHolderClass(itemBinding: ItemBinding)
+            : RecyclerView.ViewHolder(itemBinding.root) {
             val itemName = itemBinding.itemName
             val itemImage = itemBinding.itemImage
             val itemPrice = itemBinding.itemPrice
+            val hearBtn = itemBinding.heartBtn
+            val shoppingCartBtn = itemBinding.shoppingCartBtn
         }
     }
 
@@ -78,10 +101,10 @@ class CategoryFragment:Fragment() {
         }
 
         thread {
-            val categoryName = arguments?.getString("category")
+            val selectedCategory = arguments?.getString("category")
 
             val client = OkHttpClient()
-            val site = "http://192.168.0.5/products/api/app/read?category=${categoryName}"
+            val site = "http://192.168.0.5/products/api/app/read?category=${selectedCategory}"
 
             val request = Request.Builder().url(site).get().build()
             val response = client.newCall(request).execute()
@@ -93,12 +116,17 @@ class CategoryFragment:Fragment() {
 
                 for (i in 0 until data.length()){
                     val obj = data.getJSONObject(i)
-                    productIdList.add(obj.getInt("product_id"))
-                    productStatusList.add(obj.getString("status"))
-                    productCategoryList.add(obj.getString("category"))
-                    productPriceList.add(obj.getInt("price"))
-                    productNameList.add(obj.getString("name"))
-                    productImageUriList.add(obj.getString("image_url"))
+                    val productStatus = obj.getString("status")
+                    val productCategory = obj.getString("category")
+
+                    if(productStatus == "판매중" && productCategory == selectedCategory){
+                        productIdList.add(obj.getInt("product_id"))
+                        productPriceList.add(obj.getInt("price"))
+                        productNameList.add(obj.getString("name"))
+                        productImageUriList.add(obj.getString("image_url"))
+                    } else { // 판매중인 상품이 아니거나 잘못된 카테고리의 상품
+                        continue
+                    }
                 }
 
                 activity?.runOnUiThread{

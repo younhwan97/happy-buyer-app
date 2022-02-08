@@ -71,7 +71,7 @@ class CategoryActivity : FragmentActivity() {
         actionBar?.title = label[position]
         val listener1 = object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                actionBar?.title = label[categoryActivityBinding.tabs.getSelectedTabPosition()]
+                actionBar?.title = label[categoryActivityBinding.tabs.selectedTabPosition]
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {}
