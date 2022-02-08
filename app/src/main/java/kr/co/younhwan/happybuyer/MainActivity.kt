@@ -23,29 +23,24 @@ class MainActivity : AppCompatActivity() {
         android.Manifest.permission.ACCESS_NETWORK_STATE
     )
 
-    // MainActivity 에서 사용할 프래그먼트 wetwerqewr
+    // MainActivity 에서 사용할 프래그먼트
     private val homeFragment = HomeFragment()
     private val favoriteFragment = FavoriteFragment()
     private val accountFragment = AccountFragment()
 
-    // 툴바의 search item
-    // 추후 추후 프래그먼트 전환 시 강제로 expand 하기 위해서 필요
-    var searchItem: MenuItem? = null
-
-    // kakao token
+    // 카카오 토큰
     var kakaoAccountId : Long? = null
     var kakaoAccountNickname : String? = null
-
-    // 어플리케이션이 실행되고 단 1번 호출!!
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // View Binding 객체 생성
         mainActivityBinding = ActivityMainBinding.inflate(layoutInflater)
 
-        // Splash Delay
+        // 1초동안 스플래쉬 화면이 보여지도록 설정
         SystemClock.sleep(1000)
 
-        // Splash 화면 이후로 보여질 화면을 설정
+        // 스플래쉬 화면 이후로 보여질 화면을 설정
         setTheme(R.style.Theme_HappyBuyer)
         setContentView(mainActivityBinding.root)
 
@@ -62,7 +57,7 @@ class MainActivity : AppCompatActivity() {
             if (error != null) { // 토큰이 없을 때 = 로그인 정보가 없을 때
 
             } else if (tokenInfo != null) {
-                kakaoAccountId= tokenInfo.id
+                kakaoAccountId = tokenInfo.id
                 UserApiClient.instance.me { user, error ->
                     if (error != null) {
                         Log.e("kakao", "사용자 정보 요청 실패", error)
@@ -99,18 +94,6 @@ class MainActivity : AppCompatActivity() {
 
         // 첫 프래그먼트 설정
         setFragment("home")
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        when(requestCode){
-            0 -> {
-                if(resultCode == RESULT_CANCELED){
-                    mainActivityBinding.bottomNavigation.selectedItemId = R.id.action_home
-                }
-            }
-        }
     }
 
     // -----------------------------------------------------
@@ -168,5 +151,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         tran.commit()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when(requestCode){
+            0 -> {
+                if(resultCode == RESULT_CANCELED){
+                    mainActivityBinding.bottomNavigation.selectedItemId = R.id.action_home
+                }
+            }
+        }
     }
 }

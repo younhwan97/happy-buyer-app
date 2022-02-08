@@ -5,11 +5,13 @@
         android:id="@+id/search_item_in_main"
         android:icon="@drawable/ic_search2"
         android:title="search"
+        android:visible="true"
         app:showAsAction="always" />
     <item
         android:id="@+id/basket_item_in_main"
         android:icon="@drawable/ic_shopping"
         android:title="basket"
+        android:visible="true"
         app:showAsAction="always" />
 
 </menu>

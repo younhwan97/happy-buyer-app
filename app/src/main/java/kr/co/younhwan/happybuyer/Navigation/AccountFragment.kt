@@ -13,7 +13,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.kakao.sdk.user.UserApiClient
 import kr.co.younhwan.happybuyer.MainActivity
-import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.databinding.FragmentAccountBinding
 
 class AccountFragment : Fragment() {
