@@ -12,7 +12,6 @@ import com.kakao.sdk.user.UserApiClient
 import kr.co.younhwan.happybuyer.Navigation.*
 import kr.co.younhwan.happybuyer.databinding.ActivityMainBinding
 
-
 class MainActivity : AppCompatActivity() {
     // View Binding
     lateinit var mainActivityBinding : ActivityMainBinding

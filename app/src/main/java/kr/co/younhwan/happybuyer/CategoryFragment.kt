@@ -1,5 +1,6 @@
 package kr.co.younhwan.happybuyer
 
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,68 +10,37 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kr.co.younhwan.happybuyer.databinding.FragmentCategoryBinding
-import kr.co.younhwan.happybuyer.databinding.FragmentHomeBinding
 import kr.co.younhwan.happybuyer.databinding.ItemBinding
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONArray
 import org.json.JSONObject
+import java.text.DecimalFormat
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.concurrent.thread
 
 class CategoryFragment:Fragment() {
     // View Binding
     private lateinit var categoryFragmentBinding : FragmentCategoryBinding
 
-    var imgRes = arrayOf(
-        R.drawable.apple, R.drawable.apple,
-    )
-
-    var testName = arrayOf(
-       "사과", "바나나"
-    )
-
-    private var category:String? = null
+    val productIdList = ArrayList<Int>()
+    val productStatusList = ArrayList<String>()
+    val productCategoryList = ArrayList<String>()
+    val productPriceList = ArrayList<Int>()
+    val productNameList = ArrayList<String>()
+    val productImageUriList = ArrayList<String>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        categoryFragmentBinding = FragmentCategoryBinding.inflate(inflater)
-        return categoryFragmentBinding.root
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        categoryFragmentBinding = FragmentCategoryBinding.inflate(inflater)
 
         val adapter1 = RecyclerAdapter()
         categoryFragmentBinding.itemContainer.adapter = adapter1
+        categoryFragmentBinding.itemContainer.layoutManager = GridLayoutManager(activity as CategoryActivity, 3)
+        getProductList(true)
 
-        categoryFragmentBinding.itemContainer.layoutManager = GridLayoutManager(activity as CategoryActivity, 2)
-
-        category = arguments?.getString("category")
-
-        /* server */
-        thread {
-            val site = "http://172.20.10.9/products/api/app/read?category=${category}"
-            val client = OkHttpClient()
-
-            val request = Request.Builder().url(site).get().build()
-            val response = client.newCall(request).execute()
-
-            if(response.isSuccessful){
-                val resultText = response.body?.string()!!.trim()
-                val json = JSONObject(resultText)
-                val data = JSONArray(json["data"].toString())
-
-                for (i in 0 until data.length()){
-                    val obj = data.getJSONObject(i)
-                    val productId = obj.getInt("product_id")
-                    val productStatus = obj.getString("status")
-                    val productCategory = obj.getString("category")
-                    val productName = obj.getString("name")
-                    val productPrice = obj.getInt("price")
-                    val productImageUrl = obj.getString("image_url")
-                }
-            }
-        }
+        return categoryFragmentBinding.root
     }
 
     // Recycler view
@@ -84,19 +54,57 @@ class CategoryFragment:Fragment() {
 
         // ViewHolder를 통해 항목을 구성할 때 항목 내의 View 객체에 데이터를 세팅한다.
         override fun onBindViewHolder(holder: ViewHolderClass, position: Int) {
-            holder.itemImage.setImageResource(imgRes[position])
-            holder.itemName.text = testName[position]
+            holder.itemImage.setImageURI(Uri.parse(productImageUriList[position]))
+            holder.itemName.text = productNameList[position]
+            holder.itemPrice.text = DecimalFormat("#,###").format(productPriceList[position])
         }
 
         override fun getItemCount(): Int {
-            return testName.size
+            return productNameList.size
         }
 
         // ViewHolder 클래스
         inner class ViewHolderClass(itemBinding: ItemBinding): RecyclerView.ViewHolder(itemBinding.root){
             val itemName = itemBinding.itemName
             val itemImage = itemBinding.itemImage
+            val itemPrice = itemBinding.itemPrice
         }
     }
 
+    private fun getProductList(clear:Boolean){
+        if(clear){
+            productNameList.clear()
+            productImageUriList.clear()
+        }
+
+        thread {
+            val categoryName = arguments?.getString("category")
+
+            val client = OkHttpClient()
+            val site = "http://192.168.0.5/products/api/app/read?category=${categoryName}"
+
+            val request = Request.Builder().url(site).get().build()
+            val response = client.newCall(request).execute()
+
+            if(response.isSuccessful){
+                val resultText = response.body?.string()!!.trim()
+                val json = JSONObject(resultText)
+                val data = JSONArray(json["data"].toString())
+
+                for (i in 0 until data.length()){
+                    val obj = data.getJSONObject(i)
+                    productIdList.add(obj.getInt("product_id"))
+                    productStatusList.add(obj.getString("status"))
+                    productCategoryList.add(obj.getString("category"))
+                    productPriceList.add(obj.getInt("price"))
+                    productNameList.add(obj.getString("name"))
+                    productImageUriList.add(obj.getString("image_url"))
+                }
+
+                activity?.runOnUiThread{
+                    categoryFragmentBinding.itemContainer.adapter?.notifyDataSetChanged()
+                }
+            }
+        }
+    }
 }

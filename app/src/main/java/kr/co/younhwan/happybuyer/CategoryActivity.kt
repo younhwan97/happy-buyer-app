@@ -40,7 +40,7 @@ class CategoryActivity : FragmentActivity() {
         for (i in 1..label!!.size) {
             val category = CategoryFragment()
             val bundle = Bundle()
-            bundle.putString("category","${label[i-1]}")
+            bundle.putString("category", label[i-1])
             category.arguments = bundle
             fragmentList.add(category)
         }
