@@ -1,7 +1,7 @@
 package kr.co.younhwan.happybuyer
 
 import android.os.Bundle
-import android.util.Log
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import kr.co.younhwan.happybuyer.databinding.FragmentCategoryBinding
 import kr.co.younhwan.happybuyer.databinding.ItemBinding
+import kr.co.younhwan.happybuyer.databinding.FragmentCategoryBinding
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONArray
@@ -35,7 +35,7 @@ class CategoryFragment:Fragment() {
 
         val adapter = RecyclerAdapter()
         categoryFragmentBinding.itemContainer.adapter = adapter
-        categoryFragmentBinding.itemContainer.layoutManager = GridLayoutManager(activity as CategoryActivity, 3)
+        categoryFragmentBinding.itemContainer.layoutManager = GridLayoutManager(activity as CategoryActivity, 2)
         getProductList(true)
 
         return categoryFragmentBinding.root
@@ -55,18 +55,31 @@ class CategoryFragment:Fragment() {
 
         // ViewHolder 를 이용해 항목 내의 객체에 데이터를 셋팅
         override fun onBindViewHolder(holder: ViewHolderClass, position: Int) {
-            val url = productImageUriList[position]
-            Glide.with(holder.itemView.context).load(url).into(holder.itemImage)
 
-            holder.itemName.text = productNameList[position]
-            holder.itemPrice.text = DecimalFormat("#,###").format(productPriceList[position])
+            val metrics : DisplayMetrics = resources.displayMetrics
+            val outSidePadding = Math.round(15 * metrics.density)
+            val inSidePadding = Math.round(5 * metrics.density)
+            val topPadding = Math.round(5 * metrics.density)
+
+            if(position % 2 == 0)
+                holder.itemContainer.setPadding(outSidePadding, topPadding, inSidePadding,0)
+            else
+                holder.itemContainer.setPadding(inSidePadding, topPadding, outSidePadding,0)
+
+            val url = productImageUriList[position]
+
+            holder.apply {
+                Glide.with(holder.itemView.context).load(url).into(holder.itemImage)
+                itemName.text = productNameList[position]
+                itemPrice.text = DecimalFormat("#,###").format(productPriceList[position])
+            }
 
             // Set click event listener
-            holder.hearBtn.setOnClickListener {
+            holder.shoppingCartBtn.setOnClickListener {
 
             }
 
-            holder.shoppingCartBtn.setOnClickListener {
+            holder.hearBtn.setOnClickListener {
 
             }
 
@@ -86,6 +99,7 @@ class CategoryFragment:Fragment() {
         // ViewHolder 클래스
         inner class ViewHolderClass(itemBinding: ItemBinding)
             : RecyclerView.ViewHolder(itemBinding.root) {
+            val itemContainer = itemBinding.itemContainer
             val itemName = itemBinding.itemName
             val itemImage = itemBinding.itemImage
             val itemPrice = itemBinding.itemPrice
@@ -104,7 +118,7 @@ class CategoryFragment:Fragment() {
             val selectedCategory = arguments?.getString("category")
 
             val client = OkHttpClient()
-            val site = "http://192.168.0.5/products/api/app/read?category=${selectedCategory}"
+            val site = "http://192.168.0.11/products/api/app/read?category=${selectedCategory}"
 
             val request = Request.Builder().url(site).get().build()
             val response = client.newCall(request).execute()

@@ -2,18 +2,19 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="10dp"
     android:orientation="vertical"
-    android:padding="6dp">
+    android:padding="15dp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/itemImageContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        app:cardCornerRadius="4dp"
+        app:cardCornerRadius="0dp"
         app:cardElevation="0dp"
         app:cardMaxElevation="0dp">
 
@@ -26,7 +27,7 @@
             <ImageView
                 android:id="@+id/itemImage"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="220dp"
                 android:layout_gravity="center"
                 android:layout_weight="0"
                 android:scaleType="fitXY"
