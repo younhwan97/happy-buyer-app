@@ -1,5 +1,6 @@
-package kr.co.younhwan.happybuyer
+package kr.co.younhwan.happybuyer.view.main
 
+import android.Manifest
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,46 +9,59 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.kakao.sdk.user.UserApiClient
-import kr.co.younhwan.happybuyer.Navigation.*
+import kr.co.younhwan.happybuyer.view.basket.BasketActivity
+import kr.co.younhwan.happybuyer.view.login.LoginActivity
+import kr.co.younhwan.happybuyer.R
+import kr.co.younhwan.happybuyer.view.search.SearchActivity
 import kr.co.younhwan.happybuyer.databinding.ActivityMainBinding
+import kr.co.younhwan.happybuyer.util.replace
+import kr.co.younhwan.happybuyer.view.main.account.AccountFragment
+import kr.co.younhwan.happybuyer.view.main.favorite.FavoriteFragment
+import kr.co.younhwan.happybuyer.view.main.home.HomeFragment
 
 class MainActivity : AppCompatActivity() {
-    // View Binding
-    lateinit var mainActivityBinding : ActivityMainBinding
+    /* View Binding */
+    lateinit var viewDataBinding : ActivityMainBinding
 
-    // 권한 목록
+    /* MainActivity 에서 사용할 프래그먼트 */
+    private val homeFragment : HomeFragment by lazy {
+        HomeFragment()
+    }
+    private val favoriteFragment : FavoriteFragment by lazy {
+        FavoriteFragment()
+    }
+    private val accountFragment : AccountFragment by lazy {
+        AccountFragment()
+    }
+
+    /* Permission List */
     private val permissionList = arrayOf(
-        android.Manifest.permission.ACCESS_COARSE_LOCATION,
-        android.Manifest.permission.ACCESS_FINE_LOCATION,
-        android.Manifest.permission.INTERNET,
-        android.Manifest.permission.ACCESS_NETWORK_STATE
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.INTERNET,
+        Manifest.permission.ACCESS_NETWORK_STATE
     )
 
-    // MainActivity 에서 사용할 프래그먼트
-    private val homeFragment = HomeFragment()
-    private val favoriteFragment = FavoriteFragment()
-    private val accountFragment = AccountFragment()
-
-    // 카카오 토큰
+    /* 카카오 토큰 로그인 토큰 */
     var kakaoAccountId : Long? = null
     var kakaoAccountNickname : String? = null
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // View Binding 객체 생성
-        mainActivityBinding = ActivityMainBinding.inflate(layoutInflater)
+        viewDataBinding = ActivityMainBinding.inflate(layoutInflater)
 
         // 1초동안 스플래쉬 화면이 보여지도록 설정
         SystemClock.sleep(1000)
 
         // 스플래쉬 화면 이후로 보여질 화면을 설정
         setTheme(R.style.Theme_HappyBuyer)
-        setContentView(mainActivityBinding.root)
+        setContentView(viewDataBinding.root)
 
         // 액션바 -> 툴바
-        mainActivityBinding.mainToolbar.title = "코코마트"
-        mainActivityBinding.mainToolbar.setTitleTextAppearance(this, R.style.ToolbarTitleTheme)
-        setSupportActionBar(mainActivityBinding.mainToolbar)
+        viewDataBinding.mainToolbar.title = "코코마트"
+        viewDataBinding.mainToolbar.setTitleTextAppearance(this, R.style.ToolbarTitleTheme)
+        setSupportActionBar(viewDataBinding.mainToolbar)
 
         // 권한 요청
         requestPermissions(permissionList, 0)
@@ -71,19 +85,19 @@ class MainActivity : AppCompatActivity() {
         }
 
         // 바텀 내비게이션의 이벤트 리스너를 설정
-        mainActivityBinding.bottomNavigation.setOnItemSelectedListener {
+        viewDataBinding.bottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.action_home -> {
-                    setFragment("home")
+                    replace(R.id.mainContainer, homeFragment)
                     true
                 }
                 R.id.action_favorite -> {
-                    setFragment("favorite")
+                    replace(R.id.mainContainer, favoriteFragment)
                     true
                 }
                 R.id.action_account -> {
                     if(kakaoAccountId != null)
-                        setFragment("account")
+                        replace(R.id.mainContainer, accountFragment)
                     else
                         setFragment("login")
                     true
@@ -92,8 +106,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // 첫 프래그먼트 설정
-        setFragment("home")
+        replace(R.id.mainContainer, homeFragment)
     }
 
     // -----------------------------------------------------
@@ -124,18 +137,6 @@ class MainActivity : AppCompatActivity() {
         val tran = supportFragmentManager.beginTransaction()
 
         when (requestFragment) {
-            "home" -> {
-                mainActivityBinding.mainToolbar.title = "코코마트"
-                tran.replace(R.id.mainContainer, homeFragment)
-            }
-            "favorite" -> {
-                mainActivityBinding.mainToolbar.title = "관심"
-                tran.replace(R.id.mainContainer, favoriteFragment)
-            }
-            "account" -> {
-                mainActivityBinding.mainToolbar.title = "내 정보"
-                tran.replace(R.id.mainContainer, accountFragment)
-            }
             "login" -> {
                 val loginIntent = Intent(this, LoginActivity::class.java)
                 startActivityForResult(loginIntent, 0)
@@ -159,7 +160,7 @@ class MainActivity : AppCompatActivity() {
         when(requestCode){
             0 -> {
                 if(resultCode == RESULT_CANCELED){
-                    mainActivityBinding.bottomNavigation.selectedItemId = R.id.action_home
+                    viewDataBinding.bottomNavigation.selectedItemId = R.id.action_home
                 }
             }
         }

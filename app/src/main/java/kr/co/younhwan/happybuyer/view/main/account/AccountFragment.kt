@@ -1,6 +1,5 @@
-package kr.co.younhwan.happybuyer.Navigation
+package kr.co.younhwan.happybuyer.view.main.account
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
@@ -12,8 +11,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.kakao.sdk.user.UserApiClient
-import kr.co.younhwan.happybuyer.MainActivity
 import kr.co.younhwan.happybuyer.databinding.FragmentAccountBinding
+import kr.co.younhwan.happybuyer.view.main.MainActivity
 
 class AccountFragment : Fragment() {
     private lateinit var accountFragmentBinding : FragmentAccountBinding

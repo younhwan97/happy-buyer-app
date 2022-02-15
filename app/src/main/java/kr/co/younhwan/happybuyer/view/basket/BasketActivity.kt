@@ -1,4 +1,4 @@
-package kr.co.younhwan.happybuyer
+package kr.co.younhwan.happybuyer.view.basket
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

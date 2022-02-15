@@ -1,4 +1,4 @@
-package kr.co.younhwan.happybuyer.Navigation
+package kr.co.younhwan.happybuyer.view.login
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -8,7 +8,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
-import kr.co.younhwan.happybuyer.MainActivity
+import kr.co.younhwan.happybuyer.view.main.MainActivity
 import kr.co.younhwan.happybuyer.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {

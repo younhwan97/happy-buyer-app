@@ -17,19 +17,19 @@
         android:theme="@style/Theme.HappyBuyer"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".BasketActivity"
+            android:name=".view.basket.BasketActivity"
             android:exported="false" />
         <activity
-            android:name=".SearchActivity"
+            android:name=".view.search.SearchActivity"
             android:exported="false" />
         <activity
-            android:name=".Navigation.LoginActivity"
+            android:name=".view.login.LoginActivity"
             android:exported="true" />
         <activity
-            android:name=".CategoryActivity"
+            android:name=".view.category.CategoryActivity"
             android:exported="true" />
         <activity
-            android:name=".MainActivity"
+            android:name=".view.main.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.SplashScreen">
             <intent-filter>

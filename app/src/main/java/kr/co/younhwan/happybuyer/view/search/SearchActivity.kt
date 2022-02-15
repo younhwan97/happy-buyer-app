@@ -1,9 +1,10 @@
-package kr.co.younhwan.happybuyer
+package kr.co.younhwan.happybuyer.view.search
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.databinding.ActivitySearchBinding
 
 class SearchActivity : AppCompatActivity() {

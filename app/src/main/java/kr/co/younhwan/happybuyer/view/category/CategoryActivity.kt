@@ -1,4 +1,4 @@
-package kr.co.younhwan.happybuyer
+package kr.co.younhwan.happybuyer.view.category
 
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -11,7 +11,10 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.databinding.ActivityCategoryBinding
+import kr.co.younhwan.happybuyer.view.basket.BasketActivity
+import kr.co.younhwan.happybuyer.view.search.SearchActivity
 
 class CategoryActivity : AppCompatActivity() {
     // View Binding
@@ -27,14 +30,16 @@ class CategoryActivity : AppCompatActivity() {
 
         // 액션바 -> 툴바
         categoryActivityBinding.categoryToolbar.title = "코코마트"
-        categoryActivityBinding.categoryToolbar.setTitleTextAppearance(this, R.style.ToolbarTitleTheme)
+        categoryActivityBinding.categoryToolbar.setTitleTextAppearance(this,
+            R.style.ToolbarTitleTheme
+        )
         setSupportActionBar(categoryActivityBinding.categoryToolbar)
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 
         // Main Activity로 부터 전달 받은 데이터
-        val label = intent.getStringArrayExtra("label")
+        val label = intent.getStringArrayListExtra("label")
         val position = intent.getIntExtra("position", 0)
 
         for (i in 1..label!!.size) {
@@ -80,7 +85,9 @@ class CategoryActivity : AppCompatActivity() {
         }
         categoryActivityBinding.tabs.addOnTabSelectedListener(listener1)
 
-        categoryActivityBinding.chip4.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorTheme))
+        categoryActivityBinding.chip4.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this,
+            R.color.colorTheme
+        ))
     }
 
     // -----------------------------------------------------

@@ -1,4 +1,4 @@
-package kr.co.younhwan.happybuyer
+package kr.co.younhwan.happybuyer.view.category
 
 import android.os.Bundle
 import android.util.DisplayMetrics

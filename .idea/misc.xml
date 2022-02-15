@@ -3,9 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_baseline_account_circle_24.xml" value="0.225" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_baseline_favorite_24.xml" value="0.225" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.225" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.225" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/splash.xml" value="0.263" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_category.xml" value="0.33" />
-        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_main.xml" value="0.30520833333333336" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_search.xml" value="0.30520833333333336" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/fragment_category.xml" value="0.34270833333333334" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/fragment_favorite.xml" value="0.44351851851851853" />

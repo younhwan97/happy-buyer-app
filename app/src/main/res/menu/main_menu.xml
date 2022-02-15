@@ -3,13 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/search_item_in_main"
-        android:icon="@drawable/ic_search2"
+        android:icon="@drawable/ic_baseline_search_24"
         android:title="search"
         android:visible="true"
         app:showAsAction="always" />
     <item
         android:id="@+id/basket_item_in_main"
-        android:icon="@drawable/ic_shopping"
+        android:icon="@drawable/ic_baseline_shopping_cart_24"
         android:title="basket"
         android:visible="true"
         app:showAsAction="always" />

@@ -1,4 +1,4 @@
-package kr.co.younhwan.happybuyer.Navigation
+package kr.co.younhwan.happybuyer.view.main.favorite
 
 import android.os.Bundle
 import android.view.LayoutInflater

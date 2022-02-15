@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity" >
+    tools:context=".view.main.MainActivity" >
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/mainToolbar"
@@ -46,7 +46,6 @@
         android:layout_alignParentBottom="true"
         app:menu="@menu/bottom_navigation_menu"
         app:itemIconTint="@drawable/menu_selector_color"
-        app:itemTextColor="@drawable/menu_selector_color"
-        />
+        app:itemTextColor="@drawable/menu_selector_color" />
 
 </RelativeLayout>
