@@ -16,6 +16,3 @@ interface HomeContract {
         fun loadItems(context: Context, isClear: Boolean)
     }
 }
-
-//        fun updateCategory(image: ArrayList<Int>, label: ArrayList<String>)
-//        fun notifyAdapter()

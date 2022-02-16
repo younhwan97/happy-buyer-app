@@ -2,6 +2,7 @@ package kr.co.younhwan.happybuyer.view.category
 
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +10,15 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import kr.co.younhwan.happybuyer.data.source.image.SampleImageRepository
+import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
 import kr.co.younhwan.happybuyer.databinding.ItemBinding
 import kr.co.younhwan.happybuyer.databinding.FragmentCategoryBinding
+import kr.co.younhwan.happybuyer.view.category.adapter.CategoryAdapter
+import kr.co.younhwan.happybuyer.view.category.presenter.CategoryContract
+import kr.co.younhwan.happybuyer.view.category.presenter.CategoryPresenter
+import kr.co.younhwan.happybuyer.view.main.home.adapter.HomeAdapter
+import kr.co.younhwan.happybuyer.view.main.home.presenter.HomePresenter
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONArray
@@ -20,25 +28,53 @@ import java.util.*
 import kotlin.concurrent.thread
 
 
-class CategoryFragment:Fragment() {
-    // View Binding
-    private lateinit var categoryFragmentBinding : FragmentCategoryBinding
+class CategoryFragment:Fragment(), CategoryContract.View {
+
+    /* View Binding */
+    private lateinit var viewDataBinding : FragmentCategoryBinding
+
+    /* Presenter */
+    private val categoryPresenter: CategoryPresenter by lazy {
+        // View 영역은 사용자 이벤트 등에 대응하기 위해서 Presenter 변수가 필요하다.
+        // 실제 처리는 Presenter, Model 에서 이뤄지기 때문이다.
+        CategoryPresenter(
+            this,
+            productData = ProductRepository,
+            adapterModel = categoryAdapter,
+            adapterView = categoryAdapter
+        )
+    }
+
+    /* Adapter */
+    private val categoryAdapter: CategoryAdapter by lazy {
+        CategoryAdapter()
+    }
+
+    /* Data */
+    lateinit var selectedCateogory: String
 
     val productIdList = ArrayList<Int>()
     val productPriceList = ArrayList<Int>()
     val productNameList = ArrayList<String>()
     val productImageUriList = ArrayList<String>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        viewDataBinding = FragmentCategoryBinding.inflate(inflater)
+        return viewDataBinding.root
+    }
 
-        categoryFragmentBinding = FragmentCategoryBinding.inflate(inflater)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        val adapter = RecyclerAdapter()
-        categoryFragmentBinding.itemContainer.adapter = adapter
-        categoryFragmentBinding.itemContainer.layoutManager = GridLayoutManager(activity as CategoryActivity, 2)
-        getProductList(true)
+        selectedCateogory = arguments?.getString("category").toString()
+        categoryPresenter.loadProductItems(requireContext(), false, selectedCateogory)
 
-        return categoryFragmentBinding.root
+        viewDataBinding.itemContainer.run {
+            this.adapter = categoryAdapter
+            this.layoutManager = GridLayoutManager(activity as CategoryActivity, 2)
+        }
+
+        // getProductList(true)
     }
 
     // Recycler view
@@ -144,7 +180,7 @@ class CategoryFragment:Fragment() {
                 }
 
                 activity?.runOnUiThread{
-                    categoryFragmentBinding.itemContainer.adapter?.notifyDataSetChanged()
+                    viewDataBinding.itemContainer.adapter?.notifyDataSetChanged()
                 }
             }
         }

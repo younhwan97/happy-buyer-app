@@ -17,28 +17,30 @@ import kr.co.younhwan.happybuyer.view.basket.BasketActivity
 import kr.co.younhwan.happybuyer.view.search.SearchActivity
 
 class CategoryActivity : AppCompatActivity() {
-    // View Binding
-    lateinit var categoryActivityBinding: ActivityCategoryBinding
+
+    /* View Binding */
+    lateinit var viewDataBinding: ActivityCategoryBinding
 
     // category view pager2에 세팅하기 위한 Fragment 들을 가지고 있는 ArrayList
     val fragmentList = ArrayList<Fragment>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        categoryActivityBinding = ActivityCategoryBinding.inflate(layoutInflater)
-        setContentView(categoryActivityBinding.root)
+
+        viewDataBinding = ActivityCategoryBinding.inflate(layoutInflater)
+        setContentView(viewDataBinding.root)
 
         // 액션바 -> 툴바
-        categoryActivityBinding.categoryToolbar.title = "코코마트"
-        categoryActivityBinding.categoryToolbar.setTitleTextAppearance(this,
+        viewDataBinding.categoryToolbar.title = "코코마트"
+        viewDataBinding.categoryToolbar.setTitleTextAppearance(this,
             R.style.ToolbarTitleTheme
         )
-        setSupportActionBar(categoryActivityBinding.categoryToolbar)
+        setSupportActionBar(viewDataBinding.categoryToolbar)
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 
-        // Main Activity로 부터 전달 받은 데이터
+        // Main Activity 로 부터 전달 받은 데이터
         val label = intent.getStringArrayListExtra("label")
         val position = intent.getIntExtra("position", 0)
 
@@ -60,32 +62,32 @@ class CategoryActivity : AppCompatActivity() {
             }
         }
 
-        categoryActivityBinding.categoryViewPager2.adapter = adapter1
+        viewDataBinding.categoryViewPager2.adapter = adapter1
 
 
         // tab과 view pager2를 연결
         var selecetdTab: TabLayout.Tab? = null
-        TabLayoutMediator(categoryActivityBinding.tabs, categoryActivityBinding.categoryViewPager2) { tab: TabLayout.Tab, i: Int ->
+        TabLayoutMediator(viewDataBinding.tabs, viewDataBinding.categoryViewPager2) { tab: TabLayout.Tab, i: Int ->
             tab.text = label[i]
             if (i == position)
                 selecetdTab = tab
         }.attach()
 
         // toolbar에 선택된 탭을 표기하도록 설정
-        categoryActivityBinding.tabs.selectTab(selecetdTab)
-        categoryActivityBinding.categoryToolbar.title = label[position]
+        viewDataBinding.tabs.selectTab(selecetdTab)
+        viewDataBinding.categoryToolbar.title = label[position]
         val listener1 = object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                categoryActivityBinding.categoryToolbar.title = label[categoryActivityBinding.tabs.selectedTabPosition]
+                viewDataBinding.categoryToolbar.title = label[viewDataBinding.tabs.selectedTabPosition]
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {}
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
         }
-        categoryActivityBinding.tabs.addOnTabSelectedListener(listener1)
+        viewDataBinding.tabs.addOnTabSelectedListener(listener1)
 
-        categoryActivityBinding.chip4.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this,
+        viewDataBinding.chip4.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this,
             R.color.colorTheme
         ))
     }
@@ -130,47 +132,3 @@ class CategoryActivity : AppCompatActivity() {
         }
     }
 }
-
-
-
-
-
-//        categoryActivityBinding.selectListOrderChipGroup.setOnCheckedChangeListener { group, checkedId ->
-//            when (checkedId) {
-//                R.id.chip4->{
-//                    group.chip4.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorTheme))
-//                    group.chip5.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-//                    group.chip6.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-//                    group.chip7.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-//                    group.chip8.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-//                }
-//                R.id.chip5->{
-//                    group.chip4.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-//                    group.chip5.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorTheme))
-//                    group.chip6.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-//                    group.chip7.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-//                    group.chip8.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-//                }
-//                R.id.chip6->{
-//                    group.chip4.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-//                    group.chip5.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-//                    group.chip6.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorTheme))
-//                    group.chip7.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-//                    group.chip8.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-//                }
-//                R.id.chip7->{
-//                    group.chip4.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-//                    group.chip5.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-//                    group.chip6.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-//                    group.chip7.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorTheme))
-//                    group.chip8.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-//                }
-//                R.id.chip8->{
-//                    group.chip4.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-//                    group.chip5.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-//                    group.chip6.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-//                    group.chip7.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorDivision))
-//                    group.chip8.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorTheme))
-//                }
-//            }
-//        }

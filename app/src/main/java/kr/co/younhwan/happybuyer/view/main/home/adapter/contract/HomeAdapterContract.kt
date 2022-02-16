@@ -2,7 +2,7 @@ package kr.co.younhwan.happybuyer.view.main.home.adapter.contract
 
 import kr.co.younhwan.happybuyer.data.ImageItem
 
-interface CategoryAdapterContract {
+interface HomeAdapterContract {
     interface View {
 
         var onClickFunc : ((Int) -> Unit)?

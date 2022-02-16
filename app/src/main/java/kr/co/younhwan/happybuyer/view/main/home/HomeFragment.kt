@@ -12,7 +12,7 @@ import kr.co.younhwan.happybuyer.data.source.image.SampleImageRepository
 import kr.co.younhwan.happybuyer.databinding.FragmentHomeBinding
 import kr.co.younhwan.happybuyer.view.category.CategoryActivity
 import kr.co.younhwan.happybuyer.view.main.MainActivity
-import kr.co.younhwan.happybuyer.view.main.home.adapter.CategoryAdapter
+import kr.co.younhwan.happybuyer.view.main.home.adapter.HomeAdapter
 import kr.co.younhwan.happybuyer.view.main.home.presenter.HomeContract
 import kr.co.younhwan.happybuyer.view.main.home.presenter.HomePresenter
 
@@ -32,36 +32,40 @@ class HomeFragment : Fragment(), HomeContract.View {
         HomePresenter(
             this,
             imageData = SampleImageRepository,
-            adapterModel = categoryAdapter,
-            adapterView = categoryAdapter
+            adapterModel = homeAdapter,
+            adapterView = homeAdapter
         )
     }
 
     /* Adapter */
-    private val categoryAdapter: CategoryAdapter by lazy {
-        CategoryAdapter()
+    private val homeAdapter: HomeAdapter by lazy {
+        HomeAdapter()
     }
 
     /* Data */
     private lateinit var categoryLabel: ArrayList<String>
 
+    /* Method */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewDataBinding = FragmentHomeBinding.inflate(inflater)
+        viewDataBinding = FragmentHomeBinding.inflate(inflater) // Data Binding
         return viewDataBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // load item by presenter
         homePresenter.loadItems(requireContext(), false)
+
+        // set recycler view
         viewDataBinding.recycler.run {
-            adapter = categoryAdapter
+            adapter = homeAdapter
             layoutManager = GridLayoutManager(requireContext(), 5)
-            addItemDecoration(categoryAdapter.RecyclerDecoration(20))
+            addItemDecoration(homeAdapter.RecyclerDecoration(20))
         }
     }
 
@@ -82,65 +86,3 @@ class HomeFragment : Fragment(), HomeContract.View {
         act.startActivity(categoryIntent)
     }
 }
-
-
-//override fun updateCategory(image: ArrayList<Int>, label: ArrayList<String>) {
-//    this.imgRes = image
-//    this.label = label
-//}
-//
-//override fun notifyAdapter() {
-//    RecyclerAdapter().notifyAdapter()
-//}
-//
-//
-//// RecyclerView Adapter Class
-//inner class RecyclerAdapter:RecyclerView.Adapter<RecyclerAdapter.ViewHolderClass>() {
-//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderClass {
-//        // View를 생성한다.
-//        val rowBinding = RowBinding.inflate(layoutInflater)
-//        val holder = ViewHolderClass(rowBinding)
-//        rowBinding.root.setOnClickListener(holder)
-//
-//        return holder
-//    }
-//
-//    override fun onBindViewHolder(holder: ViewHolderClass, position: Int) {
-//        // View를 bind 한다.
-//        holder.rowImageView.setImageResource(imgRes[position])
-//        holder.rowTextView.text = label[position]
-//    }
-//
-//    override fun getItemCount(): Int {
-//        //  현재 View에 노출할 아이템의 카운트 수
-//        return label.size
-//    }
-//
-//    fun notifyAdapter(){
-//        notifyDataSetChanged()
-//    }
-//
-//    // ViewHolder 클래스
-//    inner class ViewHolderClass(rowBinding: RowBinding)
-//        : RecyclerView.ViewHolder(rowBinding.root), View.OnClickListener {
-//        // 항목 View 내부의 View 객체의 주소값을 담는다.
-//        val rowImageView= rowBinding.rowImageView
-//        val rowTextView = rowBinding.rowTextView
-//
-//        override fun onClick(p0: View?) {
-//            val act= activity as MainActivity
-//            val category_intent = Intent(act, CategoryActivity::class.java)
-//            category_intent.putExtra("position",adapterPosition)
-//            category_intent.putExtra("label",label)
-//            act.startActivity(category_intent)
-//        }
-//    }
-//}
-//
-//// RecyclerView의 간격을 조정하기 위한 클래스
-//inner class RecyclerDecoration(private val divHeight : Int) :RecyclerView.ItemDecoration() {
-//    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-//        super.getItemOffsets(outRect, view, parent, state)
-//        outRect.bottom= divHeight
-//    }
-//}
