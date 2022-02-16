@@ -1,8 +1,7 @@
 package kr.co.younhwan.happybuyer.data.source.product
 
 import android.content.Context
-import android.util.Log
-import kr.co.younhwan.happybuyer.data.CategoryItem
+import kr.co.younhwan.happybuyer.data.ProductItem
 
 object ProductRepository : ProductSource{
 
@@ -10,7 +9,7 @@ object ProductRepository : ProductSource{
 
     override fun getImages(context: Context, selectedCategory:String, loadImageCallback: ProductSource.LoadImageCallback?) {
         productRemoteDataSource.getImages(context, selectedCategory, object : ProductSource.LoadImageCallback {
-            override fun onLoadImages(list: ArrayList<CategoryItem>) {
+            override fun onLoadImages(list: ArrayList<ProductItem>) {
                 loadImageCallback?.onLoadImages(list)
             }
         })

@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import kr.co.younhwan.happybuyer.data.ImageItem
-import kr.co.younhwan.happybuyer.data.source.image.SampleImageRepository
+import kr.co.younhwan.happybuyer.data.CategoryItem
+import kr.co.younhwan.happybuyer.data.source.category.CategoryRepository
 import kr.co.younhwan.happybuyer.databinding.FragmentHomeBinding
 import kr.co.younhwan.happybuyer.view.category.CategoryActivity
 import kr.co.younhwan.happybuyer.view.main.MainActivity
@@ -31,7 +31,7 @@ class HomeFragment : Fragment(), HomeContract.View {
         // 실제 처리는 Presenter, Model 에서 이뤄지기 때문이다.
         HomePresenter(
             this,
-            imageData = SampleImageRepository,
+            categoryData = CategoryRepository,
             adapterModel = homeAdapter,
             adapterView = homeAdapter
         )
@@ -43,7 +43,7 @@ class HomeFragment : Fragment(), HomeContract.View {
     }
 
     /* Data */
-    private lateinit var categoryLabel: ArrayList<String>
+    private lateinit var categoryLabelList: ArrayList<String>
 
     /* Method */
     override fun onCreateView(
@@ -69,20 +69,20 @@ class HomeFragment : Fragment(), HomeContract.View {
         }
     }
 
-    override fun setCategoryLabel(list: ArrayList<ImageItem>) {
+    override fun setCategoryLabelList(list: ArrayList<CategoryItem>) {
         val temp = ArrayList<String>()
 
         for (index in list)
             temp.add(index.title)
 
-        categoryLabel = temp
+        categoryLabelList = temp
     }
 
     override fun createCategoryActivity(adapterPosition: Int) {
         val act = activity as MainActivity
         val categoryIntent = Intent(act, CategoryActivity::class.java)
         categoryIntent.putExtra("position", adapterPosition)
-        categoryIntent.putExtra("label", categoryLabel)
+        categoryIntent.putExtra("label", categoryLabelList)
         act.startActivity(categoryIntent)
     }
 }

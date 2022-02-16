@@ -1,9 +1,9 @@
-package kr.co.younhwan.happybuyer.data.source.image
+package kr.co.younhwan.happybuyer.data.source.category
 
 import android.content.Context
-import kr.co.younhwan.happybuyer.data.ImageItem
+import kr.co.younhwan.happybuyer.data.CategoryItem
 
-object SampleImageLocalDataSource : SampleImageSource {
+object CategoryLocalDataSource : CategorySource {
     private val labelList = arrayListOf<String>(
         "과일", "정육", "채소",
         "우유/유제품", "김치/반찬", "수산/건해산",
@@ -23,21 +23,12 @@ object SampleImageLocalDataSource : SampleImageSource {
 
     )
 
-    override fun getImages(context: Context, loadImageCallback: SampleImageSource.LoadImageCallback?) {
-        val list = ArrayList<ImageItem>()
+    override fun getCategories(context: Context, loadImageCallback: CategorySource.LoadCategoryCallback?) {
+        val list = ArrayList<CategoryItem>()
         for (index in 1..nameList.size) {
             val resource = context.resources.getIdentifier(nameList[index-1], "drawable", context.packageName)
-            list.add(ImageItem(resource, labelList[index-1]))
+            list.add(CategoryItem(resource, labelList[index-1]))
         }
-        loadImageCallback?.onLoadImages(list)
+        loadImageCallback?.onLoadCategories(list)
     }
 }
-
-//val imageList = arrayListOf<Int>(
-//    R.drawable.category_fruit, R.drawable.category_meat, R.drawable.category_vegetable,
-//    R.drawable.category_milk, R.drawable.category_kimchi, R.drawable.category_fish,
-//    R.drawable.category_water, R.drawable.category_coffee, R.drawable.category_chips,
-//    R.drawable.category_frozen, R.drawable.category_ramen, R.drawable.category_seasoning,
-//    R.drawable.category_rice, R.drawable.category_cleaning, R.drawable.category_tissue,
-//    R.drawable.category_kitchen, R.drawable.category_pet
-//)

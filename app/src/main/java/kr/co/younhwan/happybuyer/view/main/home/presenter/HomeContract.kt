@@ -1,12 +1,12 @@
 package kr.co.younhwan.happybuyer.view.main.home.presenter
 
 import android.content.Context
-import kr.co.younhwan.happybuyer.data.ImageItem
+import kr.co.younhwan.happybuyer.data.CategoryItem
 
 interface HomeContract {
     interface View {
         // View method
-        fun setCategoryLabel(list: ArrayList<ImageItem>)
+        fun setCategoryLabelList(list: ArrayList<CategoryItem>)
 
         fun createCategoryActivity(adapterPosition: Int)
     }

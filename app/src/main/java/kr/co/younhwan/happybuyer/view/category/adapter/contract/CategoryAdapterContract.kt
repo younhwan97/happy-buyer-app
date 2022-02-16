@@ -1,22 +1,24 @@
 package kr.co.younhwan.happybuyer.view.category.adapter.contract
 
-import kr.co.younhwan.happybuyer.data.CategoryItem
-import kr.co.younhwan.happybuyer.data.ImageItem
+import kr.co.younhwan.happybuyer.data.ProductItem
 
 interface CategoryAdapterContract{
     interface View{
 
-        fun notifyAdapter()
+        var onClickFuncHeartBtn: ((Int) -> Unit)?
 
+        var onClickFuncShoppingCartBtn: ((Int) -> Unit)?
+
+        fun notifyAdapter()
     }
 
     interface Model{
 
-        fun addItems(categoryItems: ArrayList<CategoryItem>)
+        fun addItems(productItems: ArrayList<ProductItem>)
 
         fun clearItem()
 
-        fun getItem(position: Int): CategoryItem
+        fun getItem(position: Int): ProductItem
 
     }
 

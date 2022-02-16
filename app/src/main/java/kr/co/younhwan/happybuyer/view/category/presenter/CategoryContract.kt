@@ -4,7 +4,6 @@ import android.content.Context
 
 interface CategoryContract{
     interface View{
-
     }
 
     interface Model{

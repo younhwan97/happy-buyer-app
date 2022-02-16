@@ -1,6 +1,6 @@
 package kr.co.younhwan.happybuyer.view.main.home.adapter.contract
 
-import kr.co.younhwan.happybuyer.data.ImageItem
+import kr.co.younhwan.happybuyer.data.CategoryItem
 
 interface HomeAdapterContract {
     interface View {
@@ -12,11 +12,11 @@ interface HomeAdapterContract {
 
     interface Model {
 
-        fun addItems(imageItems: ArrayList<ImageItem>)
+        fun addItems(categoryItems: ArrayList<CategoryItem>)
 
         fun clearItem()
 
-        fun getItem(position: Int): ImageItem
+        fun getItem(position: Int): CategoryItem
 
     }
 }

@@ -3,7 +3,7 @@ package kr.co.younhwan.happybuyer.data.source.product
 import android.content.Context
 import android.util.Log
 import kotlinx.coroutines.*
-import kr.co.younhwan.happybuyer.data.CategoryItem
+import kr.co.younhwan.happybuyer.data.ProductItem
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONArray
@@ -18,7 +18,7 @@ object ProductRemoteDataSource : ProductSource {
     ) {
 
         runBlocking {
-            var list = ArrayList<CategoryItem>()
+            var list = ArrayList<ProductItem>()
             val job = GlobalScope.launch {
                 list = getItem(selectedCategory)
             }
@@ -29,8 +29,8 @@ object ProductRemoteDataSource : ProductSource {
     }
 }
 
-suspend fun getItem(selectedCategory: String): ArrayList<CategoryItem> {
-    val list = ArrayList<CategoryItem>()
+suspend fun getItem(selectedCategory: String): ArrayList<ProductItem> {
+    val list = ArrayList<ProductItem>()
 
     // 클라이언트 만들기
     val client = OkHttpClient()
@@ -51,14 +51,14 @@ suspend fun getItem(selectedCategory: String): ArrayList<CategoryItem> {
             val obj = data.getJSONObject(i)
             val productStatus = obj.getString("status")
             val productCategory = obj.getString("category")
-            var productName: String
-            var productPrice: Int
-            var productImage: String
+
             if (productStatus == "판매중" && productCategory == selectedCategory) {
-                productName = obj.getString("name")
-                productPrice = obj.getInt("price")
-                productImage = obj.getString("image_url")
-                list.add(CategoryItem(productImage, productName, productPrice))
+                val productId = obj.getInt("product_id")
+                val productName = obj.getString("name")
+                val productPrice = obj.getInt("price")
+                val productImage = obj.getString("image_url")
+
+                list.add(ProductItem(productId, productImage, productName, productPrice))
             } else { // 판매중인 상품이 아니거나 잘못된 카테고리의 상품
                 continue
             }

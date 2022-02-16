@@ -88,10 +88,12 @@ class MainActivity : AppCompatActivity() {
         viewDataBinding.bottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.action_home -> {
+                    viewDataBinding.mainToolbar.title = "코코마트"
                     replace(R.id.mainContainer, homeFragment)
                     true
                 }
                 R.id.action_favorite -> {
+                    viewDataBinding.mainToolbar.title = "관심"
                     replace(R.id.mainContainer, favoriteFragment)
                     true
                 }

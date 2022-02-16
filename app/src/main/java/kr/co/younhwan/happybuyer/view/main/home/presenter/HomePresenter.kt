@@ -1,9 +1,9 @@
 package kr.co.younhwan.happybuyer.view.main.home.presenter
 
 import android.content.Context
-import kr.co.younhwan.happybuyer.data.ImageItem
-import kr.co.younhwan.happybuyer.data.source.image.SampleImageRepository
-import kr.co.younhwan.happybuyer.data.source.image.SampleImageSource
+import kr.co.younhwan.happybuyer.data.CategoryItem
+import kr.co.younhwan.happybuyer.data.source.category.CategoryRepository
+import kr.co.younhwan.happybuyer.data.source.category.CategorySource
 import kr.co.younhwan.happybuyer.view.main.home.adapter.contract.HomeAdapterContract
 
 /**
@@ -11,11 +11,11 @@ import kr.co.younhwan.happybuyer.view.main.home.adapter.contract.HomeAdapterCont
  */
 
 class HomePresenter(
-    private val view:HomeContract.View,
-    private val imageData: SampleImageRepository,
+    private val view: HomeContract.View,
+    private val categoryData: CategoryRepository,
     private val adapterModel: HomeAdapterContract.Model,
     private val adapterView: HomeAdapterContract.View
-    ) : HomeContract.Presenter {
+) : HomeContract.Presenter {
 
     init {
         adapterView.onClickFunc = { i: Int ->
@@ -24,13 +24,13 @@ class HomePresenter(
     }
 
     override fun loadItems(context: Context, isClear: Boolean) {
-        imageData.getImages(context, object : SampleImageSource.LoadImageCallback {
-            override fun onLoadImages(list: ArrayList<ImageItem>) {
-                if (isClear) {
-                    adapterModel.clearItem()
-                }
+        // 프래그먼트가 그려질 때 "초기에" 호출되는 메서드
+        // 레파지토리를 통해 카테고리 목록, 이미지, 타이틀을 가져오고 리사이클러뷰를 그린다.
+        categoryData.getCategories(context, object : CategorySource.LoadCategoryCallback {
+            override fun onLoadCategories(list: ArrayList<CategoryItem>) {
+                if (isClear) adapterModel.clearItem()
 
-                view.setCategoryLabel(list)
+                view.setCategoryLabelList(list)
                 adapterModel.addItems(list)
                 adapterView.notifyAdapter()
             }

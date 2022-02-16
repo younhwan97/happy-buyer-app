@@ -5,11 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import kr.co.younhwan.happybuyer.data.source.image.SampleImageRepository
 import kr.co.younhwan.happybuyer.databinding.FragmentFavoriteBinding
 import kr.co.younhwan.happybuyer.view.main.favorite.presenter.FavoriteContract
 import kr.co.younhwan.happybuyer.view.main.favorite.presenter.FavoritePresenter
-import kr.co.younhwan.happybuyer.view.main.home.presenter.HomePresenter
 
 class FavoriteFragment: Fragment(), FavoriteContract.View {
 

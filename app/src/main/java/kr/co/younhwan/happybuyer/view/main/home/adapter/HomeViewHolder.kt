@@ -2,24 +2,24 @@ package kr.co.younhwan.happybuyer.view.main.home.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kr.co.younhwan.happybuyer.data.ImageItem
-import kr.co.younhwan.happybuyer.databinding.RowBinding
+import kr.co.younhwan.happybuyer.data.CategoryItem
+import kr.co.younhwan.happybuyer.databinding.CategoryItemBinding
 
 class HomeViewHolder(
     parent: ViewGroup,
-    rowBinding: RowBinding,
+    categoryItemBinding: CategoryItemBinding,
     private val listenerFunc: ((Int) -> Unit)?
-) : RecyclerView.ViewHolder(rowBinding.root) {
+) : RecyclerView.ViewHolder(categoryItemBinding.root) {
 
     private val imageView by lazy {
-        rowBinding.rowImageView
+        categoryItemBinding.rowImageView
     }
 
     private val textView by lazy {
-        rowBinding.rowTextView
+        categoryItemBinding.rowTextView
     }
 
-    fun onBind(item: ImageItem, position: Int) {
+    fun onBind(item: CategoryItem, position: Int) {
         textView.text = item.title
         imageView.setImageResource(item.resource)
 

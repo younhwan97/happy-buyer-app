@@ -1,13 +1,17 @@
 package kr.co.younhwan.happybuyer.view.category.adapter
 
+import android.util.DisplayMetrics
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kr.co.younhwan.happybuyer.data.CategoryItem
+import com.bumptech.glide.Glide
+import kr.co.younhwan.happybuyer.data.ProductItem
 import kr.co.younhwan.happybuyer.databinding.ItemBinding
 
 class CategoryViewHolder(
-    parent: ViewGroup,
-    itemBinding: ItemBinding
+    private val parent: ViewGroup,
+    itemBinding: ItemBinding,
+    private val listenerFuncHeartBtn: ((Int) -> Unit)?,
+    private val listenerFuncShoppingCartBtn: ((Int) -> Unit)?
 ) : RecyclerView.ViewHolder(itemBinding.root) {
 
     private val itemName by lazy {
@@ -22,10 +26,40 @@ class CategoryViewHolder(
         itemBinding.itemImage
     }
 
+    private val itemContainer by lazy {
+        itemBinding.itemContainer
+    }
 
-    fun onBind(categoryItem: CategoryItem, position: Int){
-        itemName.text = categoryItem.title
-        itemPrice.text = categoryItem.price.toString()
-        // itemImage.setImageResource()
+    private val heartBtn by lazy {
+        itemBinding.heartBtn
+    }
+
+    private val shoppingCartBtn by lazy {
+        itemBinding.shoppingCartBtn
+    }
+
+
+    fun onBind(productItem: ProductItem, position: Int) {
+        itemName.text = productItem.productName
+        itemPrice.text = productItem.productPrice.toString()
+        Glide.with(this.itemView.context).load(productItem.productImageUrl).into(itemImage)
+
+        val metrics: DisplayMetrics = parent.resources.displayMetrics
+        val outSidePadding = Math.round(15 * metrics.density)
+        val inSidePadding = Math.round(5 * metrics.density)
+        val topPadding = Math.round(5 * metrics.density)
+
+        if (position % 2 == 0)
+            itemContainer.setPadding(outSidePadding, topPadding, inSidePadding, 0)
+        else
+            itemContainer.setPadding(inSidePadding, topPadding, outSidePadding, 0)
+
+        heartBtn.setOnClickListener {
+            listenerFuncHeartBtn?.invoke(productItem.productId)
+        }
+
+        shoppingCartBtn.setOnClickListener {
+            listenerFuncShoppingCartBtn?.invoke(productItem.productId)
+        }
     }
 }

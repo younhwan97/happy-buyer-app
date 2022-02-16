@@ -2,15 +2,10 @@ package kr.co.younhwan.happybuyer.view.category.presenter
 
 import android.content.Context
 import android.util.Log
-import kr.co.younhwan.happybuyer.data.CategoryItem
-import kr.co.younhwan.happybuyer.data.ImageItem
-import kr.co.younhwan.happybuyer.data.source.image.SampleImageRepository
-import kr.co.younhwan.happybuyer.data.source.image.SampleImageSource
+import kr.co.younhwan.happybuyer.data.ProductItem
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
 import kr.co.younhwan.happybuyer.data.source.product.ProductSource
 import kr.co.younhwan.happybuyer.view.category.adapter.contract.CategoryAdapterContract
-import kr.co.younhwan.happybuyer.view.main.home.adapter.contract.HomeAdapterContract
-import kr.co.younhwan.happybuyer.view.main.home.presenter.HomeContract
 
 class CategoryPresenter(
     private val view: CategoryContract.View,
@@ -19,17 +14,34 @@ class CategoryPresenter(
     private val adapterView: CategoryAdapterContract.View
 ) : CategoryContract.Model {
 
+    init {
+        adapterView.onClickFuncHeartBtn = {
+            onClickListenerHeartBtn(it)
+        }
+
+        adapterView.onClickFuncShoppingCartBtn = {
+            onClickListenerShoppingCartBtn(it)
+        }
+    }
+
     override fun loadProductItems(context: Context, isClear: Boolean, selectedCategory: String) {
         productData.getImages(context, selectedCategory ,object : ProductSource.LoadImageCallback {
-            override fun onLoadImages(list: ArrayList<CategoryItem>) {
+            override fun onLoadImages(list: ArrayList<ProductItem>) {
                 if (isClear) {
                     adapterModel.clearItem()
                 }
-                Log.d("test", "$list")
 
                 adapterModel.addItems(list)
                 adapterView.notifyAdapter()
             }
         })
+    }
+
+    private fun onClickListenerHeartBtn(productId: Int) {
+        // productData.addProductToWished(productId)
+    }
+
+    private fun onClickListenerShoppingCartBtn(productId: Int) {
+        // productData.addProductToBasket(productId)
     }
 }
