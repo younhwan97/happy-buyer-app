@@ -9,5 +9,13 @@ interface ProductSource{
         fun onLoadImages(list: ArrayList<ProductItem>)
     }
 
+    interface addProductCallback{
+        fun onAddProduct()
+    }
+
     fun getImages(context: Context, selectedCategory:String, loadImageCallback: LoadImageCallback?)
+
+    fun addProductToWished(productId: Int)
+
+    fun addProductToBasket(productId: Int)
 }

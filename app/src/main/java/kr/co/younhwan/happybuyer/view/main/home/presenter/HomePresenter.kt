@@ -18,8 +18,8 @@ class HomePresenter(
 ) : HomeContract.Presenter {
 
     init {
-        adapterView.onClickFunc = { i: Int ->
-            onClickListener(i)
+        adapterView.onClickFuncCategoryItem = { i: Int ->
+            onClickListenerCategoryItem(i)
         }
     }
 
@@ -37,7 +37,7 @@ class HomePresenter(
         })
     }
 
-    private fun onClickListener(position: Int) {
+    private fun onClickListenerCategoryItem(position: Int) {
         view.createCategoryActivity(position)
     }
 }

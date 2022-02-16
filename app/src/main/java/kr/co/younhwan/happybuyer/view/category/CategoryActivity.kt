@@ -3,6 +3,7 @@ package kr.co.younhwan.happybuyer.view.category
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -23,6 +24,9 @@ class CategoryActivity : AppCompatActivity() {
 
     // category view pager2에 세팅하기 위한 Fragment 들을 가지고 있는 ArrayList
     val fragmentList = ArrayList<Fragment>()
+
+    /**/
+    lateinit var sortBy : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,7 +91,7 @@ class CategoryActivity : AppCompatActivity() {
         }
         viewDataBinding.tabs.addOnTabSelectedListener(listener1)
 
-        viewDataBinding.chip4.chipBackgroundColor =  ColorStateList.valueOf(ContextCompat.getColor(this,
+        viewDataBinding.chip4.chipBackgroundColor = ColorStateList.valueOf(ContextCompat.getColor(this,
             R.color.colorTheme
         ))
     }

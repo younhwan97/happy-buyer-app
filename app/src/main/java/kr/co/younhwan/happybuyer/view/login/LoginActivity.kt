@@ -8,55 +8,64 @@ import android.view.MenuItem
 import android.widget.Toast
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
+import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
+import kr.co.younhwan.happybuyer.data.source.user.UserRepository
 import kr.co.younhwan.happybuyer.view.main.MainActivity
 import kr.co.younhwan.happybuyer.databinding.ActivityLoginBinding
+import kr.co.younhwan.happybuyer.view.category.presenter.CategoryPresenter
+import kr.co.younhwan.happybuyer.view.login.presenter.LoginContract
+import kr.co.younhwan.happybuyer.view.login.presenter.LoginPresenter
 
-class LoginActivity : AppCompatActivity() {
-    // View Binding
-    private lateinit var loginActivityBinding: ActivityLoginBinding
+class LoginActivity : AppCompatActivity(), LoginContract.View {
 
+    /* View Binding */
+    private lateinit var viewDataBinding: ActivityLoginBinding
+
+    /* Presenter */
+    private val loginPresenter: LoginPresenter by lazy {
+        // View 영역은 사용자 이벤트 등에 대응하기 위해서 Presenter 변수가 필요하다.
+        // 실제 처리는 Presenter, Model 에서 이뤄지기 때문이다.
+        LoginPresenter(
+            this,
+            userData = UserRepository,
+        )
+    }
+
+    /* Method */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        loginActivityBinding = ActivityLoginBinding.inflate(layoutInflater)
-        setContentView(loginActivityBinding.root)
+        viewDataBinding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(viewDataBinding.root)
 
         // 액션바 -> 툴바
-        setSupportActionBar(loginActivityBinding.toolbar)
-        supportActionBar?.title = ""
-        supportActionBar?.setHomeButtonEnabled(true)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
-            if (error != null) {
-                Log.e("kakao", "로그인 실패", error)
-            }
-            else if (token != null) {
-                Toast.makeText(this, "로그인에 성공하셨습니다.", Toast.LENGTH_SHORT).show()
-                val mainIntent = Intent(this, MainActivity::class.java)
-                // BackStack에 존재하는 Activity를 모두 제거후 Main Activity를 다시 생성
-                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(mainIntent)
-            }
+        setSupportActionBar(viewDataBinding.toolbar)
+        supportActionBar?.run {
+            title = ""
+            setHomeButtonEnabled(true)
+            setDisplayHomeAsUpEnabled(true)
         }
 
-        // 카카오톡이 설치되어 있으면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
-        loginActivityBinding.kakaoLoginBtn.setOnClickListener {
-            if(UserApiClient.instance.isKakaoTalkLoginAvailable(this)){
-                // 카카오톡이 설치되어 있을 때
-                UserApiClient.instance.loginWithKakaoTalk(this, callback = callback)
-            }else{
-                // 카카오톡이 설치되지 않았을 때
-                UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
-            }
+        // set event listener
+        viewDataBinding.kakaoLoginBtn.setOnClickListener {
+            loginPresenter.loginWithKakao(this)
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+        when (item.itemId) {
             android.R.id.home -> {
                 finish()
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun loginSuccessCallback() {
+        Toast.makeText(this, "로그인에 성공하셨습니다.", Toast.LENGTH_SHORT).show()
+        val mainIntent = Intent(this, MainActivity::class.java)
+
+        // BackStack 에 존재하는 Activity 를 모두 제거후 Main Activity 를 다시 생성
+        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(mainIntent)
     }
 }

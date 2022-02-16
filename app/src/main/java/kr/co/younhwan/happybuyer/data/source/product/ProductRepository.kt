@@ -14,4 +14,12 @@ object ProductRepository : ProductSource{
             }
         })
     }
+
+    override fun addProductToBasket(productId: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun addProductToWished(productId: Int) {
+        TODO("Not yet implemented")
+    }
 }

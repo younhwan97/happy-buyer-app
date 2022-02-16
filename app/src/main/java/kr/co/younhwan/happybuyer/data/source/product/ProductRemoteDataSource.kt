@@ -27,6 +27,22 @@ object ProductRemoteDataSource : ProductSource {
             loadImageCallback?.onLoadImages(list)
         }
     }
+
+    override fun addProductToBasket(productId: Int) {
+
+        runBlocking {
+            val job = GlobalScope.launch {
+                addProduct(productId)
+            }
+
+            job.join()
+        }
+
+    }
+
+    override fun addProductToWished(productId: Int) {
+        TODO("Not yet implemented")
+    }
 }
 
 suspend fun getItem(selectedCategory: String): ArrayList<ProductItem> {
@@ -38,7 +54,7 @@ suspend fun getItem(selectedCategory: String): ArrayList<ProductItem> {
     // 요청
     val site = "http://192.168.0.11/products/api/app/read?category=${selectedCategory}"
     val request = Request.Builder().url(site).get().build()
-    
+
     // 응답
     val response = client.newCall(request).execute()
 
@@ -66,4 +82,11 @@ suspend fun getItem(selectedCategory: String): ArrayList<ProductItem> {
     }
 
     return list
+}
+
+suspend fun addProduct(productId: Int): Unit {
+
+    val client = OkHttpClient()
+
+
 }

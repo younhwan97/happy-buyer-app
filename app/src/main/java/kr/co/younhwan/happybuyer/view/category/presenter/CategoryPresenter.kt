@@ -38,7 +38,7 @@ class CategoryPresenter(
     }
 
     private fun onClickListenerHeartBtn(productId: Int) {
-        // productData.addProductToWished(productId)
+        productData.addProductToWished(productId)
     }
 
     private fun onClickListenerShoppingCartBtn(productId: Int) {

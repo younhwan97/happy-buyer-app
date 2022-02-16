@@ -14,7 +14,7 @@ class HomeAdapter :
 
     private lateinit var categoryList: ArrayList<CategoryItem>
 
-    override var onClickFunc: ((Int) -> Unit)? = null
+    override var onClickFuncCategoryItem: ((Int) -> Unit)? = null
 
     override fun getItemCount() = categoryList.size
 
@@ -34,7 +34,7 @@ class HomeAdapter :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
         val rowBinding = CategoryItemBinding.inflate(LayoutInflater.from(parent.context))
-        return HomeViewHolder(parent, rowBinding, onClickFunc)
+        return HomeViewHolder(parent, rowBinding, onClickFuncCategoryItem)
     }
 
     override fun onBindViewHolder(holder: HomeViewHolder, position: Int) {

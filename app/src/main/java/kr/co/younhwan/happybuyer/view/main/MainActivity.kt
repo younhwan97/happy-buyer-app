@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.kakao.sdk.user.UserApiClient
+import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.view.basket.BasketActivity
 import kr.co.younhwan.happybuyer.view.login.LoginActivity
 import kr.co.younhwan.happybuyer.R
@@ -34,18 +35,7 @@ class MainActivity : AppCompatActivity() {
         AccountFragment()
     }
 
-    /* Permission List */
-    private val permissionList = arrayOf(
-        Manifest.permission.ACCESS_COARSE_LOCATION,
-        Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.INTERNET,
-        Manifest.permission.ACCESS_NETWORK_STATE
-    )
-
-    /* 카카오 토큰 로그인 토큰 */
-    var kakaoAccountId : Long? = null
-    var kakaoAccountNickname : String? = null
-
+    /* Method */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // View Binding 객체 생성
@@ -64,21 +54,29 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(viewDataBinding.mainToolbar)
 
         // 권한 요청
-        requestPermissions(permissionList, 0)
+        requestPermissions(arrayOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.INTERNET,
+            Manifest.permission.ACCESS_NETWORK_STATE
+        ), 0)
 
         // 로그인 정보 확인
         UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
             if (error != null) { // 토큰이 없을 때 = 로그인 정보가 없을 때
 
             } else if (tokenInfo != null) {
-                kakaoAccountId = tokenInfo.id
+                val app = application as GlobalApplication
+                app.kakaoAccountId = tokenInfo.id
+
                 UserApiClient.instance.me { user, error ->
                     if (error != null) {
-                        Log.e("kakao", "사용자 정보 요청 실패", error)
+                        Log.e("Kakao login", "사용자 정보 요청 실패", error)
                     }
                     else if (user != null) {
-                        kakaoAccountNickname = user.kakaoAccount?.profile?.nickname
-                        Log.d("kakao","${kakaoAccountNickname}")
+                        app.kakaoAccountNickname = user.kakaoAccount?.profile?.nickname
+                        Log.d("Kakao login","${app.kakaoAccountId}")
+                        Log.d("Kakao login","${app.kakaoAccountNickname}")
                     }
                 }
             }
@@ -98,10 +96,14 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.action_account -> {
-                    if(kakaoAccountId != null)
+                    val app = application as GlobalApplication
+
+                    if(app.kakaoAccountId != -1L) {
+                        viewDataBinding.mainToolbar.title = "계정"
                         replace(R.id.mainContainer, accountFragment)
-                    else
+                    } else{
                         setFragment("login")
+                    }
                     true
                 }
                 else -> false

@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.kakao.sdk.user.UserApiClient
+import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.databinding.FragmentAccountBinding
 import kr.co.younhwan.happybuyer.view.main.MainActivity
 
@@ -27,7 +28,7 @@ class AccountFragment : Fragment() {
 
         val act = activity as MainActivity
 
-        accountFragmentBinding.kakaoId.text = if(act.kakaoAccountNickname != null) act.kakaoAccountNickname else "${act.kakaoAccountId}"
+        // accountFragmentBinding.kakaoId.text = if(act.kakaoAccountNickname != null) act.kakaoAccountNickname else "${act.kakaoAccountId}"
 
         accountFragmentBinding.logoutBtn.setOnClickListener {
             var builder = AlertDialog.Builder(requireContext())
@@ -39,6 +40,9 @@ class AccountFragment : Fragment() {
                         Log.e("kakao", "로그아웃 실패. SDK에서 토큰 삭제됨", error)
                     }
                     else {
+                        val app = (activity as MainActivity).application as GlobalApplication
+                        app.kakaoAccountId  = -1L
+                        app.kakaoAccountNickname = ""
                         Toast.makeText(requireContext(), "로그아웃에 성공하셨습니다.", Toast.LENGTH_SHORT).show()
                         val mainIntent = Intent(requireContext(), MainActivity::class.java)
                         act.finish()

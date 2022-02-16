@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import kr.co.younhwan.happybuyer.data.ProductItem
 import kr.co.younhwan.happybuyer.databinding.ItemBinding
+import kotlin.math.roundToInt
 
 class CategoryViewHolder(
     private val parent: ViewGroup,
@@ -45,9 +46,9 @@ class CategoryViewHolder(
         Glide.with(this.itemView.context).load(productItem.productImageUrl).into(itemImage)
 
         val metrics: DisplayMetrics = parent.resources.displayMetrics
-        val outSidePadding = Math.round(15 * metrics.density)
-        val inSidePadding = Math.round(5 * metrics.density)
-        val topPadding = Math.round(5 * metrics.density)
+        val outSidePadding = (15 * metrics.density).roundToInt()
+        val inSidePadding = (5 * metrics.density).roundToInt()
+        val topPadding = (5 * metrics.density).roundToInt()
 
         if (position % 2 == 0)
             itemContainer.setPadding(outSidePadding, topPadding, inSidePadding, 0)
