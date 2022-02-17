@@ -24,5 +24,10 @@ class NicknameFragment : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewDataBinding.editTextTextPersonName.setOnEditorActionListener { textView, i, keyEvent ->
+
+            false
+        }
     }
 }

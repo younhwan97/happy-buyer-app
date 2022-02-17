@@ -14,7 +14,7 @@ class UpdateActivity : AppCompatActivity() {
     /* View Binding */
     lateinit var viewDataBinding : ActivityUpdateBinding
 
-    /* MainActivity 에서 사용할 프래그먼트 */
+    /* UpdateActivity 에서 사용할 프래그먼트 */
     private val nicknameFragment : NicknameFragment by lazy {
         NicknameFragment()
     }
@@ -35,7 +35,7 @@ class UpdateActivity : AppCompatActivity() {
         // 액션바 -> 툴바
         setSupportActionBar(viewDataBinding.updateToolbar)
         supportActionBar?.run {
-            title = "설정"
+            title = ""
             setHomeButtonEnabled(true)
             setDisplayHomeAsUpEnabled(true)
         }

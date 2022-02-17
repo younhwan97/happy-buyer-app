@@ -1,12 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp" >
 
     <TextView
         android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="닉네임"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/editTextTextPersonName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="닉네임" />
-</LinearLayout>
+        android:layout_below="@id/textView2"
+        android:layout_marginTop="13dp"
+        android:backgroundTint="@color/colorTheme"
+        android:ems="10"
+        android:hint="닉네임을 입력하세요."
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextTextPersonName"
+        android:layout_marginTop="2dp"
+        android:text="※ 최대 10글자까지 입력 가능합니다." />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorTheme"
+        android:backgroundTint="@color/colorTheme"
+        android:text="저장" />
+</RelativeLayout>
