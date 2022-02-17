@@ -17,6 +17,9 @@
         android:theme="@style/Theme.HappyBuyer"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".view.update.UpdateActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.basket.BasketActivity"
             android:exported="false" />
         <activity
