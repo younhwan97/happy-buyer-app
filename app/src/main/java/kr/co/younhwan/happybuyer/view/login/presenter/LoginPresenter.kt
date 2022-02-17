@@ -1,11 +1,8 @@
 package kr.co.younhwan.happybuyer.view.login.presenter
 
 import android.content.Context
-import android.util.Log
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
-import kr.co.younhwan.happybuyer.data.ProductItem
-import kr.co.younhwan.happybuyer.data.source.product.ProductSource
 import kr.co.younhwan.happybuyer.data.source.user.UserRepository
 import kr.co.younhwan.happybuyer.data.source.user.UserSource
 
