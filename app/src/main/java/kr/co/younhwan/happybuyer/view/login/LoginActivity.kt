@@ -3,16 +3,11 @@ package kr.co.younhwan.happybuyer.view.login
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
-import com.kakao.sdk.auth.model.OAuthToken
-import com.kakao.sdk.user.UserApiClient
-import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
 import kr.co.younhwan.happybuyer.data.source.user.UserRepository
 import kr.co.younhwan.happybuyer.view.main.MainActivity
 import kr.co.younhwan.happybuyer.databinding.ActivityLoginBinding
-import kr.co.younhwan.happybuyer.view.category.presenter.CategoryPresenter
 import kr.co.younhwan.happybuyer.view.login.presenter.LoginContract
 import kr.co.younhwan.happybuyer.view.login.presenter.LoginPresenter
 
@@ -67,5 +62,9 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
         // BackStack 에 존재하는 Activity 를 모두 제거후 Main Activity 를 다시 생성
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(mainIntent)
+    }
+
+    override fun loginFailCallback() {
+        Toast.makeText(this, "로그인에 실패하였습니다.", Toast.LENGTH_SHORT).show()
     }
 }

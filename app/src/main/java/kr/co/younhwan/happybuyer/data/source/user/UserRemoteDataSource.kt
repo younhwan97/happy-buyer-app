@@ -23,9 +23,8 @@ object UserRemoteDataSource : UserSource {
         runBlocking {
             var isSuccess = false
             val job = GlobalScope.launch {
-                val isSuccess = temp(kakaoLoginId, kakaoNickname)
+                isSuccess = temp(kakaoLoginId, kakaoNickname)
             }
-
             job.join()
             createUserCallback?.onCreateUser(isSuccess)
         }
@@ -42,12 +41,11 @@ suspend fun temp(kakaoAccountId: Long?, kakaoAccountNickname: String?): Boolean 
 
     // 응답
     val response = client.newCall(request).execute()
-
+    var isSuccess: Boolean = false
     if (response.isSuccessful) {
         val resultText = response.body?.string()!!.trim()
         val json = JSONObject(resultText)
-        val success = JSONArray(json["success"])
-        Log.d("test", "$json")
+        isSuccess = json.getBoolean("success")
     }
-    return true
+    return isSuccess
 }

@@ -12,27 +12,24 @@ import kr.co.younhwan.happybuyer.data.source.user.UserSource
 class LoginPresenter(
     private val view: LoginContract.View,
     private val userData: UserRepository,
-    ) : LoginContract.Model {
+) : LoginContract.Model {
 
     private val loginCallback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
         if (error != null) {
-            Log.e("kakao", "로그인 실패", error)
-        }
-        else if (token != null) {
-            var kakaoLoginId : Long? = null
-            var kakaoLoginNickname : String? = ""
-
+            view.loginFailCallback()
+        } else if (token != null) {
             UserApiClient.instance.me { user, error ->
                 if (error != null) {
-                    // 사용자 정보 요청 실패
-                }
-                else if (user != null) {
-                    kakaoLoginId = user.id
-                    kakaoLoginNickname = user.kakaoAccount?.profile?.nickname
+                    view.loginFailCallback()
+                } else if (user != null) {
+                    val kakaoLoginId = user.id
+                    val kakaoLoginNickname = user.kakaoAccount?.profile?.nickname
                     userData.createUser(kakaoLoginId, kakaoLoginNickname, object : UserSource.createUserCallback {
                         override fun onCreateUser(isSuccess: Boolean) {
-                            if(isSuccess){
-                                 // view.loginSuccessCallback()
+                            if (isSuccess) {
+                                view.loginSuccessCallback()
+                            } else {
+                                view.loginFailCallback()
                             }
                         }
                     })

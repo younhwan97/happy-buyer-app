@@ -5,6 +5,8 @@ import android.content.Context
 interface LoginContract{
     interface View {
         fun loginSuccessCallback()
+
+        fun loginFailCallback()
     }
 
     interface Model {
