@@ -1,19 +1,16 @@
 package kr.co.younhwan.happybuyer.view.main
 
-import android.Manifest
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.SystemClock
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import com.kakao.sdk.user.UserApiClient
+import androidx.activity.result.contract.ActivityResultContracts
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.view.basket.BasketActivity
 import kr.co.younhwan.happybuyer.view.login.LoginActivity
 import kr.co.younhwan.happybuyer.R
+import kr.co.younhwan.happybuyer.data.source.user.UserRepository
 import kr.co.younhwan.happybuyer.view.search.SearchActivity
 import kr.co.younhwan.happybuyer.databinding.ActivityMainBinding
 import kr.co.younhwan.happybuyer.util.replace
@@ -21,69 +18,54 @@ import kr.co.younhwan.happybuyer.view.main.account.AccountFragment
 import kr.co.younhwan.happybuyer.view.main.favorite.FavoriteFragment
 import kr.co.younhwan.happybuyer.view.main.home.HomeFragment
 
-class MainActivity : AppCompatActivity() {
-    /* View Binding */
-    lateinit var viewDataBinding : ActivityMainBinding
+class MainActivity : AppCompatActivity(), MainContract.View {
 
-    /* MainActivity 에서 사용할 프래그먼트 */
-    private val homeFragment : HomeFragment by lazy {
+    /* View Binding */
+    lateinit var viewDataBinding: ActivityMainBinding
+
+    /* Presenter */
+    private val mainPresenter: MainPresenter by lazy {
+        MainPresenter(
+            this,
+            userData = UserRepository
+        )
+    }
+
+    /* Fragments*/
+    private val homeFragment: HomeFragment by lazy {
         HomeFragment()
     }
-    private val favoriteFragment : FavoriteFragment by lazy {
+    private val favoriteFragment: FavoriteFragment by lazy {
         FavoriteFragment()
     }
-    private val accountFragment : AccountFragment by lazy {
+    private val accountFragment: AccountFragment by lazy {
         AccountFragment()
     }
 
     /* Method */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // View Binding 객체 생성
+        // create binding object
         viewDataBinding = ActivityMainBinding.inflate(layoutInflater)
 
-        // 1초동안 스플래쉬 화면이 보여지도록 설정
-        SystemClock.sleep(1000)
+        // splash -> main screen
+        mainPresenter.loadMainScreen(this)
 
-        // 스플래쉬 화면 이후로 보여질 화면을 설정
-        setTheme(R.style.Theme_HappyBuyer)
         setContentView(viewDataBinding.root)
 
-        // 액션바 -> 툴바
+        // action bar -> toolbar
         viewDataBinding.mainToolbar.title = "코코마트"
         viewDataBinding.mainToolbar.setTitleTextAppearance(this, R.style.ToolbarTitleTheme)
         setSupportActionBar(viewDataBinding.mainToolbar)
 
-        // 권한 요청
-        requestPermissions(arrayOf(
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.INTERNET,
-            Manifest.permission.ACCESS_NETWORK_STATE
-        ), 0)
+        // presenter
+        mainPresenter.loadUser(this)          // 유저 정보 확인 및 업데이트
+        mainPresenter.requestPermission(this) // 권한 요청
 
-        // 로그인 정보 확인
-        UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
-            if (error != null) { // 토큰이 없을 때 = 로그인 정보가 없을 때
+        // init fragment
+        replace(R.id.mainContainer, homeFragment)
 
-            } else if (tokenInfo != null) {
-                val app = application as GlobalApplication
-                app.kakaoAccountId = tokenInfo.id
-
-                UserApiClient.instance.me { user, error ->
-                    if (error != null) {
-                        Log.e("Kakao login", "사용자 정보 요청 실패", error)
-                    }
-                    else if (user != null) {
-                        app.kakaoAccountNickname = user.kakaoAccount?.profile?.nickname
-                        Log.d("Kakao login","${app.kakaoAccountId}")
-                        Log.d("Kakao login","${app.kakaoAccountNickname}")
-                    }
-                }
-            }
-        }
-
-        // 바텀 내비게이션의 이벤트 리스너를 설정
+        // set event listener to bottom nav
         viewDataBinding.bottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.action_home -> {
@@ -97,27 +79,24 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.action_account -> {
-                    val app = application as GlobalApplication
-
-                    if(app.kakaoAccountId != -1L) {
+                    if ((application as GlobalApplication).isLogined) { // 로그인 상태
                         viewDataBinding.mainToolbar.title = "계정"
                         replace(R.id.mainContainer, accountFragment)
-                    } else{
-                        setFragment("login")
+                    } else { // 비로그인 상태
+                        val loginIntent = Intent(this, LoginActivity::class.java)
+                        startForResult.launch(loginIntent)
                     }
                     true
                 }
                 else -> false
             }
         }
-
-        replace(R.id.mainContainer, homeFragment)
     }
 
     // -----------------------------------------------------
     // ---- 툴바 설정
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu) // 메뉴 객체 생성 및 부착(적용)
+        menuInflater.inflate(R.menu.main_menu, menu) // 메뉴 객체 생성 및 부착
         return true
     }
 
@@ -125,10 +104,12 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.search_item_in_main -> {
-                setFragment("search")
+                val searchIntent = Intent(this, SearchActivity::class.java)
+                startActivity(searchIntent)
             }
             R.id.basket_item_in_main -> {
-                setFragment("basket")
+                val basketIntent = Intent(this, BasketActivity::class.java)
+                startActivity(basketIntent)
             }
         }
 
@@ -137,37 +118,10 @@ class MainActivity : AppCompatActivity() {
     // 툴바 설정 ----
     // -----------------------------------------------------
 
-    // Fragment Controller
-    private fun setFragment(requestFragment: String) {
-        val tran = supportFragmentManager.beginTransaction()
-
-        when (requestFragment) {
-            "login" -> {
-                val loginIntent = Intent(this, LoginActivity::class.java)
-                startActivityForResult(loginIntent, 0)
-            }
-            "search" -> {
-                val searchIntent = Intent(this, SearchActivity::class.java)
-                startActivity(searchIntent)
-            }
-            "basket" -> {
-                val basketIntent = Intent(this, BasketActivity::class.java)
-                startActivity(basketIntent)
-            }
+    /* Activity Result */
+    private val startForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == RESULT_CANCELED)
+                viewDataBinding.bottomNavigation.selectedItemId = R.id.action_home
         }
-
-        tran.commit()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        when(requestCode){
-            0 -> {
-                if(resultCode == RESULT_CANCELED){
-                    viewDataBinding.bottomNavigation.selectedItemId = R.id.action_home
-                }
-            }
-        }
-    }
 }

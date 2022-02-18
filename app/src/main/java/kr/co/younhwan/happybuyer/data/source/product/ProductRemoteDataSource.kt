@@ -52,7 +52,7 @@ suspend fun getItem(selectedCategory: String): ArrayList<ProductItem> {
     val client = OkHttpClient()
 
     // 요청
-    val site = "http://192.168.0.11/products/api/app/read?category=${selectedCategory}"
+    val site = "http://happybuyer.co.kr/products/api/app/read?category=${selectedCategory}"
     val request = Request.Builder().url(site).get().build()
 
     // 응답

@@ -20,25 +20,33 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/textView2"
         android:layout_marginTop="13dp"
-        android:backgroundTint="@color/colorTheme"
+        android:backgroundTint="@color/black"
         android:ems="10"
         android:hint="닉네임을 입력하세요."
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:maxLength="10"
+        android:singleLine="true"
+        android:textCursorDrawable="@drawable/color_cursor"
+        />
 
     <TextView
         android:id="@+id/textView17"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/editTextTextPersonName"
-        android:layout_marginTop="2dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
         android:text="※ 최대 10글자까지 입력 가능합니다." />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/colorTheme"
-        android:backgroundTint="@color/colorTheme"
-        android:text="저장" />
+        android:background="@color/colorDarkGray"
+        android:enabled="false"
+        android:text="저장"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
 </RelativeLayout>

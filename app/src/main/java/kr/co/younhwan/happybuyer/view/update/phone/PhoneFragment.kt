@@ -1,6 +1,7 @@
 package kr.co.younhwan.happybuyer.view.update.phone
 
 import android.os.Bundle
+import android.telephony.PhoneNumberFormattingTextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,5 +26,7 @@ class PhoneFragment : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewDataBinding.editTextPhone.addTextChangedListener(PhoneNumberFormattingTextWatcher("KR"))
     }
 }

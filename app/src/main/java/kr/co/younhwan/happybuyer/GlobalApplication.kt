@@ -4,8 +4,12 @@ import android.app.Application
 import com.kakao.sdk.common.KakaoSdk
 
 class GlobalApplication : Application() {
-    var kakaoAccountId : Long? = -1L
-    var kakaoAccountNickname : String? = ""
+    // 유저 정보
+    var isLogined = false
+    var kakaoAccountId: Long? = -1L // oAuth value
+    var nickname: String? = "-"
+    var pointNumber: Int? = 0
+    var shippingAddress: String? = "-"
 
     override fun onCreate() {
         super.onCreate()

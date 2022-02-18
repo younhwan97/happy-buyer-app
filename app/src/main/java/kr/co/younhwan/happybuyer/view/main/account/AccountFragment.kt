@@ -1,5 +1,7 @@
 package kr.co.younhwan.happybuyer.view.main.account
 
+import android.app.Activity.RESULT_CANCELED
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -47,10 +49,10 @@ class AccountFragment : Fragment(), AccountContract.View {
 
         // set view
         viewDataBinding.nickname.text =
-            if (app.kakaoAccountNickname != null) app.kakaoAccountNickname else "${app.kakaoAccountId}"
+            if (app.nickname != null) app.nickname else "${app.kakaoAccountId}"
 
         viewDataBinding.nicknameInProfile.text =
-            if (app.kakaoAccountNickname != null) app.kakaoAccountNickname else "${app.kakaoAccountId}"
+            if (app.nickname != null) app.nickname else "${app.kakaoAccountId}"
 
 
         // set event listener
@@ -71,7 +73,7 @@ class AccountFragment : Fragment(), AccountContract.View {
         viewDataBinding.profileNicknameContainer.setOnClickListener{
             val updateIntent = Intent(requireContext(), UpdateActivity::class.java)
             updateIntent.putExtra("target", "nickname")
-            startActivity(updateIntent)
+            startActivityForResult(updateIntent, 0)
         }
 
         viewDataBinding.profilePointNumberContainer.setOnClickListener {
@@ -106,5 +108,22 @@ class AccountFragment : Fragment(), AccountContract.View {
 
     override fun withdrawalSuccessCallback() {
         Log.i("kakao", "연결 끊기 성공. SDK에서 토큰 삭제 됨")
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when(requestCode){
+            0 -> {
+                if (resultCode == RESULT_OK){
+                    val nickname = data?.getStringExtra("nickname")
+
+                    viewDataBinding.nicknameInProfile.text = nickname
+                    viewDataBinding.nickname.text = nickname
+                } else if(requestCode == RESULT_CANCELED){
+
+                }
+            }
+        }
     }
 }

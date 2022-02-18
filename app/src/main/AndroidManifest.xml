@@ -18,6 +18,7 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".view.update.UpdateActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
             android:name=".view.basket.BasketActivity"

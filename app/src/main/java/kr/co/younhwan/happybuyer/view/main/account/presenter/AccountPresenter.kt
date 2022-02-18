@@ -24,7 +24,7 @@ class AccountPresenter(
                     // 로그아웃 성공
                     val app = activity.application as GlobalApplication
                     app.kakaoAccountId = -1L
-                    app.kakaoAccountNickname = ""
+                    app.nickname = ""
                     view.logoutSuccessCallback()
                 }
             }
