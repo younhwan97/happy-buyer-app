@@ -13,23 +13,23 @@ class LoginPresenter(
 
     private val loginCallback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
         if (error != null) {
-            view.loginFailCallback()
+            view.loginResultCallback(false)
         } else if (token != null) {
             UserApiClient.instance.me { user, error ->
                 if (error != null) {
-                    view.loginFailCallback()
+                    view.loginResultCallback(false)
                 } else if (user != null) {
-                    val kakaoLoginId = user.id
-                    val kakaoLoginNickname = user.kakaoAccount?.profile?.nickname
-                    userData.createUser(kakaoLoginId, kakaoLoginNickname, object : UserSource.createUserCallback {
-                        override fun onCreateUser(isSuccess: Boolean) {
-                            if (isSuccess) {
-                                view.loginSuccessCallback()
-                            } else {
-                                view.loginFailCallback()
+                    val kakaoAccountId: Long = user.id!!
+                    val kakaoAccountNickname: String? = user.kakaoAccount?.profile?.nickname
+
+                    userData.createUser(
+                        kakaoAccountId,
+                        kakaoAccountNickname,
+                        object : UserSource.createUserCallback {
+                            override fun onCreateUser(isSuccess: Boolean) {
+                                view.loginResultCallback(isSuccess)
                             }
-                        }
-                    })
+                        })
                 }
             }
         }
@@ -37,7 +37,6 @@ class LoginPresenter(
 
     override fun loginWithKakao(context: Context) {
         // 카카오톡이 설치되어 있으면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
-
         if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
             // 카카오톡이 설치되어 있을 때
             UserApiClient.instance.loginWithKakaoTalk(context, callback = loginCallback)

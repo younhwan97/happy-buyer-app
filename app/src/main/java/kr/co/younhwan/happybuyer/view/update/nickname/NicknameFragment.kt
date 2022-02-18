@@ -12,9 +12,11 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.data.source.user.UserRepository
 import kr.co.younhwan.happybuyer.databinding.FragmentNicknameBinding
+import kr.co.younhwan.happybuyer.view.main.MainActivity
 import kr.co.younhwan.happybuyer.view.update.UpdateActivity
 import kr.co.younhwan.happybuyer.view.update.nickname.presenter.NicknameContract
 import kr.co.younhwan.happybuyer.view.update.nickname.presenter.NicknamePresenter
@@ -52,8 +54,11 @@ class NicknameFragment : Fragment(), NicknameContract.View {
         viewDataBinding.editTextTextPersonName.addTextChangedListener(listener1)
 
         viewDataBinding.button.setOnClickListener {
-            val nicknameToUpdate = viewDataBinding.editTextTextPersonName.text.toString()
-            nicknamePresenter.updateUserNickname(nicknameToUpdate)
+            val app = (activity as UpdateActivity).application as GlobalApplication
+            val id = app.kakaoAccountId!!
+
+            val newNickname = viewDataBinding.editTextTextPersonName.text.toString()
+            nicknamePresenter.updateUserNickname(id, newNickname, app)
         }
     }
 
@@ -87,19 +92,14 @@ class NicknameFragment : Fragment(), NicknameContract.View {
         }
     }
 
-    override fun updateFailCallback() {
+    override fun updateResultCallback(success: Boolean) {
         val act = activity as UpdateActivity
 
-        act.setResult(Activity.RESULT_CANCELED)
-        act.finish()
-    }
-
-    override fun updateSuccessCallback(nicknameToUpdate: String) {
-        val act = activity as UpdateActivity
-
-        val resultIntent = Intent()
-        resultIntent.putExtra("nickname", nicknameToUpdate)
-        act.setResult(Activity.RESULT_OK, resultIntent)
+        if (success) {
+            act.setResult(Activity.RESULT_OK)
+        } else {
+            act.setResult(Activity.RESULT_CANCELED)
+        }
         act.finish()
     }
 }

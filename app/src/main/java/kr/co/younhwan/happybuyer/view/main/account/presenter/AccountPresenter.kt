@@ -19,13 +19,16 @@ class AccountPresenter(
             UserApiClient.instance.logout { error ->
                 if (error != null) {
                     // 로그아웃 실패
-                    view.logoutFailCallback(error)
+                    view.logoutResultCallback(false, error)
                 } else {
                     // 로그아웃 성공
                     val app = activity.application as GlobalApplication
-                    app.kakaoAccountId = -1L
-                    app.nickname = ""
-                    view.logoutSuccessCallback()
+                    app.isLogined = false
+                    app.kakaoAccountId = 0L
+                    app.nickname = "-"
+                    app.shippingAddress = "-"
+                    app.pointNumber = 0
+                    view.logoutResultCallback(true, null)
                 }
             }
         }
@@ -42,10 +45,10 @@ class AccountPresenter(
             UserApiClient.instance.unlink { error ->
                 if (error != null) {
                     // 회원탈퇴 실패
-                    view.withdrawalFailCallback(error)
+                    view.withdrawalResultCallback(false, error)
                 } else {
                     // 회원탈퇴 성공
-                    view.withdrawalSuccessCallback()
+                    view.withdrawalResultCallback(true, null)
                 }
             }
         }

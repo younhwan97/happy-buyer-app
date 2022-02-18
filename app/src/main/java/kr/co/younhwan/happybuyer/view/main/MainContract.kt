@@ -1,15 +1,17 @@
 package kr.co.younhwan.happybuyer.view.main
 
+import kr.co.younhwan.happybuyer.GlobalApplication
+
 interface MainContract {
     interface View {
 
     }
 
     interface Model {
-        fun loadMainScreen(activity: MainActivity)
+        fun loadMainScreen(act: MainActivity)
 
-        fun requestPermission(activity: MainActivity)
+        fun requestPermission(act: MainActivity)
 
-        fun loadUser(activity: MainActivity)
+        fun loadUser(app: GlobalApplication)
     }
 }

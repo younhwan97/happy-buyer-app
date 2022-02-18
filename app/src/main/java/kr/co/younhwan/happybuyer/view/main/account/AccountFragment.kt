@@ -10,8 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.load.engine.executor.GlideExecutor.UncaughtThrowableStrategy.LOG
 import kr.co.younhwan.happybuyer.GlobalApplication
+import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.databinding.FragmentAccountBinding
 import kr.co.younhwan.happybuyer.view.main.MainActivity
 import kr.co.younhwan.happybuyer.view.main.account.presenter.AccountContract
@@ -70,10 +74,19 @@ class AccountFragment : Fragment(), AccountContract.View {
             accountPresenter.withdrawalWithKakao(requireContext(), act)
         }
 
-        viewDataBinding.profileNicknameContainer.setOnClickListener{
+        val startForResult2 =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                if (it.resultCode == RESULT_OK) {
+                    val app = activity?.application as GlobalApplication
+                    viewDataBinding.nicknameInProfile.text = app.nickname
+                    viewDataBinding.nickname.text = app.nickname
+                }
+            }
+
+        viewDataBinding.profileNicknameContainer.setOnClickListener {
             val updateIntent = Intent(requireContext(), UpdateActivity::class.java)
             updateIntent.putExtra("target", "nickname")
-            startActivityForResult(updateIntent, 0)
+            startForResult2.launch(updateIntent)
         }
 
         viewDataBinding.profilePointNumberContainer.setOnClickListener {
@@ -89,41 +102,24 @@ class AccountFragment : Fragment(), AccountContract.View {
         }
     }
 
-    override fun logoutFailCallback(error: Throwable?) {
-        Log.e("kakao", "로그아웃 실패. SDK에서 토큰 삭제됨", error)
+    override fun logoutResultCallback(success: Boolean, error: Throwable?) {
+        if (success) {
+            val act = activity as MainActivity
+            Toast.makeText(context, "로그아웃에 성공하셨습니다.", Toast.LENGTH_SHORT)
+                .show()
+            val mainIntent = Intent(context, MainActivity::class.java)
+            act.finish()
+            startActivity(mainIntent)
+        } else {
+            Log.e("kakao", "로그아웃 실패. SDK에서 토큰 삭제됨", error)
+        }
     }
 
-    override fun logoutSuccessCallback() {
-        val act = activity as MainActivity
-        Toast.makeText(context, "로그아웃에 성공하셨습니다.", Toast.LENGTH_SHORT)
-            .show()
-        val mainIntent = Intent(context, MainActivity::class.java)
-        act.finish()
-        startActivity(mainIntent)
-    }
-
-    override fun withdrawalFailCallback(error: Throwable?) {
-        Log.e("kakao", "연결 끊기 실패", error)
-    }
-
-    override fun withdrawalSuccessCallback() {
-        Log.i("kakao", "연결 끊기 성공. SDK에서 토큰 삭제 됨")
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        when(requestCode){
-            0 -> {
-                if (resultCode == RESULT_OK){
-                    val nickname = data?.getStringExtra("nickname")
-
-                    viewDataBinding.nicknameInProfile.text = nickname
-                    viewDataBinding.nickname.text = nickname
-                } else if(requestCode == RESULT_CANCELED){
-
-                }
-            }
+    override fun withdrawalResultCallback(success: Boolean, error: Throwable?) {
+        if (success) {
+            Log.e("kakao", "연결 끊기 실패", error)
+        } else {
+            Log.i("kakao", "연결 끊기 성공. SDK에서 토큰 삭제 됨")
         }
     }
 }

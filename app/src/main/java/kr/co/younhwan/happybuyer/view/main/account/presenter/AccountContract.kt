@@ -6,13 +6,9 @@ import java.lang.Error
 
 interface AccountContract {
     interface View {
-        fun logoutSuccessCallback()
+        fun logoutResultCallback(success: Boolean, error: Throwable?)
 
-        fun logoutFailCallback(error: Throwable?)
-
-        fun withdrawalSuccessCallback()
-
-        fun withdrawalFailCallback(error: Throwable?)
+        fun withdrawalResultCallback(success: Boolean, error: Throwable?)
     }
 
     interface Model {

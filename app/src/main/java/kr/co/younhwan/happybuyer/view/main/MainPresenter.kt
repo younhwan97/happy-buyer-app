@@ -14,15 +14,15 @@ class MainPresenter(
     private val userData: UserRepository
 ) : MainContract.Model {
 
-    override fun loadMainScreen(activity: MainActivity) {
+    override fun loadMainScreen(act: MainActivity) {
         SystemClock.sleep(1000)
 
         // 스플래쉬 화면 이후로 보여질 화면을 설정
-        activity.setTheme(R.style.Theme_HappyBuyer)
+        act.setTheme(R.style.Theme_HappyBuyer)
     }
 
-    override fun requestPermission(activity: MainActivity) {
-        activity.requestPermissions(
+    override fun requestPermission(act: MainActivity) {
+        act.requestPermissions(
             arrayOf(
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION,
@@ -32,10 +32,8 @@ class MainPresenter(
         )
     }
 
-    override fun loadUser(activity: MainActivity) {
+    override fun loadUser(app: GlobalApplication) {
         UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
-            val app = (activity).application as GlobalApplication
-
             if (error != null) { // 토큰이 없을 때 (= 로그인 정보가 없을 때)
                 app.isLogined = false // 로그인 상태 x
 

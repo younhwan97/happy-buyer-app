@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         setSupportActionBar(viewDataBinding.mainToolbar)
 
         // presenter
-        mainPresenter.loadUser(this)          // 유저 정보 확인 및 업데이트
+        mainPresenter.loadUser(application as GlobalApplication)          // 유저 정보 확인 및 업데이트
         mainPresenter.requestPermission(this) // 권한 요청
 
         // init fragment

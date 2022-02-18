@@ -1,5 +1,6 @@
 package kr.co.younhwan.happybuyer.data.source.user
 
+import android.util.Log
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -12,7 +13,7 @@ import org.json.JSONObject
 object UserRemoteDataSource : UserSource {
 
     override fun createUser(
-        kakaoLoginId: Long?,
+        kakaoAccountId: Long,
         kakaoNickname: String?,
         createUserCallback: UserSource.createUserCallback?
     ) {
@@ -20,7 +21,7 @@ object UserRemoteDataSource : UserSource {
         runBlocking {
             var isSuccess = false
             val job = GlobalScope.launch {
-                isSuccess = create(kakaoLoginId, kakaoNickname)
+                isSuccess = create(kakaoAccountId, kakaoNickname)
             }
             job.join()
             createUserCallback?.onCreateUser(isSuccess)
@@ -28,15 +29,15 @@ object UserRemoteDataSource : UserSource {
     }
 
     override fun updateUser(
-        kakaoLoginId: Long?,
-        nicknameToUpdate: String?,
+        kakaoAccountId: Long,
+        newNickname: String,
         updateUserCallback: UserSource.updateUserCallback?
     ) {
 
         runBlocking {
             var isSuccess = false
             val job = GlobalScope.launch {
-                isSuccess = update(kakaoLoginId, nicknameToUpdate)
+                isSuccess = update(kakaoAccountId, newNickname)
             }
 
             job.join()
@@ -62,7 +63,7 @@ object UserRemoteDataSource : UserSource {
 }
 
 suspend fun create(kakaoAccountId: Long?, kakaoAccountNickname: String?): Boolean {
-    // 클라이언트 만들기
+    // 클라이언트 생성
     val client = OkHttpClient()
 
     // 요청
@@ -72,7 +73,7 @@ suspend fun create(kakaoAccountId: Long?, kakaoAccountNickname: String?): Boolea
 
     // 응답
     val response = client.newCall(request).execute()
-    var isSuccess: Boolean = false
+    var isSuccess = false
 
     if (response.isSuccessful) {
         val resultText = response.body?.string()!!.trim()
@@ -83,11 +84,11 @@ suspend fun create(kakaoAccountId: Long?, kakaoAccountNickname: String?): Boolea
     return isSuccess
 }
 
-suspend fun update(kakaoAccountId: Long?, nicknameToUpdate: String?): Boolean {
+suspend fun update(kakaoAccountId: Long, newNickname: String): Boolean {
     val client = OkHttpClient()
 
     val site =
-        "http://happybuyer.co.kr/auth/api/app/update?id=${kakaoAccountId}&nickname=${nicknameToUpdate}"
+        "http://happybuyer.co.kr/auth/api/app/update?id=${kakaoAccountId}&nickname=${newNickname}"
     val request = Request.Builder().url(site).get().build()
 
     val response = client.newCall(request).execute()

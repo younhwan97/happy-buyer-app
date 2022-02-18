@@ -7,12 +7,12 @@ object UserRepository : UserSource {
     private val userRemoteDataSource = UserRemoteDataSource
 
     override fun createUser(
-        kakaoLoginId: Long?,
+        kakaoAccountId: Long,
         kakaoNickname: String?,
         createUserCallback: UserSource.createUserCallback?
     ) {
         userRemoteDataSource.createUser(
-            kakaoLoginId,
+            kakaoAccountId,
             kakaoNickname,
             object : UserSource.createUserCallback {
                 override fun onCreateUser(isSuccess: Boolean) {
@@ -22,13 +22,13 @@ object UserRepository : UserSource {
     }
 
     override fun updateUser(
-        kakaoLoginId: Long?,
-        nicknameToUpdate: String?,
+        kakaoAccountId: Long,
+        newNickname: String,
         updateUserCallback: UserSource.updateUserCallback?
     ) {
         userRemoteDataSource.updateUser(
-            kakaoLoginId,
-            nicknameToUpdate,
+            kakaoAccountId,
+            newNickname,
             object : UserSource.updateUserCallback {
                 override fun onUpdateUser(isSuccess: Boolean) {
                     updateUserCallback?.onUpdateUser(isSuccess)

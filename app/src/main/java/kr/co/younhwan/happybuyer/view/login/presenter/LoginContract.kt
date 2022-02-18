@@ -4,12 +4,14 @@ import android.content.Context
 
 interface LoginContract{
     interface View {
-        fun loginSuccessCallback()
 
-        fun loginFailCallback()
+        fun loginResultCallback(success: Boolean)
+
     }
 
     interface Model {
+
         fun loginWithKakao(context: Context)
+
     }
 }

@@ -55,16 +55,16 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun loginSuccessCallback() {
-        Toast.makeText(this, "로그인에 성공하셨습니다.", Toast.LENGTH_SHORT).show()
-        val mainIntent = Intent(this, MainActivity::class.java)
+    override fun loginResultCallback(success: Boolean) {
+        if (success) {
+            Toast.makeText(this, "로그인에 성공하셨습니다.", Toast.LENGTH_SHORT).show()
+            val mainIntent = Intent(this, MainActivity::class.java)
 
-        // BackStack 에 존재하는 Activity 를 모두 제거후 Main Activity 를 다시 생성
-        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(mainIntent)
-    }
-
-    override fun loginFailCallback() {
-        Toast.makeText(this, "로그인에 실패하였습니다.", Toast.LENGTH_SHORT).show()
+            // BackStack 에 존재하는 Activity 를 모두 제거후 Main Activity 를 다시 생성
+            mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(mainIntent)
+        } else {
+            Toast.makeText(this, "로그인에 실패하였습니다.", Toast.LENGTH_SHORT).show()
+        }
     }
 }
