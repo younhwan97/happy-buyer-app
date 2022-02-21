@@ -10,6 +10,8 @@ interface CategoryContract{
 
         fun addWishedResultCallback(explain: String)
 
+        fun createLoginActivity()
+
     }
 
     interface Model{

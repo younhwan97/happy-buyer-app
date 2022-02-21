@@ -35,7 +35,7 @@ object ProductRemoteDataSource : ProductSource {
     override fun addProductToBasket(
         kakaoAccountId: Long,
         productId: Int,
-        addProductCallback: ProductSource.AddProductCallback?
+        addProductCallback: ProductSource.AddProductToBasketCallback?
     ) {
 
         runBlocking {
@@ -45,7 +45,7 @@ object ProductRemoteDataSource : ProductSource {
             }
 
             job.join()
-            addProductCallback?.onAddProduct(success)
+            addProductCallback?.onAddProductToBasket(success)
         }
 
     }
@@ -56,7 +56,7 @@ object ProductRemoteDataSource : ProductSource {
         addProductToWishedCallback: ProductSource.AddProductToWishedCallback?
     ) {
         runBlocking {
-            var explain : String? = null
+            var explain: String? = null
             val job = GlobalScope.launch {
                 explain = createWished(kakaoAccountId, productId)
             }
@@ -67,7 +67,7 @@ object ProductRemoteDataSource : ProductSource {
     }
 }
 
-suspend fun getWishedProduct(kakaoAccountId: Long?): ArrayList<Int>{
+suspend fun getWishedProduct(kakaoAccountId: Long?): ArrayList<Int> {
     val list = ArrayList<Int>()
 
     // 클라이언트 생성
@@ -129,8 +129,8 @@ suspend fun getItem(selectedCategory: String, wishedList: ArrayList<Int>): Array
                 val productImage = obj.getString("image_url")
                 var isWished = false
 
-                for (item in wishedList){
-                    if(item == productId){
+                for (item in wishedList) {
+                    if (item == productId) {
                         isWished = true
                     }
                 }
@@ -165,7 +165,8 @@ suspend fun createBasket(kakaoAccountId: Long, productId: Int): Boolean {
     return false
 }
 
-suspend fun createWished(kakaoAccountId: Long, productId: Int): String?{
+suspend fun createWished(kakaoAccountId: Long, productId: Int): String? {
+
     // 클라이언트 생성
     val client = OkHttpClient()
 

@@ -15,10 +15,10 @@ object ProductRepository : ProductSource{
         })
     }
 
-    override fun addProductToBasket(kakaoAccountId: Long, productId: Int, addProductCallback: ProductSource.AddProductCallback?) {
-        productRemoteDataSource.addProductToBasket(kakaoAccountId, productId, object : ProductSource.AddProductCallback{
-            override fun onAddProduct(success: Boolean) {
-                addProductCallback?.onAddProduct(success)
+    override fun addProductToBasket(kakaoAccountId: Long, productId: Int, addProductCallback: ProductSource.AddProductToBasketCallback?) {
+        productRemoteDataSource.addProductToBasket(kakaoAccountId, productId, object : ProductSource.AddProductToBasketCallback{
+            override fun onAddProductToBasket(success: Boolean) {
+                addProductCallback?.onAddProductToBasket(success)
             }
         })
     }

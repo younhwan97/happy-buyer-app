@@ -1,8 +1,6 @@
 package kr.co.younhwan.happybuyer.view.category.presenter
 
 import android.content.Context
-import android.util.Log
-import android.view.View
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.data.ProductItem
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
@@ -21,8 +19,8 @@ class CategoryPresenter(
             onClickListenerOfWishedBtn(i, j)
         }
 
-        adapterView.onClickFuncOfBasketBtn = {
-            onClickListenerOfBasketBtn(it)
+        adapterView.onClickFuncOfBasketBtn = { i, j ->
+            onClickListenerOfBasketBtn(i, j)
         }
     }
 
@@ -50,38 +48,47 @@ class CategoryPresenter(
 
         val app = view.getAct().application as GlobalApplication
 
-        productData.addProductToWished(
-            app.kakaoAccountId!!,
-            productId,
-            object : ProductSource.AddProductToWishedCallback {
-                override fun onAddProductToWished(explain: String?) {
-                    if (explain.isNullOrBlank()) {
+        if (app.isLogined) {
+            productData.addProductToWished(
+                app.kakaoAccountId!!,
+                productId,
+                object : ProductSource.AddProductToWishedCallback {
+                    override fun onAddProductToWished(explain: String?) {
+                        if (explain.isNullOrBlank()) {
 
-                    } else {
-                        adapterModel.updateProduct(position, "wished")
-                        adapterView.notifyItem(position)
-                        view.addWishedResultCallback(explain)
+                        } else {
+//                            adapterModel.updateProduct(position, "wished")
+//                            adapterView.notifyItem(position)
+                            adapterView.notifyItemByUsingPayload(position, "wished")
+                            view.addWishedResultCallback(explain)
+                        }
                     }
                 }
-            }
-        )
+            )
+        } else {
+            view.createLoginActivity()
+        }
     }
 
-    private fun onClickListenerOfBasketBtn(productId: Int) {
+    private fun onClickListenerOfBasketBtn(productId: Int, position: Int) {
 
         val app = view.getAct().application as GlobalApplication
 
-        productData.addProductToBasket(
-            app.kakaoAccountId!!,
-            productId,
-            object : ProductSource.AddProductCallback {
-                override fun onAddProduct(success: Boolean) {
-                    if (success) {
+        if (app.isLogined) {
+            productData.addProductToBasket(
+                app.kakaoAccountId!!,
+                productId,
+                object : ProductSource.AddProductToBasketCallback {
+                    override fun onAddProductToBasket(success: Boolean) {
+                        if (success) {
 
-                    } else {
+                        } else {
 
+                        }
                     }
-                }
-            })
+                })
+        } else {
+            view.createLoginActivity()
+        }
     }
 }

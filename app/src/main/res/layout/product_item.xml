@@ -54,8 +54,10 @@
                 android:id="@+id/wishedBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
+                android:background="@drawable/wished_btn_selector"
                 android:src="@drawable/heart" />
+
+<!--            android:background="@android:color/transparent"-->
         </RelativeLayout>
 
         <RelativeLayout

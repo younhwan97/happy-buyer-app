@@ -9,8 +9,8 @@ interface ProductSource{
         fun onLoadProducts(list: ArrayList<ProductItem>)
     }
 
-    interface AddProductCallback{
-        fun onAddProduct(success: Boolean)
+    interface AddProductToBasketCallback{
+        fun onAddProductToBasket(success: Boolean)
     }
 
     interface AddProductToWishedCallback{
@@ -19,7 +19,7 @@ interface ProductSource{
 
     fun getProducts(context: Context, selectedCategory:String, kakaoAccountId: Long?, loadImageCallback: LoadProductCallback?)
 
-    fun addProductToBasket(kakaoAccountId: Long, productId: Int, addProductCallback: AddProductCallback?)
+    fun addProductToBasket(kakaoAccountId: Long, productId: Int, addProductCallback: AddProductToBasketCallback?)
 
     fun addProductToWished(kakaoAccountId: Long, productId: Int, addProductToWishedCallback: AddProductToWishedCallback?)
 }

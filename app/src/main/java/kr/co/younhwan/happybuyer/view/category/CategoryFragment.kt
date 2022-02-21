@@ -14,6 +14,7 @@ import kr.co.younhwan.happybuyer.databinding.FragmentCategoryBinding
 import kr.co.younhwan.happybuyer.view.category.adapter.CategoryAdapter
 import kr.co.younhwan.happybuyer.view.category.presenter.CategoryContract
 import kr.co.younhwan.happybuyer.view.category.presenter.CategoryPresenter
+import kr.co.younhwan.happybuyer.view.login.LoginActivity
 import kr.co.younhwan.happybuyer.view.main.MainActivity
 
 class CategoryFragment : Fragment(), CategoryContract.View {
@@ -72,5 +73,10 @@ class CategoryFragment : Fragment(), CategoryContract.View {
             Toast.makeText(requireContext(), "관심 상품에서 제외되었습니다.", Toast.LENGTH_SHORT).show()
         else
             Toast.makeText(requireContext(), "알 수 없는 에러가 발생했습니다.", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun createLoginActivity() {
+        val loginIntent = Intent(requireContext(), LoginActivity::class.java)
+        startActivity(loginIntent)
     }
 }

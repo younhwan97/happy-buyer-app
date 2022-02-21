@@ -8,11 +8,13 @@ interface CategoryAdapterContract{
 
         var onClickFuncOfWishedBtn: ((Int, Int) -> Unit)?
 
-        var onClickFuncOfBasketBtn: ((Int) -> Unit)?
+        var onClickFuncOfBasketBtn: ((Int, Int) -> Unit)?
 
         fun notifyAdapter()
 
         fun notifyItem(position: Int)
+
+        fun notifyItemByUsingPayload(position: Int, payload: String)
     }
 
     interface Model{

@@ -1,6 +1,7 @@
 package kr.co.younhwan.happybuyer.view.category.adapter
 
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -15,7 +16,7 @@ class CategoryViewHolder(
     private val parent: ViewGroup,
     productItemBinding: ProductItemBinding,
     private val listenerFuncOfWishedBtn: ((Int, Int) -> Unit)?,
-    private val listenerFuncOfBasketBtn: ((Int) -> Unit)?
+    private val listenerFuncOfBasketBtn: ((Int, Int) -> Unit)?
 ) : RecyclerView.ViewHolder(productItemBinding.root) {
 
     private val itemName by lazy {
@@ -73,28 +74,18 @@ class CategoryViewHolder(
         basketBtn.isClickable = false
         basketBtnContainer.isClickable = true
 
-        if (productItem.isWished) // productItem 의 isWished 값을 이용해 보여질 이미지 설정
-            wishedBtn.setImageResource(R.drawable.wished_heart) // 유저가 상품을 찜한경우
-        else
-            wishedBtn.setImageResource(R.drawable.heart) // 유저가 상품을 찜하지 않은 경우
+        wishedBtn.isActivated = productItem.isWished
 
         wishedBtnContainer.setOnClickListener {
             listenerFuncOfWishedBtn?.invoke(productItem.productId, position)
         }
 
-
-
         basketBtnContainer.setOnClickListener {
-            val progressBar = ProgressBar(parent.context)
-            progressBar.layoutParams = LinearLayout.LayoutParams(
-                basketBtnContainer.width,
-                basketBtnContainer.height
-            )
-
-            basketBtnContainer.removeAllViews()
-            basketBtnContainer.addView(progressBar)
-
-            listenerFuncOfBasketBtn?.invoke(productItem.productId)
+            listenerFuncOfBasketBtn?.invoke(productItem.productId, position)
         }
+    }
+
+    fun onBindWishedState(productItem: ProductItem, position: Int){
+        wishedBtn.isActivated = productItem.isWished
     }
 }
