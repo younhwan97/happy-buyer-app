@@ -1,6 +1,7 @@
 package kr.co.younhwan.happybuyer.view.category.presenter
 
 import android.content.Context
+import android.os.SystemClock
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.data.ProductItem
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
@@ -57,8 +58,6 @@ class CategoryPresenter(
                         if (explain.isNullOrBlank()) {
 
                         } else {
-//                            adapterModel.updateProduct(position, "wished")
-//                            adapterView.notifyItem(position)
                             adapterView.notifyItemByUsingPayload(position, "wished")
                             view.addWishedResultCallback(explain)
                         }

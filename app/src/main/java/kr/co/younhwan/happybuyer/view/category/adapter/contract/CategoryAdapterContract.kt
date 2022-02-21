@@ -24,9 +24,5 @@ interface CategoryAdapterContract{
         fun clearItem()
 
         fun getItem(position: Int): ProductItem
-
-        fun updateProduct(position: Int, what: String)
-
     }
-
 }

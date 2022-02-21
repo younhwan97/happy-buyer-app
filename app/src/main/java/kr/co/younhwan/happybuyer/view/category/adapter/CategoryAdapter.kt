@@ -40,7 +40,7 @@ class CategoryAdapter :
                 }
 
                 "basket" -> {
-                    
+                   // holder.onBindBasketState(productItemList[position], position.toString())
                 }
             }
         }
@@ -72,17 +72,5 @@ class CategoryAdapter :
 
     override fun notifyItemByUsingPayload(position: Int, payload: String) {
         notifyItemChanged(position, payload)
-    }
-
-    override fun updateProduct(position: Int, what: String) {
-        when (what) {
-            "wished" -> {
-                productItemList[position].isWished = !productItemList[position].isWished
-            }
-
-            "basket" -> {
-
-            }
-        }
     }
 }

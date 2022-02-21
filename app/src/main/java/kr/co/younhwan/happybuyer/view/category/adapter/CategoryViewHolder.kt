@@ -1,13 +1,9 @@
 package kr.co.younhwan.happybuyer.view.category.adapter
 
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.data.ProductItem
 import kr.co.younhwan.happybuyer.databinding.ProductItemBinding
 import kotlin.math.roundToInt
@@ -75,6 +71,7 @@ class CategoryViewHolder(
         basketBtnContainer.isClickable = true
 
         wishedBtn.isActivated = productItem.isWished
+        basketBtn.isActivated = false
 
         wishedBtnContainer.setOnClickListener {
             listenerFuncOfWishedBtn?.invoke(productItem.productId, position)
