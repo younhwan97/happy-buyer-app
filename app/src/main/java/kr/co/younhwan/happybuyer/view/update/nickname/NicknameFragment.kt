@@ -46,23 +46,26 @@ class NicknameFragment : Fragment(), NicknameContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewDataBinding.editTextTextPersonName.setOnEditorActionListener { textView, i, keyEvent ->
-
-            false
-        }
-
-        viewDataBinding.editTextTextPersonName.addTextChangedListener(listener1)
+        viewDataBinding.editTextTextPersonName.addTextChangedListener(textWatcher)
 
         viewDataBinding.button.setOnClickListener {
-            val app = (activity as UpdateActivity).application as GlobalApplication
-            val id = app.kakaoAccountId!!
-
             val newNickname = viewDataBinding.editTextTextPersonName.text.toString()
-            nicknamePresenter.updateUserNickname(id, newNickname, app)
+            nicknamePresenter.updateUserNickname(newNickname)
         }
     }
 
-    private val listener1 = object : TextWatcher {
+    override fun getApp() = (activity as UpdateActivity).application as GlobalApplication
+
+    override fun updateResultCallback(success: Boolean) {
+        val act = activity as UpdateActivity
+
+        if (success) act.setResult(Activity.RESULT_OK)
+        else act.setResult(Activity.RESULT_CANCELED)
+
+        act.finish()
+    }
+
+    private val textWatcher = object : TextWatcher {
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
         override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
@@ -90,16 +93,5 @@ class NicknameFragment : Fragment(), NicknameContract.View {
 
             }
         }
-    }
-
-    override fun updateResultCallback(success: Boolean) {
-        val act = activity as UpdateActivity
-
-        if (success) {
-            act.setResult(Activity.RESULT_OK)
-        } else {
-            act.setResult(Activity.RESULT_CANCELED)
-        }
-        act.finish()
     }
 }

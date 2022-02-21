@@ -5,17 +5,21 @@ import kr.co.younhwan.happybuyer.data.ProductItem
 
 interface ProductSource{
 
-    interface LoadImageCallback {
-        fun onLoadImages(list: ArrayList<ProductItem>)
+    interface LoadProductCallback {
+        fun onLoadProducts(list: ArrayList<ProductItem>)
     }
 
-    interface addProductCallback{
-        fun onAddProduct()
+    interface AddProductCallback{
+        fun onAddProduct(success: Boolean)
     }
 
-    fun getImages(context: Context, selectedCategory:String, loadImageCallback: LoadImageCallback?)
+    interface AddProductToWishedCallback{
+        fun onAddProductToWished(explain: String?)
+    }
 
-    fun addProductToWished(productId: Int)
+    fun getProducts(context: Context, selectedCategory:String, kakaoAccountId: Long?, loadImageCallback: LoadProductCallback?)
 
-    fun addProductToBasket(productId: Int)
+    fun addProductToBasket(kakaoAccountId: Long, productId: Int, addProductCallback: AddProductCallback?)
+
+    fun addProductToWished(kakaoAccountId: Long, productId: Int, addProductToWishedCallback: AddProductToWishedCallback?)
 }

@@ -12,7 +12,5 @@ class BasketActivity : AppCompatActivity() {
         // View Binding 객체 생성
         basketActivityBinding = ActivityBasketBinding.inflate(layoutInflater)
         setContentView(basketActivityBinding.root)
-
-
     }
 }

@@ -7,19 +7,27 @@ object ProductRepository : ProductSource{
 
     private val productRemoteDataSource = ProductRemoteDataSource
 
-    override fun getImages(context: Context, selectedCategory:String, loadImageCallback: ProductSource.LoadImageCallback?) {
-        productRemoteDataSource.getImages(context, selectedCategory, object : ProductSource.LoadImageCallback {
-            override fun onLoadImages(list: ArrayList<ProductItem>) {
-                loadImageCallback?.onLoadImages(list)
+    override fun getProducts(context: Context, selectedCategory:String, kakaoAccountId: Long?, loadImageCallback: ProductSource.LoadProductCallback?) {
+        productRemoteDataSource.getProducts(context, selectedCategory, kakaoAccountId, object : ProductSource.LoadProductCallback {
+            override fun onLoadProducts(list: ArrayList<ProductItem>) {
+                loadImageCallback?.onLoadProducts(list)
             }
         })
     }
 
-    override fun addProductToBasket(productId: Int) {
-        TODO("Not yet implemented")
+    override fun addProductToBasket(kakaoAccountId: Long, productId: Int, addProductCallback: ProductSource.AddProductCallback?) {
+        productRemoteDataSource.addProductToBasket(kakaoAccountId, productId, object : ProductSource.AddProductCallback{
+            override fun onAddProduct(success: Boolean) {
+                addProductCallback?.onAddProduct(success)
+            }
+        })
     }
 
-    override fun addProductToWished(productId: Int) {
-        TODO("Not yet implemented")
+    override fun addProductToWished(kakaoAccountId: Long, productId: Int, addProductToWishedCallback: ProductSource.AddProductToWishedCallback?) {
+        productRemoteDataSource.addProductToWished(kakaoAccountId, productId, object :ProductSource.AddProductToWishedCallback{
+            override fun onAddProductToWished(explain: String?) {
+                addProductToWishedCallback?.onAddProductToWished(explain)
+            }
+        })
     }
 }

@@ -8,9 +8,11 @@ interface NicknameContract{
 
         fun updateResultCallback(success:Boolean)
 
+        fun getApp(): GlobalApplication
+
     }
 
     interface Model{
-        fun updateUserNickname(kakaoAccountId:Long, newNickname: String, app:GlobalApplication)
+        fun updateUserNickname(newNickname: String)
     }
 }

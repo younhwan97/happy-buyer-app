@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         viewDataBinding = ActivityMainBinding.inflate(layoutInflater)
 
         // splash -> main screen
-        mainPresenter.loadMainScreen(this)
+        mainPresenter.loadMainScreen()
 
         setContentView(viewDataBinding.root)
 
@@ -59,8 +59,8 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         setSupportActionBar(viewDataBinding.mainToolbar)
 
         // presenter
-        mainPresenter.loadUser(application as GlobalApplication)          // 유저 정보 확인 및 업데이트
-        mainPresenter.requestPermission(this) // 권한 요청
+        mainPresenter.loadUser()          // 유저 정보 확인 및 업데이트
+        mainPresenter.requestPermission() // 권한 요청
 
         // init fragment
         replace(R.id.mainContainer, homeFragment)
@@ -117,6 +117,8 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     }
     // 툴바 설정 ----
     // -----------------------------------------------------
+
+    override fun getAct() = this
 
     /* Activity Result */
     private val startForResult =

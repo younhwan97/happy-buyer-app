@@ -29,7 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="220dp"
                 android:layout_gravity="center"
-                android:layout_weight="0"
+                android:layout_weight="1"
                 android:scaleType="fitXY"
                 app:srcCompat="@mipmap/ic_launcher" />
         </LinearLayout>
@@ -42,23 +42,36 @@
         android:layout_below="@id/itemImageContainer"
         android:layout_marginTop="5dp">
 
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/heartBtn"
+        <RelativeLayout
+            android:id="@+id/wishedBtnContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/shoppingCartBtn"
-            android:background="@android:color/transparent"
-            android:padding="3dp"
-            app:srcCompat="@drawable/heart" />
+            android:layout_alignBaseline="@id/basketBtnContainer"
+            android:layout_marginRight="8dp"
+            android:layout_toLeftOf="@id/basketBtnContainer">
 
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/shoppingCartBtn"
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/wishedBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:src="@drawable/heart" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/basketBtnContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:background="@android:color/transparent"
-            android:padding="3dp"
-            app:srcCompat="@drawable/shopping_cart" />
+            android:layout_alignParentEnd="true">
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/basketBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:src="@drawable/shopping_cart" />
+        </RelativeLayout>
+
     </RelativeLayout>
 
     <LinearLayout
@@ -66,7 +79,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@id/otherBtnContainer"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="7dp"
         android:layout_marginBottom="3dp"
         android:background="@color/colorDivision"
         android:orientation="horizontal" />
@@ -101,7 +114,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/textView14"
+            android:id="@+id/itemSubText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"

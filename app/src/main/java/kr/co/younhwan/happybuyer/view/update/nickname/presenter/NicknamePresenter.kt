@@ -1,7 +1,5 @@
 package kr.co.younhwan.happybuyer.view.update.nickname.presenter
 
-import android.util.Log
-import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.data.source.user.UserRepository
 import kr.co.younhwan.happybuyer.data.source.user.UserSource
 
@@ -10,7 +8,9 @@ class NicknamePresenter(
     private val userData: UserRepository,
 ) : NicknameContract.Model {
 
-    override fun updateUserNickname(kakaoAccountId: Long, newNickname: String, app:GlobalApplication) {
+    override fun updateUserNickname(newNickname: String) {
+        val app = view.getApp()
+        val kakaoAccountId = app.kakaoAccountId!!
         userData.updateUser(
             kakaoAccountId,
             newNickname,

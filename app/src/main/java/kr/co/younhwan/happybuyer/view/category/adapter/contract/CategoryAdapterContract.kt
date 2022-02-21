@@ -1,15 +1,18 @@
 package kr.co.younhwan.happybuyer.view.category.adapter.contract
 
+import android.view.View
 import kr.co.younhwan.happybuyer.data.ProductItem
 
 interface CategoryAdapterContract{
     interface View{
 
-        var onClickFuncHeartBtn: ((Int) -> Unit)?
+        var onClickFuncOfWishedBtn: ((Int, Int) -> Unit)?
 
-        var onClickFuncShoppingCartBtn: ((Int) -> Unit)?
+        var onClickFuncOfBasketBtn: ((Int) -> Unit)?
 
         fun notifyAdapter()
+
+        fun notifyItem(position: Int)
     }
 
     interface Model{
@@ -19,6 +22,8 @@ interface CategoryAdapterContract{
         fun clearItem()
 
         fun getItem(position: Int): ProductItem
+
+        fun updateProduct(position: Int, what: String)
 
     }
 

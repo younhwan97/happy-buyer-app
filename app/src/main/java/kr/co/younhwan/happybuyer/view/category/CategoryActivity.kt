@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.databinding.ActivityCategoryBinding
 import kr.co.younhwan.happybuyer.view.basket.BasketActivity
@@ -42,7 +43,6 @@ class CategoryActivity : AppCompatActivity() {
         setSupportActionBar(viewDataBinding.categoryToolbar)
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
 
         // Main Activity 로 부터 전달 받은 데이터
         val label = intent.getStringArrayListExtra("label")
