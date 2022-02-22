@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                     true
                 }
                 R.id.action_wished -> {
-                    viewDataBinding.mainToolbar.title = "관심"
+                    viewDataBinding.mainToolbar.title = "찜"
                     replace(R.id.mainContainer, wishedFragment)
                     true
                 }

@@ -27,9 +27,9 @@ class WishedPresenter(
     }
 
     override fun loadWishedItem(context: Context, isClear: Boolean) {
-        val app = view.getAct().application as GlobalApplication
+        val app = ((view.getAct()).application) as GlobalApplication
 
-        if (app.isLogined) {
+        if (app.isLogined) { // 로그인 상태
             productData.getProducts(
                 context,
                 "total",
@@ -42,20 +42,22 @@ class WishedPresenter(
 
                         val wishedItem = ArrayList<ProductItem>()
 
-                        for (item in list)
-                            if (item.isWished)
+                        for (item in list) {
+                            if (item.isWished) {
                                 wishedItem.add(item)
+                            }
+                        }
 
-                        adapterModel.addItems(wishedItem)
-                        adapterView.notifyAdapter()
-
-                        if (wishedItem.isEmpty())
+                        if (wishedItem.isEmpty()) { // 사용자가 찜한 상품이 하나도 없을 때
                             view.setEmpty()
-
+                        } else {
+                            adapterModel.addItems(wishedItem)
+                            adapterView.notifyAdapter()
+                        }
                     }
                 }
             )
-        } else {
+        } else { // 비 로그인 상태
             view.setEmpty()
         }
     }
@@ -67,7 +69,7 @@ class WishedPresenter(
             productData.addProductToWished(
                 app.kakaoAccountId!!,
                 productId,
-                object : ProductSource.AddProductToWishedCallback{
+                object : ProductSource.AddProductToWishedCallback {
                     override fun onAddProductToWished(explain: String?) {
                         if (explain.isNullOrBlank()) {
 
@@ -78,8 +80,6 @@ class WishedPresenter(
                     }
                 }
             )
-        } else {
-            // error
         }
     }
 

@@ -62,7 +62,7 @@ class WishedFragment : Fragment(), WishedContract.View {
     override fun getAct() = activity as MainActivity
 
     override fun setEmpty() {
-        viewDataBinding.empty.visibility = View.VISIBLE
+        viewDataBinding.emptyView.visibility = View.VISIBLE
         viewDataBinding.wishedItemContainer.visibility = View.GONE
     }
 

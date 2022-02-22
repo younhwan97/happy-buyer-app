@@ -43,7 +43,9 @@ class WishedViewHolder(
             .error(R.mipmap.ic_launcher)
             .into(wishedItemImage)
 
+        /* set delete/basket button */
         wishedDeleteBtn.isEnabled = true
+        wishedBasketBtn.isEnabled = true
 
         wishedDeleteBtn.setOnClickListener {
             wishedDeleteBtn.isEnabled = false

@@ -11,7 +11,7 @@
         android:id="@+id/action_wished"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_favorite_24"
-        android:title="관심" />
+        android:title="찜" />
     <item
         android:id="@+id/action_account"
         android:enabled="true"

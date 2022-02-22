@@ -10,7 +10,6 @@ interface WishedAdapterContract {
         var onClickFuncOfBasketBtn: ((Int) -> Unit)?
 
         fun notifyAdapter()
-
     }
 
     interface Model {
