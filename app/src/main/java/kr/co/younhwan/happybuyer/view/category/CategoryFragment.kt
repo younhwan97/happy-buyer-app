@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
 import kr.co.younhwan.happybuyer.databinding.FragmentCategoryBinding
@@ -68,11 +69,11 @@ class CategoryFragment : Fragment(), CategoryContract.View {
 
     override fun addWishedResultCallback(explain: String) {
         if (explain == "create")
-            Toast.makeText(requireContext(), "관심 상품에 추가되었습니다.", Toast.LENGTH_SHORT).show()
+            Snackbar.make(viewDataBinding.root, "관심에 추가되었습니다 :)", Snackbar.LENGTH_SHORT).show()
         else if (explain == "delete")
-            Toast.makeText(requireContext(), "관심 상품에서 제외되었습니다.", Toast.LENGTH_SHORT).show()
+            Snackbar.make(viewDataBinding.root, "관심 상품에서 제외되었습니다 :(", Snackbar.LENGTH_SHORT).show()
         else
-            Toast.makeText(requireContext(), "알 수 없는 에러가 발생했습니다.", Toast.LENGTH_SHORT).show()
+            Snackbar.make(viewDataBinding.root, "알 수 없는 에러가 발생했습니다. :(", Snackbar.LENGTH_SHORT).show()
     }
 
     override fun createLoginActivity() {

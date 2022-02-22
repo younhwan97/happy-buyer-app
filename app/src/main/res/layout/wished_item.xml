@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/wishedItemContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/wishedItemImage"
+        android:layout_width="130dp"
+        android:layout_height="140dp"
+        android:paddingBottom="10dp"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/category_fish" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/wishedItemImage"
+        android:layout_alignBottom="@id/wishedItemImage"
+        android:layout_alignParentTop="false"
+        android:layout_toRightOf="@id/wishedItemImage"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+
+        <TextView
+            android:id="@+id/wishedItemName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="상품이름"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/wishedBtnContainer"
+            android:layout_below="@id/wishedItemName"
+            android:gravity="bottom"
+            android:orientation="horizontal"
+            android:paddingBottom="5dp">
+
+            <TextView
+                android:id="@+id/wishedItemPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="상품가격"
+                android:textColor="#407BE6"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView21"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="원"
+                android:textColor="#407BE6" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/wishedBtnContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/wishedDeleteBtn"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:background="@drawable/button_gray_outline"
+                android:text="삭제"
+                android:textColor="@color/colorDarkGray"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/wishedBasketBtn"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/button_theme_outline"
+                android:text="장바구니 담기"
+                android:textColor="@color/colorTheme"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignBottom="@id/wishedItemImage"
+        android:background="@color/colorLightGray"
+        android:orientation="horizontal"></LinearLayout>
+
+</RelativeLayout>

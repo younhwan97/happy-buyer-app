@@ -15,6 +15,15 @@ object ProductRepository : ProductSource{
         })
     }
 
+    override fun getWishedProducts(context: Context, kakaoAccountId: Long?, loadWishedProductCallback: ProductSource.LoadWishedProductCallback?) {
+        productRemoteDataSource.getWishedProducts(context, kakaoAccountId, object : ProductSource.LoadWishedProductCallback {
+            override fun onLoadWishedProducts(list: ArrayList<ProductItem>) {
+                loadWishedProductCallback?.onLoadWishedProducts(list)
+            }
+        })
+
+    }
+
     override fun addProductToBasket(kakaoAccountId: Long, productId: Int, addProductCallback: ProductSource.AddProductToBasketCallback?) {
         productRemoteDataSource.addProductToBasket(kakaoAccountId, productId, object : ProductSource.AddProductToBasketCallback{
             override fun onAddProductToBasket(success: Boolean) {
@@ -27,6 +36,14 @@ object ProductRepository : ProductSource{
         productRemoteDataSource.addProductToWished(kakaoAccountId, productId, object :ProductSource.AddProductToWishedCallback{
             override fun onAddProductToWished(explain: String?) {
                 addProductToWishedCallback?.onAddProductToWished(explain)
+            }
+        })
+    }
+
+    override fun deleteProductInWished(kakaoAccountId: Long, productId: Int, deleteProductInWishedCallback: ProductSource.DeleteProductInWishedCallback?) {
+        productRemoteDataSource.deleteProductInWished(kakaoAccountId, productId, object : ProductSource.DeleteProductInWishedCallback{
+            override fun onDeleteProductInWished() {
+                deleteProductInWishedCallback?.onDeleteProductInWished()
             }
         })
     }

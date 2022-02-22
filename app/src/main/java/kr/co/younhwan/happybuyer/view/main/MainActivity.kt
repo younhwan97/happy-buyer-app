@@ -15,7 +15,7 @@ import kr.co.younhwan.happybuyer.view.search.SearchActivity
 import kr.co.younhwan.happybuyer.databinding.ActivityMainBinding
 import kr.co.younhwan.happybuyer.util.replace
 import kr.co.younhwan.happybuyer.view.main.account.AccountFragment
-import kr.co.younhwan.happybuyer.view.main.favorite.FavoriteFragment
+import kr.co.younhwan.happybuyer.view.main.wished.WishedFragment
 import kr.co.younhwan.happybuyer.view.main.home.HomeFragment
 
 class MainActivity : AppCompatActivity(), MainContract.View {
@@ -35,8 +35,8 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     private val homeFragment: HomeFragment by lazy {
         HomeFragment()
     }
-    private val favoriteFragment: FavoriteFragment by lazy {
-        FavoriteFragment()
+    private val wishedFragment: WishedFragment by lazy {
+        WishedFragment()
     }
     private val accountFragment: AccountFragment by lazy {
         AccountFragment()
@@ -73,9 +73,9 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                     replace(R.id.mainContainer, homeFragment)
                     true
                 }
-                R.id.action_favorite -> {
+                R.id.action_wished -> {
                     viewDataBinding.mainToolbar.title = "관심"
-                    replace(R.id.mainContainer, favoriteFragment)
+                    replace(R.id.mainContainer, wishedFragment)
                     true
                 }
                 R.id.action_account -> {

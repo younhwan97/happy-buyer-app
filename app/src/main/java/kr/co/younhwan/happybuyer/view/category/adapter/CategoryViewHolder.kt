@@ -48,7 +48,7 @@ class CategoryViewHolder(
     }
 
 
-    fun onBind(productItem: ProductItem, position: Int) {
+    fun onBind(productItem: ProductItem) {
         itemName.text = productItem.productName
         itemPrice.text = productItem.productPrice.toString()
         Glide.with(this.itemView.context).load(productItem.productImageUrl).into(itemImage)
@@ -58,7 +58,7 @@ class CategoryViewHolder(
         val inSidePadding = (5 * metrics.density).roundToInt()
         val topPadding = (5 * metrics.density).roundToInt()
 
-        if (position % 2 == 0)
+        if (adapterPosition % 2 == 0)
             itemContainer.setPadding(outSidePadding, topPadding, inSidePadding, 0)
         else
             itemContainer.setPadding(inSidePadding, topPadding, outSidePadding, 0)
@@ -74,15 +74,15 @@ class CategoryViewHolder(
         basketBtn.isActivated = false
 
         wishedBtnContainer.setOnClickListener {
-            listenerFuncOfWishedBtn?.invoke(productItem.productId, position)
+            listenerFuncOfWishedBtn?.invoke(productItem.productId, adapterPosition)
         }
 
         basketBtnContainer.setOnClickListener {
-            listenerFuncOfBasketBtn?.invoke(productItem.productId, position)
+            listenerFuncOfBasketBtn?.invoke(productItem.productId, adapterPosition)
         }
     }
 
-    fun onBindWishedState(productItem: ProductItem, position: Int){
+    fun onBindWishedState(productItem: ProductItem){
         wishedBtn.isActivated = productItem.isWished
     }
 }

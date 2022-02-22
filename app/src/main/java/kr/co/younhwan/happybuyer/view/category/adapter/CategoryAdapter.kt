@@ -21,7 +21,7 @@ class CategoryAdapter :
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         productItemList[position].let {
-            holder.onBind(it, position)
+            holder.onBind(it)
         }
     }
 
@@ -36,7 +36,7 @@ class CategoryAdapter :
             when (payloads[0]) {
                 "wished" -> {
                     productItemList[position].isWished = !productItemList[position].isWished
-                    holder.onBindWishedState(productItemList[position], position)
+                    holder.onBindWishedState(productItemList[position])
                 }
 
                 "basket" -> {

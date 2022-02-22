@@ -8,7 +8,7 @@
         android:icon="@drawable/ic_baseline_home_24"
         android:title="홈" />
     <item
-        android:id="@+id/action_favorite"
+        android:id="@+id/action_wished"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_favorite_24"
         android:title="관심" />
