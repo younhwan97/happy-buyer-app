@@ -1,33 +1,44 @@
 package kr.co.younhwan.happybuyer.data.source.product
 
-import android.content.Context
 import kr.co.younhwan.happybuyer.data.ProductItem
 
 interface ProductSource{
 
-    interface LoadProductCallback {
-        fun onLoadProducts(list: ArrayList<ProductItem>)
+    // Create Product
+    interface CreateProductInBasketCallback{
+        fun onCreateProductInBasket(isSuccess: Boolean)
     }
 
+    fun createProductInBasket(kakaoAccountId: Long, productId: Int, createProductInBasketCallback: CreateProductInBasketCallback?)
 
-    interface LoadBasketProductCallback{
-        fun onLoadBasketProducts(list: ArrayList<ProductItem>)
+    interface CreateProductInWishedCallback{
+        fun onCreateProductInWished(explain: String?)
     }
 
-    interface AddProductToBasketCallback{
-        fun onAddProductToBasket(success: Boolean)
+    fun createProductInWished(kakaoAccountId: Long, productId: Int, createProductInWishedCallback: CreateProductInWishedCallback?)
+
+    // Read Product
+    interface ReadProductsCallback {
+        fun onReadProducts(list: ArrayList<ProductItem>)
     }
 
-    interface AddProductToWishedCallback{
-        fun onAddProductToWished(explain: String?)
+    fun readProducts(kakaoAccountId: Long?, selectedCategory:String, readProductCallback: ReadProductsCallback?)
+
+    interface ReadProductsInBasketCallback{
+        fun onReadProductsInBasket(list: ArrayList<ProductItem>)
     }
 
+    fun readProductsInBasket(kakaoAccountId: Long, readProductsInBasketCallback: ReadProductsInBasketCallback?)
 
-    fun getProducts(context: Context, selectedCategory:String, kakaoAccountId: Long?, loadImageCallback: LoadProductCallback?)
+    interface ReadProductsInBasketCountCallback{
+        fun onReadProductsInBasketCount(count: Int)
+    }
 
-    fun getBasketProducts(context: Context, kakaoAccountId: Long, loadBasketProductCallback: LoadBasketProductCallback?)
+    fun readProductsInBasketCount(kakaoAccountId: Long, readProductsInBasketCountCallback: ReadProductsInBasketCountCallback?)
 
-    fun addProductToBasket(kakaoAccountId: Long, productId: Int, addProductCallback: AddProductToBasketCallback?)
+    // Update Product
+    // ..
 
-    fun addProductToWished(kakaoAccountId: Long, productId: Int, addProductToWishedCallback: AddProductToWishedCallback?)
+    // Delete Product
+    // ..
 }

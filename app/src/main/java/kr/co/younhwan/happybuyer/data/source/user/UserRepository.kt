@@ -9,42 +9,53 @@ object UserRepository : UserSource {
     override fun createUser(
         kakaoAccountId: Long,
         kakaoNickname: String?,
-        createUserCallback: UserSource.createUserCallback?
+        createUserCallback: UserSource.CreateUserCallback?
     ) {
         userRemoteDataSource.createUser(
             kakaoAccountId,
             kakaoNickname,
-            object : UserSource.createUserCallback {
+            object : UserSource.CreateUserCallback {
                 override fun onCreateUser(isSuccess: Boolean) {
                     createUserCallback?.onCreateUser(isSuccess)
                 }
             })
     }
 
+    override fun readUser(
+        kakaoAccountId: Long,
+        readUserCallback: UserSource.ReadUserCallback?
+    ) {
+        userRemoteDataSource.readUser(kakaoAccountId, object : UserSource.ReadUserCallback {
+            override fun onReadUser(userItem: UserItem?) {
+                readUserCallback?.onReadUser(userItem)
+            }
+        })
+    }
+
     override fun updateUser(
         kakaoAccountId: Long,
         target: String,
         newContent: String,
-        updateUserCallback: UserSource.updateUserCallback?
+        updateUserCallback: UserSource.UpdateUserCallback?
     ) {
         userRemoteDataSource.updateUser(
             kakaoAccountId,
             target,
             newContent,
-            object : UserSource.updateUserCallback {
+            object : UserSource.UpdateUserCallback {
                 override fun onUpdateUser(isSuccess: Boolean) {
                     updateUserCallback?.onUpdateUser(isSuccess)
                 }
             })
     }
 
-    override fun readUser(
+    override fun deleteUser(
         kakaoAccountId: Long,
-        readUserCallback: UserSource.readUserCallback?
+        deleteUserCallback: UserSource.DeleteUserCallback?
     ) {
-        userRemoteDataSource.readUser(kakaoAccountId, object :UserSource.readUserCallback{
-            override fun onReadUser(userItem: UserItem?) {
-                readUserCallback?.onReadUser(userItem)
+        userRemoteDataSource.deleteUser(kakaoAccountId, object : UserSource.DeleteUserCallback {
+            override fun onDeleteUser(isSuccess: Boolean) {
+                deleteUserCallback?.onDeleteUser(isSuccess)
             }
         })
     }

@@ -13,7 +13,7 @@ class GlobalApplication : Application() {
     var activatedBasket: String? = "deactivate"
 
     // 장바구니
-    val basketItemCount = 0
+    var basketItemCount = 0
 
     override fun onCreate() {
         super.onCreate()

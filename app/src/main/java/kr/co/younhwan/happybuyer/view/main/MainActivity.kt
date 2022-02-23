@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import com.google.android.material.snackbar.Snackbar
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.view.basket.BasketActivity
 import kr.co.younhwan.happybuyer.view.login.LoginActivity
@@ -17,6 +18,7 @@ import kr.co.younhwan.happybuyer.data.source.user.UserRepository
 import kr.co.younhwan.happybuyer.view.search.SearchActivity
 import kr.co.younhwan.happybuyer.databinding.ActivityMainBinding
 import kr.co.younhwan.happybuyer.util.replace
+import kr.co.younhwan.happybuyer.util.setupBadge
 import kr.co.younhwan.happybuyer.view.main.account.AccountFragment
 import kr.co.younhwan.happybuyer.view.main.wished.WishedFragment
 import kr.co.younhwan.happybuyer.view.main.home.HomeFragment
@@ -47,7 +49,11 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     }
 
     var textCartItemCount: TextView? = null
-    val mCartItemCount = 10
+
+    override fun onResume() {
+        super.onResume()
+        setupBadge(textCartItemCount)
+    }
 
     /* Method */
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,7 +72,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         setSupportActionBar(viewDataBinding.mainToolbar)
 
         // presenter
-        mainPresenter.loadUser()          // 유저 정보, 장바구니 확인
+        mainPresenter.loadUserInfo()      // 유저 정보, 장바구니 확인
         mainPresenter.requestPermission() // 권한 요청
 
         // init fragment
@@ -109,8 +115,6 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         val actionView = menuItem?.actionView
         textCartItemCount = actionView?.findViewById<TextView>(R.id.cart_badge)
 
-        setupBadge()
-
         actionView?.setOnClickListener{
             onOptionsItemSelected(menuItem)
         }
@@ -121,10 +125,6 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     // 툴바의 아이템이 클릭됐을 때 발생하는 이벤트
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.search_item_in_main -> {
-                val searchIntent = Intent(this, SearchActivity::class.java)
-                startActivity(searchIntent)
-            }
             R.id.basket_item_in_main -> {
                 val basketIntent = Intent(this, BasketActivity::class.java)
                 startActivity(basketIntent)
@@ -132,24 +132,6 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         }
 
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun setupBadge(){
-        val itemCount = (application as GlobalApplication).basketItemCount
-
-        if(textCartItemCount != null){
-            if (itemCount == 0) {
-                if (textCartItemCount!!.visibility != View.GONE) {
-                    textCartItemCount!!.visibility = View.GONE
-                }
-            } else {
-                textCartItemCount!!.text = Math.min(itemCount, 99).toString()
-
-                if (textCartItemCount!!.visibility != View.VISIBLE) {
-                    textCartItemCount!!.visibility = View.VISIBLE
-                }
-            }
-        }
     }
     // 툴바 설정 ----
     // -----------------------------------------------------

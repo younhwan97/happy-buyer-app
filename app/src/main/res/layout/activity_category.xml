@@ -81,24 +81,6 @@
                         android:theme="@style/Theme.MaterialComponents.Light"
                         app:checkedIconVisible="false" />
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chip7"
-                        style="@style/Widget.MaterialComponents.Chip.Filter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="주문 많은 순"
-                        android:theme="@style/Platform.MaterialComponents.Light"
-                        app:checkedIconVisible="false" />
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chip8"
-                        style="@style/Widget.MaterialComponents.Chip.Filter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="찜 많은 순"
-                        android:theme="@style/Platform.MaterialComponents.Light"
-                        app:checkedIconVisible="false" />
-
                     <Space
                         android:layout_width="10dp"
                         android:layout_height="match_parent" />

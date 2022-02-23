@@ -6,15 +6,16 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.databinding.ActivityCategoryBinding
+import kr.co.younhwan.happybuyer.util.setupBadge
 import kr.co.younhwan.happybuyer.view.basket.BasketActivity
 import kr.co.younhwan.happybuyer.view.search.SearchActivity
 
@@ -28,6 +29,8 @@ class CategoryActivity : AppCompatActivity() {
 
     /**/
     lateinit var sortBy : String
+
+    var textCartItemCount: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,7 +102,18 @@ class CategoryActivity : AppCompatActivity() {
     // -----------------------------------------------------
     // ---- 툴바 설정
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu) // 메뉴 객체 생성 및 부착(적용)
+        menuInflater.inflate(R.menu.category_menu, menu) // 메뉴 객체 생성 및 부착(적용)
+
+        val menuItem = menu?.findItem(R.id.basket_item_in_main)
+        val actionView = menuItem?.actionView
+        textCartItemCount = actionView?.findViewById<TextView>(R.id.cart_badge)
+
+        setupBadge(textCartItemCount)
+
+        actionView?.setOnClickListener{
+            onOptionsItemSelected(menuItem)
+        }
+
         return true
     }
 
@@ -108,11 +122,13 @@ class CategoryActivity : AppCompatActivity() {
             android.R.id.home -> {
                 finish()
             }
-            R.id.search_item_in_main -> {
-                setFragment("search")
+            R.id.search_item_in_category -> {
+                val categoryIntent = Intent(this, SearchActivity::class.java)
+                startActivity(categoryIntent)
             }
             R.id.basket_item_in_main -> {
-                setFragment("basket")
+                val basketIntent = Intent(this, BasketActivity::class.java)
+                startActivity(basketIntent)
             }
         }
 
@@ -120,19 +136,4 @@ class CategoryActivity : AppCompatActivity() {
     }
     // 툴바 설정 ----
     // -----------------------------------------------------
-
-    private fun setFragment(requestFragment: String){
-        when(requestFragment){
-            "search" -> {
-                val searchIntent = Intent(this, SearchActivity::class.java)
-                startActivity(searchIntent)
-            }
-
-            "basket" -> {
-                val basketIntent = Intent(this, BasketActivity::class.java)
-                startActivity(basketIntent)
-            }
-
-        }
-    }
 }

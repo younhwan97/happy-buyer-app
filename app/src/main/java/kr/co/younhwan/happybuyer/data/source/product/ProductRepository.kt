@@ -1,41 +1,48 @@
 package kr.co.younhwan.happybuyer.data.source.product
 
-import android.content.Context
 import kr.co.younhwan.happybuyer.data.ProductItem
 
 object ProductRepository : ProductSource{
 
     private val productRemoteDataSource = ProductRemoteDataSource
 
-    override fun getProducts(context: Context, selectedCategory:String, kakaoAccountId: Long?, loadImageCallback: ProductSource.LoadProductCallback?) {
-        productRemoteDataSource.getProducts(context, selectedCategory, kakaoAccountId, object : ProductSource.LoadProductCallback {
-            override fun onLoadProducts(list: ArrayList<ProductItem>) {
-                loadImageCallback?.onLoadProducts(list)
+    override fun createProductInWished(kakaoAccountId: Long, productId: Int, createProductInWishedCallback: ProductSource.CreateProductInWishedCallback?) {
+        productRemoteDataSource.createProductInWished(kakaoAccountId, productId, object :ProductSource.CreateProductInWishedCallback{
+            override fun onCreateProductInWished(explain: String?) {
+                createProductInWishedCallback?.onCreateProductInWished(explain)
+            }
+        })
+    }
+
+    override fun createProductInBasket(kakaoAccountId: Long, productId: Int, createProductInBasketCallback: ProductSource.CreateProductInBasketCallback?) {
+        productRemoteDataSource.createProductInBasket(kakaoAccountId, productId, object : ProductSource.CreateProductInBasketCallback{
+            override fun onCreateProductInBasket(isSuccess: Boolean) {
+                createProductInBasketCallback?.onCreateProductInBasket(isSuccess)
             }
         })
     }
 
 
-    override fun getBasketProducts(context: Context, kakaoAccountId: Long, loadBasketProductCallback: ProductSource.LoadBasketProductCallback?) {
-        productRemoteDataSource.getBasketProducts(context, kakaoAccountId, object : ProductSource.LoadBasketProductCallback {
-            override fun onLoadBasketProducts(list: ArrayList<ProductItem>) {
-                loadBasketProductCallback?.onLoadBasketProducts(list)
+    override fun readProducts(kakaoAccountId: Long?, selectedCategory:String, readProductCallback: ProductSource.ReadProductsCallback?) {
+        productRemoteDataSource.readProducts(kakaoAccountId, selectedCategory, object : ProductSource.ReadProductsCallback {
+            override fun onReadProducts(list: ArrayList<ProductItem>) {
+                readProductCallback?.onReadProducts(list)
             }
         })
     }
 
-    override fun addProductToBasket(kakaoAccountId: Long, productId: Int, addProductCallback: ProductSource.AddProductToBasketCallback?) {
-        productRemoteDataSource.addProductToBasket(kakaoAccountId, productId, object : ProductSource.AddProductToBasketCallback{
-            override fun onAddProductToBasket(success: Boolean) {
-                addProductCallback?.onAddProductToBasket(success)
+    override fun readProductsInBasket(kakaoAccountId: Long, readProductsInBasketCallback: ProductSource.ReadProductsInBasketCallback?) {
+        productRemoteDataSource.readProductsInBasket(kakaoAccountId, object : ProductSource.ReadProductsInBasketCallback {
+            override fun onReadProductsInBasket(list: ArrayList<ProductItem>) {
+                readProductsInBasketCallback?.onReadProductsInBasket(list)
             }
         })
     }
 
-    override fun addProductToWished(kakaoAccountId: Long, productId: Int, addProductToWishedCallback: ProductSource.AddProductToWishedCallback?) {
-        productRemoteDataSource.addProductToWished(kakaoAccountId, productId, object :ProductSource.AddProductToWishedCallback{
-            override fun onAddProductToWished(explain: String?) {
-                addProductToWishedCallback?.onAddProductToWished(explain)
+    override fun readProductsInBasketCount(kakaoAccountId: Long, readProductsInBasketCountCallback: ProductSource.ReadProductsInBasketCountCallback?) {
+        productRemoteDataSource.readProductsInBasketCount(kakaoAccountId, object : ProductSource.ReadProductsInBasketCountCallback{
+            override fun onReadProductsInBasketCount(count: Int) {
+                readProductsInBasketCountCallback?.onReadProductsInBasketCount(count)
             }
         })
     }

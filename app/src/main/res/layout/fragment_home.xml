@@ -1,65 +1,247 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:elevation="5dp"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/topTextLayout"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:scrollbars="none">
 
-        <TextView
-            android:id="@+id/textView4"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:fontFamily="@font/bm_hanna_pro"
-            android:text="자주 찾는 카테고리"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-10dp"
-            android:layout_weight="0"
-            android:fontFamily="@font/bm_hanna_pro"
-            android:text="인기 카테고리를 한눈에"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textColor="@android:color/darker_gray" />
-    </LinearLayout>
+            <RelativeLayout
+                android:id="@+id/homeSearchContainer"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/layout_bg">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/topTextLayout"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:elevation="3dp"
-        android:overScrollMode="never">
+                <ImageButton
+                    android:id="@+id/imageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="24dp"
+                    android:background="@android:color/transparent"
+                    android:clickable="false"
+                    app:srcCompat="@drawable/ic_baseline_search_24" />
 
-    </androidx.recyclerview.widget.RecyclerView>
+                <TextView
+                    android:id="@+id/textView14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="12dp"
+                    android:layout_toRightOf="@id/imageButton"
+                    android:fontFamily="@font/notosans_kr_regular"
+                    android:gravity="center"
+                    android:text="찾는 상품이 뭐예요?"
+                    android:textColor="@color/fontColorGray" />
+            </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/divisionRecycler"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@id/recycler"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:background="@color/colorDivision"
-        android:orientation="horizontal">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/homeSearchContainer"
+                android:layout_marginTop="20dp"
+                android:elevation="3dp"
+                android:overScrollMode="never">
 
-    </LinearLayout>
+            </androidx.recyclerview.widget.RecyclerView>
 
+            <LinearLayout
+                android:id="@+id/divisionRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/recycler"
+                android:layout_marginTop="12dp"
+                android:background="@color/colorDivision"
+                android:orientation="horizontal">
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView22"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/divisionRecycler"
+                android:layout_weight="1"
+                android:fontFamily="@font/notosans_kr_regular"
+                android:gravity="center"
+                android:text="모든 카테고리 보기"
+                android:textColor="@color/fontColorLightGray"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:id="@+id/eventProductContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textView22"
+                android:layout_marginTop="24dp"
+                android:visibility="visible">
+
+                <RelativeLayout
+                    android:id="@+id/eventPrdouctTopContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/textView24"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/notosans_kr_bold"
+                        android:text="행사 상품 추천"
+                        android:textColor="@color/fontColorBlack"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:id="@+id/textView25"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBaseline="@id/textView24"
+                        android:layout_alignParentRight="true"
+                        android:fontFamily="@font/notosans_kr_regular"
+                        android:text="더보기"
+                        android:textColor="@color/fontColorLightGray" />
+                </RelativeLayout>
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/eventPrdouctTopContainer"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/imageView2"
+                            android:layout_width="150dp"
+                            android:layout_height="150dp"
+                            android:layout_marginLeft="6dp"
+                            android:layout_marginRight="6dp"
+                            app:srcCompat="@drawable/a600348_1" />
+
+                        <ImageView
+                            android:id="@+id/imageView3"
+                            android:layout_width="150dp"
+                            android:layout_height="150dp"
+                            android:layout_marginLeft="6dp"
+                            android:layout_marginRight="6dp"
+                            app:srcCompat="@drawable/a600348_1" />
+
+                        <ImageView
+                            android:id="@+id/imageView4"
+                            android:layout_width="150dp"
+                            android:layout_height="150dp"
+                            android:layout_marginLeft="6dp"
+                            android:layout_marginRight="6dp"
+                            app:srcCompat="@drawable/a600348_1" />
+
+                        <ImageView
+                            android:id="@+id/imageView5"
+                            android:layout_width="150dp"
+                            android:layout_height="150dp"
+                            android:layout_marginLeft="6dp"
+                            android:layout_marginRight="6dp"
+                            app:srcCompat="@drawable/a600348_1" />
+
+                        <ImageView
+                            android:id="@+id/imageView6"
+                            android:layout_width="150dp"
+                            android:layout_height="150dp"
+                            android:layout_marginLeft="6dp"
+                            android:layout_marginRight="6dp"
+                            app:srcCompat="@drawable/a600348_1" />
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/eventProductRecycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/eventPrdouctTopContainer"
+                    tools:visibility="gone" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/popularProductContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/eventProductContainer"
+                android:layout_marginTop="12dp">
+
+                <RelativeLayout
+                    android:id="@+id/popularProductTopContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/textView26"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/notosans_kr_bold"
+                        android:text="인기 상품 추천"
+                        android:textColor="@color/fontColorBlack"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:id="@+id/textView27"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBaseline="@id/textView26"
+                        android:layout_alignParentRight="true"
+                        android:fontFamily="@font/notosans_kr_regular"
+                        android:text="더보기"
+                        android:textColor="@color/fontColorLightGray" />
+                </RelativeLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/popularProductRecycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/popularProductTopContainer"
+                    android:visibility="gone" />
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/popularProductTopContainer"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="-24dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/imageView7"
+                            android:layout_width="150dp"
+                            android:layout_height="150dp"
+                            android:layout_marginLeft="6dp"
+                            android:layout_marginRight="6dp"
+                            app:srcCompat="@drawable/a600348_1" />
+
+                        <ImageView
+                            android:id="@+id/imageView8"
+                            android:layout_width="150dp"
+                            android:layout_height="150dp"
+                            android:layout_marginLeft="6dp"
+                            android:layout_marginRight="6dp"
+                            app:srcCompat="@drawable/a600348_1" />
+                    </LinearLayout>
+                </HorizontalScrollView>
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
 </RelativeLayout>

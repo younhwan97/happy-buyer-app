@@ -15,7 +15,7 @@ class NicknamePresenter(
             kakaoAccountId,
             "nickname",
             newNickname,
-            object : UserSource.updateUserCallback {
+            object : UserSource.UpdateUserCallback {
                 override fun onUpdateUser(isSuccess: Boolean) {
                     if (isSuccess) {
                         app.nickname = newNickname

@@ -14,6 +14,6 @@ interface MainContract {
 
         fun requestPermission()
 
-        fun loadUser()
+        fun loadUserInfo()
     }
 }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.main.MainActivity" >
+    tools:context=".view.main.MainActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/mainToolbar"
@@ -13,7 +13,8 @@
         android:layout_alignParentTop="true"
         android:background="@color/colorTheme"
         android:elevation="3dp"
-        android:minHeight="?attr/actionBarSize" />
+        android:minHeight="?attr/actionBarSize"
+        app:contentInsetStart="24dp" />
 
     <LinearLayout
         android:id="@+id/toolbarDivision"
@@ -28,7 +29,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottomNavDivision"
-        android:layout_below="@id/toolbarDivision" />
+        android:layout_below="@id/toolbarDivision"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp" />
 
     <LinearLayout
         android:id="@+id/bottomNavDivision"
@@ -44,8 +47,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:menu="@menu/bottom_navigation_menu"
         app:itemIconTint="@drawable/menu_selector_color"
-        app:itemTextColor="@drawable/menu_selector_color" />
+        app:itemTextColor="@drawable/menu_selector_color"
+        app:menu="@menu/bottom_navigation_menu" />
 
 </RelativeLayout>

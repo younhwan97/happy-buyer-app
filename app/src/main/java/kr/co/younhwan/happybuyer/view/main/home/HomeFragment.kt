@@ -65,8 +65,8 @@ class HomeFragment : Fragment(), HomeContract.View {
         // set recycler view
         viewDataBinding.recycler.run {
             adapter = homeAdapter
-            layoutManager = GridLayoutManager(requireContext(), 5)
-            addItemDecoration(homeAdapter.RecyclerDecoration(20))
+            layoutManager = GridLayoutManager(requireContext(), 4)
+            addItemDecoration(homeAdapter.RecyclerDecoration(0))
         }
     }
 

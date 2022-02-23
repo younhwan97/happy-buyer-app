@@ -1,13 +1,12 @@
 package kr.co.younhwan.happybuyer.view.category.presenter
 
-import android.content.Context
-import android.os.SystemClock
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.data.ProductItem
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
 import kr.co.younhwan.happybuyer.data.source.product.ProductSource
 import kr.co.younhwan.happybuyer.data.source.user.UserRepository
 import kr.co.younhwan.happybuyer.data.source.user.UserSource
+import kr.co.younhwan.happybuyer.util.setupBadge
 import kr.co.younhwan.happybuyer.view.category.adapter.contract.CategoryAdapterContract
 
 class CategoryPresenter(
@@ -28,19 +27,16 @@ class CategoryPresenter(
         }
     }
 
-    override fun loadProductItems(context: Context, isClear: Boolean, selectedCategory: String) {
-        val act = view.getAct()
-        val app = act.application as GlobalApplication
+    override fun loadProducts(isClear: Boolean, selectedCategory: String) {
+        val app = ((view.getAct()).application) as GlobalApplication
 
-        productData.getProducts(
-            context,
-            selectedCategory,
+        productData.readProducts(
             app.kakaoAccountId,
-            object : ProductSource.LoadProductCallback {
-                override fun onLoadProducts(list: ArrayList<ProductItem>) {
-                    if (isClear) {
+            selectedCategory,
+            object : ProductSource.ReadProductsCallback {
+                override fun onReadProducts(list: ArrayList<ProductItem>) {
+                    if (isClear)
                         adapterModel.clearItem()
-                    }
 
                     adapterModel.addItems(list)
                     adapterView.notifyAdapter()
@@ -49,20 +45,19 @@ class CategoryPresenter(
     }
 
     private fun onClickListenerOfWishedBtn(productId: Int, position: Int) {
-
-        val app = view.getAct().application as GlobalApplication
+        val app = ((view.getAct()).application) as GlobalApplication
 
         if (app.isLogined) {
-            productData.addProductToWished(
+            productData.createProductInWished(
                 app.kakaoAccountId!!,
                 productId,
-                object : ProductSource.AddProductToWishedCallback {
-                    override fun onAddProductToWished(explain: String?) {
+                object : ProductSource.CreateProductInWishedCallback {
+                    override fun onCreateProductInWished(explain: String?) {
                         if (explain.isNullOrBlank()) {
-
+                            view.createProductInWishedResultCallback("error")
                         } else {
                             adapterView.notifyItemByUsingPayload(position, "wished")
-                            view.addWishedResultCallback(explain)
+                            view.createProductInWishedResultCallback(explain)
                         }
                     }
                 }
@@ -73,33 +68,32 @@ class CategoryPresenter(
     }
 
     private fun onClickListenerOfBasketBtn(productId: Int, position: Int) {
-
-        val app = view.getAct().application as GlobalApplication
+        val app = ((view.getAct()).application) as GlobalApplication
 
         if (app.isLogined) {
-            productData.addProductToBasket(
+            productData.createProductInBasket(
                 app.kakaoAccountId!!,
                 productId,
-                object : ProductSource.AddProductToBasketCallback {
-                    override fun onAddProductToBasket(success: Boolean) {
-                        if (success) {
-                            if (app.activatedBasket.isNullOrBlank() || app.activatedBasket == "deactivate") {
+                object : ProductSource.CreateProductInBasketCallback {
+                    override fun onCreateProductInBasket(isSuccess: Boolean) {
+                        if (isSuccess) {
+                            if (app.activatedBasket !== "activate") {
                                 userData.updateUser(
                                     app.kakaoAccountId!!,
                                     "basket",
                                     "activate",
-                                    object : UserSource.updateUserCallback {
+                                    object : UserSource.UpdateUserCallback {
                                         override fun onUpdateUser(isSuccess: Boolean) {
-                                            app.activatedBasket = "activate"
+                                            if(isSuccess) app.activatedBasket = "activate"
                                         }
                                     }
                                 )
                             }
 
-
-                        } else {
-
+                            app.basketItemCount += 1
+                            view.getAct().setupBadge(view.getAct().textCartItemCount)
                         }
+                        view.createProductInBasketResultCallback(isSuccess)
                     }
                 })
         } else {

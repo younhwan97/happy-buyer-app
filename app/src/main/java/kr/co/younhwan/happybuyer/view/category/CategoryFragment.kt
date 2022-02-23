@@ -5,11 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
 import kr.co.younhwan.happybuyer.data.source.user.UserRepository
 import kr.co.younhwan.happybuyer.databinding.FragmentCategoryBinding
@@ -17,7 +15,6 @@ import kr.co.younhwan.happybuyer.view.category.adapter.CategoryAdapter
 import kr.co.younhwan.happybuyer.view.category.presenter.CategoryContract
 import kr.co.younhwan.happybuyer.view.category.presenter.CategoryPresenter
 import kr.co.younhwan.happybuyer.view.login.LoginActivity
-import kr.co.younhwan.happybuyer.view.main.MainActivity
 
 class CategoryFragment : Fragment(), CategoryContract.View {
 
@@ -43,7 +40,7 @@ class CategoryFragment : Fragment(), CategoryContract.View {
     }
 
     /* Data */
-    lateinit var selectedCateogory: String
+    private lateinit var selectedCateogory: String
 
     /* Method */
     override fun onCreateView(
@@ -59,7 +56,7 @@ class CategoryFragment : Fragment(), CategoryContract.View {
         super.onViewCreated(view, savedInstanceState)
 
         selectedCateogory = arguments?.getString("category").toString()
-        categoryPresenter.loadProductItems(requireContext(), false, selectedCateogory)
+        categoryPresenter.loadProducts(false, selectedCateogory)
 
         viewDataBinding.itemContainer.run {
             this.adapter = categoryAdapter
@@ -69,17 +66,33 @@ class CategoryFragment : Fragment(), CategoryContract.View {
 
     override fun getAct() = activity as CategoryActivity
 
-    override fun addWishedResultCallback(explain: String) {
-        if (explain == "create")
-            Snackbar.make(viewDataBinding.root, "관심에 추가되었습니다 :)", Snackbar.LENGTH_SHORT).show()
-        else if (explain == "delete")
-            Snackbar.make(viewDataBinding.root, "관심 상품에서 제외되었습니다 :(", Snackbar.LENGTH_SHORT).show()
-        else
-            Snackbar.make(viewDataBinding.root, "알 수 없는 에러가 발생했습니다. :(", Snackbar.LENGTH_SHORT).show()
+    override fun createLoginActivity() =
+        startActivity(Intent(requireContext(), LoginActivity::class.java))
+
+    override fun createProductInWishedResultCallback(explain: String) {
+        when (explain) {
+            "create" -> {
+                Snackbar.make(viewDataBinding.root, "관심에 추가되었습니다 :)", Snackbar.LENGTH_SHORT)
+                    .show()
+            }
+            "delete" -> {
+                Snackbar.make(viewDataBinding.root, "관심 상품에서 제외되었습니다 :(", Snackbar.LENGTH_SHORT)
+                    .show()
+            }
+            else -> {
+                Snackbar.make(viewDataBinding.root, "알 수 없는 에러가 발생했습니다 :(", Snackbar.LENGTH_SHORT)
+                    .show()
+            }
+        }
     }
 
-    override fun createLoginActivity() {
-        val loginIntent = Intent(requireContext(), LoginActivity::class.java)
-        startActivity(loginIntent)
+    override fun createProductInBasketResultCallback(isSuccess: Boolean) {
+        if (isSuccess) {
+            Snackbar.make(viewDataBinding.root, "상품이 장바구니에 추가되었습니다.", Snackbar.LENGTH_SHORT)
+                .show()
+        } else {
+            Snackbar.make(viewDataBinding.root, "알 수 없는 에러가 발생했습니다.", Snackbar.LENGTH_SHORT)
+                .show()
+        }
     }
 }

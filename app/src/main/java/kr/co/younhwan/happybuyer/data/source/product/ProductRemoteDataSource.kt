@@ -1,6 +1,5 @@
 package kr.co.younhwan.happybuyer.data.source.product
 
-import android.content.Context
 import android.util.Log
 import kotlinx.coroutines.*
 import kr.co.younhwan.happybuyer.data.ProductItem
@@ -11,84 +10,151 @@ import org.json.JSONObject
 
 object ProductRemoteDataSource : ProductSource {
 
-    override fun getProducts(
-        context: Context,
-        selectedCategory: String,
-        kakaoAccountId: Long?,
-        loadImageCallback: ProductSource.LoadProductCallback?
-    ) {
-
-        runBlocking {
-
-            var list = ArrayList<ProductItem>()
-
-            val job = GlobalScope.launch {
-                val wishedList = getWishedProductIdList(kakaoAccountId)
-                list = getItem(selectedCategory, wishedList)
-            }
-
-            job.join()
-            loadImageCallback?.onLoadProducts(list)
-        }
-    }
-
-
-    override fun getBasketProducts(
-        context: Context,
-        kakaoAccountId: Long,
-        loadBasketProductCallback: ProductSource.LoadBasketProductCallback?
-    ) {
-
-        runBlocking {
-
-            var list = ArrayList<ProductItem>()
-
-            val job = GlobalScope.launch {
-                val tempList = getBasketProductIdAndCountList(kakaoAccountId)
-                Log.d("test", tempList.toString())
-            }
-
-            job.join()
-            loadBasketProductCallback?.onLoadBasketProducts(list)
-        }
-    }
-
-    override fun addProductToBasket(
+    override fun createProductInWished(
         kakaoAccountId: Long,
         productId: Int,
-        addProductCallback: ProductSource.AddProductToBasketCallback?
+        createProductInWishedCallback: ProductSource.CreateProductInWishedCallback?
     ) {
-
-        runBlocking {
-            var success = false
-            val job = GlobalScope.launch {
-                success = createBasket(kakaoAccountId, productId)
-            }
-
-            job.join()
-            addProductCallback?.onAddProductToBasket(success)
-        }
-
-    }
-
-    override fun addProductToWished(
-        kakaoAccountId: Long,
-        productId: Int,
-        addProductToWishedCallback: ProductSource.AddProductToWishedCallback?
-    ) {
+        // deleteProductInWished 기능도 수행
         runBlocking {
             var explain: String? = null
+
             val job = GlobalScope.launch {
-                explain = createWished(kakaoAccountId, productId)
+                explain = createInWished(kakaoAccountId, productId)
+                // explain -> create : 상품이 찜 목록에 추가
+                // explain -> delete : 상품이 찜 목록에서 제거
             }
 
             job.join()
-            addProductToWishedCallback?.onAddProductToWished(explain)
+            createProductInWishedCallback?.onCreateProductInWished(explain)
+        }
+    }
+
+    override fun createProductInBasket(
+        kakaoAccountId: Long,
+        productId: Int,
+        createProductInBasketCallback: ProductSource.CreateProductInBasketCallback?
+    ) {
+
+        runBlocking {
+            var isSuccess = false
+
+            val job = GlobalScope.launch {
+                isSuccess = createInBasket(kakaoAccountId, productId)
+            }
+
+            job.join()
+            createProductInBasketCallback?.onCreateProductInBasket(isSuccess)
+        }
+
+    }
+
+    override fun readProducts(
+        kakaoAccountId: Long?,
+        selectedCategory: String,
+        readProductCallback: ProductSource.ReadProductsCallback?
+    ) {
+
+        runBlocking {
+
+            var list = ArrayList<ProductItem>()
+
+            val job = GlobalScope.launch {
+                val wishedIdList = readWishedProductIdList(kakaoAccountId)
+                list = read(selectedCategory, wishedIdList)
+            }
+
+            job.join()
+            readProductCallback?.onReadProducts(list)
+        }
+    }
+
+
+    override fun readProductsInBasket(
+        kakaoAccountId: Long,
+        readProductsInBasketCallback: ProductSource.ReadProductsInBasketCallback?
+    ) {
+
+        runBlocking {
+
+            var list = ArrayList<ProductItem>()
+
+            val job = GlobalScope.launch {
+                val basketIdAndCountList = readBasketProductIdAndCountList(kakaoAccountId)
+                list= readBasket(basketIdAndCountList)
+            }
+
+            job.join()
+            readProductsInBasketCallback?.onReadProductsInBasket(list)
+        }
+    }
+
+    override fun readProductsInBasketCount(
+        kakaoAccountId: Long,
+        readProductsInBasketCountCallback: ProductSource.ReadProductsInBasketCountCallback?
+    ) {
+        runBlocking {
+
+            var count = 0
+
+            val job = GlobalScope.launch {
+                val basketIdAndCountList  = readBasketProductIdAndCountList(kakaoAccountId)
+                for (item in basketIdAndCountList){
+                    count += item["productCount"]!!
+                }
+            }
+
+            job.join()
+            readProductsInBasketCountCallback?.onReadProductsInBasketCount(count)
         }
     }
 }
 
-suspend fun getItem(selectedCategory: String, wishedList: ArrayList<Int>): ArrayList<ProductItem> {
+suspend fun createInWished(kakaoAccountId: Long, productId: Int): String? {
+
+    // 클라이언트 생성
+    val client = OkHttpClient()
+
+    // 요청
+    val site =
+        "http://happybuyer.co.kr/wished/api/app/create?pid=${productId}&uid=${kakaoAccountId}"
+    val request = Request.Builder().url(site).get().build()
+
+    // 응답
+    val response = client.newCall(request).execute()
+
+    if (response.isSuccessful) {
+        val resultText = response.body?.string()!!.trim()
+        val json = JSONObject(resultText)
+        return json.getString("explain")
+    }
+
+    // DB 에러
+    return null
+}
+
+suspend fun createInBasket(kakaoAccountId: Long, productId: Int): Boolean {
+
+    // 클라이언트 생성
+    val client = OkHttpClient()
+
+    // 요청
+    val site =
+        "http://happybuyer.co.kr/basket/api/app/create?pid=${productId}&uid=${kakaoAccountId}"
+    val request = Request.Builder().url(site).get().build()
+
+    // 응답
+    val response = client.newCall(request).execute()
+
+    if (response.isSuccessful) {
+        return true
+    }
+
+    return false
+}
+
+
+suspend fun read(selectedCategory: String, wishedIdList: ArrayList<Int>): ArrayList<ProductItem> {
     val list = ArrayList<ProductItem>()
 
     // 클라이언트 생성
@@ -109,7 +175,7 @@ suspend fun getItem(selectedCategory: String, wishedList: ArrayList<Int>): Array
         for (i in 0 until data.length()) {
             val obj = data.getJSONObject(i)
             val productStatus = obj.getString("status")
-            val productCategory = obj.getString("category")
+            // val productCategory = obj.getString("category")
 
             if (productStatus == "판매중") {
                 val productId = obj.getInt("product_id")
@@ -118,8 +184,8 @@ suspend fun getItem(selectedCategory: String, wishedList: ArrayList<Int>): Array
                 val productImage = obj.getString("image_url")
                 var isWished = false
 
-                for (item in wishedList) {
-                    if (item == productId) {
+                for (id in wishedIdList) {
+                    if (id == productId) {
                         isWished = true
                     }
                 }
@@ -132,8 +198,53 @@ suspend fun getItem(selectedCategory: String, wishedList: ArrayList<Int>): Array
     return list
 }
 
-suspend fun getWishedProductIdList(kakaoAccountId: Long?): ArrayList<Int> {
+suspend fun readBasket(basketIdAndCountList: ArrayList<Map<String, Int>>): ArrayList<ProductItem> {
+    val list = ArrayList<ProductItem>()
+    val selectedCategory = "total"
+
+    // 클라이언트 생성
+    val client = OkHttpClient()
+
+    // 요청
+    val site = "http://happybuyer.co.kr/products/api/app/read?category=${selectedCategory}"
+    val request = Request.Builder().url(site).get().build()
+
+    // 응답
+    val response = client.newCall(request).execute()
+
+    if (response.isSuccessful) {
+        val resultText = response.body?.string()!!.trim()
+        val json = JSONObject(resultText)
+        val data = JSONArray(json["data"].toString())
+
+        for (i in 0 until data.length()) {
+            val obj = data.getJSONObject(i)
+            val productStatus = obj.getString("status")
+            // val productCategory = obj.getString("category")
+
+            if (productStatus == "판매중") {
+                val productId = obj.getInt("product_id")
+                val productName = obj.getString("name")
+                val productPrice = obj.getInt("price")
+                val productImage = obj.getString("image_url")
+                val isWished = false
+
+                for (item in basketIdAndCountList) {
+                    if (item["productId"] == productId){
+                        list.add(ProductItem(productId, productImage, productName, productPrice, isWished, item["productCount"]!!))
+                    }
+                }
+            }
+        }
+    }
+
+    return list
+}
+
+suspend fun readWishedProductIdList(kakaoAccountId: Long?): ArrayList<Int> {
     val list = ArrayList<Int>()
+
+    if (kakaoAccountId == null || kakaoAccountId == -1L) return list
 
     // 클라이언트 생성
     val client = OkHttpClient()
@@ -153,18 +264,17 @@ suspend fun getWishedProductIdList(kakaoAccountId: Long?): ArrayList<Int> {
         for (i in 0 until data.length()) {
             val obj = data.getJSONObject(i)
             val userId = obj.getLong("user_id")
-            if (kakaoAccountId == userId) {
-                val productId = obj.getInt("product_id")
-                list.add(productId)
-            }
+
+            if (kakaoAccountId == userId)
+                list.add(obj.getInt("product_id"))
         }
     }
 
     return list
 }
 
-suspend fun getBasketProductIdAndCountList(kakaoAccountId: Long): ArrayList<Map<Int, Int>>?{
-    val list = ArrayList<Map<Int, Int>>()
+suspend fun readBasketProductIdAndCountList(kakaoAccountId: Long): ArrayList<Map<String, Int>> {
+    val list = ArrayList<Map<String, Int>>()
 
     // 클라이언트 생성
     val client = OkHttpClient()
@@ -182,12 +292,10 @@ suspend fun getBasketProductIdAndCountList(kakaoAccountId: Long): ArrayList<Map<
         val data = JSONArray(json["data"].toString())
 
         for (i in 0 until data.length()) {
-            val map = mutableMapOf<Int, Int>()
             val obj = data.getJSONObject(i)
-            val productId = obj.getInt("product_id")
-            val productCount = obj.getInt("count")
-
-            map.put(productId, productCount)
+            val map = mutableMapOf<String, Int>()
+            map["productId"] = obj.getInt("product_id")
+            map["productCount"] = obj.getInt("count")
             list.add(map)
         }
     }
@@ -195,44 +303,4 @@ suspend fun getBasketProductIdAndCountList(kakaoAccountId: Long): ArrayList<Map<
     return list
 }
 
-suspend fun createBasket(kakaoAccountId: Long, productId: Int): Boolean {
 
-    // 클라이언트 생성
-    val client = OkHttpClient()
-
-    // 요청
-    val site =
-        "http://happybuyer.co.kr/basket/api/app/create?pid=${productId}&uid=${kakaoAccountId}"
-    val request = Request.Builder().url(site).get().build()
-
-    // 응답
-    val response = client.newCall(request).execute()
-
-    if (response.isSuccessful) {
-        return true
-    }
-
-    return false
-}
-
-suspend fun createWished(kakaoAccountId: Long, productId: Int): String? {
-
-    // 클라이언트 생성
-    val client = OkHttpClient()
-
-    // 요청
-    val site =
-        "http://happybuyer.co.kr/wished/api/app/create?pid=${productId}&uid=${kakaoAccountId}"
-    val request = Request.Builder().url(site).get().build()
-
-    // 응답
-    val response = client.newCall(request).execute()
-
-    if (response.isSuccessful) {
-        val resultText = response.body?.string()!!.trim()
-        val json = JSONObject(resultText)
-        return json.getString("explain")
-    }
-
-    return null
-}

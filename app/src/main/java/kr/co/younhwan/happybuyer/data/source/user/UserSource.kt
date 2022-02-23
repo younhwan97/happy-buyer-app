@@ -4,21 +4,31 @@ import kr.co.younhwan.happybuyer.data.UserItem
 
 interface UserSource {
 
-    interface createUserCallback {
+    // Create User
+    interface CreateUserCallback {
         fun onCreateUser(isSuccess: Boolean)
     }
 
-    interface readUserCallback{
+    fun createUser(kakaoAccountId: Long, kakaoNickname:String?, createUserCallback: CreateUserCallback?)
+
+    // Read user
+    interface ReadUserCallback{
         fun onReadUser(userItem: UserItem?)
     }
 
-    interface updateUserCallback {
+    fun readUser(kakaoAccountId: Long, readUserCallback: ReadUserCallback?)
+
+    // Update User
+    interface UpdateUserCallback {
         fun onUpdateUser(isSuccess: Boolean)
     }
 
-    fun createUser(kakaoAccountId: Long, kakaoNickname:String?, createUserCallback: createUserCallback?)
+    fun updateUser(kakaoAccountId: Long, target: String, newContent: String, updateUserCallback: UpdateUserCallback?)
 
-    fun readUser(kakaoAccountId: Long, readUserCallback: readUserCallback?)
+    // Delete User
+    interface DeleteUserCallback{
+        fun onDeleteUser(isSuccess: Boolean)
+    }
 
-    fun updateUser(kakaoAccountId: Long, target: String, newContent: String, updateUserCallback: updateUserCallback?)
+    fun deleteUser(kakaoAccountId: Long, deleteUserCallback: DeleteUserCallback?)
 }

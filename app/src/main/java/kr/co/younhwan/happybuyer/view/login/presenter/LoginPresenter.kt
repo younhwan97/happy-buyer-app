@@ -22,10 +22,10 @@ class LoginPresenter(
                     val kakaoAccountId: Long = user.id!!
                     val kakaoAccountNickname: String? = user.kakaoAccount?.profile?.nickname
 
-                    userData.createUser(
+                    userData.createUser( // 유저를 실제 DB에 생성한다.
                         kakaoAccountId,
                         kakaoAccountNickname,
-                        object : UserSource.createUserCallback {
+                        object : UserSource.CreateUserCallback {
                             override fun onCreateUser(isSuccess: Boolean) {
                                 view.loginResultCallback(isSuccess)
                             }

@@ -31,12 +31,11 @@ class WishedPresenter(
         val app = ((view.getAct()).application) as GlobalApplication
 
         if (app.isLogined) { // 로그인 상태
-            productData.getProducts(
-                context,
-                "total",
+            productData.readProducts(
                 app.kakaoAccountId!!,
-                object : ProductSource.LoadProductCallback {
-                    override fun onLoadProducts(list: ArrayList<ProductItem>) {
+                "total",
+                object : ProductSource.ReadProductsCallback {
+                    override fun onReadProducts(list: ArrayList<ProductItem>) {
                         if (isClear) {
                             adapterModel.clearItem()
                         }
@@ -67,11 +66,11 @@ class WishedPresenter(
         val app = view.getAct().application as GlobalApplication
 
         if (app.isLogined) {
-            productData.addProductToWished(
+            productData.createProductInWished(
                 app.kakaoAccountId!!,
                 productId,
-                object : ProductSource.AddProductToWishedCallback {
-                    override fun onAddProductToWished(explain: String?) {
+                object : ProductSource.CreateProductInWishedCallback {
+                    override fun onCreateProductInWished(explain: String?) {
                         if (explain.isNullOrBlank()) {
 
                         } else {
@@ -88,11 +87,11 @@ class WishedPresenter(
         val app = view.getAct().application as GlobalApplication
 
         if (app.isLogined) {
-            productData.addProductToBasket(
+            productData.createProductInBasket(
                 app.kakaoAccountId!!,
                 productId,
-                object : ProductSource.AddProductToBasketCallback {
-                    override fun onAddProductToBasket(success: Boolean) {
+                object : ProductSource.CreateProductInBasketCallback {
+                    override fun onCreateProductInBasket(success: Boolean) {
                         if (success) {
                             view.addBasketResultCallback(success)
                         } else {

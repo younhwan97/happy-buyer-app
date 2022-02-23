@@ -23,4 +23,12 @@
     <color name="colorEmailSignIn">#009688</color>
     <color name="colorEmailSignInPressed">#004D40</color>
     <color name="colorDarkGray">#FFAAAAAA</color>
+
+    <!--font design-->
+    <color name="fontColorBlack">#191919</color>
+    <color name="fontColorGray">#767676</color>
+    <color name="fontColorLightGray">#999999</color>
+
+    <!-- bg color -->
+    <color name="bgColor">#F8F8FA</color>
 </resources>

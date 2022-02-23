@@ -8,7 +8,9 @@ interface CategoryContract{
 
         fun getAct() : CategoryActivity
 
-        fun addWishedResultCallback(explain: String)
+        fun createProductInWishedResultCallback(explain: String)
+
+        fun createProductInBasketResultCallback(isSuccess: Boolean)
 
         fun createLoginActivity()
 
@@ -16,7 +18,7 @@ interface CategoryContract{
 
     interface Model{
 
-        fun loadProductItems(context: Context, isClear: Boolean, selectedCategory: String)
+        fun loadProducts(isClear: Boolean, selectedCategory: String)
 
     }
 }
