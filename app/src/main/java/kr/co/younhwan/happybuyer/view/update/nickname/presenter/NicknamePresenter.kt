@@ -13,6 +13,7 @@ class NicknamePresenter(
         val kakaoAccountId = app.kakaoAccountId!!
         userData.updateUser(
             kakaoAccountId,
+            "nickname",
             newNickname,
             object : UserSource.updateUserCallback {
                 override fun onUpdateUser(isSuccess: Boolean) {

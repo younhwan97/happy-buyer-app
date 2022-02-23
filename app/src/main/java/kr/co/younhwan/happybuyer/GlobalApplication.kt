@@ -10,6 +10,10 @@ class GlobalApplication : Application() {
     var nickname: String? = "-"
     var pointNumber: Int? = 0
     var shippingAddress: String? = "-"
+    var activatedBasket: String? = "deactivate"
+
+    // 장바구니
+    val basketItemCount = 0
 
     override fun onCreate() {
         super.onCreate()

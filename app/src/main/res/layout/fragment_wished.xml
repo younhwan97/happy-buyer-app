@@ -9,7 +9,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/wishedItemContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="visible">
 
     </androidx.recyclerview.widget.RecyclerView>
 
@@ -27,7 +28,7 @@
             app:srcCompat="@drawable/touch" />
 
         <TextView
-            android:id="@+id/emptyWishedText"
+            android:id="@+id/emptyText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/emptyImage"
@@ -37,4 +38,5 @@
             android:textColor="@color/colorDarkGray"
             android:textSize="16sp" />
     </RelativeLayout>
+
 </RelativeLayout>

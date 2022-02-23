@@ -23,12 +23,14 @@ object UserRepository : UserSource {
 
     override fun updateUser(
         kakaoAccountId: Long,
-        newNickname: String,
+        target: String,
+        newContent: String,
         updateUserCallback: UserSource.updateUserCallback?
     ) {
         userRemoteDataSource.updateUser(
             kakaoAccountId,
-            newNickname,
+            target,
+            newContent,
             object : UserSource.updateUserCallback {
                 override fun onUpdateUser(isSuccess: Boolean) {
                     updateUserCallback?.onUpdateUser(isSuccess)

@@ -6,11 +6,14 @@ import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.data.ProductItem
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
 import kr.co.younhwan.happybuyer.data.source.product.ProductSource
+import kr.co.younhwan.happybuyer.data.source.user.UserRepository
+import kr.co.younhwan.happybuyer.data.source.user.UserSource
 import kr.co.younhwan.happybuyer.view.category.adapter.contract.CategoryAdapterContract
 
 class CategoryPresenter(
     private val view: CategoryContract.View,
     private val productData: ProductRepository,
+    private val userData: UserRepository,
     private val adapterModel: CategoryAdapterContract.Model,
     private val adapterView: CategoryAdapterContract.View,
 ) : CategoryContract.Model {
@@ -80,6 +83,19 @@ class CategoryPresenter(
                 object : ProductSource.AddProductToBasketCallback {
                     override fun onAddProductToBasket(success: Boolean) {
                         if (success) {
+                            if (app.activatedBasket.isNullOrBlank() || app.activatedBasket == "deactivate") {
+                                userData.updateUser(
+                                    app.kakaoAccountId!!,
+                                    "basket",
+                                    "activate",
+                                    object : UserSource.updateUserCallback {
+                                        override fun onUpdateUser(isSuccess: Boolean) {
+                                            app.activatedBasket = "activate"
+                                        }
+                                    }
+                                )
+                            }
+
 
                         } else {
 

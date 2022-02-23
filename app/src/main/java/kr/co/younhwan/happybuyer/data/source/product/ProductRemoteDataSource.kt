@@ -32,19 +32,24 @@ object ProductRemoteDataSource : ProductSource {
         }
     }
 
-    override fun getWishedProducts(
+
+    override fun getBasketProducts(
         context: Context,
-        kakaoAccountId: Long?,
-        loadWishedProductCallback: ProductSource.LoadWishedProductCallback?
+        kakaoAccountId: Long,
+        loadBasketProductCallback: ProductSource.LoadBasketProductCallback?
     ) {
 
         runBlocking {
-            val list = ArrayList<ProductItem>()
+
+            var list = ArrayList<ProductItem>()
 
             val job = GlobalScope.launch {
-                val wishedList = getWishedProductIdList(kakaoAccountId)
-
+                val tempList = getBasketProductIdAndCountList(kakaoAccountId)
+                Log.d("test", tempList.toString())
             }
+
+            job.join()
+            loadBasketProductCallback?.onLoadBasketProducts(list)
         }
     }
 
@@ -79,16 +84,6 @@ object ProductRemoteDataSource : ProductSource {
 
             job.join()
             addProductToWishedCallback?.onAddProductToWished(explain)
-        }
-    }
-
-    override fun deleteProductInWished(
-        kakaoAccountId: Long,
-        productId: Int,
-        deleteProductInWishedCallback: ProductSource.DeleteProductInWishedCallback?
-    ) {
-        runBlocking {
-
         }
     }
 }
@@ -162,6 +157,38 @@ suspend fun getWishedProductIdList(kakaoAccountId: Long?): ArrayList<Int> {
                 val productId = obj.getInt("product_id")
                 list.add(productId)
             }
+        }
+    }
+
+    return list
+}
+
+suspend fun getBasketProductIdAndCountList(kakaoAccountId: Long): ArrayList<Map<Int, Int>>?{
+    val list = ArrayList<Map<Int, Int>>()
+
+    // 클라이언트 생성
+    val client = OkHttpClient()
+
+    // 요청
+    val site = "http://happybuyer.co.kr/basket/api/app/read?id=${kakaoAccountId}"
+    val request = Request.Builder().url(site).get().build()
+
+    // 응답
+    val response = client.newCall(request).execute()
+
+    if (response.isSuccessful) {
+        val resultText = response.body?.string()!!.trim()
+        val json = JSONObject(resultText)
+        val data = JSONArray(json["data"].toString())
+
+        for (i in 0 until data.length()) {
+            val map = mutableMapOf<Int, Int>()
+            val obj = data.getJSONObject(i)
+            val productId = obj.getInt("product_id")
+            val productCount = obj.getInt("count")
+
+            map.put(productId, productCount)
+            list.add(map)
         }
     }
 

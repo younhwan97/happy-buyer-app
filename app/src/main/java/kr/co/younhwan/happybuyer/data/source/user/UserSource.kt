@@ -20,5 +20,5 @@ interface UserSource {
 
     fun readUser(kakaoAccountId: Long, readUserCallback: readUserCallback?)
 
-    fun updateUser(kakaoAccountId: Long, newNickname: String, updateUserCallback: updateUserCallback?)
+    fun updateUser(kakaoAccountId: Long, target: String, newContent: String, updateUserCallback: updateUserCallback?)
 }

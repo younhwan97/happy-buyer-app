@@ -1,6 +1,5 @@
 package kr.co.younhwan.happybuyer.data.source.user
 
-import android.util.Log
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -30,14 +29,15 @@ object UserRemoteDataSource : UserSource {
 
     override fun updateUser(
         kakaoAccountId: Long,
-        newNickname: String,
+        target: String,
+        newContent: String,
         updateUserCallback: UserSource.updateUserCallback?
     ) {
 
         runBlocking {
             var isSuccess = false
             val job = GlobalScope.launch {
-                isSuccess = update(kakaoAccountId, newNickname)
+                isSuccess = update(kakaoAccountId, target, newContent)
             }
 
             job.join()
@@ -84,13 +84,17 @@ suspend fun create(kakaoAccountId: Long?, kakaoAccountNickname: String?): Boolea
     return isSuccess
 }
 
-suspend fun update(kakaoAccountId: Long, newNickname: String): Boolean {
+suspend fun update(kakaoAccountId: Long, target: String, newContent: String): Boolean {
+    
+    // 클라이언트 생성
     val client = OkHttpClient()
+    
+    // 요청
+    // target : nickname, basket, phone, point, address
+    val site = "http://happybuyer.co.kr/auth/api/app/update?id=${kakaoAccountId}&target=${target}&content=${newContent}"
 
-    val site =
-        "http://happybuyer.co.kr/auth/api/app/update?id=${kakaoAccountId}&nickname=${newNickname}"
+    // 응답
     val request = Request.Builder().url(site).get().build()
-
     val response = client.newCall(request).execute()
     var isSuccess: Boolean = false
 
@@ -111,10 +115,10 @@ suspend fun read(kakaoAccountId: Long): UserItem? {
     val site =
         "http://happybuyer.co.kr/auth/api/app/read?id=${kakaoAccountId}"
     val request = Request.Builder().url(site).get().build()
-    
+
     // 응답
     val response = client.newCall(request).execute()
-    
+
     if (response.isSuccessful) {
         val resultText = response.body?.string()!!.trim()
         val json = JSONObject(resultText)
@@ -127,11 +131,12 @@ suspend fun read(kakaoAccountId: Long): UserItem? {
             val pointNumber = if (data.isNull("point_number")) 0 else data.getInt("point_number")
             val shippingAddress =
                 if (data.isNull("shipping_address")) "-" else data.getString("shipping_address")
+            val activatedBasket = if (data.isNull("activated_basket")) "deactivated" else data.getString("activated_basket")
 
-            return UserItem(id, nickname, pointNumber, shippingAddress)
+            return UserItem(id, nickname, pointNumber, shippingAddress, activatedBasket)
         }
     }
-    
+
     // 서버에 문제가 있어 응답을 받지 못한 경우
     return null
 }

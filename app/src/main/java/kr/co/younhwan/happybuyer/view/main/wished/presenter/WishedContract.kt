@@ -11,6 +11,8 @@ interface WishedContract{
         fun setEmpty()
 
         fun deleteWishedResultCallback()
+
+        fun addBasketResultCallback(success: Boolean)
     }
 
     interface Presenter{

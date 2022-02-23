@@ -1,6 +1,7 @@
 package kr.co.younhwan.happybuyer.view.main.wished.presenter
 
 import android.content.Context
+import android.os.SystemClock
 import android.util.Log
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.data.ProductItem
@@ -84,6 +85,22 @@ class WishedPresenter(
     }
 
     private fun onClickListenerOfBasketBtn(productId: Int) {
+        val app = view.getAct().application as GlobalApplication
 
+        if (app.isLogined) {
+            productData.addProductToBasket(
+                app.kakaoAccountId!!,
+                productId,
+                object : ProductSource.AddProductToBasketCallback {
+                    override fun onAddProductToBasket(success: Boolean) {
+                        if (success) {
+                            view.addBasketResultCallback(success)
+                        } else {
+
+                        }
+                    }
+                }
+            )
+        }
     }
 }

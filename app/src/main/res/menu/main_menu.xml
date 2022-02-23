@@ -11,7 +11,6 @@
         android:id="@+id/basket_item_in_main"
         android:icon="@drawable/ic_baseline_shopping_cart_24"
         android:title="basket"
-        android:visible="true"
-        app:showAsAction="always" />
-
+        app:actionLayout="@layout/custom_action_item_layout"
+        app:showAsAction="always"/>
 </menu>

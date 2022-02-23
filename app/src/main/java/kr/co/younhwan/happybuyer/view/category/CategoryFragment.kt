@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
+import kr.co.younhwan.happybuyer.data.source.user.UserRepository
 import kr.co.younhwan.happybuyer.databinding.FragmentCategoryBinding
 import kr.co.younhwan.happybuyer.view.category.adapter.CategoryAdapter
 import kr.co.younhwan.happybuyer.view.category.presenter.CategoryContract
@@ -30,6 +31,7 @@ class CategoryFragment : Fragment(), CategoryContract.View {
         CategoryPresenter(
             this,
             productData = ProductRepository,
+            userData = UserRepository,
             adapterModel = categoryAdapter,
             adapterView = categoryAdapter
         )

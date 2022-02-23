@@ -5,11 +5,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.view.basket.BasketActivity
 import kr.co.younhwan.happybuyer.view.login.LoginActivity
 import kr.co.younhwan.happybuyer.R
+import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
 import kr.co.younhwan.happybuyer.data.source.user.UserRepository
 import kr.co.younhwan.happybuyer.view.search.SearchActivity
 import kr.co.younhwan.happybuyer.databinding.ActivityMainBinding
@@ -27,7 +30,8 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     private val mainPresenter: MainPresenter by lazy {
         MainPresenter(
             this,
-            userData = UserRepository
+            userData = UserRepository,
+            productData = ProductRepository
         )
     }
 
@@ -41,6 +45,9 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     private val accountFragment: AccountFragment by lazy {
         AccountFragment()
     }
+
+    var textCartItemCount: TextView? = null
+    val mCartItemCount = 10
 
     /* Method */
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,7 +66,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         setSupportActionBar(viewDataBinding.mainToolbar)
 
         // presenter
-        mainPresenter.loadUser()          // 유저 정보 확인 및 업데이트
+        mainPresenter.loadUser()          // 유저 정보, 장바구니 확인
         mainPresenter.requestPermission() // 권한 요청
 
         // init fragment
@@ -97,6 +104,17 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     // ---- 툴바 설정
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu) // 메뉴 객체 생성 및 부착
+
+        val menuItem = menu?.findItem(R.id.basket_item_in_main)
+        val actionView = menuItem?.actionView
+        textCartItemCount = actionView?.findViewById<TextView>(R.id.cart_badge)
+
+        setupBadge()
+
+        actionView?.setOnClickListener{
+            onOptionsItemSelected(menuItem)
+        }
+
         return true
     }
 
@@ -114,6 +132,24 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun setupBadge(){
+        val itemCount = (application as GlobalApplication).basketItemCount
+
+        if(textCartItemCount != null){
+            if (itemCount == 0) {
+                if (textCartItemCount!!.visibility != View.GONE) {
+                    textCartItemCount!!.visibility = View.GONE
+                }
+            } else {
+                textCartItemCount!!.text = Math.min(itemCount, 99).toString()
+
+                if (textCartItemCount!!.visibility != View.VISIBLE) {
+                    textCartItemCount!!.visibility = View.VISIBLE
+                }
+            }
+        }
     }
     // 툴바 설정 ----
     // -----------------------------------------------------

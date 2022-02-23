@@ -50,7 +50,6 @@ class WishedFragment : Fragment(), WishedContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         wishedPresenter.loadWishedItem(requireContext(), false)
 
         viewDataBinding.wishedItemContainer.run {
@@ -67,4 +66,12 @@ class WishedFragment : Fragment(), WishedContract.View {
     }
 
     override fun deleteWishedResultCallback() = Snackbar.make(viewDataBinding.root, "관심 상품이 제거되었습니다.", Snackbar.LENGTH_SHORT).show()
+
+    override fun addBasketResultCallback(success: Boolean) {
+        if(success){
+            Snackbar.make(viewDataBinding.root, "상품이 장바구니에 담겼습니다.", Snackbar.LENGTH_SHORT).show()
+        }else{
+
+        }
+    }
 }
