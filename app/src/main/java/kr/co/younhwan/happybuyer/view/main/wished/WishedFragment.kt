@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
 import kr.co.younhwan.happybuyer.databinding.FragmentWishedBinding
 import kr.co.younhwan.happybuyer.view.main.MainActivity
@@ -52,7 +53,7 @@ class WishedFragment : Fragment(), WishedContract.View {
 
         wishedPresenter.loadWishedItem(requireContext(), false)
 
-        viewDataBinding.wishedItemContainer.run {
+        viewDataBinding.wishedRecycler.run {
             this.adapter = wishedAdapter
             this.layoutManager = LinearLayoutManager(requireContext())
         }
@@ -61,16 +62,20 @@ class WishedFragment : Fragment(), WishedContract.View {
     override fun getAct() = activity as MainActivity
 
     override fun setEmpty() {
-        viewDataBinding.emptyView.visibility = View.VISIBLE
-        viewDataBinding.wishedItemContainer.visibility = View.GONE
+        viewDataBinding.wishedEmptyContainer.visibility = View.VISIBLE
+        viewDataBinding.wishedRecycler.visibility = View.GONE
     }
 
-    override fun deleteWishedResultCallback() = Snackbar.make(viewDataBinding.root, "관심 상품이 제거되었습니다.", Snackbar.LENGTH_SHORT).show()
+    override fun deleteWishedResultCallback(){
+        val snack = Snackbar.make(viewDataBinding.root, "관심 상품이 제거되었습니다.", Snackbar.LENGTH_SHORT)
+        snack.setAnchorView(R.id.mainBottomNavigation)
+        snack.show()
+    }
 
     override fun addBasketResultCallback(success: Boolean) {
         if(success){
             Snackbar.make(viewDataBinding.root, "상품이 장바구니에 담겼습니다.", Snackbar.LENGTH_SHORT).show()
-        }else{
+        } else {
 
         }
     }

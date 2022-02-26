@@ -3,11 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginLeft="24dp"
+    android:layout_marginRight="24dp"
     android:orientation="vertical"
     android:visibility="visible">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/wishedItemContainer"
+        android:id="@+id/wishedRecycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="visible">
@@ -15,28 +17,29 @@
     </androidx.recyclerview.widget.RecyclerView>
 
     <RelativeLayout
-        android:id="@+id/emptyView"
+        android:id="@+id/wishedEmptyContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone">
 
         <ImageView
-            android:id="@+id/emptyImage"
+            android:id="@+id/wishedEmptyImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            app:srcCompat="@drawable/touch" />
+            app:srcCompat="@drawable/touch_temp" />
 
         <TextView
-            android:id="@+id/emptyText"
+            android:id="@+id/wishedEmptyText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/emptyImage"
+            android:layout_below="@id/wishedEmptyImage"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
+            android:fontFamily="@font/notosans_kr_regular"
             android:text="자주 찾는 상품을 찜 해보세요."
             android:textColor="@color/colorDarkGray"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
     </RelativeLayout>
 
 </RelativeLayout>

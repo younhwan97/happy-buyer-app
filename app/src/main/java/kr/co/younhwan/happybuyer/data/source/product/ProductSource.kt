@@ -36,6 +36,12 @@ interface ProductSource{
 
     fun readProductsInBasketCount(kakaoAccountId: Long, readProductsInBasketCountCallback: ReadProductsInBasketCountCallback?)
 
+    interface ReadEventProductsCallback{
+        fun onReadEventProduct(list: ArrayList<ProductItem>)
+    }
+
+    fun readEventProducts(readEventProductsCallback: ReadEventProductsCallback?)
+
     // Update Product
     // ..
 

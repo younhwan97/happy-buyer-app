@@ -1,4 +1,4 @@
-package kr.co.younhwan.happybuyer.view.main.home.adapter
+package kr.co.younhwan.happybuyer.view.main.home.adapter.main
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView

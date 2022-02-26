@@ -1,4 +1,4 @@
-package kr.co.younhwan.happybuyer.view.main.home.adapter.contract
+package kr.co.younhwan.happybuyer.view.main.home.adapter.main.contract
 
 import kr.co.younhwan.happybuyer.data.CategoryItem
 

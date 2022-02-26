@@ -14,5 +14,7 @@ interface HomeContract {
     interface Presenter {
         // Presenter method
         fun loadItems(context: Context, isClear: Boolean)
+
+        fun loadEventProduct(isClear: Boolean)
     }
 }

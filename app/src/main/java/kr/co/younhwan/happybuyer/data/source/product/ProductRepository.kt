@@ -46,4 +46,12 @@ object ProductRepository : ProductSource{
             }
         })
     }
+
+    override fun readEventProducts(readEventProductsCallback: ProductSource.ReadEventProductsCallback?) {
+        productRemoteDataSource.readEventProducts(object : ProductSource.ReadEventProductsCallback{
+            override fun onReadEventProduct(list: ArrayList<ProductItem>) {
+                readEventProductsCallback?.onReadEventProduct(list)
+            }
+        })
+    }
 }

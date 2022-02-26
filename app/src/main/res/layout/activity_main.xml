@@ -14,36 +14,35 @@
         android:background="@color/colorTheme"
         android:elevation="3dp"
         android:minHeight="?attr/actionBarSize"
+        android:paddingEnd="24dp"
         app:contentInsetStart="24dp" />
 
     <LinearLayout
-        android:id="@+id/toolbarDivision"
+        android:id="@+id/mainToolbarDivision"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@id/mainToolbar"
-        android:background="#E0E0E0"
-        android:orientation="horizontal"></LinearLayout>
+        android:background="@color/colorDivision"
+        android:orientation="horizontal" />
 
     <FrameLayout
-        android:id="@+id/mainContainer"
+        android:id="@+id/mainContentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottomNavDivision"
-        android:layout_below="@id/toolbarDivision"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp" />
+        android:layout_above="@id/mainBottomNavDivision"
+        android:layout_below="@id/mainToolbarDivision" />
 
     <LinearLayout
-        android:id="@+id/bottomNavDivision"
+        android:id="@+id/mainBottomNavDivision"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_alignWithParentIfMissing="true"
-        android:layout_above="@id/bottomNavigation"
-        android:background="#E0E0E0"
-        android:orientation="horizontal"></LinearLayout>
+        android:layout_above="@id/mainBottomNavigation"
+        android:background="@color/colorDivision"
+        android:orientation="horizontal" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigation"
+        android:id="@+id/mainBottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

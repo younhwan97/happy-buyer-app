@@ -81,7 +81,7 @@ object ProductRemoteDataSource : ProductSource {
 
             val job = GlobalScope.launch {
                 val basketIdAndCountList = readBasketProductIdAndCountList(kakaoAccountId)
-                list= readBasket(basketIdAndCountList)
+                list = readBasket(basketIdAndCountList)
             }
 
             job.join()
@@ -98,14 +98,29 @@ object ProductRemoteDataSource : ProductSource {
             var count = 0
 
             val job = GlobalScope.launch {
-                val basketIdAndCountList  = readBasketProductIdAndCountList(kakaoAccountId)
-                for (item in basketIdAndCountList){
+                val basketIdAndCountList = readBasketProductIdAndCountList(kakaoAccountId)
+                for (item in basketIdAndCountList) {
                     count += item["productCount"]!!
                 }
             }
 
             job.join()
             readProductsInBasketCountCallback?.onReadProductsInBasketCount(count)
+        }
+    }
+
+    override fun readEventProducts(
+        readEventProductsCallback: ProductSource.ReadEventProductsCallback?
+    ) {
+        runBlocking {
+            var list = ArrayList<ProductItem>()
+
+            val job = GlobalScope.launch {
+                list = readEvent()
+            }
+
+            job.join()
+            readEventProductsCallback?.onReadEventProduct(list)
         }
     }
 }
@@ -230,8 +245,17 @@ suspend fun readBasket(basketIdAndCountList: ArrayList<Map<String, Int>>): Array
                 val isWished = false
 
                 for (item in basketIdAndCountList) {
-                    if (item["productId"] == productId){
-                        list.add(ProductItem(productId, productImage, productName, productPrice, isWished, item["productCount"]!!))
+                    if (item["productId"] == productId) {
+                        list.add(
+                            ProductItem(
+                                productId,
+                                productImage,
+                                productName,
+                                productPrice,
+                                isWished,
+                                item["productCount"]!!
+                            )
+                        )
                     }
                 }
             }
@@ -300,6 +324,55 @@ suspend fun readBasketProductIdAndCountList(kakaoAccountId: Long): ArrayList<Map
         }
     }
 
+    return list
+}
+
+suspend fun readEvent(): ArrayList<ProductItem> {
+    val list = ArrayList<ProductItem>()
+
+    // 클라이언트 생성
+    val client = OkHttpClient()
+
+    // 요청
+    val site = "http://happybuyer.co.kr/event/api/app/read"
+    val request = Request.Builder().url(site).get().build()
+
+    // 응답
+    val response = client.newCall(request).execute()
+
+    if (response.isSuccessful) {
+        val resultText = response.body?.string()!!.trim()
+        val json = JSONObject(resultText)
+        val data = JSONArray(json["data"].toString())
+
+        for (i in 0 until data.length()) {
+            val obj = data.getJSONObject(i)
+            val productStatus = obj.getString("status")
+            // val productCategory = obj.getString("category")
+
+            if (productStatus == "판매중") {
+                val productId = obj.getInt("product_id")
+                val productName = obj.getString("name")
+                val productPrice = obj.getInt("price")
+                val productImage = obj.getString("image_url")
+                val eventPrice = obj.getInt("event_price")
+                var isWished = false
+
+                Log.d("test", obj.toString())
+
+                list.add(
+                    ProductItem(
+                        productId,
+                        productImage,
+                        productName,
+                        productPrice,
+                        isWished,
+                        eventPrice = eventPrice
+                    )
+                )
+            }
+        }
+    }
     return list
 }
 

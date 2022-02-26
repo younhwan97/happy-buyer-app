@@ -52,25 +52,25 @@ class AccountFragment : Fragment(), AccountContract.View {
         val app = act.application as GlobalApplication
 
         // set view
-        viewDataBinding.nickname.text =
+        viewDataBinding.accountNickname.text =
             if (app.nickname != null) app.nickname else "${app.kakaoAccountId}"
 
-        viewDataBinding.nicknameInProfile.text =
+        viewDataBinding.accountProfileNickname.text =
             if (app.nickname != null) app.nickname else "${app.kakaoAccountId}"
 
 
         // set event listener
-        viewDataBinding.callBtn.setOnClickListener {
+        viewDataBinding.accountTopThirdBtn.setOnClickListener {
             val dialIntent = Intent(Intent.ACTION_DIAL)
             dialIntent.data = Uri.parse("tel:031-654-3320")
             startActivity(dialIntent)
         }
 
-        viewDataBinding.logoutBtn.setOnClickListener {
+        viewDataBinding.accountEctLogoutBtn.setOnClickListener {
             accountPresenter.logoutWithKakao(requireContext(), act)
         }
 
-        viewDataBinding.withdrawalBtn.setOnClickListener {
+        viewDataBinding.accountEctWithdrawalBtn.setOnClickListener {
             accountPresenter.withdrawalWithKakao(requireContext(), act)
         }
 
@@ -78,24 +78,24 @@ class AccountFragment : Fragment(), AccountContract.View {
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode == RESULT_OK) {
                     val app = activity?.application as GlobalApplication
-                    viewDataBinding.nicknameInProfile.text = app.nickname
-                    viewDataBinding.nickname.text = app.nickname
+                    viewDataBinding.accountProfileNickname.text = app.nickname
+                    viewDataBinding.accountNickname.text = app.nickname
                 }
             }
 
-        viewDataBinding.profileNicknameContainer.setOnClickListener {
+        viewDataBinding.accountProfileNicknameContainer.setOnClickListener {
             val updateIntent = Intent(requireContext(), UpdateActivity::class.java)
             updateIntent.putExtra("target", "nickname")
             startForResult2.launch(updateIntent)
         }
 
-        viewDataBinding.profilePointNumberContainer.setOnClickListener {
+        viewDataBinding.accountProfilePointContainer.setOnClickListener {
             val updateIntent = Intent(requireContext(), UpdateActivity::class.java)
             updateIntent.putExtra("target", "pointNumber")
             startActivity(updateIntent)
         }
 
-        viewDataBinding.profilePhoneNumberContainer.setOnClickListener {
+        viewDataBinding.accountProfilePhoneContainer.setOnClickListener {
             val updateIntent = Intent(requireContext(), UpdateActivity::class.java)
             updateIntent.putExtra("target", "phoneNumber")
             startActivity(updateIntent)

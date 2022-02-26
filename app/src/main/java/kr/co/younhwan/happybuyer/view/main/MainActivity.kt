@@ -5,17 +5,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
-import com.google.android.material.snackbar.Snackbar
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.view.basket.BasketActivity
 import kr.co.younhwan.happybuyer.view.login.LoginActivity
 import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
 import kr.co.younhwan.happybuyer.data.source.user.UserRepository
-import kr.co.younhwan.happybuyer.view.search.SearchActivity
 import kr.co.younhwan.happybuyer.databinding.ActivityMainBinding
 import kr.co.younhwan.happybuyer.util.replace
 import kr.co.younhwan.happybuyer.util.setupBadge
@@ -76,25 +73,25 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         mainPresenter.requestPermission() // 권한 요청
 
         // init fragment
-        replace(R.id.mainContainer, homeFragment)
+        replace(R.id.mainContentContainer, homeFragment)
 
         // set event listener to bottom nav
-        viewDataBinding.bottomNavigation.setOnItemSelectedListener {
+        viewDataBinding.mainBottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.action_home -> {
                     viewDataBinding.mainToolbar.title = "코코마트"
-                    replace(R.id.mainContainer, homeFragment)
+                    replace(R.id.mainContentContainer, homeFragment)
                     true
                 }
                 R.id.action_wished -> {
                     viewDataBinding.mainToolbar.title = "찜"
-                    replace(R.id.mainContainer, wishedFragment)
+                    replace(R.id.mainContentContainer, wishedFragment)
                     true
                 }
                 R.id.action_account -> {
                     if ((application as GlobalApplication).isLogined) { // 로그인 상태
                         viewDataBinding.mainToolbar.title = "계정"
-                        replace(R.id.mainContainer, accountFragment)
+                        replace(R.id.mainContentContainer, accountFragment)
                     } else { // 비로그인 상태
                         val loginIntent = Intent(this, LoginActivity::class.java)
                         startForResult.launch(loginIntent)
@@ -142,6 +139,6 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     private val startForResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == RESULT_CANCELED)
-                viewDataBinding.bottomNavigation.selectedItemId = R.id.action_home
+                viewDataBinding.mainBottomNavigation.selectedItemId = R.id.action_home
         }
 }

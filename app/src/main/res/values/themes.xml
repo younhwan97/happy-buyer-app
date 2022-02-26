@@ -42,7 +42,7 @@
     <!-- custom toolbar title text -->
     <style name="ToolbarTitleTheme" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:fontFamily">@font/notosans_kr_bold</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">20sp</item>
         <item name="android:color">@color/fontColorBlack</item>
     </style>
 </resources>

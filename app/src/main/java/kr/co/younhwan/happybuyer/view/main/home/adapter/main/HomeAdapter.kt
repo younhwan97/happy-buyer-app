@@ -1,4 +1,4 @@
-package kr.co.younhwan.happybuyer.view.main.home.adapter
+package kr.co.younhwan.happybuyer.view.main.home.adapter.main
 
 import android.graphics.Rect
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kr.co.younhwan.happybuyer.data.CategoryItem
 import kr.co.younhwan.happybuyer.databinding.CategoryItemBinding
-import kr.co.younhwan.happybuyer.view.main.home.adapter.contract.HomeAdapterContract
+import kr.co.younhwan.happybuyer.view.main.home.adapter.main.contract.HomeAdapterContract
 
 class HomeAdapter :
     RecyclerView.Adapter<HomeViewHolder>(), HomeAdapterContract.Model, HomeAdapterContract.View {

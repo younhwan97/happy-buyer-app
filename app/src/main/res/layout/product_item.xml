@@ -10,7 +10,7 @@
     android:padding="15dp">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/itemImageContainer"
+        android:id="@+id/eventItemImageContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -39,7 +39,7 @@
         android:id="@+id/otherBtnContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/itemImageContainer"
+        android:layout_below="@id/eventItemImageContainer"
         android:layout_marginTop="5dp">
 
         <RelativeLayout
