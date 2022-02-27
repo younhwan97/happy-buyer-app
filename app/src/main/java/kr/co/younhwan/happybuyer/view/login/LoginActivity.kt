@@ -10,6 +10,7 @@ import kr.co.younhwan.happybuyer.view.main.MainActivity
 import kr.co.younhwan.happybuyer.databinding.ActivityLoginBinding
 import kr.co.younhwan.happybuyer.view.login.presenter.LoginContract
 import kr.co.younhwan.happybuyer.view.login.presenter.LoginPresenter
+import kr.co.younhwan.happybuyer.view.splash.SplashActivity
 
 class LoginActivity : AppCompatActivity(), LoginContract.View {
 
@@ -58,9 +59,9 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
     override fun loginResultCallback(success: Boolean) {
         if (success) {
             // BackStack에 존재하는 Activity를 모두 제거후 Main Activity를 다시 생성
-            val mainIntent = Intent(this, MainActivity::class.java)
-            mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(mainIntent)
+            val splashIntent = Intent(this, SplashActivity::class.java)
+            splashIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(splashIntent)
         } else
             Snackbar.make(viewDataBinding.root, "로그인에 실패하였습니다.", Snackbar.LENGTH_SHORT).show()
     }

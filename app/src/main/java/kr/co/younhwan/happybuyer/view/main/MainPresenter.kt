@@ -15,18 +15,8 @@ import kr.co.younhwan.happybuyer.data.source.user.UserSource
 import kr.co.younhwan.happybuyer.util.setupBadge
 
 class MainPresenter(
-    private val view: MainContract.View,
-    private val userData: UserRepository,
-    private val productData: ProductRepository
+    private val view: MainContract.View
 ) : MainContract.Model {
-
-    override fun loadMainScreen() {
-        // 딜레이
-        SystemClock.sleep(1000)
-
-        // 스플래쉬 화면 이후로 보여질 화면을 설정
-        view.getAct().setTheme(R.style.Theme_HappyBuyer)
-    }
 
     override fun requestPermission() {
         view.getAct().requestPermissions(
@@ -37,44 +27,5 @@ class MainPresenter(
                 Manifest.permission.ACCESS_NETWORK_STATE
             ), 0
         )
-    }
-
-    override fun loadUserInfo() {
-        val app = ((view.getAct()).application) as GlobalApplication
-
-        UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
-            if (error != null) { // 토큰이 없을 때 (= 로그인 정보가 없을 때)
-                app.isLogined = false
-            } else if (tokenInfo != null) { // 토큰이 있을 때 (= 로그인 정보가 있을 때)
-                app.isLogined = true
-                app.kakaoAccountId = tokenInfo.id
-
-                // oAuth key(kakaoAccountId) 를 이용해 사용자 정보를 DB 에서 가져온다.
-                userData.readUser(
-                    app.kakaoAccountId!!,
-                    object : UserSource.ReadUserCallback {
-                        override fun onReadUser(userItem: UserItem?) {
-                            // Application 에 사용자 정보를 업데이트한다.
-                            app.nickname = userItem?.nickname // 유저 이름, 닉네임
-                            app.pointNumber = userItem?.pointNumber // 유저 포인트 번호
-                            app.shippingAddress = userItem?.shippingAddress // 유저 주소
-                            app.activatedBasket =
-                                userItem?.activatedBasket // 유저 장바구니 활성화 여부 (activate, deactivate, null)
-
-                            if (app.activatedBasket == "activate") { // 장바구니가 활성화된 유저의 경우
-                                productData.readProductsInBasketCount(
-                                    app.kakaoAccountId!!,
-                                    object : ProductSource.ReadProductsInBasketCountCallback{
-                                        override fun onReadProductsInBasketCount(count: Int) {
-                                            app.basketItemCount = count
-                                            view.getAct().setupBadge(view.getAct().textCartItemCount)
-                                        }
-                                    }
-                                )
-                            }
-                        }
-                    })
-            }
-        }
     }
 }

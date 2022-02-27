@@ -10,10 +10,8 @@ interface MainContract {
     }
 
     interface Model {
-        fun loadMainScreen()
 
         fun requestPermission()
 
-        fun loadUserInfo()
     }
 }

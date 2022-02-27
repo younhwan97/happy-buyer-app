@@ -31,4 +31,5 @@
 
     <!-- bg color -->
     <color name="bgColor">#F8F8FA</color>
+    <color name="wideDivisionColor">#F5F6F8</color>
 </resources>

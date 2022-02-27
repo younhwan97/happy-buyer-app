@@ -69,8 +69,8 @@ class CategoryFragment : Fragment(), CategoryContract.View {
     override fun createLoginActivity() =
         startActivity(Intent(requireContext(), LoginActivity::class.java))
 
-    override fun createProductInWishedResultCallback(explain: String) {
-        when (explain) {
+    override fun createProductInWishedResultCallback(perform: String?) {
+        when (perform) {
             "create" -> {
                 Snackbar.make(viewDataBinding.root, "관심에 추가되었습니다 :)", Snackbar.LENGTH_SHORT)
                     .show()
@@ -79,7 +79,7 @@ class CategoryFragment : Fragment(), CategoryContract.View {
                 Snackbar.make(viewDataBinding.root, "관심 상품에서 제외되었습니다 :(", Snackbar.LENGTH_SHORT)
                     .show()
             }
-            else -> {
+            "error", null -> {
                 Snackbar.make(viewDataBinding.root, "알 수 없는 에러가 발생했습니다 :(", Snackbar.LENGTH_SHORT)
                     .show()
             }

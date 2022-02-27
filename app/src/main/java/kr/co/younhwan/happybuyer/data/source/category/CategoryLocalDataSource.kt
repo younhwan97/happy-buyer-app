@@ -22,13 +22,12 @@ object CategoryLocalDataSource : CategorySource {
         "category_etc"
     )
 
-    override fun getCategories(context: Context, loadImageCallback: CategorySource.LoadCategoryCallback?) {
+    override fun readCategories(context: Context, loadImageCallback: CategorySource.ReadCategoryCallback?) {
         val list = ArrayList<CategoryItem>()
         for (index in 1..imageNameList.size) {
             val resource = context.resources.getIdentifier(imageNameList[index-1], "drawable", context.packageName)
             list.add(CategoryItem(resource, labelList[index-1]))
         }
-        loadImageCallback?.onLoadCategories(list)
+        loadImageCallback?.onReadCategories(list)
     }
-
 }

@@ -8,8 +8,8 @@ object ProductRepository : ProductSource{
 
     override fun createProductInWished(kakaoAccountId: Long, productId: Int, createProductInWishedCallback: ProductSource.CreateProductInWishedCallback?) {
         productRemoteDataSource.createProductInWished(kakaoAccountId, productId, object :ProductSource.CreateProductInWishedCallback{
-            override fun onCreateProductInWished(explain: String?) {
-                createProductInWishedCallback?.onCreateProductInWished(explain)
+            override fun onCreateProductInWished(perform: String?) {
+                createProductInWishedCallback?.onCreateProductInWished(perform)
             }
         })
     }
@@ -23,8 +23,8 @@ object ProductRepository : ProductSource{
     }
 
 
-    override fun readProducts(kakaoAccountId: Long?, selectedCategory:String, readProductCallback: ProductSource.ReadProductsCallback?) {
-        productRemoteDataSource.readProducts(kakaoAccountId, selectedCategory, object : ProductSource.ReadProductsCallback {
+    override fun readProducts(selectedCategory:String, sort:String, readProductCallback: ProductSource.ReadProductsCallback?) {
+        productRemoteDataSource.readProducts(selectedCategory, sort, object : ProductSource.ReadProductsCallback {
             override fun onReadProducts(list: ArrayList<ProductItem>) {
                 readProductCallback?.onReadProducts(list)
             }
@@ -51,6 +51,14 @@ object ProductRepository : ProductSource{
         productRemoteDataSource.readEventProducts(object : ProductSource.ReadEventProductsCallback{
             override fun onReadEventProduct(list: ArrayList<ProductItem>) {
                 readEventProductsCallback?.onReadEventProduct(list)
+            }
+        })
+    }
+
+    override fun readWishedProductsId(kakaoAccountId: Long, readWishedProductsIdCallback: ProductSource.ReadWishedProductsIdCallback?) {
+        productRemoteDataSource.readWishedProductsId(kakaoAccountId, object : ProductSource.ReadWishedProductsIdCallback{
+            override fun onReadWishedProductsId(list: ArrayList<Int>) {
+                readWishedProductsIdCallback?.onReadWishedProductsId(list)
             }
         })
     }

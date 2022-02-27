@@ -5,10 +5,10 @@ import kr.co.younhwan.happybuyer.data.CategoryItem
 
 interface CategorySource {
 
-    interface LoadCategoryCallback {
+    interface ReadCategoryCallback {
 
-        fun onLoadCategories(list: ArrayList<CategoryItem>)
+        fun onReadCategories(list: ArrayList<CategoryItem>)
     }
 
-    fun getCategories(context: Context, loadImageCallback: LoadCategoryCallback?)
+    fun readCategories(context: Context, loadImageCallback: ReadCategoryCallback?)
 }

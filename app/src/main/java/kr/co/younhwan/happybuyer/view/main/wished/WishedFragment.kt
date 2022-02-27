@@ -66,15 +66,26 @@ class WishedFragment : Fragment(), WishedContract.View {
         viewDataBinding.wishedRecycler.visibility = View.GONE
     }
 
-    override fun deleteWishedResultCallback(){
-        val snack = Snackbar.make(viewDataBinding.root, "관심 상품이 제거되었습니다.", Snackbar.LENGTH_SHORT)
-        snack.setAnchorView(R.id.mainBottomNavigation)
-        snack.show()
+    override fun deleteWishedResultCallback(perform: String?){
+        when(perform){
+            "delete" -> {
+                val snack = Snackbar.make(viewDataBinding.root, "상품을 찜 목록에서 제거했어요.", Snackbar.LENGTH_SHORT)
+                snack.setAnchorView(R.id.mainBottomNavigation)
+                snack.show()
+            }
+            "error", null ->{
+                val snack = Snackbar.make(viewDataBinding.root, "알 수 없는 에러가 발생했습니다.", Snackbar.LENGTH_SHORT)
+                snack.setAnchorView(R.id.mainBottomNavigation)
+                snack.show()
+            }
+        }
     }
 
     override fun addBasketResultCallback(success: Boolean) {
         if(success){
-            Snackbar.make(viewDataBinding.root, "상품이 장바구니에 담겼습니다.", Snackbar.LENGTH_SHORT).show()
+            val snack = Snackbar.make(viewDataBinding.root, "상품이 장바구니에 담겼어요!", Snackbar.LENGTH_SHORT)
+            snack.setAnchorView(R.id.mainBottomNavigation)
+            snack.show()
         } else {
 
         }

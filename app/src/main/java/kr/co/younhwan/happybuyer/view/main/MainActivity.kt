@@ -3,6 +3,7 @@ package kr.co.younhwan.happybuyer.view.main
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
@@ -28,9 +29,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     /* Presenter */
     private val mainPresenter: MainPresenter by lazy {
         MainPresenter(
-            this,
-            userData = UserRepository,
-            productData = ProductRepository
+            this
         )
     }
 
@@ -57,10 +56,6 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         super.onCreate(savedInstanceState)
         // create binding object
         viewDataBinding = ActivityMainBinding.inflate(layoutInflater)
-
-        // splash -> main screen
-        mainPresenter.loadMainScreen()
-
         setContentView(viewDataBinding.root)
 
         // action bar -> toolbar
@@ -69,7 +64,6 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         setSupportActionBar(viewDataBinding.mainToolbar)
 
         // presenter
-        mainPresenter.loadUserInfo()      // 유저 정보, 장바구니 확인
         mainPresenter.requestPermission() // 권한 요청
 
         // init fragment

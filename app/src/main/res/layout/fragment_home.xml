@@ -96,13 +96,23 @@
                     android:text="모든 카테고리 보기"
                     android:textColor="@color/fontColorLightGray"
                     android:textSize="12sp" />
+
             </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="12dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:background="@color/wideDivisionColor"
+                android:orientation="horizontal" />
 
             <RelativeLayout
                 android:id="@+id/homeEventContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/homeMoreBtn">
+                android:layout_below="@id/homeMoreBtn"
+                android:layout_marginTop="6dp">
 
                 <RelativeLayout
                     android:id="@+id/homeEventTopContainer"
@@ -138,19 +148,27 @@
                     android:layout_below="@id/homeEventTopContainer" />
             </RelativeLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="12dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:background="@color/wideDivisionColor"
+                android:orientation="horizontal" />
+
             <RelativeLayout
                 android:id="@+id/homePopularContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/homeEventContainer"
-                android:layout_marginTop="12dp">
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginRight="24dp">
 
                 <RelativeLayout
                     android:id="@+id/homePopularTopContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginRight="24dp">
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:id="@+id/homePopularTitle"
@@ -169,7 +187,8 @@
                         android:layout_alignParentRight="true"
                         android:fontFamily="@font/notosans_kr_regular"
                         android:text="더보기"
-                        android:textColor="@color/fontColorGray" />
+                        android:textColor="@color/fontColorGray"
+                        android:visibility="gone" />
                 </RelativeLayout>
 
                 <androidx.recyclerview.widget.RecyclerView

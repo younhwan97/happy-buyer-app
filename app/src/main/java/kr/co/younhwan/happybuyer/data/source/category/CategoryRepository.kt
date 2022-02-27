@@ -7,10 +7,10 @@ object CategoryRepository : CategorySource {
 
     private val categoryLocalDataSource = CategoryLocalDataSource
 
-    override fun getCategories(context: Context, loadImageCallback: CategorySource.LoadCategoryCallback?) {
-        categoryLocalDataSource.getCategories(context, object : CategorySource.LoadCategoryCallback {
-            override fun onLoadCategories(list: ArrayList<CategoryItem>) {
-                loadImageCallback?.onLoadCategories(list)
+    override fun readCategories(context: Context, loadImageCallback: CategorySource.ReadCategoryCallback?) {
+        categoryLocalDataSource.readCategories(context, object : CategorySource.ReadCategoryCallback {
+            override fun onReadCategories(list: ArrayList<CategoryItem>) {
+                loadImageCallback?.onReadCategories(list)
             }
         })
     }

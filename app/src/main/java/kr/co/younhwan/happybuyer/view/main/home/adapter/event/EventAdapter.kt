@@ -13,6 +13,8 @@ class EventAdapter : RecyclerView.Adapter<EventViewHolder>(), EventAdapterContra
 
     private lateinit var productItemList: ArrayList<ProductItem>
 
+    override var onClickFuncOfWishedBtn: ((Int, Int) -> Unit)? = null
+
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         productItemList[position].let {
             holder.onBind(it)
@@ -23,8 +25,31 @@ class EventAdapter : RecyclerView.Adapter<EventViewHolder>(), EventAdapterContra
         val itemBinding = EventItemBinding.inflate(LayoutInflater.from(parent.context))
         return EventViewHolder(
             parent,
-            itemBinding
+            itemBinding,
+            onClickFuncOfWishedBtn,
+
         )
+    }
+
+    override fun onBindViewHolder(
+        holder: EventViewHolder,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
+        if (payloads.isEmpty()) {
+            super.onBindViewHolder(holder, position, payloads)
+        } else {
+            when (payloads[0]) {
+                "wished" -> {
+                    productItemList[position].isWished = !productItemList[position].isWished
+                    holder.onBindWishedState(productItemList[position])
+                }
+
+                "basket" -> {
+                    // holder.onBindBasketState(productItemList[position], position.toString())
+                }
+            }
+        }
     }
 
     override fun getItemCount() = this.productItemList.size
@@ -57,4 +82,12 @@ class EventAdapter : RecyclerView.Adapter<EventViewHolder>(), EventAdapterContra
             outRect.bottom = spaceByPx
         }
     }
+
+    override fun updateProduct(position: Int, productItem: ProductItem) {
+        this.productItemList[position] = productItem
+    }
+
+    override fun notifyItem(position: Int)  = notifyItemChanged(position)
+
+    override fun notifyItemByUsingPayload(position: Int, payload: String) = notifyItemChanged(position, payload)
 }

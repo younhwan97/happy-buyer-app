@@ -10,7 +10,7 @@ interface WishedContract{
 
         fun setEmpty()
 
-        fun deleteWishedResultCallback()
+        fun deleteWishedResultCallback(perform: String?)
 
         fun addBasketResultCallback(success: Boolean)
     }

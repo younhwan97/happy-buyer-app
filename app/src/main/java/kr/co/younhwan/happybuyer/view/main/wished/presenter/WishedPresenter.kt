@@ -1,13 +1,10 @@
 package kr.co.younhwan.happybuyer.view.main.wished.presenter
 
 import android.content.Context
-import android.os.SystemClock
-import android.util.Log
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.data.ProductItem
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
 import kr.co.younhwan.happybuyer.data.source.product.ProductSource
-import kr.co.younhwan.happybuyer.view.category.adapter.contract.CategoryAdapterContract
 import kr.co.younhwan.happybuyer.view.main.wished.adapter.contract.WishedAdapterContract
 
 class WishedPresenter(
@@ -32,19 +29,23 @@ class WishedPresenter(
 
         if (app.isLogined) { // 로그인 상태
             productData.readProducts(
-                app.kakaoAccountId!!,
                 "total",
+                sort = "basic",
                 object : ProductSource.ReadProductsCallback {
                     override fun onReadProducts(list: ArrayList<ProductItem>) {
                         if (isClear) {
                             adapterModel.clearItem()
                         }
 
+                        val wishedProductId = app.wishedProductId
                         val wishedItem = ArrayList<ProductItem>()
 
-                        for (item in list) {
-                            if (item.isWished) {
-                                wishedItem.add(item)
+                        for(index in 0 until list.size){
+                            for(id in wishedProductId){
+                                if(id == list[index].productId){
+                                    wishedItem.add(list[index])
+                                    break;
+                                }
                             }
                         }
 
@@ -70,16 +71,25 @@ class WishedPresenter(
                 app.kakaoAccountId!!,
                 productId,
                 object : ProductSource.CreateProductInWishedCallback {
-                    override fun onCreateProductInWished(explain: String?) {
-                        if (explain.isNullOrBlank()) {
+                    override fun onCreateProductInWished(perform: String?) {
+                        if (perform == null || perform == "error") {
+                            view.deleteWishedResultCallback(perform)
+                        } else if (perform == "delete") {
+                            for (index in 0 until app.wishedProductId.size) {
+                                if (app.wishedProductId[index] == productId) {
+                                    app.wishedProductId.removeAt(index)
+                                    break
+                                }
+                            }
 
-                        } else {
                             adapterModel.deleteItem(position)
-                            view.deleteWishedResultCallback()
+                            view.deleteWishedResultCallback(perform)
                         }
                     }
                 }
             )
+        } else {
+            view.deleteWishedResultCallback("error")
         }
     }
 

@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="270dp"
+    android:layout_width="210dp"
     android:layout_height="wrap_content"
-    android:background="#ffffff"
+    android:background="@drawable/background_round"
     android:elevation="6dp"
     android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/eventItemImageContainer"
-        android:layout_width="270dp"
+        android:layout_width="210dp"
         android:layout_height="wrap_content"
         android:background="@color/white">
 
         <ImageView
             android:id="@+id/eventItemImage"
-            android:layout_width="270dp"
-            android:layout_height="260dp"
+            android:layout_width="210dp"
+            android:layout_height="200dp"
             android:scaleType="fitXY"
             app:srcCompat="@mipmap/ic_launcher" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/eventItemOtherBtnContainer"
-        android:layout_width="270dp"
+        android:layout_width="210dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/eventItemImageContainer"
         android:paddingLeft="6dp"
@@ -38,9 +38,10 @@
             android:layout_toLeftOf="@id/eventBasketBtnContainer">
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/eventWishedBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/wished_btn_selector"
                 android:scaleType="center"
                 app:srcCompat="@drawable/heart" />
         </RelativeLayout>
@@ -52,7 +53,7 @@
             android:layout_alignParentEnd="true">
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/eventBasketBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleType="center"
@@ -75,6 +76,7 @@
             android:layout_alignParentTop="true"
             android:layout_weight="1"
             android:fontFamily="@font/notosans_kr_regular"
+            android:maxLines="2"
             android:text="TextView"
             android:textColor="@color/fontColorBlack"
             android:textSize="14sp" />

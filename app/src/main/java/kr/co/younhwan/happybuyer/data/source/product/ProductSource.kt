@@ -12,7 +12,7 @@ interface ProductSource{
     fun createProductInBasket(kakaoAccountId: Long, productId: Int, createProductInBasketCallback: CreateProductInBasketCallback?)
 
     interface CreateProductInWishedCallback{
-        fun onCreateProductInWished(explain: String?)
+        fun onCreateProductInWished(perform: String?)
     }
 
     fun createProductInWished(kakaoAccountId: Long, productId: Int, createProductInWishedCallback: CreateProductInWishedCallback?)
@@ -22,7 +22,7 @@ interface ProductSource{
         fun onReadProducts(list: ArrayList<ProductItem>)
     }
 
-    fun readProducts(kakaoAccountId: Long?, selectedCategory:String, readProductCallback: ReadProductsCallback?)
+    fun readProducts(selectedCategory:String, sort:String, readProductCallback: ReadProductsCallback?)
 
     interface ReadProductsInBasketCallback{
         fun onReadProductsInBasket(list: ArrayList<ProductItem>)
@@ -41,6 +41,12 @@ interface ProductSource{
     }
 
     fun readEventProducts(readEventProductsCallback: ReadEventProductsCallback?)
+
+    interface ReadWishedProductsIdCallback{
+        fun onReadWishedProductsId(list: ArrayList<Int>)
+    }
+
+    fun readWishedProductsId(kakaoAccountId: Long, readWishedProductsIdCallback: ReadWishedProductsIdCallback?)
 
     // Update Product
     // ..

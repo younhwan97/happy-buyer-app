@@ -31,12 +31,23 @@ class CategoryPresenter(
         val app = ((view.getAct()).application) as GlobalApplication
 
         productData.readProducts(
-            app.kakaoAccountId,
-            selectedCategory,
+            selectedCategory = selectedCategory,
+            sort = "basic",
             object : ProductSource.ReadProductsCallback {
                 override fun onReadProducts(list: ArrayList<ProductItem>) {
                     if (isClear)
                         adapterModel.clearItem()
+
+                    val wishedProductId = app.wishedProductId
+
+                    for(index in 0 until list.size){
+                        for(id in wishedProductId){
+                            if(id == list[index].productId){
+                                list[index].isWished = true
+                                break;
+                            }
+                        }
+                    }
 
                     adapterModel.addItems(list)
                     adapterView.notifyAdapter()
@@ -47,23 +58,45 @@ class CategoryPresenter(
     private fun onClickListenerOfWishedBtn(productId: Int, position: Int) {
         val app = ((view.getAct()).application) as GlobalApplication
 
-        if (app.isLogined) {
+        if (!app.isLogined) {
+            view.createLoginActivity()
+        } else {
             productData.createProductInWished(
                 app.kakaoAccountId!!,
                 productId,
                 object : ProductSource.CreateProductInWishedCallback {
-                    override fun onCreateProductInWished(explain: String?) {
-                        if (explain.isNullOrBlank()) {
-                            view.createProductInWishedResultCallback("error")
-                        } else {
+                    override fun onCreateProductInWished(perform: String?) {
+                        if (perform == "error" || perform == null) {
+                            view.createProductInWishedResultCallback(perform)
+                        } else if (perform == "delete" || perform == "create"){
+
+                            if(perform == "create"){
+                                var isMatched = false
+
+                                for(id in app.wishedProductId){
+                                    if(id == productId){
+                                        isMatched = true
+                                        break
+                                    }
+                                }
+
+                                if(!isMatched) app.wishedProductId.add(productId)
+
+                            } else if(perform == "delete"){
+                                for(index in 0 until app.wishedProductId.size){
+                                    if(app.wishedProductId[index] == productId){
+                                        app.wishedProductId.removeAt(index)
+                                        break
+                                    }
+                                }
+                            }
+
                             adapterView.notifyItemByUsingPayload(position, "wished")
-                            view.createProductInWishedResultCallback(explain)
+                            view.createProductInWishedResultCallback(perform)
                         }
                     }
                 }
             )
-        } else {
-            view.createLoginActivity()
         }
     }
 

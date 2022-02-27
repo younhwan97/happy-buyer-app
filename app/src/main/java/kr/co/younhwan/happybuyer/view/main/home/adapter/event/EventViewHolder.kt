@@ -7,10 +7,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import kr.co.younhwan.happybuyer.data.ProductItem
 import kr.co.younhwan.happybuyer.databinding.EventItemBinding
+import java.text.DecimalFormat
 
 class EventViewHolder(
     private val parent: ViewGroup,
-    eventItemBinding: EventItemBinding
+    eventItemBinding: EventItemBinding,
+    private val listenerFuncOfWishedBtn: ((Int, Int) -> Unit)?,
 ) : RecyclerView.ViewHolder(eventItemBinding.root) {
 
 
@@ -34,15 +36,32 @@ class EventViewHolder(
         eventItemBinding.eventPercent
     }
 
+    private val wishedBtn by lazy {
+        eventItemBinding.eventWishedBtn
+    }
+
+    private val wishedBtnContainer by lazy {
+        eventItemBinding.eventWishedBtnContainer
+    }
+
     fun onBind(productItem: ProductItem) {
+        val decimal = DecimalFormat("#,###")
+
         itemName.text = productItem.productName
-        originalImagePrice.text = productItem.productPrice.toString()
+        eventItemPrice.text = decimal.format(productItem.eventPrice)
+        originalImagePrice.text = decimal.format(productItem.productPrice)
         originalImagePrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-        eventPercent.text = (100 - (productItem.productPrice / productItem.eventPrice)).toString() + "%"
+        eventPercent.text = ((100 - (productItem.productPrice / productItem.eventPrice)).toString()).plus("%")
 
-        eventItemPrice.text = productItem.eventPrice.toString()
-
+        wishedBtn.isActivated = productItem.isWished
+        wishedBtnContainer.setOnClickListener {
+            listenerFuncOfWishedBtn?.invoke(productItem.productId, adapterPosition)
+        }
 
         Glide.with(this.itemView.context).load(productItem.productImageUrl).into(itemImage)
+    }
+
+    fun onBindWishedState(productItem: ProductItem){
+        wishedBtn.isActivated = productItem.isWished
     }
 }

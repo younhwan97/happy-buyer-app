@@ -8,7 +8,7 @@ interface CategoryContract{
 
         fun getAct() : CategoryActivity
 
-        fun createProductInWishedResultCallback(explain: String)
+        fun createProductInWishedResultCallback(perform: String?)
 
         fun createProductInBasketResultCallback(isSuccess: Boolean)
 

@@ -5,8 +5,13 @@ import kr.co.younhwan.happybuyer.data.ProductItem
 interface EventAdapterContract{
     interface View{
 
+        var onClickFuncOfWishedBtn: ((Int, Int) -> Unit)?
+
         fun notifyAdapter()
 
+        fun notifyItem(position: Int)
+
+        fun notifyItemByUsingPayload(position: Int, payload: String)
     }
 
     interface Model{
@@ -15,5 +20,9 @@ interface EventAdapterContract{
         fun clearItem()
 
         fun getItem(position: Int): ProductItem
+
+        fun getItemCount(): Int
+
+        fun updateProduct(position: Int, productItem: ProductItem)
     }
 }
