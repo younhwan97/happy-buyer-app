@@ -108,25 +108,25 @@ class CategoryPresenter(
                 app.kakaoAccountId!!,
                 productId,
                 object : ProductSource.CreateProductInBasketCallback {
-                    override fun onCreateProductInBasket(isSuccess: Boolean) {
-                        if (isSuccess) {
-                            if (app.activatedBasket !== "activate") {
-                                userData.updateUser(
-                                    app.kakaoAccountId!!,
-                                    "basket",
-                                    "activate",
-                                    object : UserSource.UpdateUserCallback {
-                                        override fun onUpdateUser(isSuccess: Boolean) {
-                                            if(isSuccess) app.activatedBasket = "activate"
-                                        }
-                                    }
-                                )
-                            }
+                    override fun onCreateProductInBasket(count: Int) {
 
-                            app.basketItemCount += 1
-                            view.getAct().setupBadge(view.getAct().textCartItemCount)
-                        }
-                        view.createProductInBasketResultCallback(isSuccess)
+//                        if (app.activatedBasket !== "activate") {
+//                            userData.updateUser(
+//                                app.kakaoAccountId!!,
+//                                "basket",
+//                                "activate",
+//                                object : UserSource.UpdateUserCallback {
+//                                    override fun onUpdateUser(isSuccess: Boolean) {
+//                                        if(isSuccess) app.activatedBasket = "activate"
+//                                    }
+//                                }
+//                            )
+//                        }
+//
+//                        app.basketItemCount += 1
+//                        view.getAct().setupBadge(view.getAct().textCartItemCount)
+
+                        view.createProductInBasketResultCallback(count)
                     }
                 })
         } else {

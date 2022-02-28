@@ -98,14 +98,14 @@ object ProductRemoteDataSource : ProductSource {
         createProductInBasketCallback: ProductSource.CreateProductInBasketCallback?
     ) {
         runBlocking {
-            var isSuccess = false
+            var count = 0
 
             val job = GlobalScope.launch {
-                isSuccess = createInBasket(kakaoAccountId, productId)
+                count = createInBasket(kakaoAccountId, productId)
             }
 
             job.join()
-            createProductInBasketCallback?.onCreateProductInBasket(isSuccess)
+            createProductInBasketCallback?.onCreateProductInBasket(count)
         }
     }
 
@@ -165,7 +165,7 @@ object ProductRemoteDataSource : ProductSource {
     /***********************************************************************/
 }
 
-suspend fun read(selectedCategory: String, sort:String): ArrayList<ProductItem> {
+suspend fun read(selectedCategory: String, sort: String): ArrayList<ProductItem> {
     val list = ArrayList<ProductItem>()
 
     // 클라이언트 생성
@@ -185,7 +185,7 @@ suspend fun read(selectedCategory: String, sort:String): ArrayList<ProductItem> 
 
         val success = json.getBoolean("success")
 
-        if(success){
+        if (success) {
             val data = JSONArray(json["data"].toString())
 
             for (i in 0 until data.length()) {
@@ -297,7 +297,7 @@ suspend fun createInWished(kakaoAccountId: Long, productId: Int): String? {
         val success = json.getBoolean("success")
         val perform = json.getString("perform")
 
-        if(success)
+        if (success)
             return perform
     }
 
@@ -345,7 +345,9 @@ suspend fun readWished(kakaoAccountId: Long): ArrayList<Int> {
 /***********************************************************************/
 /******************************* Basket *******************************/
 
-suspend fun createInBasket(kakaoAccountId: Long, productId: Int): Boolean {
+suspend fun createInBasket(kakaoAccountId: Long, productId: Int): Int {
+    var count = 0
+
     // 클라이언트 생성
     val client = OkHttpClient()
 
@@ -356,15 +358,18 @@ suspend fun createInBasket(kakaoAccountId: Long, productId: Int): Boolean {
 
     // 응답
     val response = client.newCall(request).execute()
-    var success = false
 
     if (response.isSuccessful) {
         val resultText = response.body?.string()!!.trim()
         val json = JSONObject(resultText)
-        success  = json.getBoolean("success")
+        val success = json.getBoolean("success")
+
+        if (success)
+            count = json.getInt("count")
+
     }
 
-    return success
+    return count
 }
 
 suspend fun readInBasket(kakaoAccountId: Long): ArrayList<ProductItem> {
@@ -386,7 +391,7 @@ suspend fun readInBasket(kakaoAccountId: Long): ArrayList<ProductItem> {
 
         val success = json.getBoolean("success")
 
-        if(success) {
+        if (success) {
             val data = JSONArray(json["data"].toString())
 
             for (i in 0 until data.length()) {
@@ -403,15 +408,17 @@ suspend fun readInBasket(kakaoAccountId: Long): ArrayList<ProductItem> {
                     val onSale = if (obj.isNull("on_sale")) false else obj.getBoolean("on_sale")
                     val eventPrice = if (obj.isNull("event_price")) 0 else obj.getInt("event_price")
 
-                    list.add(ProductItem(
-                        productId = productId,
-                        productName = productName,
-                        productPrice = productPrice,
-                        productImageUrl = productImage,
-                        countInBasket = countInBasket,
-                        onSale = onSale,
-                        eventPrice = eventPrice
-                    ))
+                    list.add(
+                        ProductItem(
+                            productId = productId,
+                            productName = productName,
+                            productPrice = productPrice,
+                            productImageUrl = productImage,
+                            countInBasket = countInBasket,
+                            onSale = onSale,
+                            eventPrice = eventPrice
+                        )
+                    )
                 }
             }
         }
@@ -420,7 +427,7 @@ suspend fun readInBasket(kakaoAccountId: Long): ArrayList<ProductItem> {
     return list
 }
 
-suspend fun minusInBasket(kakaoAccountId: Long, productId: Int): Boolean{
+suspend fun minusInBasket(kakaoAccountId: Long, productId: Int): Boolean {
     // 클라이언트 생성
     val client = OkHttpClient()
 
@@ -436,13 +443,13 @@ suspend fun minusInBasket(kakaoAccountId: Long, productId: Int): Boolean{
     if (response.isSuccessful) {
         val resultText = response.body?.string()!!.trim()
         val json = JSONObject(resultText)
-        success  = json.getBoolean("success")
+        success = json.getBoolean("success")
     }
 
     return success
 }
 
-suspend fun deleteInBasket(kakaoAccountId: Long, productId: Int): Boolean{
+suspend fun deleteInBasket(kakaoAccountId: Long, productId: Int): Boolean {
     // 클라이언트 생성
     val client = OkHttpClient()
 
@@ -458,7 +465,7 @@ suspend fun deleteInBasket(kakaoAccountId: Long, productId: Int): Boolean{
     if (response.isSuccessful) {
         val resultText = response.body?.string()!!.trim()
         val json = JSONObject(resultText)
-        success  = json.getBoolean("success")
+        success = json.getBoolean("success")
     }
 
     return success

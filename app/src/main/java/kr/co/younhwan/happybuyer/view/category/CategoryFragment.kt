@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
 import kr.co.younhwan.happybuyer.data.source.user.UserRepository
 import kr.co.younhwan.happybuyer.databinding.FragmentCategoryBinding
@@ -86,13 +87,19 @@ class CategoryFragment : Fragment(), CategoryContract.View {
         }
     }
 
-    override fun createProductInBasketResultCallback(isSuccess: Boolean) {
-        if (isSuccess) {
-            Snackbar.make(viewDataBinding.root, "상품이 장바구니에 추가되었습니다.", Snackbar.LENGTH_SHORT)
-                .show()
-        } else {
+    override fun createProductInBasketResultCallback(count: Int) {
+        var snack: Snackbar? = null
+
+        snack = if(count == 0){
             Snackbar.make(viewDataBinding.root, "알 수 없는 에러가 발생했습니다.", Snackbar.LENGTH_SHORT)
-                .show()
+        } else if (count == 1){
+            Snackbar.make(viewDataBinding.root, "장바구니에 상품을 담았습니다.", Snackbar.LENGTH_SHORT)
+        } else if (count == 10){
+            Snackbar.make(viewDataBinding.root, "같은 종류의 상품은 최대 10개까지 담을 수 있습니다.", Snackbar.LENGTH_SHORT)
+        } else {
+            Snackbar.make(viewDataBinding.root, "한 번 더 담으셨네요! \n담긴 수량이 ${count}개가 되었습니다.", Snackbar.LENGTH_SHORT)
         }
+
+        snack.show()
     }
 }

@@ -20,6 +20,8 @@ interface WishedAdapterContract {
 
         fun getItem(position: Int): ProductItem
 
+        fun getItemCount(): Int
+
         fun deleteItem(position: Int)
     }
 }

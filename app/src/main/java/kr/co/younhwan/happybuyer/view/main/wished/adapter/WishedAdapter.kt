@@ -1,7 +1,6 @@
 package kr.co.younhwan.happybuyer.view.main.wished.adapter
 
 import android.graphics.Rect
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +20,23 @@ class WishedAdapter :
 
     override var onClickFuncOfBasketBtn: ((Int) -> Unit)? = null
 
+    override fun getItemCount() = productItemList.size
+
+    override fun notifyAdapter() = notifyDataSetChanged()
+
+    override fun clearItem() = productItemList.clear()
+
+    override fun getItem(position: Int) = productItemList[position]
+
+    override fun addItems(productItems: ArrayList<ProductItem>) {
+        this.productItemList = productItems
+    }
+
+    override fun deleteItem(position: Int) {
+        productItemList.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
     override fun onBindViewHolder(holder: WishedViewHolder, position: Int) {
         productItemList[position].let {
             holder.onBind(it)
@@ -37,20 +53,16 @@ class WishedAdapter :
         )
     }
 
-    override fun addItems(productItems: ArrayList<ProductItem>) {
-        this.productItemList = productItems
-    }
+    inner class RecyclerDecoration :RecyclerView.ItemDecoration() {
+        override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+            super.getItemOffsets(outRect, view, parent, state)
 
-    override fun getItemCount() = productItemList.size
+            val spaceByDp = 24
+            val density = parent.resources.displayMetrics.density
+            val spaceByPx = (spaceByDp * density).toInt()
 
-    override fun notifyAdapter() = notifyDataSetChanged()
-
-    override fun clearItem() = productItemList.clear()
-
-    override fun getItem(position: Int) = productItemList[position]
-
-    override fun deleteItem(position: Int) {
-        productItemList.removeAt(position)
-        notifyItemRemoved(position)
+            outRect.right = spaceByPx
+            outRect.left= spaceByPx
+        }
     }
 }

@@ -49,7 +49,7 @@ interface ProductSource {
     /******************************* Basket *******************************/
 
     interface CreateProductInBasketCallback { // CREATE
-        fun onCreateProductInBasket(isSuccess: Boolean)
+        fun onCreateProductInBasket(count: Int)
     }
 
     fun createProductInBasket(

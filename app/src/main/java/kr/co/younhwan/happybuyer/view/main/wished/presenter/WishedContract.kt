@@ -12,7 +12,7 @@ interface WishedContract{
 
         fun deleteWishedResultCallback(perform: String?)
 
-        fun addBasketResultCallback(success: Boolean)
+        fun addBasketResultCallback(count: Int)
     }
 
     interface Presenter{

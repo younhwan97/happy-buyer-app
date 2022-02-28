@@ -1,6 +1,7 @@
 package kr.co.younhwan.happybuyer.view.main.wished.presenter
 
 import android.content.Context
+import android.util.Log
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.data.ProductItem
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
@@ -84,6 +85,10 @@ class WishedPresenter(
 
                             adapterModel.deleteItem(position)
                             view.deleteWishedResultCallback(perform)
+
+                            if(adapterModel.getItemCount() == 0){
+                                view.setEmpty()
+                            }
                         }
                     }
                 }
@@ -101,12 +106,8 @@ class WishedPresenter(
                 app.kakaoAccountId!!,
                 productId,
                 object : ProductSource.CreateProductInBasketCallback {
-                    override fun onCreateProductInBasket(success: Boolean) {
-                        if (success) {
-                            view.addBasketResultCallback(success)
-                        } else {
-
-                        }
+                    override fun onCreateProductInBasket(count: Int) {
+                        view.addBasketResultCallback(count)
                     }
                 }
             )

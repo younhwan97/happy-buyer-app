@@ -10,7 +10,7 @@ interface CategoryContract{
 
         fun createProductInWishedResultCallback(perform: String?)
 
-        fun createProductInBasketResultCallback(isSuccess: Boolean)
+        fun createProductInBasketResultCallback(count: Int)
 
         fun createLoginActivity()
 

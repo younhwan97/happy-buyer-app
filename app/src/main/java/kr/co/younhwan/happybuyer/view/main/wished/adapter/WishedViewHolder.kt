@@ -51,7 +51,6 @@ class WishedViewHolder(
 
     private val decimal = DecimalFormat("#,###")
 
-
     fun onBind(productItem: ProductItem) {
         // 상품 이름
         itemName.text = productItem.productName
@@ -63,15 +62,16 @@ class WishedViewHolder(
             .into(itemImage)
 
         // 상품 가격 (이벤트 상품일 경우 할인률과 할인 가격도 표시)
+        itemEventPriceContainer.visibility = View.GONE
+        itemPrice.text = decimal.format(productItem.productPrice)
+        itemPrice.paintFlags = 0
+
         if(productItem.onSale){
             itemEventPriceContainer.visibility = View.VISIBLE
             itemEventPrice.text = decimal.format(productItem.eventPrice)
             itemPrice.text = decimal.format(productItem.productPrice)
             itemPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
             itemEventPercent.text = ((100 - (productItem.productPrice / productItem.eventPrice)).toString()).plus("%")
-        } else {
-            itemEventPriceContainer.visibility = View.GONE
-            itemPrice.text = decimal.format(productItem.productPrice)
         }
 
         // 장바구니 추가, 찜 삭제 버튼

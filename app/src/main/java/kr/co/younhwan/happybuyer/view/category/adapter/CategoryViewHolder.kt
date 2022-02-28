@@ -71,7 +71,6 @@ class CategoryViewHolder(
         basketBtnContainer.isClickable = true
 
         wishedBtn.isActivated = productItem.isWished
-        basketBtn.isActivated = false
 
         wishedBtnContainer.setOnClickListener {
             listenerFuncOfWishedBtn?.invoke(productItem.productId, adapterPosition)

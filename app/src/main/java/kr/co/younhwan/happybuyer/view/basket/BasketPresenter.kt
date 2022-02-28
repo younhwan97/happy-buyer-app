@@ -54,8 +54,8 @@ class BasketPresenter(
                 app.kakaoAccountId!!,
                 productId,
                 object : ProductSource.CreateProductInBasketCallback {
-                    override fun onCreateProductInBasket(isSuccess: Boolean) {
-                        if (isSuccess) {
+                    override fun onCreateProductInBasket(count: Int) {
+                        if(count in 2..10){
                             adapterView.notifyItemByUsingPayload(position, "plus")
                         }
                     }

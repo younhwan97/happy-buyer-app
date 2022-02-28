@@ -173,7 +173,49 @@ class HomePresenter(
         if (!app.isLogined) {
             view.createLoginActivity()
         } else {
+            productData.createProductInWished(
+                app.kakaoAccountId!!,
+                productId,
+                object : ProductSource.CreateProductInWishedCallback{
+                    override fun onCreateProductInWished(perform: String?) {
+                        if(perform == null || perform == "error"){
+                            view.createProductInWishedResultCallback(perform)
+                        }else if(perform == "create" || perform == "delete"){
 
+                            if(perform == "create"){
+                                var isMatched = false
+
+                                for(id in app.wishedProductId){
+                                    if(id == productId){
+                                        isMatched = true
+                                        break
+                                    }
+                                }
+
+                                if(!isMatched) app.wishedProductId.add(productId)
+
+                            } else if(perform == "delete"){
+                                for(index in 0 until app.wishedProductId.size){
+                                    if(app.wishedProductId[index] == productId){
+                                        app.wishedProductId.removeAt(index)
+                                        break
+                                    }
+                                }
+                            }
+
+                            for(index in 0 until eventAdapterModel.getItemCount()){
+                                if(eventAdapterModel.getItem(index).productId == productId){
+                                    eventAdapterView.notifyItemByUsingPayload(index, "wished")
+                                    break
+                                }
+                            }
+
+                            popularAdapterView.notifyItemByUsingPayload(position, "wished")
+                            view.createProductInWishedResultCallback(perform)
+                        }
+                    }
+                }
+            )
         }
     }
 
