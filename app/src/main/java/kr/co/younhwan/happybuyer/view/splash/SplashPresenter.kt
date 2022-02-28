@@ -48,16 +48,18 @@ class SplashPresenter(
                                         app.wishedProductId = list
 
                                         if(app.activatedBasket == "activate"){
-                                            productData.readProductsInBasketCount(
-                                                app.kakaoAccountId!!,
-                                                object : ProductSource.ReadProductsInBasketCountCallback {
-                                                    override fun onReadProductsInBasketCount(count: Int) {
-                                                        app.basketItemCount = count
+//                                            productData.readProductsInBasketCount(
+//                                                app.kakaoAccountId!!,
+//                                                object : ProductSource.ReadProductsInBasketCountCallback {
+//                                                    override fun onReadProductsInBasketCount(count: Int) {
+//                                                        app.basketItemCount = count
+//
+//                                                        view.finishSplashActivity()
+//                                                    }
+//                                                }
+//                                            )
 
-                                                        view.finishSplashActivity()
-                                                    }
-                                                }
-                                            )
+                                            view.finishSplashActivity()
                                         } else { // deactivate or null
                                             view.finishSplashActivity()
                                         }

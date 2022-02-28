@@ -6,12 +6,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import kr.co.younhwan.happybuyer.data.ProductItem
-import kr.co.younhwan.happybuyer.databinding.EventItemBinding
+import kr.co.younhwan.happybuyer.databinding.RecyclerEventItemBinding
 import java.text.DecimalFormat
 
 class EventViewHolder(
     private val parent: ViewGroup,
-    eventItemBinding: EventItemBinding,
+    eventItemBinding: RecyclerEventItemBinding,
     private val listenerFuncOfWishedBtn: ((Int, Int) -> Unit)?,
 ) : RecyclerView.ViewHolder(eventItemBinding.root) {
 

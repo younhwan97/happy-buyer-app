@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kr.co.younhwan.happybuyer.data.ProductItem
-import kr.co.younhwan.happybuyer.databinding.ProductItemBinding
+import kr.co.younhwan.happybuyer.databinding.RecyclerProductItemBinding
 import kr.co.younhwan.happybuyer.view.category.adapter.contract.CategoryAdapterContract
 
 class CategoryAdapter :
@@ -47,7 +47,7 @@ class CategoryAdapter :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
-        val itemBinding = ProductItemBinding.inflate(LayoutInflater.from(parent.context))
+        val itemBinding = RecyclerProductItemBinding.inflate(LayoutInflater.from(parent.context))
         return CategoryViewHolder(
             parent,
             itemBinding,

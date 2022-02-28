@@ -5,12 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import kr.co.younhwan.happybuyer.data.ProductItem
-import kr.co.younhwan.happybuyer.databinding.ProductItemBinding
+import kr.co.younhwan.happybuyer.databinding.RecyclerProductItemBinding
 import kotlin.math.roundToInt
 
 class CategoryViewHolder(
     private val parent: ViewGroup,
-    productItemBinding: ProductItemBinding,
+    productItemBinding: RecyclerProductItemBinding,
     private val listenerFuncOfWishedBtn: ((Int, Int) -> Unit)?,
     private val listenerFuncOfBasketBtn: ((Int, Int) -> Unit)?
 ) : RecyclerView.ViewHolder(productItemBinding.root) {

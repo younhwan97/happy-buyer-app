@@ -1,11 +1,13 @@
 package kr.co.younhwan.happybuyer.view.main.wished.adapter
 
+import android.graphics.Rect
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kr.co.younhwan.happybuyer.data.ProductItem
-import kr.co.younhwan.happybuyer.databinding.WishedItemBinding
+import kr.co.younhwan.happybuyer.databinding.RecyclerWishedItemBinding
 import kr.co.younhwan.happybuyer.view.main.wished.adapter.contract.WishedAdapterContract
 
 class WishedAdapter :
@@ -26,7 +28,7 @@ class WishedAdapter :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WishedViewHolder {
-        val itemBinding = WishedItemBinding.inflate(LayoutInflater.from(parent.context))
+        val itemBinding = RecyclerWishedItemBinding.inflate(LayoutInflater.from(parent.context))
         return WishedViewHolder(
             parent,
             itemBinding,

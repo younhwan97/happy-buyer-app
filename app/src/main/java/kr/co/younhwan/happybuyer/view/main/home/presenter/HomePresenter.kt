@@ -26,12 +26,16 @@ class HomePresenter(
 ) : HomeContract.Presenter {
 
     init {
-        homeAdapterView.onClickFuncCategoryItem = { i: Int ->
+        homeAdapterView.onClickFuncOfCategoryItem= { i: Int ->
             onClickListenerCategoryItem(i)
         }
 
         eventAdapterView.onClickFuncOfWishedBtn = { i: Int, j: Int ->
-            onClickListenerOfWishedBtn(i, j)
+            onClickListenerOfEventWishedBtn(i, j)
+        }
+
+        popularAdapterView.onClickFuncOfWishedBtn = { i: Int, j: Int ->
+            onClickListenerOfPopularWishedBtn(i, j)
         }
     }
 
@@ -82,7 +86,7 @@ class HomePresenter(
         )
     }
 
-    private fun onClickListenerOfWishedBtn(productId: Int, position: Int) {
+    private fun onClickListenerOfEventWishedBtn(productId: Int, position: Int) {
         val app = ((view.getAct()).application) as GlobalApplication
 
         if (!app.isLogined) {
@@ -118,6 +122,13 @@ class HomePresenter(
                                 }
                             }
 
+                            for(index in 0 until popularAdapterModel.getItemCount()){
+                                if(popularAdapterModel.getItem(index).productId == productId){
+                                    popularAdapterView.notifyItemByUsingPayload(index, "wished")
+                                    break
+                                }
+                            }
+
                             eventAdapterView.notifyItemByUsingPayload(position, "wished")
                             view.createProductInWishedResultCallback(perform)
                         }
@@ -136,7 +147,7 @@ class HomePresenter(
             object : ProductSource.ReadProductsCallback{
                 override fun onReadProducts(list: ArrayList<ProductItem>) {
                     if (isClear)
-                        eventAdapterModel.clearItem()
+                        popularAdapterModel.clearItem()
 
                     val wishedProductId = app.wishedProductId
 
@@ -156,12 +167,22 @@ class HomePresenter(
         )
     }
 
+    private fun onClickListenerOfPopularWishedBtn(productId: Int, position: Int){
+        val app = ((view.getAct()).application) as GlobalApplication
+
+        if (!app.isLogined) {
+            view.createLoginActivity()
+        } else {
+
+        }
+    }
+
     override fun dataRefresh() {
         val app = view.getAct().application as GlobalApplication
+        val wishedProductId = app.wishedProductId
 
+        /* refresh data of event product recycler */
         if(eventAdapterModel.getItemCount() != 0){
-            val wishedProductId = app.wishedProductId
-
             for(index in 0 until eventAdapterModel.getItemCount()){
                 var isMatched = false
 
@@ -178,6 +199,26 @@ class HomePresenter(
             }
 
             eventAdapterView.notifyAdapter()
+        }
+
+        /* refresh data of popular product recycler */
+        if(popularAdapterModel.getItemCount() != 0){
+            for(index in 0 until popularAdapterModel.getItemCount()){
+                var isMatched = false
+
+                for(id in wishedProductId){
+                    if(id == popularAdapterModel.getItem(index).productId){
+                        isMatched = true
+                        break;
+                    }
+                }
+
+                val newProduct = popularAdapterModel.getItem(index)
+                newProduct.isWished = isMatched
+                popularAdapterModel.updateProduct(index, newProduct)
+            }
+
+            popularAdapterView.notifyAdapter()
         }
     }
 }

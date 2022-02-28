@@ -3,7 +3,6 @@ package kr.co.younhwan.happybuyer.view.category
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
@@ -104,7 +103,7 @@ class CategoryActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.category_menu, menu) // 메뉴 객체 생성 및 부착(적용)
 
-        val menuItem = menu?.findItem(R.id.basket_item_in_main)
+        val menuItem = menu?.findItem(R.id.basketIconInMainMenu)
         val actionView = menuItem?.actionView
         textCartItemCount = actionView?.findViewById<TextView>(R.id.cart_badge)
 
@@ -122,11 +121,11 @@ class CategoryActivity : AppCompatActivity() {
             android.R.id.home -> {
                 finish()
             }
-            R.id.search_item_in_category -> {
+            R.id.searchIconInCategoryMenu -> {
                 val categoryIntent = Intent(this, SearchActivity::class.java)
                 startActivity(categoryIntent)
             }
-            R.id.basket_item_in_main -> {
+            R.id.basketIconInMainMenu -> {
                 val basketIntent = Intent(this, BasketActivity::class.java)
                 startActivity(basketIntent)
             }

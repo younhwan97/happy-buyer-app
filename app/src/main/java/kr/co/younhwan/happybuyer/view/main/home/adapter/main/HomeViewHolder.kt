@@ -3,12 +3,12 @@ package kr.co.younhwan.happybuyer.view.main.home.adapter.main
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kr.co.younhwan.happybuyer.data.CategoryItem
-import kr.co.younhwan.happybuyer.databinding.CategoryItemBinding
+import kr.co.younhwan.happybuyer.databinding.RecyclerCategoryItemBinding
 
 class HomeViewHolder(
     parent: ViewGroup,
-    categoryItemBinding: CategoryItemBinding,
-    private val listenerFunc: ((Int) -> Unit)?
+    categoryItemBinding: RecyclerCategoryItemBinding,
+    private val listenerFuncOfCategoryBtn: ((Int) -> Unit)?
 ) : RecyclerView.ViewHolder(categoryItemBinding.root) {
 
     private val imageView by lazy {
@@ -24,11 +24,11 @@ class HomeViewHolder(
         imageView.setImageResource(item.resource)
 
         imageView.setOnClickListener {
-            listenerFunc?.invoke(position)
+            listenerFuncOfCategoryBtn?.invoke(position)
         }
 
         textView.setOnClickListener {
-            listenerFunc?.invoke(position)
+            listenerFuncOfCategoryBtn?.invoke(position)
         }
     }
 }

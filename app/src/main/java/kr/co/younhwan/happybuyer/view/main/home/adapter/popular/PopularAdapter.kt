@@ -6,13 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kr.co.younhwan.happybuyer.data.ProductItem
-import kr.co.younhwan.happybuyer.databinding.PopularItemBinding
+import kr.co.younhwan.happybuyer.databinding.RecyclerPopularItemBinding
 import kr.co.younhwan.happybuyer.view.main.home.adapter.popular.contract.PopularAdapterContract
 
 class PopularAdapter :
     RecyclerView.Adapter<PopularViewHolder>(), PopularAdapterContract.Model, PopularAdapterContract.View {
 
     private lateinit var productItemList: ArrayList<ProductItem>
+
+    override var onClickFuncOfWishedBtn: ((Int, Int) -> Unit)? = null
 
     override fun onBindViewHolder(holder: PopularViewHolder, position: Int) {
         productItemList[position].let {
@@ -21,12 +23,35 @@ class PopularAdapter :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PopularViewHolder {
-        val itemBinding = PopularItemBinding.inflate(LayoutInflater.from(parent.context))
+        val itemBinding = RecyclerPopularItemBinding.inflate(LayoutInflater.from(parent.context))
         return PopularViewHolder(
             parent,
-            itemBinding
+            itemBinding,
+            onClickFuncOfWishedBtn
         )
     }
+
+    override fun onBindViewHolder(
+        holder: PopularViewHolder,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
+        if (payloads.isEmpty()) {
+            super.onBindViewHolder(holder, position, payloads)
+        } else {
+            when (payloads[0]) {
+                "wished" -> {
+                    productItemList[position].isWished = !productItemList[position].isWished
+                    holder.onBindWishedState(productItemList[position])
+                }
+
+                "basket" -> {
+                    // holder.onBindBasketState(productItemList[position], position.toString())
+                }
+            }
+        }
+    }
+
 
     override fun getItemCount() = productItemList.size
 
@@ -54,5 +79,17 @@ class PopularAdapter :
 
             outRect.bottom = 10
         }
+    }
+
+    override fun notifyItem(position: Int) {
+        notifyItem(position)
+    }
+
+    override fun notifyItemByUsingPayload(position: Int, payload: String) {
+        notifyItemChanged(position, payload)
+    }
+
+    override fun updateProduct(position: Int, productItem: ProductItem) {
+        this.productItemList[position] = productItem
     }
 }

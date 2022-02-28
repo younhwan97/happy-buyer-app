@@ -3,17 +3,17 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/action_home"
+        android:id="@+id/homeIconInBottomNav"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_home_24"
         android:title="홈" />
     <item
-        android:id="@+id/action_wished"
+        android:id="@+id/wishedIconInBottomNav"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_favorite_24"
         android:title="찜" />
     <item
-        android:id="@+id/action_account"
+        android:id="@+id/accountIconInBottomNav"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_account_circle_24"
         android:title="계정" />

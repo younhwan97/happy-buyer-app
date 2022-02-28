@@ -4,20 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bgColorWhite"
     android:elevation="5dp"
     android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="none">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/homeContentContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
 
 
             <RelativeLayout
@@ -78,7 +77,7 @@
                     android:layout_marginLeft="24dp"
                     android:layout_marginTop="12dp"
                     android:layout_marginRight="24dp"
-                    android:background="@color/colorDivision"
+                    android:background="@color/LineColorGray"
                     android:orientation="horizontal">
 
                 </LinearLayout>
@@ -98,14 +97,6 @@
                     android:textSize="12sp" />
 
             </RelativeLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="12dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
-                android:background="@color/wideDivisionColor"
-                android:orientation="horizontal" />
 
             <RelativeLayout
                 android:id="@+id/homeEventContainer"
@@ -147,14 +138,6 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/homeEventTopContainer" />
             </RelativeLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="12dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
-                android:background="@color/wideDivisionColor"
-                android:orientation="horizontal" />
 
             <RelativeLayout
                 android:id="@+id/homePopularContainer"
@@ -198,6 +181,7 @@
                     android:layout_below="@id/homePopularTopContainer" />
 
             </RelativeLayout>
+
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

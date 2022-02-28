@@ -5,12 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import kr.co.younhwan.happybuyer.data.ProductItem
-import kr.co.younhwan.happybuyer.databinding.PopularItemBinding
+import kr.co.younhwan.happybuyer.databinding.RecyclerPopularItemBinding
 import java.text.DecimalFormat
 
 class PopularViewHolder (
     parent: ViewGroup,
-    popularItemBinding: PopularItemBinding
+    popularItemBinding: RecyclerPopularItemBinding,
+    private val listenerFuncOfWishedBtn: ((Int, Int) -> Unit)?,
 ) : RecyclerView.ViewHolder(popularItemBinding.root) {
 
     private val itemName by lazy {
@@ -29,6 +30,14 @@ class PopularViewHolder (
         popularItemBinding.popularItemPrice
     }
 
+    private val wishedBtn by lazy {
+        popularItemBinding.popularWishedBtn
+    }
+
+    private val wishedBtnContainer by lazy {
+        popularItemBinding.popularWishedBtnContainer
+    }
+
     fun onBind(item: ProductItem, position: Int) {
         val decimal = DecimalFormat("#,###")
 
@@ -43,5 +52,14 @@ class PopularViewHolder (
             itemEventPercent.visibility = View.GONE
             itemPrice.text = decimal.format(item.productPrice)
         }
+
+        wishedBtn.isActivated = item.isWished
+        wishedBtnContainer.setOnClickListener {
+            listenerFuncOfWishedBtn?.invoke(item.productId, adapterPosition)
+        }
+    }
+
+    fun onBindWishedState(productItem: ProductItem){
+        wishedBtn.isActivated = productItem.isWished
     }
 }

@@ -1,9 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bgColorWhite"
     tools:context=".view.basket.BasketActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/basketToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bgColorWhite"
+        android:minHeight="?attr/actionBarSize">
+
+        <TextView
+            android:id="@+id/basketToolbarTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/notosans_kr_regular"
+            android:text="장바구니"
+            android:textColor="@color/fontColorBlack"
+            android:textStyle="bold" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <RelativeLayout
+        android:id="@+id/basketTopContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/basketToolbar"
+        android:background="@color/bgColorWhite"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp">
+
+        <CheckBox
+            android:id="@+id/basketAllProductCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/notosans_kr_regular"
+            android:text="모두선택"
+            android:textColor="@color/fontColorBlack"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/notosans_kr_regular"
+                android:text="품절상품삭제"
+                android:textColor="@color/fontColorGray"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/basketMiddleContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/basketBottomContainer"
+        android:layout_below="@id/basketTopContainer">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/basketRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/basketBottomContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/transparent">
+
+        <LinearLayout
+            android:id="@+id/basketCountAndPriceContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/button4"
+            android:layout_alignBottom="@id/button4"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="TextView" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/basketCountAndPriceContainer"
+            android:backgroundTint="@color/colorThemeAccent"
+            android:fontFamily="@font/notosans_kr_bold"
+            android:text="주문하기"
+            android:textColor="@color/bgColorWhite"
+            android:textStyle="bold" />
+    </RelativeLayout>
+</RelativeLayout>

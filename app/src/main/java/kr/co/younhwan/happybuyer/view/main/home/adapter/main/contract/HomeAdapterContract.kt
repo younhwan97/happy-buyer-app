@@ -5,9 +5,10 @@ import kr.co.younhwan.happybuyer.data.CategoryItem
 interface HomeAdapterContract {
     interface View {
 
-        var onClickFuncCategoryItem : ((Int) -> Unit)?
+        var onClickFuncOfCategoryItem : ((Int) -> Unit)?
 
         fun notifyAdapter()
+
     }
 
     interface Model {

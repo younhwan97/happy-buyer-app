@@ -6,14 +6,10 @@ import android.os.Bundle
 import android.view.MenuItem
 import com.google.android.material.snackbar.Snackbar
 import kr.co.younhwan.happybuyer.data.source.user.UserRepository
-import kr.co.younhwan.happybuyer.view.main.MainActivity
 import kr.co.younhwan.happybuyer.databinding.ActivityLoginBinding
-import kr.co.younhwan.happybuyer.view.login.presenter.LoginContract
-import kr.co.younhwan.happybuyer.view.login.presenter.LoginPresenter
 import kr.co.younhwan.happybuyer.view.splash.SplashActivity
 
 class LoginActivity : AppCompatActivity(), LoginContract.View {
-
     /* View Binding */
     private lateinit var viewDataBinding: ActivityLoginBinding
 
@@ -27,14 +23,13 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
         )
     }
 
-    /* Method */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewDataBinding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(viewDataBinding.root)
 
-        // 액션바 -> 툴바
-        setSupportActionBar(viewDataBinding.toolbar)
+        // action -> tool bar
+        setSupportActionBar(viewDataBinding.loginToolbar)
         supportActionBar?.run {
             title = ""
             setHomeButtonEnabled(true)
@@ -47,6 +42,7 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
         }
     }
 
+    /* set menu event listener */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {

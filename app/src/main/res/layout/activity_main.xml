@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@id/mainToolbar"
-        android:background="@color/colorDivision"
+        android:background="@color/LineColorGray"
         android:orientation="horizontal" />
 
     <FrameLayout
@@ -30,7 +30,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/mainBottomNavDivision"
-        android:layout_below="@id/mainToolbarDivision" />
+        android:layout_below="@id/mainToolbarDivision"
+        android:background="@color/bgColorWhite" />
 
     <LinearLayout
         android:id="@+id/mainBottomNavDivision"
@@ -38,7 +39,6 @@
         android:layout_height="1dp"
         android:layout_alignWithParentIfMissing="true"
         android:layout_above="@id/mainBottomNavigation"
-        android:background="@color/colorDivision"
         android:orientation="horizontal" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -46,7 +46,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/colorWhite"
+        android:background="@color/bgColorWhite"
         app:itemIconTint="@drawable/menu_selector_color"
         app:itemTextColor="@drawable/menu_selector_color"
         app:menu="@menu/bottom_navigation_menu" />

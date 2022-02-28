@@ -31,7 +31,7 @@ class SearchActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.search_menu, menu)
 
         // 메뉴의 search view 에 이벤트 리스너 설정을 위해 객체를 얻어온다.
-        val searchItem = menu?.findItem(R.id.search_item_in_search)
+        val searchItem = menu?.findItem(R.id.searchIconInSearchMenu)
         val searchView = searchItem?.actionView as androidx.appcompat.widget.SearchView
 
         // setting search view

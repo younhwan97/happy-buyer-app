@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kr.co.younhwan.happybuyer.data.ProductItem
 import kr.co.younhwan.happybuyer.view.main.home.adapter.event.contract.EventAdapterContract
-import kr.co.younhwan.happybuyer.databinding.EventItemBinding
+import kr.co.younhwan.happybuyer.databinding.RecyclerEventItemBinding
 
 class EventAdapter : RecyclerView.Adapter<EventViewHolder>(), EventAdapterContract.Model, EventAdapterContract.View {
 
@@ -22,7 +22,7 @@ class EventAdapter : RecyclerView.Adapter<EventViewHolder>(), EventAdapterContra
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
-        val itemBinding = EventItemBinding.inflate(LayoutInflater.from(parent.context))
+        val itemBinding = RecyclerEventItemBinding.inflate(LayoutInflater.from(parent.context))
         return EventViewHolder(
             parent,
             itemBinding,
