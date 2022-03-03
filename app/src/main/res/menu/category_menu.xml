@@ -3,14 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/searchIconInCategoryMenu"
-        android:icon="@drawable/ic_baseline_search_24"
-        android:title="search"
+        android:icon="@drawable/ic_outline_search_28"
+        android:title="검색"
         android:visible="true"
         app:showAsAction="always" />
     <item
         android:id="@+id/baksetIconInCategoryMenu"
-        app:actionLayout="@layout/custom_action_item_layout"
-        app:showAsAction="always"
-        android:icon="@drawable/ic_baseline_shopping_cart_24"
-        android:title="basket" />
+        android:icon="@drawable/ic_shopping_cart_outline_black_28"
+        android:title="장바구니"
+        app:showAsAction="always" />
 </menu>

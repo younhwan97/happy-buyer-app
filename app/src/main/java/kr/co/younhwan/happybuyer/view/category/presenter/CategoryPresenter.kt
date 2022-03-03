@@ -1,29 +1,27 @@
 package kr.co.younhwan.happybuyer.view.category.presenter
 
 import kr.co.younhwan.happybuyer.GlobalApplication
+import kr.co.younhwan.happybuyer.adapter.product.contract.ProductAdapterContract
 import kr.co.younhwan.happybuyer.data.ProductItem
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
 import kr.co.younhwan.happybuyer.data.source.product.ProductSource
 import kr.co.younhwan.happybuyer.data.source.user.UserRepository
-import kr.co.younhwan.happybuyer.data.source.user.UserSource
-import kr.co.younhwan.happybuyer.util.setupBadge
-import kr.co.younhwan.happybuyer.view.category.adapter.contract.CategoryAdapterContract
 
 class CategoryPresenter(
     private val view: CategoryContract.View,
     private val productData: ProductRepository,
     private val userData: UserRepository,
-    private val adapterModel: CategoryAdapterContract.Model,
-    private val adapterView: CategoryAdapterContract.View,
+    private val adapterModel: ProductAdapterContract.Model,
+    private val adapterView: ProductAdapterContract.View,
 ) : CategoryContract.Model {
 
     init {
-        adapterView.onClickFuncOfWishedBtn = { i, j ->
-            onClickListenerOfWishedBtn(i, j)
-        }
-
         adapterView.onClickFuncOfBasketBtn = { i, j ->
             onClickListenerOfBasketBtn(i, j)
+        }
+
+        adapterView.onClickFuncOfProduct = {
+            onClickListenerProduct(it)
         }
     }
 
@@ -55,57 +53,14 @@ class CategoryPresenter(
             })
     }
 
-    private fun onClickListenerOfWishedBtn(productId: Int, position: Int) {
-        val app = ((view.getAct()).application) as GlobalApplication
-
-        if (!app.isLogined) {
-            view.createLoginActivity()
-        } else {
-            productData.createProductInWished(
-                app.kakaoAccountId!!,
-                productId,
-                object : ProductSource.CreateProductInWishedCallback {
-                    override fun onCreateProductInWished(perform: String?) {
-                        if (perform == "error" || perform == null) {
-                            view.createProductInWishedResultCallback(perform)
-                        } else if (perform == "delete" || perform == "create"){
-
-                            if(perform == "create"){
-                                var isMatched = false
-
-                                for(id in app.wishedProductId){
-                                    if(id == productId){
-                                        isMatched = true
-                                        break
-                                    }
-                                }
-
-                                if(!isMatched) app.wishedProductId.add(productId)
-
-                            } else if(perform == "delete"){
-                                for(index in 0 until app.wishedProductId.size){
-                                    if(app.wishedProductId[index] == productId){
-                                        app.wishedProductId.removeAt(index)
-                                        break
-                                    }
-                                }
-                            }
-
-                            adapterView.notifyItemByUsingPayload(position, "wished")
-                            view.createProductInWishedResultCallback(perform)
-                        }
-                    }
-                }
-            )
-        }
-    }
+    private fun onClickListenerProduct(productItem: ProductItem) = view.createProductActivity(productItem)
 
     private fun onClickListenerOfBasketBtn(productId: Int, position: Int) {
         val app = ((view.getAct()).application) as GlobalApplication
 
         if (app.isLogined) {
             productData.createProductInBasket(
-                app.kakaoAccountId!!,
+                app.kakaoAccountId,
                 productId,
                 object : ProductSource.CreateProductInBasketCallback {
                     override fun onCreateProductInBasket(count: Int) {

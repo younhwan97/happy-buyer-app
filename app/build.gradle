@@ -60,4 +60,10 @@ dependencies {
 
     /* 코루틴 */
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9'
+
+    /* Lottie */
+    implementation 'com.airbnb.android:lottie:5.0.2'
+
+    /* wished button animation */
+    implementation 'pub.hanks:smallbang:1.2.2'
 }

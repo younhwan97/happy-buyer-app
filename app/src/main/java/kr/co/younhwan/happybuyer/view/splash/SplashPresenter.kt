@@ -26,7 +26,7 @@ class SplashPresenter(
             } else if (tokenInfo != null) { // 토큰이 있을 때 (= 로그인 정보가 있을 때)
 
                 app.isLogined = true
-                app.kakaoAccountId = tokenInfo.id
+                app.kakaoAccountId = tokenInfo.id!!
 
                 // oAuth key(kakaoAccountId) 를 이용해 사용자 정보를 DB 에서 가져온다.
                 userData.readUser(

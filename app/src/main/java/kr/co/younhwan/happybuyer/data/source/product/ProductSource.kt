@@ -4,8 +4,49 @@ import kr.co.younhwan.happybuyer.data.ProductItem
 
 interface ProductSource {
 
-    // Create Product
+    interface ReadProductsCallback {
+        fun onReadProducts(list: ArrayList<ProductItem>)
+    }
 
+    fun readProducts(
+        selectedCategory: String,
+        sort: String,
+        readProductsCallback: ReadProductsCallback?
+    )
+
+    interface ReadProductCallback{
+        fun onReadProduct(productItem: ProductItem?)
+    }
+
+    fun readProduct(
+        productId: Int,
+        kakaoAccountId: Long,
+        readProductCallback: ReadProductCallback?
+    )
+
+
+    /***********************************************************************/
+    /******************************* Event *******************************/
+    interface ReadEventProductsCallback {
+        fun onReadEventProduct(list: ArrayList<ProductItem>)
+    }
+
+    fun readEventProducts(readEventProductsCallback: ReadEventProductsCallback?)
+    /***********************************************************************/
+    /***********************************************************************/
+
+
+    /***********************************************************************/
+    /******************************* Wished *******************************/
+
+    interface ReadWishedProductsIdCallback {
+        fun onReadWishedProductsId(list: ArrayList<Int>)
+    }
+
+    fun readWishedProductsId(
+        kakaoAccountId: Long,
+        readWishedProductsIdCallback: ReadWishedProductsIdCallback?
+    )
 
     interface CreateProductInWishedCallback {
         fun onCreateProductInWished(perform: String?)
@@ -17,32 +58,8 @@ interface ProductSource {
         createProductInWishedCallback: CreateProductInWishedCallback?
     )
 
-    // Read Product
-    interface ReadProductsCallback {
-        fun onReadProducts(list: ArrayList<ProductItem>)
-    }
-
-    fun readProducts(
-        selectedCategory: String,
-        sort: String,
-        readProductCallback: ReadProductsCallback?
-    )
-
-
-    interface ReadEventProductsCallback {
-        fun onReadEventProduct(list: ArrayList<ProductItem>)
-    }
-
-    fun readEventProducts(readEventProductsCallback: ReadEventProductsCallback?)
-
-    interface ReadWishedProductsIdCallback {
-        fun onReadWishedProductsId(list: ArrayList<Int>)
-    }
-
-    fun readWishedProductsId(
-        kakaoAccountId: Long,
-        readWishedProductsIdCallback: ReadWishedProductsIdCallback?
-    )
+    /***********************************************************************/
+    /***********************************************************************/
 
 
     /***********************************************************************/
@@ -87,4 +104,7 @@ interface ProductSource {
         productId: Int,
         deleteProductInBasketCallback: DeleteProductInBasketCallback?
     )
+
+    /***********************************************************************/
+    /***********************************************************************/
 }

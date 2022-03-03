@@ -17,9 +17,12 @@
         android:theme="@style/Theme.HappyBuyer"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".view.update.UpdateActivity"
-            android:windowSoftInputMode="adjustResize"
+            android:name=".view.product.ProductActivity"
             android:exported="false" />
+        <activity
+            android:name=".view.update.UpdateActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.basket.BasketActivity"
             android:exported="false" />
@@ -34,17 +37,17 @@
             android:exported="true" />
         <activity
             android:name=".view.splash.SplashActivity"
-            android:theme="@style/Theme.SplashScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".view.main.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.HappyBuyer"/>
+            android:theme="@style/Theme.HappyBuyer" />
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">

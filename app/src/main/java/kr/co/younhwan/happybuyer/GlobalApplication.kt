@@ -1,12 +1,17 @@
 package kr.co.younhwan.happybuyer
 
+import android.app.Activity
 import android.app.Application
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.widget.ImageView
+import androidx.appcompat.app.AppCompatDialog
 import com.kakao.sdk.common.KakaoSdk
 
 class GlobalApplication : Application() {
     // 유저 정보
     var isLogined = false
-    var kakaoAccountId: Long? = null
+    var kakaoAccountId: Long = -1L
     var nickname: String? = null
     var pointNumber: Int? = null
     var shippingAddress: String? = null

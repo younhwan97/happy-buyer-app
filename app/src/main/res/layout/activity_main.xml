@@ -14,8 +14,22 @@
         android:background="@color/colorTheme"
         android:elevation="3dp"
         android:minHeight="?attr/actionBarSize"
-        android:paddingEnd="24dp"
-        app:contentInsetStart="24dp" />
+        app:contentInsetStart="18dp">
+
+        <TextView
+            android:id="@+id/mainTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/notosans_kr_bold"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:text="코코마트"
+            android:textColor="@color/fontColorBlack"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+    </androidx.appcompat.widget.Toolbar>
+
+
 
     <LinearLayout
         android:id="@+id/mainToolbarDivision"

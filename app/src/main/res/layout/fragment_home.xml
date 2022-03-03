@@ -28,9 +28,9 @@
                     android:id="@+id/homeSearchContainer"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_marginLeft="24dp"
+                    android:layout_marginLeft="18dp"
                     android:layout_marginTop="24dp"
-                    android:layout_marginRight="24dp"
+                    android:layout_marginRight="18dp"
                     android:background="@drawable/layout_bg"
                     android:clickable="true">
 
@@ -61,9 +61,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/homeSearchContainer"
-                    android:layout_marginLeft="24dp"
+                    android:layout_marginLeft="18dp"
                     android:layout_marginTop="24dp"
-                    android:layout_marginRight="24dp"
+                    android:layout_marginRight="18dp"
                     android:elevation="3dp"
                     android:overScrollMode="never">
 
@@ -74,9 +74,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_below="@id/homeCategoryRecycler"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginRight="24dp"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginRight="18dp"
                     android:background="@color/LineColorGray"
                     android:orientation="horizontal">
 
@@ -87,8 +86,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/homeDivision"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginRight="24dp"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginRight="18dp"
                     android:layout_weight="1"
                     android:fontFamily="@font/notosans_kr_regular"
                     android:gravity="center"
@@ -109,17 +108,19 @@
                     android:id="@+id/homeEventTopContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginRight="24dp">
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginRight="18dp">
 
                     <TextView
                         android:id="@+id/homeEventTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/notosans_kr_bold"
+                        android:layout_marginBottom="4dp"
+                        android:fontFamily="@font/notosans_kr_regular"
                         android:text="행사 상품 추천"
                         android:textColor="@color/fontColorBlack"
-                        android:textSize="22sp" />
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/homeEventMoreBtn"
@@ -144,23 +145,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/homeEventContainer"
-                android:layout_marginLeft="24dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginRight="24dp">
+                android:layout_marginTop="6dp">
 
                 <RelativeLayout
                     android:id="@+id/homePopularTopContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginRight="18dp">
 
                     <TextView
                         android:id="@+id/homePopularTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/notosans_kr_bold"
+                        android:layout_marginBottom="4dp"
+                        android:fontFamily="@font/notosans_kr_regular"
                         android:text="인기 상품 추천"
                         android:textColor="@color/fontColorBlack"
-                        android:textSize="22sp" />
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/homePopularMoreBtn"

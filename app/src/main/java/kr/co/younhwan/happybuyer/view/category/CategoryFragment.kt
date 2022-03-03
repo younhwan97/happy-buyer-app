@@ -8,14 +8,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import kr.co.younhwan.happybuyer.R
+import kr.co.younhwan.happybuyer.adapter.product.ProductAdapter
+import kr.co.younhwan.happybuyer.data.ProductItem
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
 import kr.co.younhwan.happybuyer.data.source.user.UserRepository
 import kr.co.younhwan.happybuyer.databinding.FragmentCategoryBinding
-import kr.co.younhwan.happybuyer.view.category.adapter.CategoryAdapter
 import kr.co.younhwan.happybuyer.view.category.presenter.CategoryContract
 import kr.co.younhwan.happybuyer.view.category.presenter.CategoryPresenter
 import kr.co.younhwan.happybuyer.view.login.LoginActivity
+import kr.co.younhwan.happybuyer.view.main.MainActivity
+import kr.co.younhwan.happybuyer.view.product.ProductActivity
 
 class CategoryFragment : Fragment(), CategoryContract.View {
 
@@ -30,14 +32,14 @@ class CategoryFragment : Fragment(), CategoryContract.View {
             this,
             productData = ProductRepository,
             userData = UserRepository,
-            adapterModel = categoryAdapter,
-            adapterView = categoryAdapter
+            adapterModel = productAdapter,
+            adapterView = productAdapter
         )
     }
 
     /* Adapter */
-    private val categoryAdapter: CategoryAdapter by lazy {
-        CategoryAdapter()
+    private val productAdapter: ProductAdapter by lazy {
+        ProductAdapter("category")
     }
 
     /* Data */
@@ -59,9 +61,12 @@ class CategoryFragment : Fragment(), CategoryContract.View {
         selectedCateogory = arguments?.getString("category").toString()
         categoryPresenter.loadProducts(false, selectedCateogory)
 
+
+
         viewDataBinding.itemContainer.run {
-            this.adapter = categoryAdapter
-            this.layoutManager = GridLayoutManager(activity as CategoryActivity, 2)
+            adapter = productAdapter
+            layoutManager = GridLayoutManager(activity as CategoryActivity, 2)
+            addItemDecoration(productAdapter.RecyclerDecoration())
         }
     }
 
@@ -101,5 +106,12 @@ class CategoryFragment : Fragment(), CategoryContract.View {
         }
 
         snack.show()
+    }
+
+    override fun createProductActivity(productItem: ProductItem){
+        val act = activity as CategoryActivity
+        val productIntent = Intent(act, ProductActivity::class.java)
+        productIntent.putExtra("productItem", productItem)
+        act.startActivity(productIntent)
     }
 }

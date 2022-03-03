@@ -16,7 +16,21 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorTheme"
-            app:layout_scrollFlags="scroll|enterAlways"></androidx.appcompat.widget.Toolbar>
+            app:layout_scrollFlags="scroll|enterAlways">
+
+            <TextView
+                android:id="@+id/categoryTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/notosans_kr_regular"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:text="타이틀"
+                android:textColor="@color/fontColorBlack"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </androidx.appcompat.widget.Toolbar>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
@@ -27,73 +41,10 @@
             app:tabMode="scrollable" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="none">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/select_list_order_chip_group"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:checkedChip="@id/chip4"
-                    app:singleSelection="true">
-
-                    <Space
-                        android:layout_width="10dp"
-                        android:layout_height="match_parent" />
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chip4"
-                        style="@style/Widget.MaterialComponents.Chip.Filter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="기본순"
-                        android:theme="@style/Theme.MaterialComponents.Light"
-                        app:checkedIconVisible="false" />
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chip5"
-                        style="@style/Widget.MaterialComponents.Chip.Filter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="가격 낮은 순"
-                        android:theme="@style/Theme.MaterialComponents.Light"
-                        app:checkedIconVisible="false" />
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chip6"
-                        style="@style/Widget.MaterialComponents.Chip.Filter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="가격 높은 순"
-                        android:theme="@style/Theme.MaterialComponents.Light"
-                        app:checkedIconVisible="false" />
-
-                    <Space
-                        android:layout_width="10dp"
-                        android:layout_height="match_parent" />
-                </com.google.android.material.chip.ChipGroup>
-            </LinearLayout>
-        </HorizontalScrollView>
-    </LinearLayout>
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 
-        android:layout_marginTop="52dp"
         android:fillViewport="true"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 

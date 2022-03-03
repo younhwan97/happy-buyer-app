@@ -68,25 +68,40 @@ class BasketViewHolder(
         itemCount.text = productItem.countInBasket.toString()
 
         // 상품 개수 + , -
+        plusBtn.isClickable = true
         plusBtn.setOnClickListener {
             if(productItem.countInBasket in 1..9){
+                plusBtn.isClickable = false
                 listenerFunOfPlusBtn?.invoke(productItem.productId, adapterPosition)
             }
         }
 
+        minusBtn.isClickable = true
         minusBtn.setOnClickListener {
             if(productItem.countInBasket in 2..10){
+                minusBtn.isClickable = false
                 listenerFunOfMinusBtn?.invoke(productItem.productId, adapterPosition)
             }
         }
 
         // 삭제 버튼
+        deleteBtn.isClickable = true
         deleteBtn.setOnClickListener {
+            deleteBtn.isClickable = false
             listenerFunOfDeleteBtn?.invoke(productItem.productId, adapterPosition)
         }
     }
 
     fun onBindBasketCount(productItem: ProductItem){
+
+        if(!minusBtn.isClickable){
+            minusBtn.isClickable = !minusBtn.isClickable
+        }
+
+        if(!plusBtn.isClickable){
+            plusBtn.isClickable = !plusBtn.isClickable
+        }
+
         itemCount.text = productItem.countInBasket.toString()
 
         if(productItem.onSale){

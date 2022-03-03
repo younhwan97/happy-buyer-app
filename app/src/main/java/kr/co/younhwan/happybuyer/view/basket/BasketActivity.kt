@@ -5,13 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.LinearLayoutManager
 import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
 import kr.co.younhwan.happybuyer.databinding.ActivityBasketBinding
 import kr.co.younhwan.happybuyer.view.basket.adapter.BasketAdapter
-import kr.co.younhwan.happybuyer.view.category.adapter.CategoryAdapter
 import kr.co.younhwan.happybuyer.view.main.MainActivity
 import kr.co.younhwan.happybuyer.view.search.SearchActivity
 

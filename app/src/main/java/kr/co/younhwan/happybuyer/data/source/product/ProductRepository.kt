@@ -17,10 +17,22 @@ object ProductRepository : ProductSource{
 
 
 
-    override fun readProducts(selectedCategory:String, sort:String, readProductCallback: ProductSource.ReadProductsCallback?) {
+    override fun readProducts(selectedCategory:String, sort:String, readProductsCallback: ProductSource.ReadProductsCallback?) {
         productRemoteDataSource.readProducts(selectedCategory, sort, object : ProductSource.ReadProductsCallback {
             override fun onReadProducts(list: ArrayList<ProductItem>) {
-                readProductCallback?.onReadProducts(list)
+                readProductsCallback?.onReadProducts(list)
+            }
+        })
+    }
+
+    override fun readProduct(
+        productId: Int,
+        kakaoAccountId: Long,
+        readProductCallback: ProductSource.ReadProductCallback?
+    ) {
+        productRemoteDataSource.readProduct(productId, kakaoAccountId, object : ProductSource.ReadProductCallback{
+            override fun onReadProduct(productItem: ProductItem?) {
+                readProductCallback?.onReadProduct(productItem)
             }
         })
     }

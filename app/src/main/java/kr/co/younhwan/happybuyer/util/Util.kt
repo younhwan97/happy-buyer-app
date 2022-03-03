@@ -14,20 +14,3 @@ fun AppCompatActivity.replace(
 ) {
     supportFragmentManager.beginTransaction().replace(frameId, fragment, tag).commit()
 }
-
-fun AppCompatActivity.setupBadge(textCartItemCount: TextView?) {
-
-    val itemCount = (application as GlobalApplication).basketItemCount
-
-    if (textCartItemCount != null) {
-        if (itemCount == 0) {
-            if (textCartItemCount.visibility != View.GONE)
-                textCartItemCount.visibility = View.GONE
-        } else {
-            textCartItemCount.text = "" // Math.min(itemCount, 99).toString()
-
-            if (textCartItemCount.visibility != View.VISIBLE)
-                textCartItemCount.visibility = View.VISIBLE
-        }
-    }
-}

@@ -2,10 +2,45 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/categoryTopContainer"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp">
+
+        <TextView
+            android:id="@+id/categoryItemCountText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:fontFamily="@font/notosans_kr_regular"
+            android:gravity="center"
+            android:text="총 0개"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/categoryItemOrderBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:fontFamily="@font/notosans_kr_regular"
+            android:gravity="center"
+            android:text="추천순"
+            android:textStyle="bold" />
+    </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/itemContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@id/categoryTopContainer"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginRight="18dp" />
 </RelativeLayout>

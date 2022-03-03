@@ -1,6 +1,7 @@
 package kr.co.younhwan.happybuyer.view.category.presenter
 
 import android.content.Context
+import kr.co.younhwan.happybuyer.data.ProductItem
 import kr.co.younhwan.happybuyer.view.category.CategoryActivity
 
 interface CategoryContract{
@@ -14,6 +15,7 @@ interface CategoryContract{
 
         fun createLoginActivity()
 
+        fun createProductActivity(productItem: ProductItem)
     }
 
     interface Model{
