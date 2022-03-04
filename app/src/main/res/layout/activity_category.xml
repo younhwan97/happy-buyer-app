@@ -15,19 +15,19 @@
             android:id="@+id/categoryToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorTheme"
-            app:layout_scrollFlags="scroll|enterAlways">
+            android:background="@color/bgColorWhite"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:titleTextColor="@color/fontColorBlack">
 
             <TextView
                 android:id="@+id/categoryTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/notosans_kr_regular"
-                android:gravity="center"
                 android:includeFontPadding="false"
                 android:text="타이틀"
                 android:textColor="@color/fontColorBlack"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
         </androidx.appcompat.widget.Toolbar>
@@ -36,9 +36,12 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorWhite"
+            android:background="@color/bgColorWhite"
+            app:tabIndicatorColor="@color/hbPrimaryDarkColor"
             app:tabIndicatorHeight="3dp"
-            app:tabMode="scrollable" />
+            app:tabMode="scrollable"
+            app:tabSelectedTextColor="@color/hbPrimaryDarkColor"
+            app:tabTextAppearance="@style/CategoryTabTheme" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView

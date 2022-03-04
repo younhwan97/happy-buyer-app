@@ -27,7 +27,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/bg_product_basket_btn"
-            android:src="@drawable/ic_shopping_cart_outline_white_24" />
+            android:src="@drawable/ic_shopping_cart_white_24" />
     </RelativeLayout>
 
     <TextView

@@ -38,7 +38,7 @@
             android:layout_marginTop="30dp"
             android:fontFamily="@font/notosans_kr_regular"
             android:text="자주 찾는 상품을 찜 해보세요."
-            android:textColor="@color/colorDarkGray"
+            android:textColor="@color/fontColorLightGray"
             android:textSize="18sp" />
     </RelativeLayout>
 

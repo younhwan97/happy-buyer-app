@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:background="@color/colorWhite"
+        android:background="@color/bgColorWhite"
         android:elevation="3dp"
         android:minHeight="?attr/actionBarSize">
 

@@ -18,7 +18,6 @@ class SearchActivity : AppCompatActivity() {
 
         // 액션바 -> 툴바
         searchActivityBinding.searchToolbar.title = ""
-        searchActivityBinding.searchToolbar.setTitleTextAppearance(this, R.style.ToolbarTitleTheme)
         setSupportActionBar(searchActivityBinding.searchToolbar)
 
     }

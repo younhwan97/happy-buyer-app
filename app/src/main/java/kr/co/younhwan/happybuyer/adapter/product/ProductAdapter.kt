@@ -63,7 +63,7 @@ class ProductAdapter(private val usingBy: String?) :
 
             // 사용되는 엑티비티에 따라 아이템 데코레이션을 조정
             if(usingBy == "home"){
-                val outsideSpaceByPx = (18 * density).toInt()
+                val outsideSpaceByPx = (16 * density).toInt()
                 val insideSpaceByPx = (10 * density).toInt()
 
                 when (itemPosition) {

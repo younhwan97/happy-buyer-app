@@ -61,6 +61,7 @@ class CategoryActivity : AppCompatActivity() {
 
         viewDataBinding.run {
             tabs.selectTab(selectTab) // toolbar에 선택된 탭을 표기하도록 설정
+
             tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabReselected(tab: TabLayout.Tab?) {}
                 override fun onTabUnselected(tab: TabLayout.Tab?) {}

@@ -7,12 +7,18 @@
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/background_round.xml" value="0.206" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/badge_background.xml" value="0.1" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/basket_btn_selector.xml" value="0.122" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/bg_bottom_sheet.xml" value="0.2015" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/bg_bottom_sheet_btn.xml" value="0.267" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/bg_bottom_sheet_content.xml" value="0.267" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/bg_bottom_sheet_count.xml" value="0.267" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/bg_product_basket_btn.xml" value="0.235" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/bg_product_buy_btn.xml" value="0.236" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/bg_product_wished_btn.xml" value="0.236" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/border.xml" value="0.308" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/button_blue_outline.xml" value="0.193" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/button_gray_outline.xml" value="0.1505" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/button_outline.xml" value="0.193" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/button_theme_outline.xml" value="0.2275" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/category_background.xml" value="0.1" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/color_cursor.xml" value="0.2375" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/custom_border.xml" value="0.1655" />
@@ -27,27 +33,53 @@
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_baseline_favorite_border_24.xml" value="0.3805" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.225" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_baseline_home_24_black.xml" value="0.1855" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_baseline_keyboard_arrow_down_24.xml" value="0.274" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_baseline_keyboard_arrow_down_32.xml" value="0.274" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_baseline_local_shipping_24_2.xml" value="0.1" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_baseline_remove_24.xml" value="0.1" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.225" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_baseline_search_24_2.xml" value="0.1855" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_baseline_search_24_black.xml" value="0.1855" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_baseline_shopping_cart_24.xml" value="0.1" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_heart_24.xml" value="0.195" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_like_outline_black_24.xml" value="0.2845" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_like_outline_red_24.xml" value="0.2845" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_like_outline_red_28.xml" value="0.2845" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_like_red_24.xml" value="0.2845" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_magnifiying_glass.xml" value="0.2845" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_magnifying_glass_black_24.xml" value="0.248" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_outline_black_home_24.xml" value="0.1" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_outline_black_search_24.xml" value="0.277" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_outline_delete_outline_24.xml" value="0.1" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_outline_ios_share_24.xml" value="0.248" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_outline_search_28.xml" value="0.244" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_outline_shopping_cart_24.xml" value="0.1" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_outline_shopping_cart_24_2.xml" value="0.1" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_search_24.xml" value="0.2845" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_search__1_balck.xml" value="0.248" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_search_black_24.xml" value="0.248" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_search_theme_24.xml" value="0.248" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_sharp_ios_share_32.xml" value="0.248" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_sharp_keyboard_arrow_down_32.xml" value="0.248" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_shopping.xml" value="0.248" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_shopping_cart_24.xml" value="0.248" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_shopping_cart__1_.xml" value="0.248" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_shopping_cart_black_24.xml" value="0.248" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_shopping_cart_black_28.xml" value="0.248" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_shopping_cart_outline_black_24.xml" value="0.277" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_shopping_cart_outline_black_28.xml" value="0.244" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_shopping_cart_outline_black_32.xml" value="0.244" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_shopping_cart_outline_white_24.xml" value="0.25" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_shopping_cart_white_24.xml" value="0.248" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_shopping_cart_white_36.xml" value="0.248" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_twotone_home_24_outline_black.xml" value="0.1855" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_twotone_shopping_cart_24.xml" value="0.1" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/ic_user_outline.xml" value="0.267" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/layout_bg.xml" value="0.1395" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/menu_selector_color.xml" value="0.2705" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/selector_bottom_nav_color.xml" value="0.166" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/selector_heart_btn_image.xml" value="0.2845" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/shopping_cart_animation.xml" value="0.14" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/splash.xml" value="0.263" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/temp.xml" value="0.127" />
@@ -56,7 +88,7 @@
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_category.xml" value="0.5" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_login.xml" value="0.27685185185185185" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_main.xml" value="0.33" />
-        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_product.xml" value="0.33" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_product.xml" value="0.5" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_search.xml" value="0.30520833333333336" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_splash.xml" value="0.4869791666666667" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_update.xml" value="0.3537037037037037" />
@@ -78,6 +110,7 @@
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/fragment_search.xml" value="0.44351851851851853" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/fragment_wished.xml" value="0.48333333333333334" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/item.xml" value="0.34270833333333334" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/layout_bottom_sheet.xml" value="0.5" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/popular_item.xml" value="0.47178444331469244" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/product_item.xml" value="0.47178444331469244" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/recycler_basket_item.xml" value="0.47178444331469244" />
@@ -94,6 +127,7 @@
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/menu/category_menu.xml" value="0.44351851851851853" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/menu/main_menu.xml" value="0.30520833333333336" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/menu/search_menu.xml" value="0.30520833333333336" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/menu/sort_popup_menu.xml" value="0.302491103202847" />
         <entry key="..\:/Users/yh/Desktop/HappyBuyer/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.5359375" />
         <entry key="..\:/Users/yh/Desktop/HappyBuyer/app/src/main/res/drawable/bg_gradient.xml" value="0.5322916666666667" />
         <entry key="..\:/Users/yh/Desktop/HappyBuyer/app/src/main/res/drawable/edge.xml" value="0.4601851851851852" />

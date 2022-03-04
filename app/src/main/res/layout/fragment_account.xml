@@ -15,8 +15,8 @@
             android:id="@+id/accountContentContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="18dp"
-            android:layout_marginRight="18dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -82,7 +82,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
                             android:background="@color/white"
-                            app:srcCompat="@drawable/memo" />
+                            app:srcCompat="@drawable/category_fastfood" />
 
                         <TextView
                             android:id="@+id/accountTopFirstBtnText"
@@ -108,7 +108,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
                             android:background="@color/white"
-                            app:srcCompat="@drawable/delivery_truck" />
+                            app:srcCompat="@drawable/category_fastfood" />
 
                         <TextView
                             android:id="@+id/accountTopSecondBtnText"
@@ -135,7 +135,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
                             android:background="@color/white"
-                            app:srcCompat="@drawable/call" />
+                            app:srcCompat="@drawable/category_fastfood" />
 
                         <TextView
                             android:id="@+id/accountTopThirdBtnText"

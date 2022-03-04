@@ -28,32 +28,47 @@ class CategoryPresenter(
     override fun loadProducts(isClear: Boolean, selectedCategory: String) {
         val app = ((view.getAct()).application) as GlobalApplication
 
-        productData.readProducts(
-            selectedCategory = selectedCategory,
-            sort = "basic",
-            object : ProductSource.ReadProductsCallback {
-                override fun onReadProducts(list: ArrayList<ProductItem>) {
-                    if (isClear)
-                        adapterModel.clearItem()
+        if (selectedCategory == "행사") {
+            productData.readEventProducts(
+                object : ProductSource.ReadEventProductsCallback {
+                    override fun onReadEventProduct(list: ArrayList<ProductItem>) {
+                        if (isClear)
+                            adapterModel.clearItem()
 
-                    val wishedProductId = app.wishedProductId
+                        adapterModel.addItems(list)
+                        adapterView.notifyAdapter()
+                    }
+                }
+            )
+        } else {
+            productData.readProducts(
+                selectedCategory = selectedCategory,
+                sort = "basic",
+                object : ProductSource.ReadProductsCallback {
+                    override fun onReadProducts(list: ArrayList<ProductItem>) {
+                        if (isClear)
+                            adapterModel.clearItem()
 
-                    for(index in 0 until list.size){
-                        for(id in wishedProductId){
-                            if(id == list[index].productId){
-                                list[index].isWished = true
-                                break;
+                        val wishedProductId = app.wishedProductId
+
+                        for (index in 0 until list.size) {
+                            for (id in wishedProductId) {
+                                if (id == list[index].productId) {
+                                    list[index].isWished = true
+                                    break;
+                                }
                             }
                         }
-                    }
 
-                    adapterModel.addItems(list)
-                    adapterView.notifyAdapter()
-                }
-            })
+                        adapterModel.addItems(list)
+                        adapterView.notifyAdapter()
+                    }
+                })
+        }
     }
 
-    private fun onClickListenerProduct(productItem: ProductItem) = view.createProductActivity(productItem)
+    private fun onClickListenerProduct(productItem: ProductItem) =
+        view.createProductActivity(productItem)
 
     private fun onClickListenerOfBasketBtn(productId: Int, position: Int) {
         val app = ((view.getAct()).application) as GlobalApplication

@@ -28,7 +28,5 @@ interface HomeContract {
         fun loadEventProduct(isClear: Boolean)
 
         fun loadPopularProduct(isClear: Boolean)
-
-        fun dataRefresh()
     }
 }

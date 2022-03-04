@@ -28,9 +28,9 @@
                     android:id="@+id/homeSearchContainer"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_marginLeft="18dp"
+                    android:layout_marginLeft="16dp"
                     android:layout_marginTop="24dp"
-                    android:layout_marginRight="18dp"
+                    android:layout_marginRight="16dp"
                     android:background="@drawable/layout_bg"
                     android:clickable="true">
 
@@ -41,7 +41,7 @@
                         android:layout_marginLeft="24dp"
                         android:background="@android:color/transparent"
                         android:clickable="false"
-                        app:srcCompat="@drawable/ic_baseline_search_24_2"
+                        app:srcCompat="@drawable/ic_search_accent_28"
                         tools:ignore="SpeakableTextPresentCheck" />
 
                     <TextView
@@ -61,33 +61,30 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/homeSearchContainer"
-                    android:layout_marginLeft="18dp"
+                    android:layout_marginLeft="16dp"
                     android:layout_marginTop="24dp"
-                    android:layout_marginRight="18dp"
+                    android:layout_marginRight="16dp"
                     android:elevation="3dp"
                     android:overScrollMode="never">
 
                 </androidx.recyclerview.widget.RecyclerView>
 
-                <LinearLayout
+                <com.google.android.material.divider.MaterialDivider
                     android:id="@+id/homeDivision"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="wrap_content"
                     android:layout_below="@id/homeCategoryRecycler"
-                    android:layout_marginLeft="18dp"
-                    android:layout_marginRight="18dp"
-                    android:background="@color/LineColorGray"
-                    android:orientation="horizontal">
-
-                </LinearLayout>
+                    app:dividerColor="@color/hbDividerColor"
+                    app:dividerInsetEnd="16dp"
+                    app:dividerInsetStart="16dp" />
 
                 <TextView
                     android:id="@+id/homeMoreBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/homeDivision"
-                    android:layout_marginLeft="18dp"
-                    android:layout_marginRight="18dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
                     android:layout_weight="1"
                     android:fontFamily="@font/notosans_kr_regular"
                     android:gravity="center"
@@ -108,8 +105,8 @@
                     android:id="@+id/homeEventTopContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="18dp"
-                    android:layout_marginRight="18dp">
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp">
 
                     <TextView
                         android:id="@+id/homeEventTitle"
@@ -151,8 +148,8 @@
                     android:id="@+id/homePopularTopContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="18dp"
-                    android:layout_marginRight="18dp">
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp">
 
                     <TextView
                         android:id="@+id/homePopularTitle"

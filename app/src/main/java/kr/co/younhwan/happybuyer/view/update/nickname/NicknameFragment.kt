@@ -75,7 +75,7 @@ class NicknameFragment : Fragment(), NicknameContract.View {
                     setBackgroundColor(
                         ContextCompat.getColor(
                             requireContext(),
-                            R.color.colorThemeAccent
+                            R.color.hbSecondaryColor
                         )
                     )
                     isEnabled = true
@@ -85,7 +85,7 @@ class NicknameFragment : Fragment(), NicknameContract.View {
                     setBackgroundColor(
                         ContextCompat.getColor(
                             requireContext(),
-                            R.color.colorDarkGray
+                            R.color.bgColorGray
                         )
                     )
                     isEnabled = false

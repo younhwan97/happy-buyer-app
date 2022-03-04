@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/basketIconInMainMenu"
-        android:icon="@drawable/ic_shopping_cart_outline_black_28"
+        android:icon="@drawable/ic_shopping_cart_black_24"
         android:title="장바구니"
         app:showAsAction="always" />
 </menu>

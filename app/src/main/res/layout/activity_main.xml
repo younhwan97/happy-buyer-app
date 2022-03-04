@@ -11,10 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:background="@color/colorTheme"
+        android:background="@color/hbPrimaryColor"
         android:elevation="3dp"
         android:minHeight="?attr/actionBarSize"
-        app:contentInsetStart="18dp">
+        android:paddingRight="18dp">
 
         <TextView
             android:id="@+id/mainTitle"
@@ -25,7 +25,7 @@
             android:includeFontPadding="false"
             android:text="코코마트"
             android:textColor="@color/fontColorBlack"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:textStyle="bold" />
     </androidx.appcompat.widget.Toolbar>
 
@@ -61,8 +61,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/bgColorWhite"
-        app:itemIconTint="@drawable/menu_selector_color"
-        app:itemTextColor="@drawable/menu_selector_color"
+        app:itemIconTint="@drawable/selector_bottom_nav_color"
+        app:itemTextColor="@drawable/selector_bottom_nav_color"
         app:menu="@menu/bottom_navigation_menu" />
 
 </RelativeLayout>

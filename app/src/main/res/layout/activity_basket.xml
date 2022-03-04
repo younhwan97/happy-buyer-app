@@ -116,7 +116,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/basketCountAndPriceContainer"
-            android:backgroundTint="@color/colorThemeAccent"
+            android:backgroundTint="@color/hbSecondaryColor"
             android:fontFamily="@font/notosans_kr_bold"
             android:text="주문하기"
             android:textColor="@color/bgColorWhite"

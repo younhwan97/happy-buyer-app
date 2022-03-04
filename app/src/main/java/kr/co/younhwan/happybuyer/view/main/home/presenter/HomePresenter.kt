@@ -1,7 +1,6 @@
 package kr.co.younhwan.happybuyer.view.main.home.presenter
 
 import android.content.Context
-import android.util.Log
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.adapter.product.contract.ProductAdapterContract
 import kr.co.younhwan.happybuyer.data.CategoryItem
@@ -30,11 +29,19 @@ class HomePresenter(
         }
 
         eventAdapterView.onClickFuncOfBasketBtn = { i: Int, j: Int ->
-            onClickListenerOfEventBasketBtn(i, j)
+            onClickListenerOfBasketBtn(i, j)
         }
 
         eventAdapterView.onClickFuncOfProduct = {
-            onClickListenerProduct(it)
+            onClickListenerOfProduct(it)
+        }
+
+        popularAdapterView.onClickFuncOfBasketBtn = {i: Int, j: Int ->
+            onClickListenerOfBasketBtn(i, j)
+        }
+
+        popularAdapterView.onClickFuncOfProduct = {
+            onClickListenerOfProduct(it)
         }
 
     }
@@ -60,12 +67,10 @@ class HomePresenter(
     }
 
     private fun onClickListenerCategoryItem(position: Int) = view.createCategoryActivity(position)
-    /***********************************************************************/
-    /***********************************************************************/
 
 
     /***********************************************************************/
-    /******************************* Event *******************************/
+    /******************************* Event/Popular *******************************/
     // load event product(data) in event recycler
     override fun loadEventProduct(isClear: Boolean) {
         val app = view.getAct().application as GlobalApplication
@@ -93,87 +98,6 @@ class HomePresenter(
             }
         )
     }
-
-    // set event listener in event recycler
-    private fun onClickListenerProduct(productItem: ProductItem) = view.createProductActivity(productItem)
-
-    private fun onClickListenerOfEventBasketBtn(productId: Int, position: Int) {
-        val app = ((view.getAct()).application) as GlobalApplication
-
-        if (!app.isLogined) {
-            view.createLoginActivity()
-        } else {
-            productData.createProductInBasket(
-                app.kakaoAccountId!!,
-                productId,
-                object : ProductSource.CreateProductInBasketCallback {
-                    override fun onCreateProductInBasket(count: Int) {
-                        if (count in 1..10) {
-
-                            // eventAdapterView.notifyItemByUsingPayload(position, "basket")
-                            view.createProductInBasketResultCallback(count)
-                        }
-                    }
-                }
-            )
-        }
-    }
-    /***********************************************************************/
-    /***********************************************************************/
-
-
-//    private fun onClickListenerOfEventWishedBtn(productId: Int, position: Int) {
-//        val app = ((view.getAct()).application) as GlobalApplication
-//
-//        if (!app.isLogined) {
-//            view.createLoginActivity()
-//        } else {
-//            productData.createProductInWished(
-//                app.kakaoAccountId!!,
-//                productId,
-//                object : ProductSource.CreateProductInWishedCallback {
-//                    override fun onCreateProductInWished(perform: String?) {
-//                        if (perform == null || perform == "error") {
-//                            view.createProductInWishedResultCallback(perform)
-//                        } else if(perform == "delete" || perform == "create"){
-//
-//                            if(perform == "create"){
-//                                var isMatched = false
-//
-//                                for(id in app.wishedProductId){
-//                                    if(id == productId){
-//                                        isMatched = true
-//                                        break
-//                                    }
-//                                }
-//
-//                                if(!isMatched) app.wishedProductId.add(productId)
-//
-//                            } else if(perform == "delete"){
-//                                for(index in 0 until app.wishedProductId.size){
-//                                    if(app.wishedProductId[index] == productId){
-//                                        app.wishedProductId.removeAt(index)
-//                                        break
-//                                    }
-//                                }
-//                            }
-//
-//                            for(index in 0 until popularAdapterModel.getItemCount()){
-//                                if(popularAdapterModel.getItem(index).productId == productId){
-//                                    popularAdapterView.notifyItemByUsingPayload(index, "wished")
-//                                    break
-//                                }
-//                            }
-//
-//                            eventAdapterView.notifyItemByUsingPayload(position, "wished")
-//                            view.createProductInWishedResultCallback(perform)
-//                        }
-//                    }
-//                }
-//            )
-//        }
-//    }
-
 
     override fun loadPopularProduct(isClear: Boolean) {
         val app = view.getAct().application as GlobalApplication
@@ -204,100 +128,28 @@ class HomePresenter(
         )
     }
 
-//    private fun onClickListenerOfPopularWishedBtn(productId: Int, position: Int){
-//        val app = ((view.getAct()).application) as GlobalApplication
-//
-//        if (!app.isLogined) {
-//            view.createLoginActivity()
-//        } else {
-//            productData.createProductInWished(
-//                app.kakaoAccountId!!,
-//                productId,
-//                object : ProductSource.CreateProductInWishedCallback{
-//                    override fun onCreateProductInWished(perform: String?) {
-//                        if(perform == null || perform == "error"){
-//                            view.createProductInWishedResultCallback(perform)
-//                        }else if(perform == "create" || perform == "delete"){
-//
-//                            if(perform == "create"){
-//                                var isMatched = false
-//
-//                                for(id in app.wishedProductId){
-//                                    if(id == productId){
-//                                        isMatched = true
-//                                        break
-//                                    }
-//                                }
-//
-//                                if(!isMatched) app.wishedProductId.add(productId)
-//
-//                            } else if(perform == "delete"){
-//                                for(index in 0 until app.wishedProductId.size){
-//                                    if(app.wishedProductId[index] == productId){
-//                                        app.wishedProductId.removeAt(index)
-//                                        break
-//                                    }
-//                                }
-//                            }
-//
-//                            for(index in 0 until eventAdapterModel.getItemCount()){
-//                                if(eventAdapterModel.getItem(index).productId == productId){
-//                                    eventAdapterView.notifyItemByUsingPayload(index, "wished")
-//                                    break
-//                                }
-//                            }
-//
-//                            popularAdapterView.notifyItemByUsingPayload(position, "wished")
-//                            view.createProductInWishedResultCallback(perform)
-//                        }
-//                    }
-//                }
-//            )
-//        }
-//    }
+    // set event listener in event recycler
+    private fun onClickListenerOfProduct(productItem: ProductItem) = view.createProductActivity(productItem)
 
-    override fun dataRefresh() {
-        val app = view.getAct().application as GlobalApplication
-        val wishedProductId = app.wishedProductId
+    private fun onClickListenerOfBasketBtn(productId: Int, position: Int) {
+        val app = ((view.getAct()).application) as GlobalApplication
 
-//        /* refresh data of event product recycler */
-//        if(eventAdapterModel.getItemCount() != 0){
-//            for(index in 0 until eventAdapterModel.getItemCount()){
-//                var isMatched = false
-//
-//                for(id in wishedProductId){
-//                    if(id == eventAdapterModel.getItem(index).productId){
-//                        isMatched = true
-//                        break;
-//                    }
-//                }
-//
-//                val newProduct = eventAdapterModel.getItem(index)
-//                newProduct.isWished = isMatched
-//                eventAdapterModel.updateProduct(index, newProduct)
-//            }
-//
-//            eventAdapterView.notifyAdapter()
-//        }
-//
-//        /* refresh data of popular product recycler */
-//        if(popularAdapterModel.getItemCount() != 0){
-//            for(index in 0 until popularAdapterModel.getItemCount()){
-//                var isMatched = false
-//
-//                for(id in wishedProductId){
-//                    if(id == popularAdapterModel.getItem(index).productId){
-//                        isMatched = true
-//                        break;
-//                    }
-//                }
-//
-//                val newProduct = popularAdapterModel.getItem(index)
-//                newProduct.isWished = isMatched
-//                popularAdapterModel.updateProduct(index, newProduct)
-//            }
-//
-//            popularAdapterView.notifyAdapter()
-//        }
+        if (!app.isLogined) {
+            view.createLoginActivity()
+        } else {
+            productData.createProductInBasket(
+                app.kakaoAccountId!!,
+                productId,
+                object : ProductSource.CreateProductInBasketCallback {
+                    override fun onCreateProductInBasket(count: Int) {
+                        if (count in 1..10) {
+
+                            // eventAdapterView.notifyItemByUsingPayload(position, "basket")
+                            view.createProductInBasketResultCallback(count)
+                        }
+                    }
+                }
+            )
+        }
     }
 }

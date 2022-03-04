@@ -10,7 +10,7 @@
         android:id="@+id/searchToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorTheme"
+        android:background="@color/hbPrimaryColor"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme" />
 </RelativeLayout>
