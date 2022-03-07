@@ -103,11 +103,14 @@ class WishedPresenter(
 
         if (app.isLogined) {
             productData.createProductInBasket(
-                app.kakaoAccountId!!,
-                productId,
+                kakaoAccountId = app.kakaoAccountId!!,
+                productId = productId,
+                count = 1,
                 object : ProductSource.CreateProductInBasketCallback {
                     override fun onCreateProductInBasket(count: Int) {
-                        view.addBasketResultCallback(count)
+                        if(count in 1..20){
+                            view.addBasketResultCallback(count)
+                        }
                     }
                 }
             )

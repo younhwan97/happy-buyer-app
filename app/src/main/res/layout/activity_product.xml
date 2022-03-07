@@ -458,18 +458,14 @@
                 android:textColor="@android:color/holo_red_light" />
         </RelativeLayout>
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/bottomSheetBtn"
+            style="@style/Button.Secondary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:background="@drawable/bg_bottom_sheet_btn"
-            android:fontFamily="@font/notosans_kr_bold"
-            android:text="0원 장바구니 담기"
-            android:textColor="@color/fontColorWhite"
-            android:textStyle="bold" />
-
+            android:text="0원 장바구니 담기" />
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

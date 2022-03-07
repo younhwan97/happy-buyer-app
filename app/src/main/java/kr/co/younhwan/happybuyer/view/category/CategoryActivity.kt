@@ -26,14 +26,6 @@ class CategoryActivity : AppCompatActivity() {
         viewDataBinding = ActivityCategoryBinding.inflate(layoutInflater)
         setContentView(viewDataBinding.root)
 
-        // action -> tool bar
-        setSupportActionBar(viewDataBinding.categoryToolbar)
-        supportActionBar?.run {
-            setHomeButtonEnabled(true)
-            setDisplayHomeAsUpEnabled(true)
-            setDisplayShowTitleEnabled(false)
-        }
-
         // Main Activity 로 부터 전달 받은 데이터
         val label = intent.getStringArrayListExtra("label")
         val position = intent.getIntExtra("position", 0)
@@ -72,28 +64,25 @@ class CategoryActivity : AppCompatActivity() {
             })
             categoryTitle.text = selectTab?.text
         }
-    }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.category_menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-            }
-            R.id.searchIconInCategoryMenu -> {
-                val categoryIntent = Intent(this, SearchActivity::class.java)
-                startActivity(categoryIntent)
-            }
-            R.id.baksetIconInCategoryMenu-> {
-                val basketIntent = Intent(this, BasketActivity::class.java)
-                startActivity(basketIntent)
-            }
+        viewDataBinding.categoryToolbar.setNavigationOnClickListener {
+            finish()
         }
 
-        return super.onOptionsItemSelected(item)
+        viewDataBinding.categoryToolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.searchIconInCategoryMenu -> {
+                    val categoryIntent = Intent(this, SearchActivity::class.java)
+                    startActivity(categoryIntent)
+                    true
+                }
+                R.id.baksetIconInCategoryMenu-> {
+                    val basketIntent = Intent(this, BasketActivity::class.java)
+                    startActivity(basketIntent)
+                    true
+                }
+                else -> false
+            }
+        }
     }
 }

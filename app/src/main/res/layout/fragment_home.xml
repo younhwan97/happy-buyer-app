@@ -8,9 +8,7 @@
     android:elevation="5dp"
     android:orientation="vertical">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+
 
         <LinearLayout
             android:id="@+id/homeContentContainer"
@@ -52,7 +50,7 @@
                         android:layout_toRightOf="@id/homeSearchIcon"
                         android:fontFamily="@font/notosans_kr_regular"
                         android:gravity="center"
-                        android:text="찾는 상품이 뭐예요?"
+                        android:text="@string/search_hint"
                         android:textColor="@color/fontColorGray" />
                 </RelativeLayout>
 
@@ -183,5 +181,5 @@
             </RelativeLayout>
 
         </LinearLayout>
-    </ScrollView>
+
 </RelativeLayout>

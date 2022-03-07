@@ -138,11 +138,12 @@ class HomePresenter(
             view.createLoginActivity()
         } else {
             productData.createProductInBasket(
-                app.kakaoAccountId!!,
-                productId,
+                kakaoAccountId = app.kakaoAccountId!!,
+                productId = productId,
+                count = 1,
                 object : ProductSource.CreateProductInBasketCallback {
                     override fun onCreateProductInBasket(count: Int) {
-                        if (count in 1..10) {
+                        if (count in 1..20) {
 
                             // eventAdapterView.notifyItemByUsingPayload(position, "basket")
                             view.createProductInBasketResultCallback(count)

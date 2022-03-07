@@ -100,7 +100,12 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
             bottomSheetBtn.setOnClickListener {
                 val count = (bottomSheetProductCount.text).toString().toInt()
 
-
+                val app = application as GlobalApplication
+                productPresenter.createProductInBasket(
+                    app.kakaoAccountId,
+                    productItem!!.productId,
+                    count
+                )
             }
 
             // 상품 이미지
@@ -220,6 +225,36 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
             }
         }.apply {
             setAnchorView(R.id.productBottomNav)
+            show()
+        }
+    }
+
+    override fun createProductInBasketResultCallback(count: Int) {
+        when(count){
+            0 -> {
+                Snackbar.make(viewDataBinding.root, "알 수 없는 에러가 발생했습니다.", Snackbar.LENGTH_SHORT)
+            }
+
+            1 -> {
+                Snackbar.make(viewDataBinding.root, "장바구니에 상품을 담았습니다.", Snackbar.LENGTH_SHORT)
+            }
+
+            20 -> {
+                Snackbar.make(
+                    viewDataBinding.root,
+                    "같은 종류의 상품은 최대 20개까지 담을 수 있습니다.",
+                    Snackbar.LENGTH_SHORT
+                )
+            }
+
+            else -> {
+                Snackbar.make(
+                    viewDataBinding.root,
+                    "한 번 더 담으셨네요! \n담긴 수량이 ${count}개가 되었습니다.",
+                    Snackbar.LENGTH_SHORT
+                )
+            }
+        }.apply {
             show()
         }
     }

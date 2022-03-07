@@ -81,7 +81,6 @@ object UserRemoteDataSource : UserSource {
 }
 
 suspend fun create(kakaoAccountId: Long?, kakaoAccountNickname: String?): Boolean {
-
     // 클라이언트 생성
     val client = OkHttpClient()
 

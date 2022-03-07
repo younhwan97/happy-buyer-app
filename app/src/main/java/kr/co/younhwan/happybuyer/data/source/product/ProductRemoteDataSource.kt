@@ -1,7 +1,5 @@
 package kr.co.younhwan.happybuyer.data.source.product
 
-import android.util.Log
-import com.google.gson.JsonObject
 import kotlinx.coroutines.*
 import kr.co.younhwan.happybuyer.data.ProductItem
 import okhttp3.OkHttpClient
@@ -41,10 +39,9 @@ object ProductRemoteDataSource : ProductSource {
             }
 
             job.join()
-             readProductCallback?.onReadProduct(product)
+            readProductCallback?.onReadProduct(product)
         }
     }
-
 
     /***********************************************************************/
     /******************************* Event *******************************/
@@ -114,17 +111,18 @@ object ProductRemoteDataSource : ProductSource {
     override fun createProductInBasket(
         kakaoAccountId: Long,
         productId: Int,
+        count: Int,
         createProductInBasketCallback: ProductSource.CreateProductInBasketCallback?
     ) {
         runBlocking {
-            var count = 0
+            var resultCount = 0
 
             val job = GlobalScope.launch {
-                count = createInBasket(kakaoAccountId, productId)
+                resultCount = createInBasket(kakaoAccountId, productId, count)
             }
 
             job.join()
-            createProductInBasketCallback?.onCreateProductInBasket(count)
+            createProductInBasketCallback?.onCreateProductInBasket(resultCount)
         }
     }
 
@@ -293,6 +291,7 @@ suspend fun read(productId: Int, kakaoAccountId: Long): ProductItem?{
     return product
 }
 
+
 /***********************************************************************/
 /******************************* Event *******************************/
 
@@ -417,15 +416,15 @@ suspend fun readWished(kakaoAccountId: Long): ArrayList<Int> {
 /***********************************************************************/
 /******************************* Basket *******************************/
 
-suspend fun createInBasket(kakaoAccountId: Long, productId: Int): Int {
-    var count = 0
+suspend fun createInBasket(kakaoAccountId: Long, productId: Int, count: Int): Int {
+    var resultCount = 0
 
     // 클라이언트 생성
     val client = OkHttpClient()
 
     // 요청
     val site =
-        "http://happybuyer.co.kr/basket/api/app/create?pid=${productId}&uid=${kakaoAccountId}"
+        "http://192.168.0.11/basket/api/app/create?pid=${productId}&uid=${kakaoAccountId}&count=${count}"
     val request = Request.Builder().url(site).get().build()
 
     // 응답
@@ -437,11 +436,10 @@ suspend fun createInBasket(kakaoAccountId: Long, productId: Int): Int {
         val success = json.getBoolean("success")
 
         if (success)
-            count = json.getInt("count")
-
+            resultCount = json.getInt("result_count")
     }
 
-    return count
+    return resultCount
 }
 
 suspend fun readInBasket(kakaoAccountId: Long): ArrayList<ProductItem> {

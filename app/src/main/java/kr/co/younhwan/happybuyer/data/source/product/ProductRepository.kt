@@ -37,8 +37,6 @@ object ProductRepository : ProductSource{
         })
     }
 
-
-
     override fun readEventProducts(readEventProductsCallback: ProductSource.ReadEventProductsCallback?) {
         productRemoteDataSource.readEventProducts(object : ProductSource.ReadEventProductsCallback{
             override fun onReadEventProduct(list: ArrayList<ProductItem>) {
@@ -55,14 +53,11 @@ object ProductRepository : ProductSource{
         })
     }
 
-
-
-
     /***********************************************************************/
     /******************************* Basket *******************************/
 
-    override fun createProductInBasket(kakaoAccountId: Long, productId: Int, createProductInBasketCallback: ProductSource.CreateProductInBasketCallback?) {
-        productRemoteDataSource.createProductInBasket(kakaoAccountId, productId, object : ProductSource.CreateProductInBasketCallback{
+    override fun createProductInBasket(kakaoAccountId: Long, productId: Int, count:Int, createProductInBasketCallback: ProductSource.CreateProductInBasketCallback?) {
+        productRemoteDataSource.createProductInBasket(kakaoAccountId, productId, count, object : ProductSource.CreateProductInBasketCallback{
             override fun onCreateProductInBasket(count: Int) {
                 createProductInBasketCallback?.onCreateProductInBasket(count)
             }

@@ -75,28 +75,16 @@ class CategoryPresenter(
 
         if (app.isLogined) {
             productData.createProductInBasket(
-                app.kakaoAccountId,
-                productId,
+                kakaoAccountId = app.kakaoAccountId,
+                productId = productId,
+                count = 1,
                 object : ProductSource.CreateProductInBasketCallback {
                     override fun onCreateProductInBasket(count: Int) {
 
-//                        if (app.activatedBasket !== "activate") {
-//                            userData.updateUser(
-//                                app.kakaoAccountId!!,
-//                                "basket",
-//                                "activate",
-//                                object : UserSource.UpdateUserCallback {
-//                                    override fun onUpdateUser(isSuccess: Boolean) {
-//                                        if(isSuccess) app.activatedBasket = "activate"
-//                                    }
-//                                }
-//                            )
-//                        }
-//
-//                        app.basketItemCount += 1
-//                        view.getAct().setupBadge(view.getAct().textCartItemCount)
+                        if(count in 1..20){
+                            view.createProductInBasketResultCallback(count)
+                        }
 
-                        view.createProductInBasketResultCallback(count)
                     }
                 })
         } else {

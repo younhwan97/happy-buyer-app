@@ -24,7 +24,6 @@ interface ProductSource {
         readProductCallback: ReadProductCallback?
     )
 
-
     /***********************************************************************/
     /******************************* Event *******************************/
     interface ReadEventProductsCallback {
@@ -72,6 +71,7 @@ interface ProductSource {
     fun createProductInBasket(
         kakaoAccountId: Long,
         productId: Int,
+        count: Int,
         createProductInBasketCallback: CreateProductInBasketCallback?
     )
 

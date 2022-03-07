@@ -92,10 +92,10 @@ class WishedFragment : Fragment(), WishedContract.View {
                 Snackbar.make(viewDataBinding.root, "장바구니에 상품을 담았습니다.", Snackbar.LENGTH_SHORT)
             }
 
-            10 -> {
+            20 -> {
                 Snackbar.make(
                     viewDataBinding.root,
-                    "같은 종류의 상품은 최대 10개까지 담을 수 있습니다.",
+                    "같은 종류의 상품은 최대 20개까지 담을 수 있습니다.",
                     Snackbar.LENGTH_SHORT
                 )
             }
@@ -108,7 +108,7 @@ class WishedFragment : Fragment(), WishedContract.View {
                 )
             }
         }.apply {
-            setAnchorView(R.id.mainBottomNavDivision)
+            setAnchorView(R.id.mainBottomNavigation)
             show()
         }
     }

@@ -1,23 +1,70 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Basic Theme -->
-    <style name="Theme.HappyBuyer" parent="Theme.AppCompat.DayNight.DarkActionBar">
+    <style name="Theme.HappyBuyer" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/hbPrimaryColor</item>
-        <item name="colorPrimaryVariant">@color/hbPrimaryDarkColor</item>
-        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorPrimaryDark">@color/hbPrimaryDarkColor</item>
+        <item name="colorOnPrimary">@color/fontColorBlack</item>
 
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/hbSecondaryColor</item>
         <item name="colorSecondaryVariant">@color/hbSecondaryDarkColor</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorOnSecondary">@color/fontColorWhite</item>
 
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/hbPrimaryColor</item>
+        <item name="android:windowBackground">@color/bgColorWhite</item>
+    </style>
 
-        <!-- Customize your theme here. -->
-        <!-- Delete action bar -->
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+    <style name="HappyBuyer.LightTextButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/fontColorGray</item>
+        <item name="android:fontFamily">@font/notosans_kr_regular</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextView">
+        <item name="android:fontFamily">@font/notosans_kr_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/fontColorBlack</item>
+    </style>
+
+    <style name="TextView.Bold">
+        <item name="android:fontFamily">@font/notosans_kr_bold</item>
+    </style>
+
+
+
+
+
+
+    <style name="SearchView">
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:background">@drawable/bg_search_view</item>
+        <item name="android:queryBackground">@color/bgColorGray</item>
+        <item name="android:queryHint">@string/search_hint_in_search</item>
+    </style>
+
+
+
+
+
+
+
+
+
+    <style name="Button">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/fontColorWhite</item>
+    </style>
+
+    <style name="Button.Primary">
+
+    </style>
+
+    <style name="Button.Secondary">
+        <item name="android:background">@drawable/bg_bottom_sheet_btn</item>
+        <item name="android:fontFamily">@font/notosans_kr_bold</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="ProductPriceTheme" parent="Widget.MaterialComponents.TextView">

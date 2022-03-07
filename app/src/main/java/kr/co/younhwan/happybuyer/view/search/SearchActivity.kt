@@ -2,68 +2,104 @@ package kr.co.younhwan.happybuyer.view.search
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import kr.co.younhwan.happybuyer.R
+import android.util.Log
+import android.view.View
+import android.widget.SearchView
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import kr.co.younhwan.happybuyer.data.source.search.SearchRepository
 import kr.co.younhwan.happybuyer.databinding.ActivitySearchBinding
+import kr.co.younhwan.happybuyer.view.search.adapter.recent.RecentAdapter
+import kr.co.younhwan.happybuyer.view.search.adapter.suggested.SuggestedAdapter
 
-class SearchActivity : AppCompatActivity() {
-    lateinit var searchActivityBinding: ActivitySearchBinding
+class SearchActivity : AppCompatActivity(), SearchContract.View {
+    lateinit var viewDataBinding: ActivitySearchBinding
+
+    private val recentAdapter : RecentAdapter by lazy {
+        RecentAdapter()
+    }
+
+    private val suggestedAdapter: SuggestedAdapter by lazy {
+        SuggestedAdapter()
+    }
+
+    private val searchPresenter : SearchPresenter by lazy {
+        SearchPresenter(
+            view = this,
+            searchData = SearchRepository,
+            recentAdapterView = recentAdapter,
+            recentAdapterModel = recentAdapter,
+            suggestedAdapterView = suggestedAdapter,
+            suggestedAdapterModel = suggestedAdapter
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // View Binding 객체 생성
-        searchActivityBinding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(searchActivityBinding.root)
+        viewDataBinding = ActivitySearchBinding.inflate(layoutInflater)
+        setContentView(viewDataBinding.root)
 
-        // 액션바 -> 툴바
-        searchActivityBinding.searchToolbar.title = ""
-        setSupportActionBar(searchActivityBinding.searchToolbar)
+        searchPresenter.loadRecentSearch()  // 최근 검색어를 불러온다.
+        searchPresenter.loadSearchHistory() // 검색어 추천을 위해 검색 기록을 불러온다.
 
-    }
-
-    // -----------------------------------------------------
-    // ---- 툴바 설정
-    // 툴바의 메뉴 아이템을 생성하고, 이벤트 리스너를 장착한다.
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        // 메뉴 객체 생성
-        menuInflater.inflate(R.menu.search_menu, menu)
-
-        // 메뉴의 search view 에 이벤트 리스너 설정을 위해 객체를 얻어온다.
-        val searchItem = menu?.findItem(R.id.searchIconInSearchMenu)
-        val searchView = searchItem?.actionView as androidx.appcompat.widget.SearchView
-
-        // setting search view
-        searchView.queryHint = "검색어를 입력하세요."
-        searchItem.expandActionView()
-
-        // searchView 가 펼쳐졌을 때 발생하는 이벤트를 처리하는 리스너
-        val expandListener = object : MenuItem.OnActionExpandListener {
-            override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
+        viewDataBinding.run {
+            /* Toolbar */
+            searchToolbar.setNavigationOnClickListener {
                 finish()
-                return true
             }
 
-            override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
-                return true
+            searchViewInSearchToolbar.run {
+                isIconified = false // focus
+                isIconifiedByDefault = false
+                setOnQueryTextListener(queryTextListener)
+            }
+
+            /* Recent Search */
+            recentSearchContainer.visibility = View.VISIBLE
+
+            allRecentSearchDeleteBtn.setOnClickListener {
+                searchPresenter.deleteAllRecentSearch()
+            }
+
+            recentSearchRecycler.run {
+                adapter = recentAdapter
+                layoutManager = GridLayoutManager(context, 2)
+                addItemDecoration(recentAdapter.RecyclerDecoration())
+            }
+
+            /* Suggested Search */
+            suggestedSearchContainer.visibility = View.GONE
+
+            suggestedSearchRecycler.run {
+                adapter = suggestedAdapter
+                layoutManager = LinearLayoutManager(context)
             }
         }
-
-        // searchView 에 text 가 입력 됐을 때 발생하는 이벤트를 처리하는 리스너
-        val inputListener = object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return true
-            }
-
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return true
-            }
-        }
-
-        searchItem.setOnActionExpandListener(expandListener)
-        searchView.setOnQueryTextListener(inputListener)
-        return true
     }
-    // 툴바 설정 ----
-    // -----------------------------------------------------
+
+    override fun getAct() = this
+
+    private val queryTextListener = object : SearchView.OnQueryTextListener{
+        override fun onQueryTextSubmit(query: String?): Boolean {
+
+            if(!query.isNullOrEmpty()){
+                searchPresenter.createRecentSearch(query) // 최근 검색어에 저장한다.
+            }
+
+            return false
+        }
+
+        override fun onQueryTextChange(newText: String?): Boolean {
+            if(newText.isNullOrEmpty()){
+                viewDataBinding.recentSearchContainer.visibility = View.VISIBLE
+                viewDataBinding.suggestedSearchContainer.visibility = View.GONE
+            }else{
+                viewDataBinding.recentSearchContainer.visibility = View.GONE
+                viewDataBinding.suggestedSearchContainer.visibility = View.VISIBLE
+            }
+
+            suggestedAdapter.filter.filter(newText)
+            return false
+        }
+    }
 }

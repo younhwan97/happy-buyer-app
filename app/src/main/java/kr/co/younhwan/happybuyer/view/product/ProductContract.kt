@@ -11,11 +11,15 @@ interface ProductContract {
         fun createLoginActivity()
 
         fun createProductInWishedResultCallback(productId: Int, perform: String?)
+
+        fun createProductInBasketResultCallback(count:Int)
     }
 
     interface Model {
 
         fun clickWishedBtn(productId: Int)
+
+        fun createProductInBasket(kakaoAccountId:Long, productId: Int, count:Int)
 
     }
 }

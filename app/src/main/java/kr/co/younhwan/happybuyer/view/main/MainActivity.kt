@@ -44,12 +44,6 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         viewDataBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewDataBinding.root)
 
-        // action bar -> toolbar
-        setSupportActionBar(viewDataBinding.mainToolbar)
-        supportActionBar?.run {
-            setDisplayShowTitleEnabled(false)
-        }
-
         // presenter
         mainPresenter.requestPermission() // 권한 요청
 
@@ -60,18 +54,18 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         viewDataBinding.mainBottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.homeIconInBottomNav -> {
-                    viewDataBinding.mainTitle.text = "코코마트"
+                    //viewDataBinding.mainTitle.text = "코코마트"
                     replace(R.id.mainContentContainer, homeFragment)
                     true
                 }
                 R.id.wishedIconInBottomNav -> {
-                    viewDataBinding.mainTitle.text = "찜"
+                   // viewDataBinding.mainTitle.text = "찜"
                     replace(R.id.mainContentContainer, wishedFragment)
                     true
                 }
                 R.id.accountIconInBottomNav -> {
                     if ((application as GlobalApplication).isLogined) { // 로그인 상태
-                        viewDataBinding.mainTitle.text = "계정"
+                      //  viewDataBinding.mainTitle.text = "계정"
                         replace(R.id.mainContentContainer, accountFragment)
                     } else { // 비로그인 상태
                         val loginIntent = Intent(this, LoginActivity::class.java)
@@ -81,25 +75,20 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                 }
                 else -> false
             }
+
         }
-    }
 
-    /* create menu */
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu) // 메뉴 객체 생성 및 부착
-        return true
-    }
+        viewDataBinding.topAppBar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.basketInMain -> {
+                    val basketIntent = Intent(this, BasketActivity::class.java)
+                    startActivity(basketIntent)
+                    true
+                }
 
-    /* set menu event listener */
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.basketIconInMainMenu -> {
-                val basketIntent = Intent(this, BasketActivity::class.java)
-                startActivity(basketIntent)
+                else -> false
             }
         }
-
-        return super.onOptionsItemSelected(item)
     }
 
     override fun getAct() = this
