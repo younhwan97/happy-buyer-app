@@ -1,7 +1,11 @@
 package kr.co.younhwan.happybuyer.view.search
 
 import kr.co.younhwan.happybuyer.GlobalApplication
+import kr.co.younhwan.happybuyer.adapter.product.contract.ProductAdapterContract
+import kr.co.younhwan.happybuyer.data.ProductItem
 import kr.co.younhwan.happybuyer.data.SearchItem
+import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
+import kr.co.younhwan.happybuyer.data.source.product.ProductSource
 import kr.co.younhwan.happybuyer.data.source.search.SearchRepository
 import kr.co.younhwan.happybuyer.data.source.search.SearchSource
 import kr.co.younhwan.happybuyer.view.search.adapter.recent.contract.RecentAdapterContract
@@ -10,15 +14,26 @@ import kr.co.younhwan.happybuyer.view.search.adapter.suggested.contract.Suggeste
 class SearchPresenter(
     private val view: SearchContract.View,
     private val searchData: SearchRepository,
+    private val productData: ProductRepository,
     private val recentAdapterView: RecentAdapterContract.View,
     private val recentAdapterModel: RecentAdapterContract.Model,
     private val suggestedAdapterView: SuggestedAdapterContract.View,
-    private val suggestedAdapterModel: SuggestedAdapterContract.Model
+    private val suggestedAdapterModel: SuggestedAdapterContract.Model,
+    private val resultAdapterView: ProductAdapterContract.View,
+    private val resultAdapterModel: ProductAdapterContract.Model
 ) : SearchContract.Model {
 
     init {
         recentAdapterView.onClickFuncOfDeleteBtn = { keyword: String, i: Int ->
             onClickListenerOfDeleteBtn(keyword, i)
+        }
+
+        recentAdapterView.onClickFuncOfRecentSearch = {
+            onClickListenerOfKeyword(it)
+        }
+
+        suggestedAdapterView.onClickFuncOfSuggestedSearch = {
+            onClickListenerOfKeyword(it)
         }
     }
 
@@ -103,6 +118,8 @@ class SearchPresenter(
         }
     }
 
+    fun onClickListenerOfKeyword(keyword: String) = view.createResultActivity(keyword)
+
     override fun loadSearchHistory() {
         searchData.readSearchHistory(
             readSearchHistoryCallback = object : SearchSource.ReadSearchHistoryCallback {
@@ -113,5 +130,26 @@ class SearchPresenter(
                 }
             }
         )
+    }
+
+    override fun loadResultSearch(keyword: String?) {
+        if (!keyword.isNullOrBlank()) {
+            productData.readProducts(
+                selectedCategory = "total",
+                sort = "basic",
+                keyword = keyword,
+                object : ProductSource.ReadProductsCallback {
+                    override fun onReadProducts(list: ArrayList<ProductItem>) {
+                        resultAdapterModel.addItems(list)
+                        resultAdapterView.notifyAdapter()
+                    }
+                }
+            )
+        } else {
+            val list = ArrayList<ProductItem>()
+
+            resultAdapterModel.addItems(list)
+            resultAdapterView.notifyAdapter()
+        }
     }
 }

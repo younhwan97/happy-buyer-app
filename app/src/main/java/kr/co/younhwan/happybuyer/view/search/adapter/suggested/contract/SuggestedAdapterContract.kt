@@ -2,6 +2,9 @@ package kr.co.younhwan.happybuyer.view.search.adapter.suggested.contract
 
 interface SuggestedAdapterContract {
     interface View {
+
+        var onClickFuncOfSuggestedSearch : ((String) -> Unit)?
+
         fun notifyAdapter()
     }
 

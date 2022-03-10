@@ -12,13 +12,14 @@ object ProductRemoteDataSource : ProductSource {
     override fun readProducts(
         selectedCategory: String,
         sort: String,
+        keyword:String?,
         readProductsCallback: ProductSource.ReadProductsCallback?
     ) {
         runBlocking {
             val list = ArrayList<ProductItem>()
 
             val job = GlobalScope.launch {
-                list.addAll(reads(selectedCategory, sort))
+                list.addAll(reads(selectedCategory, sort, keyword))
             }
 
             job.join()
@@ -182,7 +183,7 @@ object ProductRemoteDataSource : ProductSource {
     /***********************************************************************/
 }
 
-suspend fun reads(selectedCategory: String, sort: String): ArrayList<ProductItem> {
+suspend fun reads(selectedCategory: String, sort: String, keyword: String?): ArrayList<ProductItem> {
     val list = ArrayList<ProductItem>()
 
     // 클라이언트 생성
@@ -190,7 +191,7 @@ suspend fun reads(selectedCategory: String, sort: String): ArrayList<ProductItem
 
     // 요청
     val site =
-        "http://happybuyer.co.kr/products/api/app/reads?category=${selectedCategory}&sort=${sort}"
+        "http://192.168.0.11/products/api/app/reads?category=${selectedCategory}&sort=${sort}&keyword=${keyword}"
     val request = Request.Builder().url(site).get().build()
 
     // 응답

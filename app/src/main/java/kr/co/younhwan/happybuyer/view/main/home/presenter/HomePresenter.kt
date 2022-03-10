@@ -105,6 +105,7 @@ class HomePresenter(
         productData.readProducts(
             "total",
             "popular",
+            keyword = null,
             object : ProductSource.ReadProductsCallback {
                 override fun onReadProducts(list: ArrayList<ProductItem>) {
                     if (isClear)

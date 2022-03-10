@@ -11,6 +11,7 @@ interface ProductSource {
     fun readProducts(
         selectedCategory: String,
         sort: String,
+        keyword: String?,
         readProductsCallback: ReadProductsCallback?
     )
 

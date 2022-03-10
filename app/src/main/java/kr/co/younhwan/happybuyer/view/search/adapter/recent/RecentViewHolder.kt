@@ -8,7 +8,8 @@ import kr.co.younhwan.happybuyer.databinding.RecyclerRecentSearchItemBinding
 class RecentViewHolder (
     parent: ViewGroup,
     recentItemBinding: RecyclerRecentSearchItemBinding,
-    private val listenerFuncOfDeleteBtn: ((String, Int) -> Unit)?
+    private val listenerFuncOfDeleteBtn: ((String, Int) -> Unit)?,
+    private val listenerFuncOfRecentSearch: ((String) -> Unit)?
 ) : RecyclerView.ViewHolder(recentItemBinding.root) {
 
     private val keyword by lazy {
@@ -21,6 +22,9 @@ class RecentViewHolder (
 
     fun onBind(item: SearchItem) {
         keyword.text = item.keyword
+        keyword.setOnClickListener {
+            listenerFuncOfRecentSearch?.invoke(item.keyword)
+        }
 
         deleteBtn.isClickable = true
         deleteBtn.setOnClickListener {

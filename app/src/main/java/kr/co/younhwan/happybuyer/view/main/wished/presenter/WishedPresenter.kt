@@ -32,6 +32,7 @@ class WishedPresenter(
             productData.readProducts(
                 "total",
                 sort = "basic",
+                keyword = null,
                 object : ProductSource.ReadProductsCallback {
                     override fun onReadProducts(list: ArrayList<ProductItem>) {
                         if (isClear) {

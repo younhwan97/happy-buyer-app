@@ -14,11 +14,8 @@ object ProductRepository : ProductSource{
         })
     }
 
-
-
-
-    override fun readProducts(selectedCategory:String, sort:String, readProductsCallback: ProductSource.ReadProductsCallback?) {
-        productRemoteDataSource.readProducts(selectedCategory, sort, object : ProductSource.ReadProductsCallback {
+    override fun readProducts(selectedCategory:String, sort:String, keyword:String?, readProductsCallback: ProductSource.ReadProductsCallback?) {
+        productRemoteDataSource.readProducts(selectedCategory, sort, keyword, object : ProductSource.ReadProductsCallback {
             override fun onReadProducts(list: ArrayList<ProductItem>) {
                 readProductsCallback?.onReadProducts(list)
             }

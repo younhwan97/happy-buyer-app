@@ -15,6 +15,8 @@ class RecentAdapter : RecyclerView.Adapter<RecentViewHolder>(), RecentAdapterCon
 
     override var onClickFuncOfDeleteBtn: ((String, Int) -> Unit)? = null
 
+    override var onClickFuncOfRecentSearch: ((String) -> Unit)? = null
+
     override fun getItemCount() = recentSearchItem.size
 
     override fun clearItem() = recentSearchItem.clear()
@@ -44,7 +46,8 @@ class RecentAdapter : RecyclerView.Adapter<RecentViewHolder>(), RecentAdapterCon
         return RecentViewHolder(
             parent,
             recentSearchItemBinding,
-            onClickFuncOfDeleteBtn
+            onClickFuncOfDeleteBtn,
+            onClickFuncOfRecentSearch
         )
     }
 

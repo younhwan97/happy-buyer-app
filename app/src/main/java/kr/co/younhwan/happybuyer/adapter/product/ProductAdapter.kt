@@ -82,7 +82,7 @@ class ProductAdapter(private val usingBy: String?) :
                 }
 
                 outRect.bottom = outsideSpaceByPx
-            } else if(usingBy == "category"){
+            } else if(usingBy == "category" || usingBy == "search"){
                 val insideSpaceByPx = (4 * density).toInt()
 
                 if(itemPosition % 2 != 0){

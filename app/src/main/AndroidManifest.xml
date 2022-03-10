@@ -17,6 +17,9 @@
         android:theme="@style/Theme.HappyBuyer"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".view.result.ResultActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.product.ProductActivity"
             android:exported="false" />
         <activity
@@ -28,7 +31,9 @@
             android:exported="false" />
         <activity
             android:name=".view.search.SearchActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleInstance"
+            />
         <activity
             android:name=".view.login.LoginActivity"
             android:exported="true" />
@@ -44,11 +49,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".view.main.MainActivity"
             android:theme="@style/Theme.HappyBuyer" />
-
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">

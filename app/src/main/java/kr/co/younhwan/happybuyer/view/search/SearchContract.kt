@@ -4,16 +4,21 @@ interface SearchContract{
     interface View{
 
         fun getAct() : SearchActivity
+
+        fun createResultActivity(keyword: String)
     }
 
     interface Model{
 
-        fun loadRecentSearch()
+        fun createRecentSearch(keyword:String)
 
-        fun loadSearchHistory()
+        fun loadRecentSearch()
 
         fun deleteAllRecentSearch()
 
-        fun createRecentSearch(keyword:String)
+        fun loadSearchHistory()
+
+        fun loadResultSearch(keyword: String?)
+
     }
 }

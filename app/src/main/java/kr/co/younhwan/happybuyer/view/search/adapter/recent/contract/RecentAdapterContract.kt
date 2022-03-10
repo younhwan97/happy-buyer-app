@@ -7,6 +7,8 @@ interface RecentAdapterContract {
 
         var onClickFuncOfDeleteBtn: ((String, Int) -> Unit)?
 
+        var onClickFuncOfRecentSearch: ((String) -> Unit)?
+
         fun notifyAdapter()
 
         fun notifyRemoved(position: Int)
