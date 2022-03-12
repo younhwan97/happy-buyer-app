@@ -48,7 +48,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -97,10 +97,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <RelativeLayout
-                        android:id="@+id/resultSearchTopContainer"
+                        android:id="@+id/searchResultTopContainer"
                         android:layout_width="match_parent"
                         android:layout_height="50dp">
 
@@ -151,7 +151,7 @@
                         android:layout_height="match_parent">
 
                         <TextView
-                            android:id="@+id/resultSearchEmptyText"
+                            android:id="@+id/searchResultEmptyText"
                             style="@style/TextView.Light"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
