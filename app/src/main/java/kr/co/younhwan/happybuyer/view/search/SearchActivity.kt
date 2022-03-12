@@ -68,12 +68,13 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
         viewDataBinding.searchResultContainer.visibility = View.GONE
 
         if (!keyword.isNullOrEmpty()) { // 검색어가 존재할 때
-            viewDataBinding.searchResultContainer.visibility = View.VISIBLE // 검색 결과 컨테이너를 보여준다.
             viewDataBinding.searchViewInSearchToolbar.isIconified = true
             viewDataBinding.searchViewInSearchToolbar.setQuery(keyword, false)
+            viewDataBinding.searchResultContainer.visibility = View.VISIBLE // 검색 결과 컨테이너를 보여준다.
+
         } else { // 검색어가 존재하지 않을 때
-            viewDataBinding.recentSearchContainer.visibility = View.VISIBLE // 최근 검색 컨테이너를 보여준다.
             viewDataBinding.searchViewInSearchToolbar.isIconified = false
+            viewDataBinding.recentSearchContainer.visibility = View.VISIBLE // 최근 검색 컨테이너를 보여준다.
         }
 
         // 툴바
@@ -135,34 +136,37 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
         viewDataBinding.searchResultRecycler.adapter = resultAdapter
         viewDataBinding.searchResultRecycler.layoutManager = GridLayoutManager(this, 2)
         viewDataBinding.searchResultRecycler.addItemDecoration(resultAdapter.RecyclerDecoration())
+        viewDataBinding.searchResultSortingSpinner.selectItemByIndex(0) // 기본값 = 추천순
+        viewDataBinding.searchResultSortingSpinner.lifecycleOwner = this // 메모리 누수 방지
 
         viewDataBinding.searchResultSortingSpinner.setOnSpinnerItemSelectedListener<String> { _, oldItem, _, newItem ->
-            if (oldItem != newItem && (!oldItem.isNullOrEmpty() || (oldItem.isNullOrEmpty() && newItem != "추천순"))) {
-                viewDataBinding.searchResultLoadingView.visibility = View.VISIBLE
-                viewDataBinding.searchResultRecycler.visibility = View.GONE
-                viewDataBinding.searchResultLoadingImage.playAnimation()
+            if (oldItem != newItem) { // && (!oldItem.isNullOrEmpty() || (oldItem.isNullOrEmpty() && newItem != "추천순"))
                 searchPresenter.sortSearchResult(newItem)
+                viewDataBinding.searchResultLoadingView.visibility = View.VISIBLE
+                viewDataBinding.searchResultLoadingImage.playAnimation()
+                viewDataBinding.searchResultRecycler.visibility = View.GONE
             }
         }
     }
 
     override fun loadSearchResultCallback(size: Int) {
-        if (size == 0) { // 검색 결과가 없을 때
+        // 검색 결과 개수에 따라 다른 뷰를 보여준다.
+        if (size == 0) { // 검색 결과가 없을 때 -> empty view
             viewDataBinding.searchResultEmptyView.visibility = View.VISIBLE
+            viewDataBinding.searchResultTopContainer.visibility = View.GONE
             viewDataBinding.searchResultRecycler.visibility = View.GONE
-            viewDataBinding.searchResultCountText.visibility = View.GONE
-            viewDataBinding.searchResultSortingSpinner.visibility = View.GONE
-        } else { // 검색 결과가 있을 때
+        } else { // 검색 결과가 있을 때 -> recycler view
             viewDataBinding.searchResultEmptyView.visibility = View.GONE
             viewDataBinding.searchResultCountText.text = "총 ".plus(size.toString()).plus("개")
         }
     }
 
     override fun sortSearchResultCallback() {
-        Handler(Looper.getMainLooper()).postDelayed(Runnable {
+        // 로딩 뷰를 숨기고 정렬된 검색 결과 뷰를 보인다.
+        Handler(Looper.getMainLooper()).postDelayed({
             viewDataBinding.searchResultLoadingView.visibility = View.GONE
             viewDataBinding.searchResultRecycler.visibility = View.VISIBLE
-            viewDataBinding.searchResultLoadingImage.pauseAnimation()
+            viewDataBinding.searchResultLoadingImage.pauseAnimation() // 메모리 낭비를 막기위해 퍼즈
         }, 500)
     }
 
@@ -171,7 +175,7 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
     override fun createResultActivity(keyword: String) {
         val resultIntent = Intent(this, SearchActivity::class.java)
         resultIntent.putExtra("keyword", keyword)
-        finish() // 현재 엑티비티를 종료해 줘야 한다.
+        finish() // 현재 엑티비티를 종료!
         startActivity(resultIntent)
     }
 
@@ -181,8 +185,5 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
         startActivity(productIntent)
     }
 
-    override fun createBasketActivity() {
-        val basketIntent = Intent(this, BasketActivity::class.java)
-        startActivity(basketIntent)
-    }
+    override fun createBasketActivity() = startActivity(Intent(this, BasketActivity::class.java))
 }
