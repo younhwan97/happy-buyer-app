@@ -56,115 +56,114 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
         viewDataBinding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(viewDataBinding.root)
 
-        val keyword = intent.getStringExtra("keyword")
+        val keyword = intent.getStringExtra("keyword") // 검색어
 
         searchPresenter.loadRecentSearch() // 최근 검색어를 불러온다.
         searchPresenter.loadSearchHistory() // 검색어 추천을 위해 (인기) 검색 기록을 불러온다.
         searchPresenter.loadResultSearch(keyword) // 검색 결과를 불러온다.
 
-        viewDataBinding.run {
-            /* Toolbar */
-            searchToolbar.setNavigationOnClickListener {
-                finish()
-            }
+        // 컨테이너
+        viewDataBinding.recentSearchContainer.visibility = View.GONE
+        viewDataBinding.suggestedSearchContainer.visibility = View.GONE
+        viewDataBinding.searchResultContainer.visibility = View.GONE
 
-            searchToolbar.setOnMenuItemClickListener {
-                when (it.itemId) {
-                    R.id.basketInSearchMenu -> {
-                        createBasketActivity()
-                        true
-                    }
-                    else -> false
-                }
-            }
-
-            searchViewInSearchToolbar.run {
-                isIconifiedByDefault = false
-                suggestedSearchContainer.visibility = View.GONE
-
-                if (keyword.isNullOrBlank()) {
-                    isIconified = false // focusing (= show keypad)
-
-                    recentSearchContainer.visibility = View.VISIBLE
-                    resultSearchContainer.visibility = View.GONE
-                } else {
-                    isIconified = true // not focusing (= hide keypad)
-                    setQuery(keyword, false)
-
-                    recentSearchContainer.visibility = View.GONE
-                    resultSearchContainer.visibility = View.VISIBLE
-                }
-
-                setOnQueryTextListener(
-                    object : SearchView.OnQueryTextListener {
-                        override fun onQueryTextSubmit(query: String?): Boolean {
-                            if (!query.isNullOrEmpty()) {
-                                searchPresenter.onClickListenerOfKeyword(query)
-                                searchPresenter.createRecentSearch(query) // 최근 검색어에 저장한다.
-                            }
-                            return false
-                        }
-
-                        override fun onQueryTextChange(newText: String?): Boolean {
-                            if (newText.isNullOrEmpty()) { // 입력된 단어가 없다면 최근 검색어 화면을 보여준다.
-                                recentSearchContainer.visibility = View.VISIBLE
-                                suggestedSearchContainer.visibility = View.GONE
-                            } else { // 추천 검색어 화면을 보여준다.
-                                recentSearchContainer.visibility = View.GONE
-                                suggestedSearchContainer.visibility = View.VISIBLE
-                            }
-                            resultSearchContainer.visibility = View.GONE
-
-                            suggestedAdapter.filter.filter(newText) // 필터링
-                            return false
-                        }
-                    })
-            }
-
-            /* Recent Search */
-            recentSearchRecycler.run {
-                adapter = recentAdapter
-                layoutManager = GridLayoutManager(context, 2)
-                addItemDecoration(recentAdapter.RecyclerDecoration())
-            }
-
-            allRecentSearchDeleteBtn.setOnClickListener {
-                searchPresenter.deleteAllRecentSearch()
-            }
-
-            /* Suggested Search */
-            suggestedSearchRecycler.run {
-                adapter = suggestedAdapter
-                layoutManager = LinearLayoutManager(context)
-            }
-
-            /* Result Search */
-            resultSearchRecycler.run {
-                adapter = resultAdapter
-                layoutManager = GridLayoutManager(context, 2)
-                addItemDecoration(resultAdapter.RecyclerDecoration())
-            }
-
-            resultSortSpinner.setOnSpinnerItemSelectedListener<String> { oldIndex, oldItem, newIndex, newItem ->
-                if(oldItem.isNullOrBlank()){
-                    if(newItem != "추천순"){
-                        resultSearchLoadingView.visibility = View.VISIBLE
-                        resultSearchRecycler.visibility = View.GONE
-                        loadingImage.playAnimation()
-                        searchPresenter.sortResultSearch(newItem)
-                    }
-                } else{
-                    if(oldItem != newItem){
-                        resultSearchLoadingView.visibility = View.VISIBLE
-                        resultSearchRecycler.visibility = View.GONE
-                        loadingImage.playAnimation()
-                        searchPresenter.sortResultSearch(newItem)
-                    }
-                }
-            }
-
-            resultSearchLoadingView.visibility = View.GONE
+        if (!keyword.isNullOrEmpty()) { // 검색어가 존재할 때
+            viewDataBinding.searchResultContainer.visibility = View.VISIBLE // 검색 결과 컨테이너를 보여준다.
+            viewDataBinding.searchViewInSearchToolbar.isIconified = true
+            viewDataBinding.searchViewInSearchToolbar.setQuery(keyword, false)
+        } else { // 검색어가 존재하지 않을 때
+            viewDataBinding.recentSearchContainer.visibility = View.VISIBLE // 최근 검색 컨테이너를 보여준다.
+            viewDataBinding.searchViewInSearchToolbar.isIconified = false
         }
+
+        // 툴바
+        viewDataBinding.searchViewInSearchToolbar.isIconifiedByDefault = false
+
+        viewDataBinding.searchToolbar.setNavigationOnClickListener {
+            finish()
+        }
+
+        viewDataBinding.searchToolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.basketInSearchMenu -> {
+                    createBasketActivity()
+                    true
+                }
+                else -> false
+            }
+        }
+
+        viewDataBinding.searchViewInSearchToolbar.setOnQueryTextListener(
+            object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    if (!query.isNullOrEmpty()) {
+                        searchPresenter.onClickListenerOfKeyword(query)
+                        searchPresenter.createRecentSearch(query) // 최근 검색어에 저장한다.
+                    }
+                    return false
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    suggestedAdapter.filter.filter(newText) // 필터링
+                    viewDataBinding.searchResultContainer.visibility = View.GONE
+                    if (newText.isNullOrEmpty()) { // 검색어가 존재하지 않을 때
+                        viewDataBinding.recentSearchContainer.visibility = View.VISIBLE
+                        viewDataBinding.suggestedSearchContainer.visibility = View.GONE
+                    } else { // 검색어가 존재할 때
+                        viewDataBinding.recentSearchContainer.visibility = View.GONE
+                        viewDataBinding.suggestedSearchContainer.visibility = View.VISIBLE
+                    }
+                    return false
+                }
+            }
+        )
+
+        // 최근 검색
+        viewDataBinding.recentSearchRecycler.adapter = recentAdapter
+        viewDataBinding.recentSearchRecycler.layoutManager = GridLayoutManager(this, 2)
+        viewDataBinding.recentSearchRecycler.addItemDecoration(recentAdapter.RecyclerDecoration())
+
+        viewDataBinding.recentSearchDeleteAllBtn.setOnClickListener {
+            searchPresenter.deleteAllRecentSearch()
+        }
+
+        // 추천 검색
+        viewDataBinding.suggestedSearchRecycler.adapter = suggestedAdapter
+        viewDataBinding.suggestedSearchRecycler.layoutManager = LinearLayoutManager(this)
+
+        // 검색 결과
+        viewDataBinding.searchResultRecycler.adapter = resultAdapter
+        viewDataBinding.searchResultRecycler.layoutManager = GridLayoutManager(this, 2)
+        viewDataBinding.searchResultRecycler.addItemDecoration(resultAdapter.RecyclerDecoration())
+
+        viewDataBinding.searchResultSortingSpinner.setOnSpinnerItemSelectedListener<String> { _, oldItem, _, newItem ->
+            if (oldItem != newItem && (!oldItem.isNullOrEmpty() || (oldItem.isNullOrEmpty() && newItem != "추천순"))) {
+                viewDataBinding.searchResultLoadingView.visibility = View.VISIBLE
+                viewDataBinding.searchResultRecycler.visibility = View.GONE
+                viewDataBinding.searchResultLoadingImage.playAnimation()
+                searchPresenter.sortSearchResult(newItem)
+            }
+        }
+    }
+
+    override fun loadSearchResultCallback(size: Int) {
+        if (size == 0) { // 검색 결과가 없을 때
+            viewDataBinding.searchResultEmptyView.visibility = View.VISIBLE
+            viewDataBinding.searchResultRecycler.visibility = View.GONE
+            viewDataBinding.searchResultCountText.visibility = View.GONE
+            viewDataBinding.searchResultSortingSpinner.visibility = View.GONE
+        } else { // 검색 결과가 있을 때
+            viewDataBinding.searchResultEmptyView.visibility = View.GONE
+            viewDataBinding.searchResultCountText.text = "총 ".plus(size.toString()).plus("개")
+        }
+    }
+
+    override fun sortSearchResultCallback() {
+        Handler(Looper.getMainLooper()).postDelayed(Runnable {
+            viewDataBinding.searchResultLoadingView.visibility = View.GONE
+            viewDataBinding.searchResultRecycler.visibility = View.VISIBLE
+            viewDataBinding.searchResultLoadingImage.pauseAnimation()
+        }, 500)
     }
 
     override fun getAct() = this
@@ -172,7 +171,7 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
     override fun createResultActivity(keyword: String) {
         val resultIntent = Intent(this, SearchActivity::class.java)
         resultIntent.putExtra("keyword", keyword)
-        finish()
+        finish() // 현재 엑티비티를 종료해 줘야 한다.
         startActivity(resultIntent)
     }
 
@@ -185,27 +184,5 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
     override fun createBasketActivity() {
         val basketIntent = Intent(this, BasketActivity::class.java)
         startActivity(basketIntent)
-    }
-
-    override fun loadResultSearchCallback(size: Int) {
-        if (size == 0) { // 검색 결과가 없을 때 (= empty view 를 visible 상태로 만든다.)
-            viewDataBinding.resultSearchEmptyView.visibility = View.VISIBLE
-            viewDataBinding.resultSearchRecycler.visibility = View.GONE
-            viewDataBinding.resultItemCountText.visibility = View.GONE
-            viewDataBinding.resultSortSpinner.visibility = View.GONE
-        } else {
-            viewDataBinding.resultSearchEmptyView.visibility = View.GONE
-            viewDataBinding.recentSearchRecycler.visibility = View.VISIBLE
-
-            viewDataBinding.resultItemCountText.text = "총 ".plus(size.toString()).plus("개")
-        }
-    }
-
-    override fun sortResultSearchCallback() {
-        Handler(Looper.getMainLooper()).postDelayed(Runnable {
-            viewDataBinding.resultSearchLoadingView.visibility = View.GONE
-            viewDataBinding.resultSearchRecycler.visibility = View.VISIBLE
-            viewDataBinding.loadingImage.pauseAnimation()
-        }, 500)
     }
 }

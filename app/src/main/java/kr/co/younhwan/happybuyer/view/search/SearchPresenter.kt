@@ -1,6 +1,5 @@
 package kr.co.younhwan.happybuyer.view.search
 
-import android.util.Log
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.adapter.product.contract.ProductAdapterContract
 import kr.co.younhwan.happybuyer.data.ProductItem
@@ -25,10 +24,6 @@ class SearchPresenter(
 ) : SearchContract.Model {
 
     init {
-        resultAdapterView.onClickFuncOfProduct = {
-            onClickListenerOfProduct(it)
-        }
-
         recentAdapterView.onClickFuncOfDeleteBtn = { keyword: String, i: Int ->
             onClickListenerOfDeleteBtn(keyword, i)
         }
@@ -40,70 +35,17 @@ class SearchPresenter(
         suggestedAdapterView.onClickFuncOfSuggestedSearch = {
             onClickListenerOfKeyword(it)
         }
+
+        resultAdapterView.onClickFuncOfProduct = {
+            onClickListenerOfProduct(it)
+        }
     }
 
     val app = view.getAct().application as GlobalApplication
 
-    /* Result */
-    override fun loadResultSearch(keyword: String?) {
-        if (keyword.isNullOrBlank()) {
-            // 키워드가 존재하지 않더라도 빈 배열을 추가해야 에러가 발생하지 않는다.
-            resultAdapterModel.addItems(ArrayList<ProductItem>())
-            resultAdapterView.notifyAdapter()
-        } else { // 키워드가 존재할 때
-            productData.readProducts(
-                selectedCategory = "total",
-                sort = "basic",
-                keyword = keyword,
-                readProductsCallback = object : ProductSource.ReadProductsCallback {
-                    override fun onReadProducts(list: ArrayList<ProductItem>) {
-                        view.loadResultSearchCallback(list.size)
-                        resultAdapterModel.addItems(list)
-                        resultAdapterView.notifyAdapter()
-                    }
-                }
-            )
-        }
-    }
-
-    private fun onClickListenerOfProduct(productItem: ProductItem) = view.createProductActivity(productItem)
-
-    override fun sortResultSearch(newItem: String) {
-        if(resultAdapterModel.getItemCount() > 1){
-            val oldList: ArrayList<ProductItem> = resultAdapterModel.getItems()
-            val sortedList = when(newItem){
-                "추천순" -> {
-                    ArrayList(oldList.sortedBy { it.productId })
-                }
-
-                "판매순" -> {
-                    ArrayList(oldList.sortedBy { it.sales })
-                }
-
-                "낮은 가격순" -> {
-                    ArrayList(oldList.sortedBy { it.productPrice })
-                }
-
-                "높은 가격순" ->{
-                    ArrayList(oldList.sortedBy { it.productPrice }.reversed())
-                }
-
-                else -> {
-                    oldList
-                }
-            }
-
-            resultAdapterModel.clearItem()
-            resultAdapterModel.addItems(sortedList)
-            resultAdapterView.notifyAdapter()
-        }
-
-        view.sortResultSearchCallback()
-    }
-
-    /* Recent */
+    // 최근 검색
     override fun createRecentSearch(keyword: String) {
-        if (app.isLogined) { // 로그인 상태
+        if (app.isLogined) { // 로그인 상태에서만 최근 검색 기록을 생성
             var alreadyExistsKeyword = false
             for (i in 0 until recentAdapterModel.getItemCount()) {
                 if (recentAdapterModel.getItem(i).keyword == keyword) {
@@ -122,18 +64,18 @@ class SearchPresenter(
     }
 
     override fun loadRecentSearch() {
-        if (app.isLogined) {
+        if (app.isLogined) { // 로그인한 유저의 최근 검색 기록을 읽어온다.
             searchData.readRecentSearch(
                 kakaoAccountId = app.kakaoAccountId,
                 readRecentSearchCallback = object : SearchSource.ReadRecentSearchCallback {
                     override fun onReadRecentSearch(list: ArrayList<SearchItem>) {
-                        // list 가 비어있더라도 addItems 와 notifyAdapter 를 호출해야 에러가 발생하지 않는다.
                         recentAdapterModel.addItems(list)
                         recentAdapterView.notifyAdapter()
                     }
                 }
             )
-        } else {
+        } else { // 로그인하지 않은 유저
+            // list 가 비어있더라도 addItems, notifyAdapter 를 호출해야 에러가 발생하지 않는다.
             recentAdapterModel.addItems(ArrayList<SearchItem>())
             recentAdapterView.notifyAdapter()
         }
@@ -141,8 +83,7 @@ class SearchPresenter(
 
     override fun deleteAllRecentSearch() {
         if (app.isLogined) {
-            // 저장된 검색어가 있는 경우 (불필요한 api 호출 방지)
-            if (recentAdapterModel.getItemCount() != 0) {
+            if (recentAdapterModel.getItemCount() != 0) { // 저장된 검색어가 있는 경우 (불필요한 api 호출 방지)
                 // keyword == null -> 모든 최근 검색어 삭제
                 // keyword !== null -> keyword 에 해당하는 검색어만 삭제
                 searchData.deleteRecentSearch(
@@ -180,9 +121,7 @@ class SearchPresenter(
         }
     }
 
-    fun onClickListenerOfKeyword(keyword: String) = view.createResultActivity(keyword)
-
-    /* Suggested */
+    // 추천 검색
     override fun loadSearchHistory() {
         searchData.readSearchHistory(
             readSearchHistoryCallback = object : SearchSource.ReadSearchHistoryCallback {
@@ -193,5 +132,65 @@ class SearchPresenter(
                 }
             }
         )
+    }
+
+    fun onClickListenerOfKeyword(keyword: String) = view.createResultActivity(keyword)
+
+    // 검색 결과
+    override fun loadResultSearch(keyword: String?) {
+        if (keyword.isNullOrBlank()) {
+            // 키워드가 존재하지 않더라도 빈 배열을 추가해야 에러가 발생하지 않는다.
+            view.loadSearchResultCallback(0)
+            resultAdapterModel.addItems(ArrayList<ProductItem>())
+            resultAdapterView.notifyAdapter()
+        } else { // 키워드가 존재할 때
+            productData.readProducts(
+                selectedCategory = "total",
+                sort = "basic",
+                keyword = keyword,
+                readProductsCallback = object : ProductSource.ReadProductsCallback {
+                    override fun onReadProducts(list: ArrayList<ProductItem>) {
+                        view.loadSearchResultCallback(list.size)
+                        resultAdapterModel.addItems(list)
+                        resultAdapterView.notifyAdapter()
+                    }
+                }
+            )
+        }
+    }
+
+    private fun onClickListenerOfProduct(productItem: ProductItem) = view.createProductActivity(productItem)
+
+    override fun sortSearchResult(newItem: String) {
+        if(resultAdapterModel.getItemCount() > 1){
+            val oldList: ArrayList<ProductItem> = resultAdapterModel.getItems()
+            val sortedList = when(newItem){
+                "추천순" -> {
+                    ArrayList(oldList.sortedBy { it.productId })
+                }
+
+                "판매순" -> {
+                    ArrayList(oldList.sortedBy { it.sales })
+                }
+
+                "낮은 가격순" -> {
+                    ArrayList(oldList.sortedBy { it.productPrice })
+                }
+
+                "높은 가격순" ->{
+                    ArrayList(oldList.sortedBy { it.productPrice }.reversed())
+                }
+
+                else -> {
+                    oldList
+                }
+            }
+
+            resultAdapterModel.clearItem()
+            resultAdapterModel.addItems(sortedList)
+            resultAdapterView.notifyAdapter()
+        }
+
+        view.sortSearchResultCallback()
     }
 }

@@ -7,15 +7,15 @@ interface SearchContract{
 
         fun getAct() : SearchActivity
 
+        fun loadSearchResultCallback(size: Int)
+
+        fun sortSearchResultCallback()
+
         fun createResultActivity(keyword: String)
 
         fun createProductActivity(productItem: ProductItem)
 
         fun createBasketActivity()
-
-        fun loadResultSearchCallback(size: Int)
-
-        fun sortResultSearchCallback()
     }
 
     interface Model{
@@ -30,7 +30,6 @@ interface SearchContract{
 
         fun loadResultSearch(keyword: String?)
 
-        fun sortResultSearch(newItem: String)
-
+        fun sortSearchResult(newItem: String)
     }
 }

@@ -7,7 +7,6 @@
     tools:context=".view.search.SearchActivity">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/searchTopAppBarContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -65,7 +64,7 @@
 
 
                         <Button
-                            android:id="@+id/allRecentSearchDeleteBtn"
+                            android:id="@+id/recentSearchDeleteAllBtn"
                             style="@style/LightTextButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -94,10 +93,11 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/resultSearchContainer"
+                    android:id="@+id/searchResultContainer"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="visible">
 
                     <RelativeLayout
                         android:id="@+id/resultSearchTopContainer"
@@ -105,7 +105,7 @@
                         android:layout_height="50dp">
 
                         <TextView
-                            android:id="@+id/resultItemCountText"
+                            android:id="@+id/searchResultCountText"
                             style="@style/TextView"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
@@ -113,7 +113,7 @@
                             android:text="@string/result_item_count" />
 
                         <com.skydoves.powerspinner.PowerSpinnerView
-                            android:id="@+id/resultSortSpinner"
+                            android:id="@+id/searchResultSortingSpinner"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
@@ -139,14 +139,14 @@
                     </RelativeLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/resultSearchRecycler"
+                        android:id="@+id/searchResultRecycler"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                     </androidx.recyclerview.widget.RecyclerView>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/resultSearchEmptyView"
+                        android:id="@+id/searchResultEmptyView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
@@ -163,12 +163,12 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/resultSearchLoadingView"
+                        android:id="@+id/searchResultLoadingView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <com.airbnb.lottie.LottieAnimationView
-                            android:id="@+id/loadingImage"
+                            android:id="@+id/searchResultLoadingImage"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@color/bgColorWhite"
