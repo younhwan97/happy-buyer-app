@@ -12,7 +12,7 @@ object ProductRemoteDataSource : ProductSource {
     override fun readProducts(
         selectedCategory: String,
         sort: String,
-        keyword:String?,
+        keyword: String?,
         readProductsCallback: ProductSource.ReadProductsCallback?
     ) {
         runBlocking {
@@ -33,7 +33,7 @@ object ProductRemoteDataSource : ProductSource {
         readProductCallback: ProductSource.ReadProductCallback?
     ) {
         runBlocking {
-            var product : ProductItem? = null
+            var product: ProductItem? = null
 
             val job = GlobalScope.launch {
                 product = read(productId, kakaoAccountId)
@@ -183,15 +183,24 @@ object ProductRemoteDataSource : ProductSource {
     /***********************************************************************/
 }
 
-suspend fun reads(selectedCategory: String, sort: String, keyword: String?): ArrayList<ProductItem> {
+suspend fun reads(
+    selectedCategory: String,
+    sort: String,
+    keyword: String?
+): ArrayList<ProductItem> {
     val list = ArrayList<ProductItem>()
 
     // 클라이언트 생성
     val client = OkHttpClient()
 
     // 요청
-    val site =
-        "http://192.168.0.11/products/api/app/reads?category=${selectedCategory}&sort=${sort}&keyword=${keyword}"
+    var site =
+        "http://happybuyer.co.kr/products/api/app/reads?category=${selectedCategory}&sort=${sort}"
+
+    if (!keyword.isNullOrEmpty()) {
+        site += "&keyword=${keyword}"
+    }
+
     val request = Request.Builder().url(site).get().build()
 
     // 응답
@@ -239,8 +248,8 @@ suspend fun reads(selectedCategory: String, sort: String, keyword: String?): Arr
     return list
 }
 
-suspend fun read(productId: Int, kakaoAccountId: Long): ProductItem?{
-    var product : ProductItem? = null
+suspend fun read(productId: Int, kakaoAccountId: Long): ProductItem? {
+    var product: ProductItem? = null
 
     // 클라이언트 생성
     val client = OkHttpClient()
@@ -265,7 +274,7 @@ suspend fun read(productId: Int, kakaoAccountId: Long): ProductItem?{
             val productStatus = obj.getString("status")
             val productCategory = obj.getString("category")
 
-            if(productStatus == "판매중"){
+            if (productStatus == "판매중") {
                 val productId = obj.getInt("product_id")
                 val productName = obj.getString("name")
                 val productPrice = obj.getInt("price")
@@ -278,8 +287,8 @@ suspend fun read(productId: Int, kakaoAccountId: Long): ProductItem?{
                 product = ProductItem(
                     productId = productId,
                     productName = productName,
-                    productPrice =  productPrice,
-                    productImageUrl =  productImage,
+                    productPrice = productPrice,
+                    productImageUrl = productImage,
                     onSale = onSale,
                     eventPrice = eventPrice,
                     sales = sales,
@@ -425,7 +434,7 @@ suspend fun createInBasket(kakaoAccountId: Long, productId: Int, count: Int): In
 
     // 요청
     val site =
-        "http://192.168.0.11/basket/api/app/create?pid=${productId}&uid=${kakaoAccountId}&count=${count}"
+        "http://happybuyer.co.kr/basket/api/app/create?pid=${productId}&uid=${kakaoAccountId}&count=${count}"
     val request = Request.Builder().url(site).get().build()
 
     // 응답

@@ -3,14 +3,15 @@
     <style name="Theme.HappyBuyer" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/hbPrimaryColor</item>
-        <item name="colorPrimaryDark">@color/hbPrimaryDarkColor</item>
+        <item name="colorPrimaryVariant">@color/hbPrimaryDarkColor</item>
         <item name="colorOnPrimary">@color/fontColorBlack</item>
-
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/hbSecondaryColor</item>
         <item name="colorSecondaryVariant">@color/hbSecondaryDarkColor</item>
         <item name="colorOnSecondary">@color/fontColorWhite</item>
-
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
+        <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/bgColorWhite</item>
     </style>
 </resources>

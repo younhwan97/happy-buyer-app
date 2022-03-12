@@ -17,9 +17,6 @@
         android:theme="@style/Theme.HappyBuyer"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".view.result.ResultActivity"
-            android:exported="false" />
-        <activity
             android:name=".view.product.ProductActivity"
             android:exported="false" />
         <activity
@@ -31,9 +28,7 @@
             android:exported="false" />
         <activity
             android:name=".view.search.SearchActivity"
-            android:exported="false"
-            android:launchMode="singleInstance"
-            />
+            android:exported="false" />
         <activity
             android:name=".view.login.LoginActivity"
             android:exported="true" />

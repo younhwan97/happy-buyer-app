@@ -3,14 +3,20 @@ package kr.co.younhwan.happybuyer.view.search
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.adapter.product.ProductAdapter
+import kr.co.younhwan.happybuyer.data.ProductItem
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
 import kr.co.younhwan.happybuyer.data.source.search.SearchRepository
 import kr.co.younhwan.happybuyer.databinding.ActivitySearchBinding
+import kr.co.younhwan.happybuyer.view.basket.BasketActivity
+import kr.co.younhwan.happybuyer.view.product.ProductActivity
 import kr.co.younhwan.happybuyer.view.search.adapter.recent.RecentAdapter
 import kr.co.younhwan.happybuyer.view.search.adapter.suggested.SuggestedAdapter
 
@@ -62,11 +68,21 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
                 finish()
             }
 
+            searchToolbar.setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.basketInSearchMenu -> {
+                        createBasketActivity()
+                        true
+                    }
+                    else -> false
+                }
+            }
+
             searchViewInSearchToolbar.run {
                 isIconifiedByDefault = false
                 suggestedSearchContainer.visibility = View.GONE
 
-                if(keyword.isNullOrBlank()){
+                if (keyword.isNullOrBlank()) {
                     isIconified = false // focusing (= show keypad)
 
                     recentSearchContainer.visibility = View.VISIBLE
@@ -106,14 +122,14 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
             }
 
             /* Recent Search */
-            allRecentSearchDeleteBtn.setOnClickListener {
-                searchPresenter.deleteAllRecentSearch()
-            }
-
             recentSearchRecycler.run {
                 adapter = recentAdapter
                 layoutManager = GridLayoutManager(context, 2)
                 addItemDecoration(recentAdapter.RecyclerDecoration())
+            }
+
+            allRecentSearchDeleteBtn.setOnClickListener {
+                searchPresenter.deleteAllRecentSearch()
             }
 
             /* Suggested Search */
@@ -128,15 +144,68 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
                 layoutManager = GridLayoutManager(context, 2)
                 addItemDecoration(resultAdapter.RecyclerDecoration())
             }
+
+            resultSortSpinner.setOnSpinnerItemSelectedListener<String> { oldIndex, oldItem, newIndex, newItem ->
+                if(oldItem.isNullOrBlank()){
+                    if(newItem != "추천순"){
+                        resultSearchLoadingView.visibility = View.VISIBLE
+                        resultSearchRecycler.visibility = View.GONE
+                        loadingImage.playAnimation()
+                        searchPresenter.sortResultSearch(newItem)
+                    }
+                } else{
+                    if(oldItem != newItem){
+                        resultSearchLoadingView.visibility = View.VISIBLE
+                        resultSearchRecycler.visibility = View.GONE
+                        loadingImage.playAnimation()
+                        searchPresenter.sortResultSearch(newItem)
+                    }
+                }
+            }
+
+            resultSearchLoadingView.visibility = View.GONE
         }
     }
 
     override fun getAct() = this
 
     override fun createResultActivity(keyword: String) {
-        val resultIntent = Intent(this, SearchActivity:: class.java)
+        val resultIntent = Intent(this, SearchActivity::class.java)
         resultIntent.putExtra("keyword", keyword)
         finish()
         startActivity(resultIntent)
+    }
+
+    override fun createProductActivity(productItem: ProductItem) {
+        val productIntent = Intent(this, ProductActivity::class.java)
+        productIntent.putExtra("productItem", productItem)
+        startActivity(productIntent)
+    }
+
+    override fun createBasketActivity() {
+        val basketIntent = Intent(this, BasketActivity::class.java)
+        startActivity(basketIntent)
+    }
+
+    override fun loadResultSearchCallback(size: Int) {
+        if (size == 0) { // 검색 결과가 없을 때 (= empty view 를 visible 상태로 만든다.)
+            viewDataBinding.resultSearchEmptyView.visibility = View.VISIBLE
+            viewDataBinding.resultSearchRecycler.visibility = View.GONE
+            viewDataBinding.resultItemCountText.visibility = View.GONE
+            viewDataBinding.resultSortSpinner.visibility = View.GONE
+        } else {
+            viewDataBinding.resultSearchEmptyView.visibility = View.GONE
+            viewDataBinding.recentSearchRecycler.visibility = View.VISIBLE
+
+            viewDataBinding.resultItemCountText.text = "총 ".plus(size.toString()).plus("개")
+        }
+    }
+
+    override fun sortResultSearchCallback() {
+        Handler(Looper.getMainLooper()).postDelayed(Runnable {
+            viewDataBinding.resultSearchLoadingView.visibility = View.GONE
+            viewDataBinding.resultSearchRecycler.visibility = View.VISIBLE
+            viewDataBinding.loadingImage.pauseAnimation()
+        }, 500)
     }
 }

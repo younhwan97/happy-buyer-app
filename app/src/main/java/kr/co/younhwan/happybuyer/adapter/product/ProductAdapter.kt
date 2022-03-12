@@ -29,6 +29,8 @@ class ProductAdapter(private val usingBy: String?) :
 
     override fun getItem(position: Int) = this.productItemList[position]
 
+    override fun getItems() = productItemList
+
     override fun addItems(productItems: ArrayList<ProductItem>) {
         this.productItemList = productItems
     }

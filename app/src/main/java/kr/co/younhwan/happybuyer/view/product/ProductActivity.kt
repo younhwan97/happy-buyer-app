@@ -40,15 +40,6 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
         viewDataBinding = ActivityProductBinding.inflate(layoutInflater)
         setContentView(viewDataBinding.root)
 
-        // action bar -> toolbar
-        setSupportActionBar(viewDataBinding.productToolbar)
-        supportActionBar?.run {
-            setHomeButtonEnabled(true)
-            setDisplayHomeAsUpEnabled(true)
-            setDisplayShowTitleEnabled(false)
-        }
-
-
         productItem = intent.getParcelableExtra("productItem")
         if(productItem == null) finish()
 
@@ -163,16 +154,6 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             }
         }
-    }
-
-    /* set menu event listener */
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun getAct() = this

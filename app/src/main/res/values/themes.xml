@@ -3,15 +3,25 @@
     <style name="Theme.HappyBuyer" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/hbPrimaryColor</item>
-        <item name="colorPrimaryDark">@color/hbPrimaryDarkColor</item>
+        <item name="colorPrimaryVariant">@color/hbPrimaryDarkColor</item>
         <item name="colorOnPrimary">@color/fontColorBlack</item>
-
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/hbSecondaryColor</item>
         <item name="colorSecondaryVariant">@color/hbSecondaryDarkColor</item>
         <item name="colorOnSecondary">@color/fontColorWhite</item>
-
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
+        <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/bgColorWhite</item>
+        <item name="textAppearanceLargePopupMenu">@style/TextAppearance.App.Subtitle1</item>
+        <item name="textAppearanceSmallPopupMenu">@style/TextAppearance.App.Subtitle1</item>
+    </style>
+
+    <style name="TextAppearance.App.Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="fontFamily">@font/notosans_kr_regular</item>
+        <item name="android:fontFamily">@font/notosans_kr_regular</item>
+        <item name="android:textColor">@color/fontColorBlack</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="TextView">
@@ -24,14 +34,26 @@
         <item name="android:fontFamily">@font/notosans_kr_bold</item>
     </style>
 
+    <style name="TextView.Light">
+        <item name="android:textColor">@color/fontColorGray</item>
+    </style>
+
     <style name="LightTextButton" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:textColor">@color/fontColorGray</item>
         <item name="android:fontFamily">@font/notosans_kr_regular</item>
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="IconTextButton" parent="Widget.MaterialComponents.Button.TextButton.Icon">
+        <item name="android:textColor">@color/fontColorBlack</item>
+        <item name="android:fontFamily">@font/notosans_kr_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="iconTint">@color/fontColorBlack</item>
+        <item name="iconGravity">textEnd</item>
+    </style>
+
     <style name="SearchView">
-        <item name="android:layout_marginRight">16dp</item>
         <item name="android:layout_marginTop">8dp</item>
         <item name="android:layout_marginBottom">8dp</item>
         <item name="android:background">@drawable/bg_search_view</item>

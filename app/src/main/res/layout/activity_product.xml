@@ -6,326 +6,327 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/bgColorWhite"
-        tools:context=".view.product.ProductActivity">
+        android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/productToolbar"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/mainToolbar"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="?attr/actionBarSize"
             android:background="@color/bgColorWhite"
-            android:minHeight="?attr/actionBarSize">
+            app:navigationIcon="@drawable/ic_back">
 
             <TextView
-                android:id="@+id/productToolbarTitle"
+                android:id="@+id/textView5"
+                style="@style/TextView.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:fontFamily="@font/notosans_kr_regular"
                 android:text="코코마트"
-                android:textColor="@color/fontColorBlack"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-        </androidx.appcompat.widget.Toolbar>
+                android:textSize="16sp" />
+        </com.google.android.material.appbar.MaterialToolbar>
 
-        <ScrollView
-            android:id="@+id/productContentContainer"
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Note: A RecyclerView can also be used -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@id/productBottomNav"
-            android:layout_below="@id/productToolbar"
-            android:visibility="visible">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <ImageView
+                android:id="@+id/productImage"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:scaleType="fitXY"
+                app:srcCompat="@mipmap/ic_launcher" />
+
+            <RelativeLayout
+                android:id="@+id/productInfoContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/productImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="400dp"
-                    android:scaleType="fitXY"
-                    app:srcCompat="@mipmap/ic_launcher" />
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="24dp">
 
                 <RelativeLayout
-                    android:id="@+id/productInfoContainer"
+                    android:id="@+id/productNameContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="18dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginBottom="24dp">
+                    android:layout_height="wrap_content">
 
-                    <RelativeLayout
-                        android:id="@+id/productNameContainer"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:id="@+id/productName"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/notosans_kr_regular"
-                            android:includeFontPadding="false"
-                            android:text="상품이름"
-                            android:textColor="@color/fontColorBlack"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                        <ImageButton
-                            android:id="@+id/productShareBtn"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:background="@color/bgColorWhite"
-                            app:srcCompat="@drawable/ic_share_24" />
-
-                    </RelativeLayout>
-
-                    <LinearLayout
-                        android:id="@+id/productPriceContainer"
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/productName"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/productNameContainer"
-                        android:layout_marginTop="18dp"
-                        android:orientation="vertical">
+                        android:fontFamily="@font/notosans_kr_regular"
+                        android:includeFontPadding="false"
+                        android:text="상품이름"
+                        android:textColor="@color/fontColorBlack"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
-                        <LinearLayout
-                            android:id="@+id/productEventPriceContainer"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/productEventPrice"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/notosans_kr_bold"
-                                android:includeFontPadding="false"
-                                android:text="0"
-                                android:textColor="@color/fontColorBlack"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:id="@+id/productEventPriceSubText"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="8dp"
-                                android:fontFamily="@font/notosans_kr_regular"
-                                android:includeFontPadding="false"
-                                android:text="원"
-                                android:textColor="@color/fontColorBlack"
-                                android:textSize="14sp" />
-
-                            <TextView
-                                android:id="@+id/productEventPercent"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/notosans_kr_bold"
-                                android:includeFontPadding="false"
-                                android:text="0%"
-                                android:textColor="@android:color/holo_red_light"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/productOriginalPriceContainer"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="8dp"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/productPrice"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/notosans_kr_bold"
-                                android:includeFontPadding="false"
-                                android:text="0"
-                                android:textColor="@color/fontColorBlack"
-                                android:textSize="18sp" />
-
-                            <TextView
-                                android:id="@+id/productPriceSubText"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/notosans_kr_regular"
-                                android:includeFontPadding="false"
-                                android:text="원"
-                                android:textColor="@color/fontColorBlack"
-                                android:textSize="14sp" />
-                        </LinearLayout>
-
-                    </LinearLayout>
+                    <ImageButton
+                        android:id="@+id/productShareBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:background="@color/bgColorWhite"
+                        app:srcCompat="@drawable/ic_share_24" />
 
                 </RelativeLayout>
 
                 <LinearLayout
+                    android:id="@+id/productPriceContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="8dp"
-                    android:background="@color/bgColorGray"
-                    android:orientation="horizontal" />
-
-
-                <LinearLayout
-                    android:id="@+id/productDesContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="16dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/productNameContainer"
                     android:layout_marginTop="18dp"
-                    android:layout_marginRight="16dp"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/productDesTitle"
+                    <LinearLayout
+                        android:id="@+id/productEventPriceContainer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/notosans_kr_bold"
-                        android:includeFontPadding="false"
-                        android:text="상품정보"
-                        android:textColor="@color/fontColorBlack"
-                        android:textSize="16sp" />
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/productEventPrice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/notosans_kr_bold"
+                            android:includeFontPadding="false"
+                            android:text="0"
+                            android:textColor="@color/fontColorBlack"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/productEventPriceSubText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="8dp"
+                            android:fontFamily="@font/notosans_kr_regular"
+                            android:includeFontPadding="false"
+                            android:text="원"
+                            android:textColor="@color/fontColorBlack"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/productEventPercent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/notosans_kr_bold"
+                            android:includeFontPadding="false"
+                            android:text="0%"
+                            android:textColor="@android:color/holo_red_light"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/productDelivery"
+                        android:id="@+id/productOriginalPriceContainer"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="8dp"
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/productDeliveryTitle"
-                            android:layout_width="84dp"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/notosans_kr_regular"
-                            android:text="배송구분"
-                            android:textColor="@color/fontColorGray" />
-
-                        <TextView
-                            android:id="@+id/productDeliveryText"
+                            android:id="@+id/productPrice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/notosans_kr_regular"
-                            android:text="5만원 이상 무료배송"
-                            android:textColor="@color/fontColorBlack" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/productUnit"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
+                            android:fontFamily="@font/notosans_kr_bold"
+                            android:includeFontPadding="false"
+                            android:text="0"
+                            android:textColor="@color/fontColorBlack"
+                            android:textSize="18sp" />
 
                         <TextView
-                            android:id="@+id/productUnitTitle"
-                            android:layout_width="84dp"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/notosans_kr_regular"
-                            android:text="판매단위"
-                            android:textColor="@color/fontColorGray" />
-
-                        <TextView
-                            android:id="@+id/productUnitText"
+                            android:id="@+id/productPriceSubText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:fontFamily="@font/notosans_kr_regular"
                             android:includeFontPadding="false"
-                            android:text="1개"
-                            android:textColor="@color/fontColorBlack" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/productVolume"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/productVolumeTitle"
-                            android:layout_width="84dp"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/notosans_kr_regular"
-                            android:text="중량/용량"
-                            android:textColor="@color/fontColorGray" />
-
-                        <TextView
-                            android:id="@+id/productVolumeText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/notosans_kr_regular"
-                            android:text="300g"
-                            android:textColor="@color/fontColorBlack" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/productDes"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/productDesText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/notosans_kr_regular"
-                            android:lineSpacingExtra="10sp"
-                            android:text="든든하게 구비해 두는 김치, 종가집으로 선택해 보세요. 이번에는 기본 반ㅇ찬으로 제격인 포기김치를 준비했어요. 소금으로 앎작게 절인 국산 배추를 종가집만의 양념에 맛있게 버무려 주었지요. 국산 농산물만을 사용해 깔끔하게 담궜기에 더욱 만족스럽답니다. 먹기 좋은 크리골 썰어 밥 반찬은 물론이고, 찌개 또는 볶음밥 요리에 두루 활용해 보세요."
-                            android:textColor="@color/fontColorBlack" />
+                            android:text="원"
+                            android:textColor="@color/fontColorBlack"
+                            android:textSize="14sp" />
                     </LinearLayout>
 
                 </LinearLayout>
-            </LinearLayout>
-        </ScrollView>
 
-        <LinearLayout
-            android:id="@+id/productBottomNav"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:orientation="horizontal"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp">
+            </RelativeLayout>
 
-            <xyz.hanks.library.bang.SmallBangView
-                android:id="@+id/productWishedBtn"
-                android:layout_width="52dp"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:background="@color/bgColorGray"
+                android:orientation="horizontal" />
+
+
+            <LinearLayout
+                android:id="@+id/productDesContainer"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginRight="8dp"
-                android:background="@drawable/bg_product_wished_btn">
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginRight="16dp"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/image"
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/productDesTitle"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/selector_heart_btn_image"
-                    android:text="Hello World!" />
-            </xyz.hanks.library.bang.SmallBangView>
+                    android:fontFamily="@font/notosans_kr_bold"
+                    android:includeFontPadding="false"
+                    android:text="상품정보"
+                    android:textColor="@color/fontColorBlack"
+                    android:textSize="16sp" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/productPurchaseBtn"
+                <LinearLayout
+                    android:id="@+id/productDelivery"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/productDeliveryTitle"
+                        android:layout_width="84dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/notosans_kr_regular"
+                        android:text="배송구분"
+                        android:textColor="@color/fontColorGray" />
+
+                    <TextView
+                        android:id="@+id/productDeliveryText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/notosans_kr_regular"
+                        android:text="5만원 이상 무료배송"
+                        android:textColor="@color/fontColorBlack" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/productUnit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/productUnitTitle"
+                        android:layout_width="84dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/notosans_kr_regular"
+                        android:text="판매단위"
+                        android:textColor="@color/fontColorGray" />
+
+                    <TextView
+                        android:id="@+id/productUnitText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/notosans_kr_regular"
+                        android:includeFontPadding="false"
+                        android:text="1개"
+                        android:textColor="@color/fontColorBlack" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/productVolume"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/productVolumeTitle"
+                        android:layout_width="84dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/notosans_kr_regular"
+                        android:text="중량/용량"
+                        android:textColor="@color/fontColorGray" />
+
+                    <TextView
+                        android:id="@+id/productVolumeText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/notosans_kr_regular"
+                        android:text="300g"
+                        android:textColor="@color/fontColorBlack" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/productDes"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/productDesText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/notosans_kr_regular"
+                        android:lineSpacingExtra="10sp"
+                        android:text="든든하게 구비해 두는 김치, 종가집으로 선택해 보세요. 이번에는 기본 반ㅇ찬으로 제격인 포기김치를 준비했어요. 소금으로 앎작게 절인 국산 배추를 종가집만의 양념에 맛있게 버무려 주었지요. 국산 농산물만을 사용해 깔끔하게 담궜기에 더욱 만족스럽답니다. 먹기 좋은 크리골 썰어 밥 반찬은 물론이고, 찌개 또는 볶음밥 요리에 두루 활용해 보세요."
+                        android:textColor="@color/fontColorBlack" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:id="@+id/productBottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="horizontal"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior">
+
+        <xyz.hanks.library.bang.SmallBangView
+            android:id="@+id/productWishedBtn"
+            android:layout_width="52dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_product_wished_btn">
+
+            <ImageView
+                android:id="@+id/image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/bg_product_buy_btn"
-                android:fontFamily="@font/notosans_kr_bold"
-                android:text="구매하기"
-                android:textColor="@color/fontColorWhite"
-                android:textStyle="bold" />
-        </LinearLayout>
-    </RelativeLayout>
+                android:layout_gravity="center"
+                android:src="@drawable/selector_heart_btn_image"
+                android:text="Hello World!" />
+        </xyz.hanks.library.bang.SmallBangView>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/productPurchaseBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_product_buy_btn"
+            android:fontFamily="@font/notosans_kr_bold"
+            android:text="구매하기"
+            android:textColor="@color/fontColorWhite"
+            android:textStyle="bold" />
+    </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/productBottomSheet"

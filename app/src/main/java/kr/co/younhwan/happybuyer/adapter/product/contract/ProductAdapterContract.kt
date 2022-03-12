@@ -20,6 +20,8 @@ interface ProductAdapterContract {
 
         fun getItem(position: Int): ProductItem
 
+        fun getItems() : ArrayList<ProductItem>
+
         fun getItemCount(): Int
 
     }

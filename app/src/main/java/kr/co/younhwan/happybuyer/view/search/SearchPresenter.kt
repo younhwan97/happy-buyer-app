@@ -1,5 +1,6 @@
 package kr.co.younhwan.happybuyer.view.search
 
+import android.util.Log
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.adapter.product.contract.ProductAdapterContract
 import kr.co.younhwan.happybuyer.data.ProductItem
@@ -24,6 +25,10 @@ class SearchPresenter(
 ) : SearchContract.Model {
 
     init {
+        resultAdapterView.onClickFuncOfProduct = {
+            onClickListenerOfProduct(it)
+        }
+
         recentAdapterView.onClickFuncOfDeleteBtn = { keyword: String, i: Int ->
             onClickListenerOfDeleteBtn(keyword, i)
         }
@@ -39,9 +44,66 @@ class SearchPresenter(
 
     val app = view.getAct().application as GlobalApplication
 
-    override fun createRecentSearch(keyword: String) {
-        if (app.isLogined) { // 로그인 상태에서만 검색어를 저장
+    /* Result */
+    override fun loadResultSearch(keyword: String?) {
+        if (keyword.isNullOrBlank()) {
+            // 키워드가 존재하지 않더라도 빈 배열을 추가해야 에러가 발생하지 않는다.
+            resultAdapterModel.addItems(ArrayList<ProductItem>())
+            resultAdapterView.notifyAdapter()
+        } else { // 키워드가 존재할 때
+            productData.readProducts(
+                selectedCategory = "total",
+                sort = "basic",
+                keyword = keyword,
+                readProductsCallback = object : ProductSource.ReadProductsCallback {
+                    override fun onReadProducts(list: ArrayList<ProductItem>) {
+                        view.loadResultSearchCallback(list.size)
+                        resultAdapterModel.addItems(list)
+                        resultAdapterView.notifyAdapter()
+                    }
+                }
+            )
+        }
+    }
 
+    private fun onClickListenerOfProduct(productItem: ProductItem) = view.createProductActivity(productItem)
+
+    override fun sortResultSearch(newItem: String) {
+        if(resultAdapterModel.getItemCount() > 1){
+            val oldList: ArrayList<ProductItem> = resultAdapterModel.getItems()
+            val sortedList = when(newItem){
+                "추천순" -> {
+                    ArrayList(oldList.sortedBy { it.productId })
+                }
+
+                "판매순" -> {
+                    ArrayList(oldList.sortedBy { it.sales })
+                }
+
+                "낮은 가격순" -> {
+                    ArrayList(oldList.sortedBy { it.productPrice })
+                }
+
+                "높은 가격순" ->{
+                    ArrayList(oldList.sortedBy { it.productPrice }.reversed())
+                }
+
+                else -> {
+                    oldList
+                }
+            }
+
+            resultAdapterModel.clearItem()
+            resultAdapterModel.addItems(sortedList)
+            resultAdapterView.notifyAdapter()
+        }
+
+        view.sortResultSearchCallback()
+    }
+
+    /* Recent */
+    override fun createRecentSearch(keyword: String) {
+        if (app.isLogined) { // 로그인 상태
             var alreadyExistsKeyword = false
             for (i in 0 until recentAdapterModel.getItemCount()) {
                 if (recentAdapterModel.getItem(i).keyword == keyword) {
@@ -120,6 +182,7 @@ class SearchPresenter(
 
     fun onClickListenerOfKeyword(keyword: String) = view.createResultActivity(keyword)
 
+    /* Suggested */
     override fun loadSearchHistory() {
         searchData.readSearchHistory(
             readSearchHistoryCallback = object : SearchSource.ReadSearchHistoryCallback {
@@ -130,26 +193,5 @@ class SearchPresenter(
                 }
             }
         )
-    }
-
-    override fun loadResultSearch(keyword: String?) {
-        if (!keyword.isNullOrBlank()) {
-            productData.readProducts(
-                selectedCategory = "total",
-                sort = "basic",
-                keyword = keyword,
-                object : ProductSource.ReadProductsCallback {
-                    override fun onReadProducts(list: ArrayList<ProductItem>) {
-                        resultAdapterModel.addItems(list)
-                        resultAdapterView.notifyAdapter()
-                    }
-                }
-            )
-        } else {
-            val list = ArrayList<ProductItem>()
-
-            resultAdapterModel.addItems(list)
-            resultAdapterView.notifyAdapter()
-        }
     }
 }

@@ -9,7 +9,7 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/homeIconInBasketMenu"
-        android:icon="@drawable/ic_outline_black_home_24"
+        android:icon="@drawable/ic_hut_24"
         android:title="home"
         app:showAsAction="always" />
 </menu>
