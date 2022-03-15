@@ -126,7 +126,7 @@ suspend fun read(kakaoAccountId: Long): UserItem? {
             val nickname = if (data.isNull("name")) "-" else data.getString("name")
             val pointNumber = if (data.isNull("point_number")) 0 else data.getInt("point_number")
             val shippingAddress =
-                if (data.isNull("shipping_address")) "-" else data.getString("shipping_address")
+                if (data.isNull("shipping_address")) null else data.getString("shipping_address")
             val activatedBasket =
                 if (data.isNull("activated_basket")) "deactivated" else data.getString("activated_basket")
 

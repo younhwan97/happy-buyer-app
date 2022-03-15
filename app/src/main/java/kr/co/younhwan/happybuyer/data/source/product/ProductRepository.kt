@@ -1,5 +1,6 @@
 package kr.co.younhwan.happybuyer.data.source.product
 
+import kr.co.younhwan.happybuyer.data.BasketItem
 import kr.co.younhwan.happybuyer.data.ProductItem
 
 object ProductRepository : ProductSource{
@@ -63,7 +64,7 @@ object ProductRepository : ProductSource{
 
     override fun readProductsInBasket(kakaoAccountId: Long, readProductsInBasketCallback: ProductSource.ReadProductsInBasketCallback?) {
         productRemoteDataSource.readProductsInBasket(kakaoAccountId, object : ProductSource.ReadProductsInBasketCallback {
-            override fun onReadProductsInBasket(list: ArrayList<ProductItem>) {
+            override fun onReadProductsInBasket(list: ArrayList<BasketItem>) {
                 readProductsInBasketCallback?.onReadProductsInBasket(list)
             }
         })

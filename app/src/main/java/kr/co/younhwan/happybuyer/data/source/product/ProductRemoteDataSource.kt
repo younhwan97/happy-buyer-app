@@ -1,6 +1,7 @@
 package kr.co.younhwan.happybuyer.data.source.product
 
 import kotlinx.coroutines.*
+import kr.co.younhwan.happybuyer.data.BasketItem
 import kr.co.younhwan.happybuyer.data.ProductItem
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -133,7 +134,7 @@ object ProductRemoteDataSource : ProductSource {
         readProductsInBasketCallback: ProductSource.ReadProductsInBasketCallback?
     ) {
         runBlocking {
-            val list = ArrayList<ProductItem>()
+            val list = ArrayList<BasketItem>()
 
             val job = GlobalScope.launch {
                 list.addAll(readInBasket(kakaoAccountId))
@@ -452,8 +453,8 @@ suspend fun createInBasket(kakaoAccountId: Long, productId: Int, count: Int): In
     return resultCount
 }
 
-suspend fun readInBasket(kakaoAccountId: Long): ArrayList<ProductItem> {
-    val list = ArrayList<ProductItem>()
+suspend fun readInBasket(kakaoAccountId: Long): ArrayList<BasketItem> {
+    val list = ArrayList<BasketItem>()
 
     // 클라이언트 생성
     val client = OkHttpClient()
@@ -489,7 +490,9 @@ suspend fun readInBasket(kakaoAccountId: Long): ArrayList<ProductItem> {
                     val eventPrice = if (obj.isNull("event_price")) 0 else obj.getInt("event_price")
 
                     list.add(
-                        ProductItem(
+                        BasketItem(
+                            isChecked = true,
+                            productStatus = productStatus,
                             productId = productId,
                             productName = productName,
                             productPrice = productPrice,

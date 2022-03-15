@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kr.co.younhwan.happybuyer.data.ProductItem
+import kr.co.younhwan.happybuyer.data.BasketItem
 import kr.co.younhwan.happybuyer.databinding.RecyclerBasketItemBinding
 import kr.co.younhwan.happybuyer.view.basket.adapter.contract.BasketAdapterContract
 
@@ -13,20 +13,25 @@ class BasketAdapter :
     RecyclerView.Adapter<BasketViewHolder>(),
     BasketAdapterContract.Model,
     BasketAdapterContract.View {
+    
+    // 아이템 (리사이클러뷰)
+    private lateinit var basketItemList: ArrayList<BasketItem>
 
-    private lateinit var productItemList: ArrayList<ProductItem>
+    // 이벤트 리스너
+    override var onClickFuncOfPlusBtn: ((Int, Int) -> Unit)? = null // 플러스 버튼
+    override var onClickFuncOfMinusBtn: ((Int, Int) -> Unit)? = null // 마이너스 버튼
+    override var onClickFuncOfDeleteBtn: ((Int, Int) -> Unit)? = null // 삭제 버튼
 
-    override var onClickFuncOfPlusBtn: ((Int, Int) -> Unit)? = null
 
-    override var onClickFuncOfMinusBtn: ((Int, Int) -> Unit)? = null
 
-    override var onClickFuncOfDeleteBtn: ((Int, Int) -> Unit)? = null
 
-    override fun getItemCount() = productItemList.size
+
+    
+    override fun getItemCount() = basketItemList.size
 
     override fun onBindViewHolder(holder: BasketViewHolder, position: Int) {
-        productItemList[position].let {
-            holder.onBind(it)
+        basketItemList[position].let {
+             holder.onBind(it)
         }
     }
 
@@ -40,13 +45,13 @@ class BasketAdapter :
         } else {
             when (payloads[0]) {
                 "plus" -> {
-                    productItemList[position].countInBasket += 1
-                    holder.onBindBasketCount(productItemList[position])
+                    basketItemList[position].countInBasket += 1
+                   // holder.onBindBasketCount(productItemList[position])
                 }
 
                 "minus" -> {
-                    productItemList[position].countInBasket -= 1
-                    holder.onBindBasketCount(productItemList[position])
+                    basketItemList[position].countInBasket -= 1
+                  //  holder.onBindBasketCount(productItemList[position])
                 }
             }
         }
@@ -63,32 +68,49 @@ class BasketAdapter :
         )
     }
 
-    override fun addItems(productItems: ArrayList<ProductItem>) {
-        this.productItemList = productItems
+    override fun addItems(productItems: ArrayList<BasketItem>) {
+        this.basketItemList = productItems
     }
 
-    override fun clearItem() = this.productItemList.clear()
+    override fun clearItem() = this.basketItemList.clear()
 
-    override fun getItem(position: Int) = this.productItemList[position]
+    override fun getItem(position: Int) = this.basketItemList[position]
 
     override fun notifyAdapter() = notifyDataSetChanged()
 
     override fun notifyItem(position: Int) = notifyItemChanged(position)
-
-    inner class RecyclerDecoration :RecyclerView.ItemDecoration() {
-        override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-            super.getItemOffsets(outRect, view, parent, state)
-
-            outRect.bottom = 20
-        }
-    }
 
     override fun notifyItemByUsingPayload(position: Int, payload: String) {
         notifyItemChanged(position, payload)
     }
 
     override fun deleteItem(position: Int) {
-        productItemList.removeAt(position)
+        basketItemList.removeAt(position)
         notifyItemRemoved(position)
+    }
+
+    inner class RecyclerDecoration : RecyclerView.ItemDecoration() {
+        override fun getItemOffsets(
+            outRect: Rect,
+            view: View,
+            parent: RecyclerView,
+            state: RecyclerView.State
+        ) {
+            super.getItemOffsets(outRect, view, parent, state)
+
+            val itemPosition = parent.getChildAdapterPosition(view)
+            val density = parent.resources.displayMetrics.density
+
+            outRect.top = (16 * density).toInt()
+
+            if(itemPosition == basketItemList.size - 1){
+                outRect.bottom = (16 * density).toInt()
+            }
+        }
+    }
+
+
+    override fun updateItem(position: Int, basketItem: BasketItem) {
+        basketItemList[position] = basketItem
     }
 }

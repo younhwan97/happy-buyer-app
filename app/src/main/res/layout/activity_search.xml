@@ -16,12 +16,11 @@
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/searchToolbar"
-                style="@style/Widget.MaterialComponents.Toolbar.Primary"
+                style="@style/Widget.App.Toolbar.Light"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@color/bgColorWhite"
                 app:menu="@menu/search_menu"
-                app:navigationIcon="@drawable/ic_back">
+                app:navigationIcon="@drawable/ic_back_24">
 
                 <SearchView
                     android:id="@+id/searchViewInSearchToolbar"

@@ -17,7 +17,7 @@
             android:background="@color/bgColorWhite"
             app:layout_scrollFlags="scroll|enterAlways"
             app:titleTextColor="@color/fontColorBlack"
-            app:navigationIcon="@drawable/ic_back"
+            app:navigationIcon="@drawable/ic_back_24"
             app:menu="@menu/category_menu">
 
             <TextView

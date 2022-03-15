@@ -1,5 +1,6 @@
 package kr.co.younhwan.happybuyer.data.source.product
 
+import kr.co.younhwan.happybuyer.data.BasketItem
 import kr.co.younhwan.happybuyer.data.ProductItem
 
 interface ProductSource {
@@ -77,7 +78,7 @@ interface ProductSource {
     )
 
     interface ReadProductsInBasketCallback { // READ
-        fun onReadProductsInBasket(list: ArrayList<ProductItem>)
+        fun onReadProductsInBasket(list: ArrayList<BasketItem>)
     }
 
     fun readProductsInBasket(

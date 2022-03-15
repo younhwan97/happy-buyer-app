@@ -1,6 +1,6 @@
 package kr.co.younhwan.happybuyer.view.basket.adapter.contract
 
-import kr.co.younhwan.happybuyer.data.ProductItem
+import kr.co.younhwan.happybuyer.data.BasketItem
 
 interface BasketAdapterContract{
     interface View{
@@ -20,12 +20,16 @@ interface BasketAdapterContract{
     }
 
     interface Model{
-        fun addItems(productItems: ArrayList<ProductItem>)
+        fun addItems(productItems: ArrayList<BasketItem>)
 
         fun clearItem()
 
-        fun getItem(position: Int): ProductItem
+        fun getItem(position: Int): BasketItem
+
+        fun getItemCount(): Int
 
         fun deleteItem(position: Int)
+
+        fun updateItem(position: Int, basketItem: BasketItem)
     }
 }

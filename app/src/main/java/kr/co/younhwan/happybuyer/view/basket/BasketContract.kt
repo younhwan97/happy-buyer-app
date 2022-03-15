@@ -1,16 +1,18 @@
 package kr.co.younhwan.happybuyer.view.basket
 
-import kr.co.younhwan.happybuyer.data.ProductItem
-
 interface BasketContract{
     interface View{
 
         fun getAct(): BasketActivity
+
+        fun loadBasketProductCallback(size: Int, totalPrice: Int)
 
     }
 
     interface Model{
 
         fun loadBasketProduct(isClear: Boolean)
+
+        fun checkAllBasketProduct()
     }
 }

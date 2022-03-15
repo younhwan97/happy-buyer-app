@@ -25,7 +25,8 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.basket.BasketActivity"
-            android:exported="false" />
+            android:exported="false"
+            />
         <activity
             android:name=".view.search.SearchActivity"
             android:exported="false" />

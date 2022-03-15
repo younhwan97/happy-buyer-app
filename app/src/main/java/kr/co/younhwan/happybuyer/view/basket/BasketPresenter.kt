@@ -1,8 +1,7 @@
 package kr.co.younhwan.happybuyer.view.basket
 
-import android.util.Log
 import kr.co.younhwan.happybuyer.GlobalApplication
-import kr.co.younhwan.happybuyer.data.ProductItem
+import kr.co.younhwan.happybuyer.data.BasketItem
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
 import kr.co.younhwan.happybuyer.data.source.product.ProductSource
 import kr.co.younhwan.happybuyer.view.basket.adapter.contract.BasketAdapterContract
@@ -10,39 +9,71 @@ import kr.co.younhwan.happybuyer.view.basket.adapter.contract.BasketAdapterContr
 class BasketPresenter(
     private val view: BasketContract.View,
     private val productData: ProductRepository,
-    private val adapterModel: BasketAdapterContract.Model,
-    private val adapterView: BasketAdapterContract.View
+    private val basketAdapterModel: BasketAdapterContract.Model,
+    private val basketAdapterView: BasketAdapterContract.View
 ) : BasketContract.Model {
 
     init {
-        adapterView.onClickFuncOfPlusBtn = { i: Int, j: Int ->
+        basketAdapterView.onClickFuncOfPlusBtn = { i: Int, j: Int ->
             onClickListenerOfPlusBtn(i, j)
         }
 
-        adapterView.onClickFuncOfMinusBtn = { i: Int, j: Int ->
+        basketAdapterView.onClickFuncOfMinusBtn = { i: Int, j: Int ->
             onClickListenerOfMinusBtn(i, j)
         }
 
-        adapterView.onClickFuncOfDeleteBtn = {i: Int, j: Int ->
+        basketAdapterView.onClickFuncOfDeleteBtn = { i: Int, j: Int ->
             onClickListenerOfDeleteBtn(i, j)
         }
     }
 
-    override fun loadBasketProduct(isClear: Boolean) {
-        val app = view.getAct().application as GlobalApplication
+    val app = view.getAct().application as GlobalApplication
 
-        productData.readProductsInBasket(
-            app.kakaoAccountId!!,
-            object : ProductSource.ReadProductsInBasketCallback {
-                override fun onReadProductsInBasket(list: ArrayList<ProductItem>) {
-                    if (isClear)
-                        adapterModel.clearItem()
+    override fun checkAllBasketProduct() {
+        if (app.isLogined && basketAdapterModel.getItemCount() != 0) { // 로그인 상태이며 장바구니에 상품이 있을 때
+            for(index in 0 until basketAdapterModel.getItemCount()){
+                val temp = basketAdapterModel.getItem(index)
+                temp.isChecked = !temp.isChecked
 
-                    adapterModel.addItems(list)
-                    adapterView.notifyAdapter()
-                }
+                basketAdapterModel.updateItem(position = index, basketItem = temp)
             }
-        )
+
+            basketAdapterView.notifyAdapter()
+        }
+    }
+
+    override fun loadBasketProduct(isClear: Boolean) {
+        if (app.isLogined) { // 로그인 상태
+            productData.readProductsInBasket(
+                app.kakaoAccountId,
+                object : ProductSource.ReadProductsInBasketCallback {
+                    override fun onReadProductsInBasket(list: ArrayList<BasketItem>) {
+                        if (isClear)
+                            basketAdapterModel.clearItem()
+
+                        var totalPrice = 0
+
+                        for(index in 0 until list.size){
+                            if(list[index].productStatus != "품절"){
+                                totalPrice += if(list[index].onSale){
+                                    list[index].eventPrice * list[index].countInBasket
+                                } else {
+                                    list[index].productPrice * list[index].countInBasket
+                                }
+                            }
+                        }
+
+                        view.loadBasketProductCallback(list.size, totalPrice)
+                        basketAdapterModel.addItems(list)
+                        basketAdapterView.notifyAdapter()
+                    }
+                }
+            )
+        } else { // 비로그인 상태
+            view.loadBasketProductCallback(0, 0)
+            basketAdapterModel.addItems(ArrayList<BasketItem>())
+            basketAdapterView.notifyAdapter()
+        }
     }
 
 
@@ -56,8 +87,8 @@ class BasketPresenter(
                 count = 1,
                 object : ProductSource.CreateProductInBasketCallback {
                     override fun onCreateProductInBasket(count: Int) {
-                        if(count in 2..19){
-                            adapterView.notifyItemByUsingPayload(position, "plus")
+                        if (count in 2..19) {
+                            basketAdapterView.notifyItemByUsingPayload(position, "plus")
                         }
                     }
                 }
@@ -75,7 +106,7 @@ class BasketPresenter(
                 object : ProductSource.MinusProductInBasketCallback {
                     override fun onMinusProductInBasket(isSuccess: Boolean) {
                         if (isSuccess) {
-                            adapterView.notifyItemByUsingPayload(position, "minus")
+                            basketAdapterView.notifyItemByUsingPayload(position, "minus")
                         }
                     }
                 }
@@ -83,17 +114,17 @@ class BasketPresenter(
         }
     }
 
-    private fun onClickListenerOfDeleteBtn(productId: Int, position: Int){
+    private fun onClickListenerOfDeleteBtn(productId: Int, position: Int) {
         val app = view.getAct().application as GlobalApplication
 
-        if(app.isLogined){
+        if (app.isLogined) {
             productData.deleteProductInBasket(
                 app.kakaoAccountId!!,
                 productId,
-                object : ProductSource.DeleteProductInBasketCallback{
+                object : ProductSource.DeleteProductInBasketCallback {
                     override fun onDeleteProductInBasket(isSuccess: Boolean) {
-                        if(isSuccess){
-                            adapterModel.deleteItem(position)
+                        if (isSuccess) {
+                            basketAdapterModel.deleteItem(position)
                         }
                     }
                 }

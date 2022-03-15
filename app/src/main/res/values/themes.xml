@@ -11,19 +11,50 @@
         <item name="colorOnSecondary">@color/fontColorWhite</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/bgColorWhite</item>
-        <item name="textAppearanceLargePopupMenu">@style/TextAppearance.App.Subtitle1</item>
-        <item name="textAppearanceSmallPopupMenu">@style/TextAppearance.App.Subtitle1</item>
+    </style>
+
+    <!-- 툴바 스타일 시작 -->
+    <style name="Widget.App.Toolbar" parent="Widget.MaterialComponents.Toolbar.Primary">
+        <!-- 프라이머리 컬러를 배경으로 하는 툴바 (메인 화면에서 사용) -->
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Toolbar</item>
+        <item name="titleTextAppearance">@style/TextAppearance.App.Headline6</item>
+        <item name="subtitleTextAppearance">@style/TextAppearance.App.Subtitle1</item>
+    </style>
+
+    <style name="Widget.App.Toolbar.Light">
+        <!-- 흰 배경 툴바 (장바구니, 검색, 카테고리 엑티비티 등에 사용) -->
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.ToolbarLight</item>
+    </style>
+
+    <style name="ThemeOverlay.App.Toolbar" parent="">
+        <item name="colorPrimary">@color/hbPrimaryColor</item>
+        <item name="colorPrimaryVariant">@color/hbPrimaryDarkColor</item>
+        <item name="colorOnPrimary">@color/fontColorBlack</item>
+    </style>
+
+    <style name="ThemeOverlay.App.ToolbarLight" parent="">
+        <item name="colorPrimary">@color/bgColorWhite</item>
+        <item name="colorPrimaryVariant">@color/hbPrimaryColor</item>
+        <item name="colorOnPrimary">@color/fontColorBlack</item>
+    </style>
+
+    <style name="TextAppearance.App.Headline6" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="fontFamily">@font/notosans_kr_regular</item>
+        <item name="android:fontFamily">@font/notosans_kr_regular</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="TextAppearance.App.Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
         <item name="fontFamily">@font/notosans_kr_regular</item>
         <item name="android:fontFamily">@font/notosans_kr_regular</item>
-        <item name="android:textColor">@color/fontColorBlack</item>
-        <item name="android:textSize">14sp</item>
     </style>
+    <!-- 종료 툴바 스타일 -->
 
+    <!-- 텍스트 뷰 시작 -->
     <style name="TextView">
         <item name="android:fontFamily">@font/notosans_kr_regular</item>
         <item name="android:textSize">14sp</item>
@@ -37,6 +68,55 @@
     <style name="TextView.Light">
         <item name="android:textColor">@color/fontColorGray</item>
     </style>
+
+    <style name="TextView.Accent">
+        <item name="android:textColor">@color/hbPrimaryDarkColor</item>
+    </style>
+
+    <style name="NumberTextView">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/fontColorBlack</item>
+    </style>
+
+    <style name="NumberTextView.Bold">
+        <item name="android:fontFamily">@font/roboto_bold</item>
+    </style>
+
+    <style name="NumberTextView.Light">
+        <item name="android:textColor">@color/fontColorGray</item>
+    </style>
+    <!-- 종료 텍스트 뷰 -->
+
+    <!-- 체크 박스 시작 -->
+    <style name="Widget.App.CheckBox" parent="Widget.MaterialComponents.CompoundButton.CheckBox">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.CheckBox</item>
+    </style>
+
+    <style name="ThemeOverlay.App.CheckBox" parent="">
+        <item name="colorSecondary">@color/hbPrimaryDarkColor</item>
+    </style>
+    <!-- 종료 체크 박스 -->
+
+
+
+
+
+
+
+
+
+
+    <!-- 텍스트 버튼 시작 -->
+    <style name="TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/fontColorBlack</item>
+        <item name="android:fontFamily">@font/notosans_kr_regular</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+    <!-- 종료 텍스트 버튼 -->
+
+
+
 
     <style name="LightTextButton" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:textColor">@color/fontColorGray</item>
@@ -82,12 +162,6 @@
         <item name="android:background">@drawable/bg_bottom_sheet_btn</item>
         <item name="android:fontFamily">@font/notosans_kr_bold</item>
         <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="ProductPriceTheme" parent="Widget.MaterialComponents.TextView">
-        <item name="android:fontFamily">@font/notosans_kr_regular</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/fontColorLightGray</item>
     </style>
 
     <style name="CategoryTabTheme" parent="TextAppearance.Design.Tab">

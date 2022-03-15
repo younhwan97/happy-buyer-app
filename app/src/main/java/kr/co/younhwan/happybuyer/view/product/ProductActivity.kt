@@ -18,20 +18,15 @@ import kr.co.younhwan.happybuyer.view.login.LoginActivity
 import java.text.DecimalFormat
 
 class ProductActivity : AppCompatActivity(), ProductContract.View {
-    /* View Binding */
     lateinit var viewDataBinding: ActivityProductBinding
 
-    /* Presenter */
     private val productPresenter: ProductPresenter by lazy {
-        // View 영역은 사용자 이벤트 등에 대응하기 위해서 Presenter 변수가 필요하다.
-        // 실제 처리는 Presenter, Model 에서 이뤄지기 때문이다.
         ProductPresenter(
             view = this,
             productData = ProductRepository
         )
     }
 
-    /* Data */
     var productItem: ProductItem? = null
     private val decimal = DecimalFormat("#,###")
 
@@ -42,6 +37,22 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
 
         productItem = intent.getParcelableExtra("productItem")
         if(productItem == null) finish()
+
+        // 툴바
+        viewDataBinding.productToolbar.setNavigationOnClickListener {
+            finish()
+        }
+
+        // 상품 및 바텀 시트
+        viewDataBinding.productName.text = productItem!!.productName // 상품 이름
+        viewDataBinding.bottomSheetProductName.text = productItem!!.productName // 바텀시트 상품이름
+        viewDataBinding.productPrice.text = decimal.format(productItem!!.productPrice) // 상품 가격
+        viewDataBinding.productPrice.paintFlags = 0
+        viewDataBinding.productPriceSubText.paintFlags = 0
+        viewDataBinding.productEventPriceContainer.visibility = View.GONE
+        viewDataBinding.bottomSheetProductTotalPrice.text = decimal.format(productItem!!.productPrice)
+        viewDataBinding.bottomSheetBtn.text =  decimal.format(productItem!!.productPrice).plus("원 장바구니 담기")
+
 
         viewDataBinding.run {
             // Bottom Sheet
@@ -102,25 +113,13 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
             // 상품 이미지
             Glide.with(productImage.context).load(productItem!!.productImageUrl).into(productImage)
 
-            // 상품 이름
-            productName.text = productItem!!.productName
-            bottomSheetProductName.text = productItem!!.productName // bottom sheet
 
-            // 상품 가격
-            productPrice.text = decimal.format(productItem!!.productPrice)
-            productPrice.paintFlags = 0
-            productPriceSubText.paintFlags = 0
-            productEventPriceContainer.visibility = View.GONE
-            bottomSheetProductTotalPrice.text =
-                decimal.format(productItem!!.productPrice) // bottom sheet
-            bottomSheetBtn.text =
-                decimal.format(productItem!!.productPrice).plus("원 장바구니 담기") // bottom sheet
 
             if (productItem!!.onSale) {
                 productPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
                 productPriceSubText.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-                productPrice.setTextAppearance(R.style.ProductPriceTheme)
-                productPriceSubText.setTextAppearance(R.style.ProductPriceTheme)
+                //productPrice.setTextAppearance(R.style.ProductPriceTheme)
+                //productPriceSubText.setTextAppearance(R.style.ProductPriceTheme)
                 // 행사 가격
                 productEventPriceContainer.visibility = View.VISIBLE
                 productEventPrice.text = decimal.format(productItem!!.eventPrice)

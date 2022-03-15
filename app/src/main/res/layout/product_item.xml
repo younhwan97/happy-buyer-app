@@ -8,8 +8,7 @@
         android:id="@+id/productItemImageContainer"
         android:layout_width="match_parent"
         android:layout_height="224dp"
-        android:layout_alignParentBottom="false"
-        android:layout_marginBottom="8dp">
+        android:layout_alignParentBottom="false">
 
         <ImageView
             android:id="@+id/productItemImage"
@@ -37,6 +36,7 @@
         android:layout_below="@id/productItemImageContainer"
         android:layout_alignLeft="@id/productItemImageContainer"
         android:layout_alignRight="@id/productItemImageContainer"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="4dp"
         android:ellipsize="end"
         android:fontFamily="@font/notosans_kr_regular"
@@ -57,34 +57,57 @@
 
         <TextView
             android:id="@+id/productItemEventPercent"
+            style="@style/NumberTextView.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:text="0"
+            android:textColor="@android:color/holo_red_light" />
+
+        <TextView
+            android:id="@+id/productItemEventPercentSubText"
+            style="@style/TextView.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="6dp"
-            android:fontFamily="@font/notosans_kr_bold"
             android:includeFontPadding="false"
-            android:text="0%"
+            android:text="%"
             android:textColor="@android:color/holo_red_light" />
 
         <TextView
             android:id="@+id/productItemEventPrice"
+            style="@style/NumberTextView.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:fontFamily="@font/notosans_kr_bold"
             android:includeFontPadding="false"
-            android:text="0원"
-            android:textColor="@color/fontColorBlack" />
+            android:text="0" />
+
+        <TextView
+            android:id="@+id/productItemEventPriceSubText"
+            style="@style/TextView.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:text="@string/product_price_sub" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/productItemPrice"
+        style="@style/NumberTextView.Bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/productItemEvent"
         android:layout_alignLeft="@id/productItemImageContainer"
-        android:layout_alignRight="@id/productItemImageContainer"
-        android:fontFamily="@font/notosans_kr_bold"
         android:includeFontPadding="false"
-        android:text="0원"
-        android:textColor="@color/fontColorBlack" />
+        android:text="0" />
+
+    <TextView
+        android:id="@+id/productItemPriceSubText"
+        style="@style/TextView.Bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/productItemPrice"
+        android:layout_toRightOf="@id/productItemPrice"
+        android:includeFontPadding="false"
+        android:text="@string/product_price_sub" />
 </RelativeLayout>

@@ -4,6 +4,6 @@ data class UserItem(
     val kakaoAccountId: Long,
     val nickname: String,
     val pointNumber: Int,
-    val shippingAddress: String,
+    val shippingAddress: String?,
     val activatedBasket: String
 )

@@ -34,6 +34,10 @@ class ProductViewHolder(
         itemBinding.productItemPrice
     }
 
+    private val productPriceSubText by lazy {
+        itemBinding.productItemPriceSubText
+    }
+
     private val productEventPrice by lazy {
         itemBinding.productItemEventPrice
     }
@@ -59,19 +63,30 @@ class ProductViewHolder(
         productName.text = productItem.productName
         
         // 가격
-        productPrice.text = decimal.format(productItem.productPrice).plus("원")
+        productPrice.text = decimal.format(productItem.productPrice)
         productPrice.paintFlags = 0
-        productEvent.visibility = View.GONE
+        productPrice.setTextAppearance(R.style.NumberTextView_Bold)
+        productPrice.textSize = 14F // 스타일 값에 폰트 크기가 지정되어 있기 대문에 스타일 보다 아래서 지정
+        productPriceSubText.text = "원" // 서브 텍스트
+        productPriceSubText.paintFlags = 0
+        productPriceSubText.setTextAppearance(R.style.TextView_Bold)
+        productPriceSubText.textSize = 14F
 
-        if(productItem.onSale){
+        productEvent.visibility = View.GONE
+        if(productItem.onSale){ // 세일 중인 상품의 경우
             productPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-            productPrice.setTextAppearance(R.style.ProductPriceTheme)
+            productPrice.setTextAppearance(R.style.NumberTextView_Light)
+            productPrice.textSize = 12F
+            productPriceSubText.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG // 서브 텍스트
+            productPriceSubText.setTextAppearance(R.style.TextView_Light)
+            productPriceSubText.textSize = 12F
             // 행사 가격
             productEvent.visibility = View.VISIBLE
-            productEventPrice.text = decimal.format(productItem.eventPrice).plus("원")
-            productEventPercent.text =
-                ((100 - (productItem.productPrice / productItem.eventPrice)).toString()).plus("%")
+            productEventPrice.text = decimal.format(productItem.eventPrice)
+            productEventPrice.setTextAppearance(R.style.NumberTextView_Bold)
+            productEventPercent.text = ((100 - (productItem.productPrice / productItem.eventPrice)).toString())
         }
+
 
         // 장바구니 버튼
         productBasketBtn.isClickable = true
