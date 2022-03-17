@@ -1,7 +1,6 @@
 package kr.co.younhwan.happybuyer.view.basket
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.data.BasketItem
 import kr.co.younhwan.happybuyer.data.source.basket.BasketRepository
@@ -37,10 +36,10 @@ class BasketPresenter(
 
     override fun loadBasketProduct(isClear: Boolean) { // 장바구니에 존재하는 상품을 가져온다.
         if (app.isLogined) { // 로그인 상태
-            basketData.readProductsInBasket(
+            basketData.readProducts(
                 kakaoAccountId = app.kakaoAccountId,
-                readProductsInBasketCallback = object : BasketSource.ReadProductsInBasketCallback {
-                    override fun onReadProductsInBasket(list: ArrayList<BasketItem>) {
+                readProductsCallback = object : BasketSource.ReadProductsCallback {
+                    override fun onReadProducts(list: ArrayList<BasketItem>) {
                         if (isClear)
                             basketAdapterModel.clearItem()
 
@@ -127,13 +126,13 @@ class BasketPresenter(
 
     private fun onClickListenerOfPlusBtn(basketItem: BasketItem, position: Int) {
         if (app.isLogined) {
-            basketData.createProductInBasket(
+            basketData.createProduct(
                 kakaoAccountId = app.kakaoAccountId,
                 productId = basketItem.productId,
                 count = 1,
-                createProductInBasketCallback = object :
-                    BasketSource.CreateProductInBasketCallback {
-                    override fun onCreateProductInBasket(resultCount: Int) {
+                createProductCallback = object :
+                    BasketSource.CreateProductCallback {
+                    override fun onCreateProduct(resultCount: Int) {
                         if (resultCount == basketItem.countInBasket + 1) {
                             for (index in 0 until basketAdapterModel.getItemCount()) {
                                 if (basketAdapterModel.getItem(index).productId == basketItem.productId) {
@@ -153,13 +152,13 @@ class BasketPresenter(
 
     private fun onClickListenerOfMinusBtn(basketItem: BasketItem, position: Int) {
         if (app.isLogined) {
-            basketData.updateProductInBasket(
+            basketData.updateProduct(
                 kakaoAccountId = app.kakaoAccountId,
                 productId = basketItem.productId,
                 perform = "minus",
-                updateProductInBasketCallback = object :
-                    BasketSource.UpdateProductInBasketCallback {
-                    override fun onUpdateProductInBasket(isSuccess: Boolean) {
+                updateProductCallback = object :
+                    BasketSource.UpdateProductCallback {
+                    override fun onUpdateProduct(isSuccess: Boolean) {
                         if (isSuccess) {
                             for (index in 0 until basketAdapterModel.getItemCount()) {
                                 if (basketAdapterModel.getItem(index).productId == basketItem.productId) {
@@ -182,12 +181,12 @@ class BasketPresenter(
 
     private fun onClickListenerOfDeleteBtn(basketItem: BasketItem, position: Int) {
         if (app.isLogined) {
-            basketData.deleteProductInBasket(
+            basketData.deleteProduct(
                 kakaoAccountId = app.kakaoAccountId,
                 productId = basketItem.productId,
-                deleteProductInBasketCallback = object :
-                    BasketSource.DeleteProductInBasketCallback {
-                    override fun onDeleteProductInBasket(isSuccess: Boolean) {
+                deleteProductCallback = object :
+                    BasketSource.DeleteProductCallback {
+                    override fun onDeleteProduct(isSuccess: Boolean) {
                         if (isSuccess) {
                             basketAdapterModel.deleteItem(position)
 

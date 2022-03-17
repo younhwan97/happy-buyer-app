@@ -6,34 +6,34 @@ object BasketRepository : BasketSource {
 
     private val basketRemoteDataSource = BasketRemoteDataSource
 
-    override fun createProductInBasket(kakaoAccountId: Long, productId: Int, count:Int, createProductInBasketCallback: BasketSource.CreateProductInBasketCallback?) {
-        basketRemoteDataSource.createProductInBasket(kakaoAccountId, productId, count, object : BasketSource.CreateProductInBasketCallback{
-            override fun onCreateProductInBasket(resultCount: Int) {
-                createProductInBasketCallback?.onCreateProductInBasket(resultCount)
+    override fun createProduct(kakaoAccountId: Long, productId: Int, count:Int, createProductCallback: BasketSource.CreateProductCallback?) {
+        basketRemoteDataSource.createProduct(kakaoAccountId, productId, count, object : BasketSource.CreateProductCallback{
+            override fun onCreateProduct(resultCount: Int) {
+                createProductCallback?.onCreateProduct(resultCount)
             }
         })
     }
 
-    override fun readProductsInBasket(kakaoAccountId: Long, readProductsInBasketCallback: BasketSource.ReadProductsInBasketCallback?) {
-        basketRemoteDataSource.readProductsInBasket(kakaoAccountId, object : BasketSource.ReadProductsInBasketCallback {
-            override fun onReadProductsInBasket(list: ArrayList<BasketItem>) {
-                readProductsInBasketCallback?.onReadProductsInBasket(list)
+    override fun readProducts(kakaoAccountId: Long, readProductsCallback: BasketSource.ReadProductsCallback?) {
+        basketRemoteDataSource.readProducts(kakaoAccountId, object : BasketSource.ReadProductsCallback {
+            override fun onReadProducts(list: ArrayList<BasketItem>) {
+                readProductsCallback?.onReadProducts(list)
             }
         })
     }
 
-    override fun updateProductInBasket(kakaoAccountId: Long, productId: Int, perform:String, updateProductInBasketCallback: BasketSource.UpdateProductInBasketCallback?) {
-        basketRemoteDataSource.updateProductInBasket(kakaoAccountId, productId, perform, object : BasketSource.UpdateProductInBasketCallback{
-            override fun onUpdateProductInBasket(isSuccess: Boolean) {
-                updateProductInBasketCallback?.onUpdateProductInBasket(isSuccess)
+    override fun updateProduct(kakaoAccountId: Long, productId: Int, perform:String, updateProductCallback: BasketSource.UpdateProductCallback?) {
+        basketRemoteDataSource.updateProduct(kakaoAccountId, productId, perform, object : BasketSource.UpdateProductCallback{
+            override fun onUpdateProduct(isSuccess: Boolean) {
+                updateProductCallback?.onUpdateProduct(isSuccess)
             }
         })
     }
 
-    override fun deleteProductInBasket(kakaoAccountId: Long, productId: Int, deleteProductInBasketCallback: BasketSource.DeleteProductInBasketCallback?) {
-        basketRemoteDataSource.deleteProductInBasket(kakaoAccountId, productId, object : BasketSource.DeleteProductInBasketCallback{
-            override fun onDeleteProductInBasket(isSuccess: Boolean) {
-                deleteProductInBasketCallback?.onDeleteProductInBasket(isSuccess)
+    override fun deleteProduct(kakaoAccountId: Long, productId: Int, deleteProductCallback: BasketSource.DeleteProductCallback?) {
+        basketRemoteDataSource.deleteProduct(kakaoAccountId, productId, object : BasketSource.DeleteProductCallback{
+            override fun onDeleteProduct(isSuccess: Boolean) {
+                deleteProductCallback?.onDeleteProduct(isSuccess)
             }
         })
     }

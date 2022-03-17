@@ -141,12 +141,12 @@ class HomePresenter(
         if (!app.isLogined) {
             view.createLoginActivity()
         } else {
-            basketData.createProductInBasket(
+            basketData.createProduct(
                 kakaoAccountId = app.kakaoAccountId,
                 productId = productId,
                 count = 1,
-                object : BasketSource.CreateProductInBasketCallback {
-                    override fun onCreateProductInBasket(count: Int) {
+                object : BasketSource.CreateProductCallback {
+                    override fun onCreateProduct(count: Int) {
                         if (count in 1..20) {
 
                             view.createProductInBasketResultCallback(count)

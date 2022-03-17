@@ -3,46 +3,56 @@ package kr.co.younhwan.happybuyer.data.source.basket
 import kr.co.younhwan.happybuyer.data.BasketItem
 
 interface BasketSource {
-    interface CreateProductInBasketCallback {
-        fun onCreateProductInBasket(resultCount: Int)
-    }
-
-    fun createProductInBasket(
+    // CREATE
+    fun createProduct(
         kakaoAccountId: Long,
         productId: Int,
         count: Int,
-        createProductInBasketCallback: CreateProductInBasketCallback?
+        createProductCallback: CreateProductCallback?
     )
 
-    interface ReadProductsInBasketCallback {
-        fun onReadProductsInBasket(list: ArrayList<BasketItem>)
+    interface CreateProductCallback {
+        fun onCreateProduct(resultCount: Int)
     }
 
-    fun readProductsInBasket(
+    // READ
+    fun readProducts(
         kakaoAccountId: Long,
-        readProductsInBasketCallback: ReadProductsInBasketCallback?
+        readProductsCallback: ReadProductsCallback?
     )
 
-    interface UpdateProductInBasketCallback {
-        fun onUpdateProductInBasket(isSuccess: Boolean)
+    interface ReadProductsCallback {
+        fun onReadProducts(list: ArrayList<BasketItem>)
     }
 
-    fun updateProductInBasket(
+    // UPDATE
+    fun updateProduct(
         kakaoAccountId: Long,
         productId: Int,
         perform: String,
-        updateProductInBasketCallback: UpdateProductInBasketCallback?
+        updateProductCallback: UpdateProductCallback?
     )
 
-
-    interface DeleteProductInBasketCallback {
-        fun onDeleteProductInBasket(isSuccess: Boolean)
+    interface UpdateProductCallback {
+        fun onUpdateProduct(isSuccess: Boolean)
     }
 
-    fun deleteProductInBasket(
+    // DELETE
+    fun deleteProduct(
         kakaoAccountId: Long,
         productId: Int,
-        deleteProductInBasketCallback: DeleteProductInBasketCallback?
+        deleteProductCallback: DeleteProductCallback?
     )
 
+    interface DeleteProductCallback {
+        fun onDeleteProduct(isSuccess: Boolean)
+    }
+
+//    interface DeleteProductsCallback{
+//        fun onDeleteProducts(isSuccess: Boolean)
+//    }
+//
+//    fun deleteProducts(
+//
+//    )
 }

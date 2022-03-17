@@ -106,12 +106,12 @@ class WishedPresenter(
         val app = view.getAct().application as GlobalApplication
 
         if (app.isLogined) {
-            basketData.createProductInBasket(
+            basketData.createProduct(
                 kakaoAccountId = app.kakaoAccountId!!,
                 productId = productId,
                 count = 1,
-                object : BasketSource.CreateProductInBasketCallback {
-                    override fun onCreateProductInBasket(count: Int) {
+                object : BasketSource.CreateProductCallback {
+                    override fun onCreateProduct(count: Int) {
                         if(count in 1..20){
                             view.addBasketResultCallback(count)
                         }
