@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import kr.co.younhwan.happybuyer.R
+import kr.co.younhwan.happybuyer.data.source.basket.BasketRepository
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
 import kr.co.younhwan.happybuyer.databinding.FragmentWishedBinding
 import kr.co.younhwan.happybuyer.view.main.MainActivity
@@ -29,6 +30,7 @@ class WishedFragment : Fragment(), WishedContract.View {
         WishedPresenter(
             this,
             productData = ProductRepository,
+            basketData = BasketRepository,
             adapterModel = wishedAdapter,
             adapterView = wishedAdapter
         )

@@ -13,6 +13,7 @@ import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.adapter.product.ProductAdapter
 import kr.co.younhwan.happybuyer.data.CategoryItem
 import kr.co.younhwan.happybuyer.data.ProductItem
+import kr.co.younhwan.happybuyer.data.source.basket.BasketRepository
 import kr.co.younhwan.happybuyer.data.source.category.CategoryRepository
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
 import kr.co.younhwan.happybuyer.databinding.FragmentHomeBinding
@@ -50,6 +51,7 @@ class HomeFragment : Fragment(), HomeContract.View {
             this,
             categoryData = CategoryRepository,
             productData = ProductRepository,
+            basketData = BasketRepository,
             homeAdapterModel = homeAdapter,
             homeAdapterView = homeAdapter,
             eventAdapterModel = eventAdapter,

@@ -5,6 +5,8 @@ import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.adapter.product.contract.ProductAdapterContract
 import kr.co.younhwan.happybuyer.data.CategoryItem
 import kr.co.younhwan.happybuyer.data.ProductItem
+import kr.co.younhwan.happybuyer.data.source.basket.BasketRepository
+import kr.co.younhwan.happybuyer.data.source.basket.BasketSource
 import kr.co.younhwan.happybuyer.data.source.category.CategoryRepository
 import kr.co.younhwan.happybuyer.data.source.category.CategorySource
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
@@ -15,6 +17,7 @@ class HomePresenter(
     private val view: HomeContract.View,
     private val categoryData: CategoryRepository,
     private val productData: ProductRepository,
+    private val basketData: BasketRepository,
     private val homeAdapterModel: HomeAdapterContract.Model,
     private val homeAdapterView: HomeAdapterContract.View,
     private val eventAdapterModel: ProductAdapterContract.Model,
@@ -138,11 +141,11 @@ class HomePresenter(
         if (!app.isLogined) {
             view.createLoginActivity()
         } else {
-            productData.createProductInBasket(
+            basketData.createProductInBasket(
                 kakaoAccountId = app.kakaoAccountId,
                 productId = productId,
                 count = 1,
-                object : ProductSource.CreateProductInBasketCallback {
+                object : BasketSource.CreateProductInBasketCallback {
                     override fun onCreateProductInBasket(count: Int) {
                         if (count in 1..20) {
 

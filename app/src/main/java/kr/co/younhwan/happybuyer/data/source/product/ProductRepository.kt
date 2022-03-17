@@ -54,35 +54,5 @@ object ProductRepository : ProductSource{
     /***********************************************************************/
     /******************************* Basket *******************************/
 
-    override fun createProductInBasket(kakaoAccountId: Long, productId: Int, count:Int, createProductInBasketCallback: ProductSource.CreateProductInBasketCallback?) {
-        productRemoteDataSource.createProductInBasket(kakaoAccountId, productId, count, object : ProductSource.CreateProductInBasketCallback{
-            override fun onCreateProductInBasket(count: Int) {
-                createProductInBasketCallback?.onCreateProductInBasket(count)
-            }
-        })
-    }
 
-    override fun readProductsInBasket(kakaoAccountId: Long, readProductsInBasketCallback: ProductSource.ReadProductsInBasketCallback?) {
-        productRemoteDataSource.readProductsInBasket(kakaoAccountId, object : ProductSource.ReadProductsInBasketCallback {
-            override fun onReadProductsInBasket(list: ArrayList<BasketItem>) {
-                readProductsInBasketCallback?.onReadProductsInBasket(list)
-            }
-        })
-    }
-
-    override fun minusProductInBasket(kakaoAccountId: Long, productId: Int, minusProductInBasketCallback: ProductSource.MinusProductInBasketCallback?) {
-        productRemoteDataSource.minusProductInBasket(kakaoAccountId, productId, object : ProductSource.MinusProductInBasketCallback{
-            override fun onMinusProductInBasket(isSuccess: Boolean) {
-                minusProductInBasketCallback?.onMinusProductInBasket(isSuccess)
-            }
-        })
-    }
-
-    override fun deleteProductInBasket(kakaoAccountId: Long, productId: Int, deleteProductInBasketCallback: ProductSource.DeleteProductInBasketCallback?) {
-        productRemoteDataSource.deleteProductInBasket(kakaoAccountId, productId, object : ProductSource.DeleteProductInBasketCallback{
-            override fun onDeleteProductInBasket(isSuccess: Boolean) {
-                deleteProductInBasketCallback?.onDeleteProductInBasket(isSuccess)
-            }
-        })
-    }
 }

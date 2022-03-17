@@ -66,46 +66,7 @@ interface ProductSource {
     /***********************************************************************/
     /******************************* Basket *******************************/
 
-    interface CreateProductInBasketCallback { // CREATE
-        fun onCreateProductInBasket(count: Int)
-    }
 
-    fun createProductInBasket(
-        kakaoAccountId: Long,
-        productId: Int,
-        count: Int,
-        createProductInBasketCallback: CreateProductInBasketCallback?
-    )
-
-    interface ReadProductsInBasketCallback { // READ
-        fun onReadProductsInBasket(list: ArrayList<BasketItem>)
-    }
-
-    fun readProductsInBasket(
-        kakaoAccountId: Long,
-        readProductsInBasketCallback: ReadProductsInBasketCallback?
-    )
-
-    interface MinusProductInBasketCallback { // UPDATE (Minus)
-        fun onMinusProductInBasket(isSuccess: Boolean)
-    }
-
-    fun minusProductInBasket(
-        kakaoAccountId: Long,
-        productId: Int,
-        minusProductInBasketCallback: MinusProductInBasketCallback?
-    )
-
-
-    interface DeleteProductInBasketCallback { // DELETE
-        fun onDeleteProductInBasket(isSuccess: Boolean)
-    }
-
-    fun deleteProductInBasket(
-        kakaoAccountId: Long,
-        productId: Int,
-        deleteProductInBasketCallback: DeleteProductInBasketCallback?
-    )
 
     /***********************************************************************/
     /***********************************************************************/

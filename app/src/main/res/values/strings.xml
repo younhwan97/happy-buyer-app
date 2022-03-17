@@ -21,9 +21,11 @@
     <!-- HappyBuyer basket page strings -->
     <string name="basket_title">장바구니</string>
     <string name="basket_address">배송 정보를 입력해주세요.</string>
-    <string name="basket_checkbox">전체선택 (0/0)</string>
+    <string name="basket_checkbox">전체선택</string>
     <string name="basket_delete">선택삭제</string>
     <string name="basket_price_sub">원</string>
+    <string name="basket_price_zero">0</string>
+    <string name="basket_empty">장바구니에 담긴 상품이 없습니다.</string>
 
     <!-- HappyBuyer address page strings -->
     <string name="address_title">배송지 추가</string>

@@ -5,11 +5,13 @@ import kr.co.younhwan.happybuyer.data.BasketItem
 interface BasketAdapterContract{
     interface View{
 
-        var onClickFuncOfPlusBtn: ((Int, Int) -> Unit)?
+        var onClickFunOfCheckBox: ((Int, Boolean) -> Unit)?
 
-        var onClickFuncOfMinusBtn: ((Int, Int) -> Unit)?
+        var onClickFunOfPlusBtn: ((BasketItem, Int) -> Unit)?
 
-        var onClickFuncOfDeleteBtn: ((Int, Int) -> Unit)?
+        var onClickFunOfMinusBtn: ((BasketItem, Int) -> Unit)?
+
+        var onClickFunOfDeleteBtn: ((BasketItem, Int) -> Unit)?
 
         fun notifyAdapter()
 
@@ -31,5 +33,7 @@ interface BasketAdapterContract{
         fun deleteItem(position: Int)
 
         fun updateItem(position: Int, basketItem: BasketItem)
+
+        fun updateItemCount(position: Int, count: Int)
     }
 }

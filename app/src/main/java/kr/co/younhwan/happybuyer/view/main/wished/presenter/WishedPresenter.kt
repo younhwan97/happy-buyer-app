@@ -4,6 +4,8 @@ import android.content.Context
 import android.util.Log
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.data.ProductItem
+import kr.co.younhwan.happybuyer.data.source.basket.BasketRepository
+import kr.co.younhwan.happybuyer.data.source.basket.BasketSource
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
 import kr.co.younhwan.happybuyer.data.source.product.ProductSource
 import kr.co.younhwan.happybuyer.view.main.wished.adapter.contract.WishedAdapterContract
@@ -11,6 +13,7 @@ import kr.co.younhwan.happybuyer.view.main.wished.adapter.contract.WishedAdapter
 class WishedPresenter(
     val view: WishedContract.View,
     private val productData: ProductRepository,
+    private val basketData: BasketRepository,
     private val adapterModel: WishedAdapterContract.Model,
     private val adapterView: WishedAdapterContract.View
 ) : WishedContract.Presenter {
@@ -103,11 +106,11 @@ class WishedPresenter(
         val app = view.getAct().application as GlobalApplication
 
         if (app.isLogined) {
-            productData.createProductInBasket(
+            basketData.createProductInBasket(
                 kakaoAccountId = app.kakaoAccountId!!,
                 productId = productId,
                 count = 1,
-                object : ProductSource.CreateProductInBasketCallback {
+                object : BasketSource.CreateProductInBasketCallback {
                     override fun onCreateProductInBasket(count: Int) {
                         if(count in 1..20){
                             view.addBasketResultCallback(count)

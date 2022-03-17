@@ -18,15 +18,15 @@ class BasketAdapter :
     private lateinit var basketItemList: ArrayList<BasketItem>
 
     // 이벤트 리스너
-    override var onClickFuncOfPlusBtn: ((Int, Int) -> Unit)? = null // 플러스 버튼
-    override var onClickFuncOfMinusBtn: ((Int, Int) -> Unit)? = null // 마이너스 버튼
-    override var onClickFuncOfDeleteBtn: ((Int, Int) -> Unit)? = null // 삭제 버튼
+    override var onClickFunOfCheckBox: ((Int, Boolean) -> Unit)? = null
 
+    override var onClickFunOfPlusBtn: ((BasketItem, Int) -> Unit)? = null
 
+    override var onClickFunOfMinusBtn: ((BasketItem, Int) -> Unit)? = null
 
-
-
+    override var onClickFunOfDeleteBtn: ((BasketItem, Int) -> Unit)? = null
     
+    // 메서드
     override fun getItemCount() = basketItemList.size
 
     override fun onBindViewHolder(holder: BasketViewHolder, position: Int) {
@@ -45,13 +45,11 @@ class BasketAdapter :
         } else {
             when (payloads[0]) {
                 "plus" -> {
-                    basketItemList[position].countInBasket += 1
-                   // holder.onBindBasketCount(productItemList[position])
+                    holder.onBindCount(basketItemList[position])
                 }
 
                 "minus" -> {
-                    basketItemList[position].countInBasket -= 1
-                  //  holder.onBindBasketCount(productItemList[position])
+                    holder.onBindCount(basketItemList[position])
                 }
             }
         }
@@ -60,28 +58,35 @@ class BasketAdapter :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BasketViewHolder {
         val itemBinding = RecyclerBasketItemBinding.inflate(LayoutInflater.from(parent.context))
         return BasketViewHolder(
-            parent,
-            itemBinding,
-            onClickFuncOfPlusBtn,
-            onClickFuncOfMinusBtn,
-            onClickFuncOfDeleteBtn
+            parent = parent,
+            basketItemBinding = itemBinding,
+            listenerFunOfCheckBox = onClickFunOfCheckBox,
+            listenerFunOfPlusBtn = onClickFunOfPlusBtn,
+            listenerFunOfMinusBtn = onClickFunOfMinusBtn,
+            listenerFunOfDeleteBtn = onClickFunOfDeleteBtn
         )
     }
 
     override fun addItems(productItems: ArrayList<BasketItem>) {
-        this.basketItemList = productItems
+        basketItemList = productItems
     }
 
-    override fun clearItem() = this.basketItemList.clear()
+    override fun clearItem() = basketItemList.clear()
 
-    override fun getItem(position: Int) = this.basketItemList[position]
+    override fun getItem(position: Int) = basketItemList[position]
 
     override fun notifyAdapter() = notifyDataSetChanged()
 
     override fun notifyItem(position: Int) = notifyItemChanged(position)
 
-    override fun notifyItemByUsingPayload(position: Int, payload: String) {
-        notifyItemChanged(position, payload)
+    override fun notifyItemByUsingPayload(position: Int, payload: String) = notifyItemChanged(position, payload)
+
+    override fun updateItem(position: Int, basketItem: BasketItem) {
+        basketItemList[position] = basketItem
+    }
+
+    override fun updateItemCount(position: Int, count: Int) {
+        basketItemList[position].countInBasket = count
     }
 
     override fun deleteItem(position: Int) {
@@ -107,10 +112,5 @@ class BasketAdapter :
                 outRect.bottom = (16 * density).toInt()
             }
         }
-    }
-
-
-    override fun updateItem(position: Int, basketItem: BasketItem) {
-        basketItemList[position] = basketItem
     }
 }

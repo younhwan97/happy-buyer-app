@@ -21,6 +21,7 @@
     <color name="hbDividerColor">#e0e1e1e1</color>
 
     <color name="bgColorWhite">#FFFFFFFF</color>
+    <color name="bgColorDarkGray">#DDDDDD</color>
     <color name="bgColorGray">#F1F1F5</color>
     <color name="bgColorBlack">#FF000000</color>
 

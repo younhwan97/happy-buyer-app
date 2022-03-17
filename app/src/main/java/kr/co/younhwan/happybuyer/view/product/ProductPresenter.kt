@@ -28,15 +28,15 @@ class ProductPresenter(
     }
 
     override fun createProductInBasket(kakaoAccountId: Long, productId: Int, count: Int) {
-        productData.createProductInBasket(
-            kakaoAccountId,
-            productId,
-            count,
-            object : ProductSource.CreateProductInBasketCallback{
-                override fun onCreateProductInBasket(count: Int) {
-                    view.createProductInBasketResultCallback(count)
-                }
-            }
-        )
+//        productData.createProductInBasket(
+//            kakaoAccountId,
+//            productId,
+//            count,
+//            object : ProductSource.CreateProductInBasketCallback{
+//                override fun onCreateProductInBasket(count: Int) {
+//                    view.createProductInBasketResultCallback(count)
+//                }
+//            }
+//        )
     }
 }
