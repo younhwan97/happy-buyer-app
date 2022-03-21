@@ -12,6 +12,7 @@ import com.google.android.material.snackbar.Snackbar
 import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.data.source.basket.BasketRepository
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
+import kr.co.younhwan.happybuyer.data.source.wished.WishedRepository
 import kr.co.younhwan.happybuyer.databinding.FragmentWishedBinding
 import kr.co.younhwan.happybuyer.view.main.MainActivity
 import kr.co.younhwan.happybuyer.view.main.wished.adapter.WishedAdapter
@@ -31,6 +32,7 @@ class WishedFragment : Fragment(), WishedContract.View {
             this,
             productData = ProductRepository,
             basketData = BasketRepository,
+            wishedData = WishedRepository,
             adapterModel = wishedAdapter,
             adapterView = wishedAdapter
         )

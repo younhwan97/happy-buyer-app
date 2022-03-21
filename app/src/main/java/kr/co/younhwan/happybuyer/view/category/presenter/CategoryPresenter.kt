@@ -35,9 +35,9 @@ class CategoryPresenter(
         val app = ((view.getAct()).application) as GlobalApplication
 
         if (selectedCategory == "행사") {
-            eventData.readEventProducts(
-                object : EventSource.ReadEventProductsCallback {
-                    override fun onReadEventProducts(list: ArrayList<ProductItem>) {
+            eventData.readProducts(
+                object : EventSource.ReadProductsCallback {
+                    override fun onReadProducts(list: ArrayList<ProductItem>) {
                         if (isClear)
                             adapterModel.clearItem()
 

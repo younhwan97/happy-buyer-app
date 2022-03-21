@@ -8,12 +8,15 @@ import kr.co.younhwan.happybuyer.data.source.basket.BasketRepository
 import kr.co.younhwan.happybuyer.data.source.basket.BasketSource
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
 import kr.co.younhwan.happybuyer.data.source.product.ProductSource
+import kr.co.younhwan.happybuyer.data.source.wished.WishedRepository
+import kr.co.younhwan.happybuyer.data.source.wished.WishedSource
 import kr.co.younhwan.happybuyer.view.main.wished.adapter.contract.WishedAdapterContract
 
 class WishedPresenter(
     val view: WishedContract.View,
     private val productData: ProductRepository,
     private val basketData: BasketRepository,
+    private val wishedData: WishedRepository,
     private val adapterModel: WishedAdapterContract.Model,
     private val adapterView: WishedAdapterContract.View
 ) : WishedContract.Presenter {
@@ -72,11 +75,11 @@ class WishedPresenter(
         val app = view.getAct().application as GlobalApplication
 
         if (app.isLogined) {
-            productData.createProductInWished(
-                app.kakaoAccountId!!,
+            wishedData.createOrDeleteProduct(
+                app.kakaoAccountId,
                 productId,
-                object : ProductSource.CreateProductInWishedCallback {
-                    override fun onCreateProductInWished(perform: String?) {
+                object : WishedSource.CreateOrDeleteProductCallback {
+                    override fun onCreateOrDeleteProduct(perform: String?) {
                         if (perform == null || perform == "error") {
                             view.deleteWishedResultCallback(perform)
                         } else if (perform == "delete") {

@@ -13,6 +13,7 @@ import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.data.ProductItem
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
+import kr.co.younhwan.happybuyer.data.source.wished.WishedRepository
 import kr.co.younhwan.happybuyer.databinding.ActivityProductBinding
 import kr.co.younhwan.happybuyer.view.login.LoginActivity
 import java.text.DecimalFormat
@@ -23,7 +24,8 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
     private val productPresenter: ProductPresenter by lazy {
         ProductPresenter(
             view = this,
-            productData = ProductRepository
+            productData = ProductRepository,
+            wishedData = WishedRepository
         )
     }
 

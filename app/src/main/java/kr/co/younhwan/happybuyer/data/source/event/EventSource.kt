@@ -4,10 +4,9 @@ import kr.co.younhwan.happybuyer.data.ProductItem
 
 interface EventSource {
 
-    fun readEventProducts(readEventProductsCallback: ReadEventProductsCallback?)
+    fun readProducts(readProductsCallback: ReadProductsCallback?)
 
-    interface ReadEventProductsCallback {
-        fun onReadEventProducts(list: ArrayList<ProductItem>)
+    interface ReadProductsCallback {
+        fun onReadProducts(list: ArrayList<ProductItem>)
     }
-
 }

@@ -13,8 +13,8 @@ object EventRemoteDataSource : EventSource {
     private val client = OkHttpClient() // 클라이언트
     private const val serverInfo = "http://happybuyer.co.kr/event/api" // API 서버
 
-    override fun readEventProducts(
-        readEventProductsCallback: EventSource.ReadEventProductsCallback?
+    override fun readProducts(
+        readProductsCallback: EventSource.ReadProductsCallback?
     ) {
         runBlocking {
             val list = ArrayList<ProductItem>()
@@ -65,7 +65,7 @@ object EventRemoteDataSource : EventSource {
             }
 
             job.join()
-            readEventProductsCallback?.onReadEventProducts(list)
+            readProductsCallback?.onReadProducts(list)
         }
     }
 }

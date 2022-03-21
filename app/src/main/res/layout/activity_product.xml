@@ -290,7 +290,7 @@
         android:orientation="horizontal"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior">
 
         <xyz.hanks.library.bang.SmallBangView

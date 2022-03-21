@@ -7,11 +7,14 @@ import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
 import kr.co.younhwan.happybuyer.data.source.product.ProductSource
 import kr.co.younhwan.happybuyer.data.source.user.UserRepository
 import kr.co.younhwan.happybuyer.data.source.user.UserSource
+import kr.co.younhwan.happybuyer.data.source.wished.WishedRepository
+import kr.co.younhwan.happybuyer.data.source.wished.WishedSource
 
 class SplashPresenter(
     private val view : SplashContract.View,
     private val userData: UserRepository,
-    private val productData: ProductRepository
+    private val productData: ProductRepository,
+    private val wishedData: WishedRepository
 ) : SplashContract.Model {
 
     override fun loadUserInfo() {
@@ -40,10 +43,10 @@ class SplashPresenter(
                             app.activatedBasket =
                                 userItem?.activatedBasket // 유저 장바구니 활성화 여부 (activate, deactivate, null)
 
-                            productData.readWishedProductsId(
-                                app.kakaoAccountId!!,
-                                object : ProductSource.ReadWishedProductsIdCallback {
-                                    override fun onReadWishedProductsId(list: ArrayList<Int>) {
+                            wishedData.readProductsId(
+                                app.kakaoAccountId,
+                                object : WishedSource.ReadProductsIdCallback {
+                                    override fun onReadProductsId(list: ArrayList<Int>) {
 
                                         app.wishedProductId = list
 

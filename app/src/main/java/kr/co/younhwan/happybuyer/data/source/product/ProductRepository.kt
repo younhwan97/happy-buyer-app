@@ -7,13 +7,7 @@ object ProductRepository : ProductSource{
 
     private val productRemoteDataSource = ProductRemoteDataSource
 
-    override fun createProductInWished(kakaoAccountId: Long, productId: Int, createProductInWishedCallback: ProductSource.CreateProductInWishedCallback?) {
-        productRemoteDataSource.createProductInWished(kakaoAccountId, productId, object :ProductSource.CreateProductInWishedCallback{
-            override fun onCreateProductInWished(perform: String?) {
-                createProductInWishedCallback?.onCreateProductInWished(perform)
-            }
-        })
-    }
+
 
     override fun readProducts(selectedCategory:String, sort:String, keyword:String?, readProductsCallback: ProductSource.ReadProductsCallback?) {
         productRemoteDataSource.readProducts(selectedCategory, sort, keyword, object : ProductSource.ReadProductsCallback {
@@ -34,17 +28,4 @@ object ProductRepository : ProductSource{
             }
         })
     }
-
-    override fun readWishedProductsId(kakaoAccountId: Long, readWishedProductsIdCallback: ProductSource.ReadWishedProductsIdCallback?) {
-        productRemoteDataSource.readWishedProductsId(kakaoAccountId, object : ProductSource.ReadWishedProductsIdCallback{
-            override fun onReadWishedProductsId(list: ArrayList<Int>) {
-                readWishedProductsIdCallback?.onReadWishedProductsId(list)
-            }
-        })
-    }
-
-    /***********************************************************************/
-    /******************************* Basket *******************************/
-
-
 }

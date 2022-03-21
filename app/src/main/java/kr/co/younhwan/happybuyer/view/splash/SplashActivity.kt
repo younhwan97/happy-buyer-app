@@ -7,6 +7,7 @@ import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
 import kr.co.younhwan.happybuyer.data.source.user.UserRepository
+import kr.co.younhwan.happybuyer.data.source.wished.WishedRepository
 import kr.co.younhwan.happybuyer.databinding.ActivitySplashBinding
 import kr.co.younhwan.happybuyer.view.main.MainActivity
 
@@ -19,7 +20,8 @@ class SplashActivity : AppCompatActivity(), SplashContract.View {
         SplashPresenter(
             view = this,
             userData = UserRepository,
-            productData = ProductRepository
+            productData = ProductRepository,
+            wishedData = WishedRepository
         )
     }
 
