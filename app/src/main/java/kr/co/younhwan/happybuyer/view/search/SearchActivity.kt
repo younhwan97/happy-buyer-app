@@ -58,7 +58,7 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
 
         val keyword = intent.getStringExtra("keyword") // 검색어
 
-        searchPresenter.loadRecentSearch() // 최근 검색어를 불러온다.
+        searchPresenter.loadRecent() // 최근 검색어를 불러온다.
         searchPresenter.loadSearchHistory() // 검색어 추천을 위해 (인기) 검색 기록을 불러온다.
         searchPresenter.loadResultSearch(keyword) // 검색 결과를 불러온다.
 
@@ -99,7 +99,7 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     if (!query.isNullOrEmpty()) {
                         searchPresenter.onClickListenerOfKeyword(query)
-                        searchPresenter.createRecentSearch(query) // 최근 검색어에 저장한다.
+                        searchPresenter.createRecentWithHistory(query) // 최근 검색어에 저장한다.
                     }
                     return false
                 }
@@ -125,7 +125,7 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
         viewDataBinding.recentSearchRecycler.addItemDecoration(recentAdapter.RecyclerDecoration())
 
         viewDataBinding.recentSearchDeleteAllBtn.setOnClickListener {
-            searchPresenter.deleteAllRecentSearch()
+            searchPresenter.deleteAllRecent()
         }
 
         // 추천 검색

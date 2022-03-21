@@ -40,19 +40,11 @@ interface BasketSource {
     // DELETE
     fun deleteProduct(
         kakaoAccountId: Long,
-        productId: Int,
+        productId: ArrayList<Int>,
         deleteProductCallback: DeleteProductCallback?
     )
 
     interface DeleteProductCallback {
         fun onDeleteProduct(isSuccess: Boolean)
     }
-
-//    interface DeleteProductsCallback{
-//        fun onDeleteProducts(isSuccess: Boolean)
-//    }
-//
-//    fun deleteProducts(
-//
-//    )
 }

@@ -1,6 +1,5 @@
 package kr.co.younhwan.happybuyer.data.source.product
 
-import kr.co.younhwan.happybuyer.data.BasketItem
 import kr.co.younhwan.happybuyer.data.ProductItem
 
 interface ProductSource {
@@ -26,20 +25,6 @@ interface ProductSource {
         readProductCallback: ReadProductCallback?
     )
 
-    /***********************************************************************/
-    /******************************* Event *******************************/
-    interface ReadEventProductsCallback {
-        fun onReadEventProduct(list: ArrayList<ProductItem>)
-    }
-
-    fun readEventProducts(readEventProductsCallback: ReadEventProductsCallback?)
-    /***********************************************************************/
-    /***********************************************************************/
-
-
-    /***********************************************************************/
-    /******************************* Wished *******************************/
-
     interface ReadWishedProductsIdCallback {
         fun onReadWishedProductsId(list: ArrayList<Int>)
     }
@@ -58,16 +43,4 @@ interface ProductSource {
         productId: Int,
         createProductInWishedCallback: CreateProductInWishedCallback?
     )
-
-    /***********************************************************************/
-    /***********************************************************************/
-
-
-    /***********************************************************************/
-    /******************************* Basket *******************************/
-
-
-
-    /***********************************************************************/
-    /***********************************************************************/
 }

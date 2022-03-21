@@ -9,6 +9,8 @@ import kr.co.younhwan.happybuyer.data.source.basket.BasketRepository
 import kr.co.younhwan.happybuyer.data.source.basket.BasketSource
 import kr.co.younhwan.happybuyer.data.source.category.CategoryRepository
 import kr.co.younhwan.happybuyer.data.source.category.CategorySource
+import kr.co.younhwan.happybuyer.data.source.event.EventRepository
+import kr.co.younhwan.happybuyer.data.source.event.EventSource
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
 import kr.co.younhwan.happybuyer.data.source.product.ProductSource
 import kr.co.younhwan.happybuyer.view.main.home.adapter.main.contract.HomeAdapterContract
@@ -17,6 +19,7 @@ class HomePresenter(
     private val view: HomeContract.View,
     private val categoryData: CategoryRepository,
     private val productData: ProductRepository,
+    private val eventData: EventRepository,
     private val basketData: BasketRepository,
     private val homeAdapterModel: HomeAdapterContract.Model,
     private val homeAdapterView: HomeAdapterContract.View,
@@ -78,9 +81,9 @@ class HomePresenter(
     override fun loadEventProduct(isClear: Boolean) {
         val app = view.getAct().application as GlobalApplication
 
-        productData.readEventProducts(
-            object : ProductSource.ReadEventProductsCallback {
-                override fun onReadEventProduct(list: ArrayList<ProductItem>) {
+        eventData.readEventProducts(
+            object : EventSource.ReadEventProductsCallback {
+                override fun onReadEventProducts(list: ArrayList<ProductItem>) {
                     if (isClear)
                         eventAdapterModel.clearItem()
 

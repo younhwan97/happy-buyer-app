@@ -1,6 +1,6 @@
 package kr.co.younhwan.happybuyer.view.search.adapter.recent.contract
 
-import kr.co.younhwan.happybuyer.data.SearchItem
+import kr.co.younhwan.happybuyer.data.RecentItem
 
 interface RecentAdapterContract {
     interface View{
@@ -16,11 +16,11 @@ interface RecentAdapterContract {
 
     interface Model{
 
-        fun addItems(recentSearchItems: ArrayList<SearchItem>)
+        fun addItems(recentRecentItems: ArrayList<RecentItem>)
 
         fun clearItem()
 
-        fun getItem(position: Int): SearchItem
+        fun getItem(position: Int): RecentItem
 
         fun getItemCount(): Int
 

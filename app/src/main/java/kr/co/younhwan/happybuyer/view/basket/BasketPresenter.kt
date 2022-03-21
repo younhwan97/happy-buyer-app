@@ -181,31 +181,60 @@ class BasketPresenter(
 
     private fun onClickListenerOfDeleteBtn(basketItem: BasketItem, position: Int) {
         if (app.isLogined) {
-            basketData.deleteProduct(
-                kakaoAccountId = app.kakaoAccountId,
-                productId = basketItem.productId,
-                deleteProductCallback = object :
-                    BasketSource.DeleteProductCallback {
-                    override fun onDeleteProduct(isSuccess: Boolean) {
-                        if (isSuccess) {
-                            basketAdapterModel.deleteItem(position)
+            val productIdList = ArrayList<Int>()
+            productIdList.add(basketItem.productId)
 
-                            calculatePrice()
+            if(basketItem.productStatus == "품절"){
+                basketData.deleteProduct(
+                    kakaoAccountId = app.kakaoAccountId,
+                    productId = productIdList,
+                    deleteProductCallback = object :
+                        BasketSource.DeleteProductCallback {
+                        override fun onDeleteProduct(isSuccess: Boolean) {
+                            if (isSuccess) {
+                                basketAdapterModel.deleteItem(position)
+
+                                calculatePrice()
+                            }
                         }
                     }
-                }
-            )
+                )
+            } else {
+                MaterialAlertDialogBuilder(view.getAct())
+                    .setMessage("상품을 삭제하시겠습니까?")
+                    .setNegativeButton("취소") { dialog, which ->
+                        // Respond to negative button press
+                    }
+                    .setPositiveButton("확인") { dialog, which ->
+                        basketData.deleteProduct(
+                            kakaoAccountId = app.kakaoAccountId,
+                            productId = productIdList,
+                            deleteProductCallback = object : BasketSource.DeleteProductCallback{
+                                override fun onDeleteProduct(isSuccess: Boolean) {
+                                    if(isSuccess){
+                                        basketAdapterModel.deleteItem(position)
+
+                                        calculatePrice()
+                                    }
+                                }
+                            }
+                        )
+                    }
+                    .show()
+            }
         }
     }
 
     override fun deleteSelectedItems() {
         if (app.isLogined) {
             val newBasketItemList = ArrayList<BasketItem>()
-            val selectedItemList = ArrayList<BasketItem>()
+            val selectedItemList = ArrayList<Int>()
+
             for (index in 0 until basketAdapterModel.getItemCount()) {
                 val basketItem = basketAdapterModel.getItem(index)
+
                 if (basketItem.isChecked) {
-                    selectedItemList.add(basketItem)
+                    selectedItemList.add(basketItem.productId)
                 } else {
                     newBasketItemList.add(basketItem)
                 }
@@ -218,8 +247,19 @@ class BasketPresenter(
                         // Respond to negative button press
                     }
                     .setPositiveButton("확인") { dialog, which ->
-                        // basketAdapterModel.addItems(newBasketItemList)
-                        // basketAdapterView.notifyAdapter()
+                        basketData.deleteProduct(
+                            kakaoAccountId = app.kakaoAccountId,
+                            productId = selectedItemList,
+                            deleteProductCallback = object : BasketSource.DeleteProductCallback{
+                                override fun onDeleteProduct(isSuccess: Boolean) {
+                                    if(isSuccess){
+                                        basketAdapterModel.addItems(newBasketItemList)
+                                        basketAdapterView.notifyAdapter()
+                                        calculatePrice()
+                                    }
+                                }
+                            }
+                        )
                     }
                     .show()
             }

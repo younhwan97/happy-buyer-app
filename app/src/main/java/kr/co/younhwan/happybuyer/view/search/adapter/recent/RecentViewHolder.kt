@@ -2,7 +2,7 @@ package kr.co.younhwan.happybuyer.view.search.adapter.recent
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kr.co.younhwan.happybuyer.data.SearchItem
+import kr.co.younhwan.happybuyer.data.RecentItem
 import kr.co.younhwan.happybuyer.databinding.RecyclerRecentSearchItemBinding
 
 class RecentViewHolder (
@@ -20,7 +20,7 @@ class RecentViewHolder (
         recentItemBinding.recentSearchDeleteBtn
     }
 
-    fun onBind(item: SearchItem) {
+    fun onBind(item: RecentItem) {
         keyword.text = item.keyword
         keyword.setOnClickListener {
             listenerFuncOfRecentSearch?.invoke(item.keyword)

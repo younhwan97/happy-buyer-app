@@ -35,14 +35,6 @@ object ProductRepository : ProductSource{
         })
     }
 
-    override fun readEventProducts(readEventProductsCallback: ProductSource.ReadEventProductsCallback?) {
-        productRemoteDataSource.readEventProducts(object : ProductSource.ReadEventProductsCallback{
-            override fun onReadEventProduct(list: ArrayList<ProductItem>) {
-                readEventProductsCallback?.onReadEventProduct(list)
-            }
-        })
-    }
-
     override fun readWishedProductsId(kakaoAccountId: Long, readWishedProductsIdCallback: ProductSource.ReadWishedProductsIdCallback?) {
         productRemoteDataSource.readWishedProductsId(kakaoAccountId, object : ProductSource.ReadWishedProductsIdCallback{
             override fun onReadWishedProductsId(list: ArrayList<Int>) {

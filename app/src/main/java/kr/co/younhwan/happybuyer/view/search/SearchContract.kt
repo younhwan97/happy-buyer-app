@@ -20,11 +20,11 @@ interface SearchContract{
 
     interface Model{
 
-        fun createRecentSearch(keyword:String)
+        fun createRecentWithHistory(keyword:String)
 
-        fun loadRecentSearch()
+        fun loadRecent()
 
-        fun deleteAllRecentSearch()
+        fun deleteAllRecent()
 
         fun loadSearchHistory()
 

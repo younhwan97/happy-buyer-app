@@ -5,6 +5,8 @@ import kr.co.younhwan.happybuyer.adapter.product.contract.ProductAdapterContract
 import kr.co.younhwan.happybuyer.data.ProductItem
 import kr.co.younhwan.happybuyer.data.source.basket.BasketRepository
 import kr.co.younhwan.happybuyer.data.source.basket.BasketSource
+import kr.co.younhwan.happybuyer.data.source.event.EventRepository
+import kr.co.younhwan.happybuyer.data.source.event.EventSource
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
 import kr.co.younhwan.happybuyer.data.source.product.ProductSource
 import kr.co.younhwan.happybuyer.data.source.user.UserRepository
@@ -12,6 +14,7 @@ import kr.co.younhwan.happybuyer.data.source.user.UserRepository
 class CategoryPresenter(
     private val view: CategoryContract.View,
     private val productData: ProductRepository,
+    private val eventData: EventRepository,
     private val basketData: BasketRepository,
     private val userData: UserRepository,
     private val adapterModel: ProductAdapterContract.Model,
@@ -32,9 +35,9 @@ class CategoryPresenter(
         val app = ((view.getAct()).application) as GlobalApplication
 
         if (selectedCategory == "행사") {
-            productData.readEventProducts(
-                object : ProductSource.ReadEventProductsCallback {
-                    override fun onReadEventProduct(list: ArrayList<ProductItem>) {
+            eventData.readEventProducts(
+                object : EventSource.ReadEventProductsCallback {
+                    override fun onReadEventProducts(list: ArrayList<ProductItem>) {
                         if (isClear)
                             adapterModel.clearItem()
 

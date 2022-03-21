@@ -1,17 +1,22 @@
 package kr.co.younhwan.happybuyer.data.source.search
 
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kr.co.younhwan.happybuyer.data.SearchItem
+import kr.co.younhwan.happybuyer.data.RecentItem
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONArray
 import org.json.JSONObject
 
 object SearchRemoteDataSource : SearchSource {
-    override fun createRecentSearch(
+    private val client = OkHttpClient() // 클라이언트
+    private const val serverInfo = "http://happybuyer.co.kr/search/api" // API 서버
+    private val jsonMediaType = "application/json; charset=utf-8".toMediaTypeOrNull()
+
+    override fun createRecentWithHistory(
         kakaoAccountId: Long,
         keyword: String
     ) {
@@ -19,179 +24,141 @@ object SearchRemoteDataSource : SearchSource {
             var isSuccess = false
 
             val job = GlobalScope.launch {
-                isSuccess = createRecent(kakaoAccountId, keyword)
+                // API 서버 주소
+                val site = "${serverInfo}/recent-with-history"
+
+                // 새로운 데이터 생성을 위한 POST Request 생성
+                val jsonData = JSONObject()
+                jsonData.put("id", kakaoAccountId)
+                jsonData.put("keyword", keyword)
+                val requestBody = jsonData.toString().toRequestBody(jsonMediaType)
+                val request = Request.Builder().url(site).post(requestBody).build()
+
+                // 응답
+                val response = client.newCall(request).execute()
+                if (response.isSuccessful) {
+                    val resultText = response.body?.string()!!.trim()
+                    val json = JSONObject(resultText)
+                    isSuccess = json.getBoolean("success")
+                }
             }
 
             job.join()
         }
     }
 
-    override fun readRecentSearch(
+    override fun readRecent(
         kakaoAccountId: Long,
-        readRecentSearchCallback: SearchSource.ReadRecentSearchCallback?
+        readRecentCallback: SearchSource.ReadRecentCallback?
     ) {
         runBlocking {
-            val list = ArrayList<SearchItem>()
+            val list = ArrayList<RecentItem>()
 
             val job = GlobalScope.launch {
-                list.addAll(readRecent(kakaoAccountId))
+                // API 서버 주소
+                val site = "${serverInfo}/recent?id=${kakaoAccountId}"
+                
+                // 데이터를 읽어오기 위한 GET Request 생성
+                val request = Request.Builder().url(site).get().build()
+
+                // 응답
+                val response = client.newCall(request).execute()
+                if (response.isSuccessful) {
+                    val resultText = response.body?.string()!!.trim()
+                    val json = JSONObject(resultText)
+                    val success = json.getBoolean("success")
+
+                    if(success){
+                        val data = JSONArray(json["data"].toString())
+
+                        for(i in 0 until data.length()){
+                            val obj = data.getJSONObject(i)
+                            val userId = obj.getLong("user_id")
+                            val keyword = obj.getString("keyword")
+
+                            if(userId == kakaoAccountId){
+                                list.add(RecentItem(
+                                    userId = userId,
+                                    keyword = keyword
+                                ))
+                            }
+                        }
+                    }
+                }
             }
 
             job.join()
-            readRecentSearchCallback?.onReadRecentSearch(list)
+            readRecentCallback?.onReadRecent(list)
         }
     }
 
-    override fun deleteRecentSearch(
+    override fun readHistory(readHistoryCallback: SearchSource.ReadHistoryCallback?) {
+        runBlocking {
+            val list = ArrayList<String>()
+
+            val job = GlobalScope.launch {
+                // API 서버 주소
+                val site = "${serverInfo}/history"
+                
+                // 데이터를 읽어오기 위한 GET Request 생성
+                val request = Request.Builder().url(site).get().build()
+
+                // 응답
+                val response = client.newCall(request).execute()
+                if (response.isSuccessful) {
+                    val resultText = response.body?.string()!!.trim()
+                    val json = JSONObject(resultText)
+                    val success = json.getBoolean("success")
+
+                    if(success){
+                        val data = JSONArray(json["data"].toString())
+
+                        for(i in 0 until data.length()){
+                            val obj = data.getJSONObject(i)
+                            val keyword = obj.getString("keyword")
+                            list.add(keyword)
+                        }
+                    }
+                }
+            }
+
+            job.join()
+            readHistoryCallback?.onReadHistory(list)
+        }
+    }
+
+    override fun deleteRecent(
         kakaoAccountId: Long,
         keyword: String?,
-        deleteRecentSearchCallback: SearchSource.DeleteRecentSearchCallback?
+        deleteRecentCallback: SearchSource.DeleteRecentCallback?
     ) {
         runBlocking {
             var isSuccess = false
 
             val job = GlobalScope.launch {
-                isSuccess = deleteRecent(kakaoAccountId, keyword)
-            }
+                // API 서버 주소
+                val site = "${serverInfo}/recent"
 
-            job.join()
-            deleteRecentSearchCallback?.onDeleteRecentSearch(isSuccess)
-        }
-    }
+                // 새로운 데이터 삭제를 위한 DELETE Request 생성
+                val jsonData = JSONObject()
+                jsonData.put("id", kakaoAccountId)
+                if(!keyword.isNullOrEmpty()){
+                    jsonData.put("keyword", keyword)
+                }
+                val requestBody = jsonData.toString().toRequestBody(jsonMediaType)
+                val request = Request.Builder().url(site).delete(requestBody).build()
 
-    override fun readSearchHistory(readSearchHistoryCallback: SearchSource.ReadSearchHistoryCallback?) {
-        runBlocking {
-            val list = ArrayList<String>()
-
-            val job = GlobalScope.launch {
-                list.addAll(readHistory())
-            }
-
-            job.join()
-            readSearchHistoryCallback?.onReadSearchHistory(list)
-
-        }
-    }
-}
-
-suspend fun createRecent(kakaoAccountId: Long, keyword: String): Boolean {
-    var isSuccess = false
-
-    // 클라이언트 생성
-    val client = OkHttpClient()
-
-    // 요청
-    val site =
-        "http://happybuyer.co.kr/search/api/app/recent/create?id=${kakaoAccountId}&keyword=${keyword}"
-    val request = Request.Builder().url(site).get().build()
-
-    // 응답
-    val response = client.newCall(request).execute()
-
-    if (response.isSuccessful) {
-        val resultText = response.body?.string()!!.trim()
-        val json = JSONObject(resultText)
-        isSuccess = json.getBoolean("success")
-    }
-
-    return isSuccess
-}
-
-suspend fun readRecent(kakaoAccountId: Long): ArrayList<SearchItem> {
-    val list = ArrayList<SearchItem>()
-
-    // 클라이언트 생성
-    val client = OkHttpClient()
-
-    // 요청
-    val site =
-        "http://happybuyer.co.kr/search/api/app/recent/read?id=${kakaoAccountId}"
-    val request = Request.Builder().url(site).get().build()
-
-    // 응답
-    val response = client.newCall(request).execute()
-
-    if (response.isSuccessful) {
-        val resultText = response.body?.string()!!.trim()
-        val json = JSONObject(resultText)
-        val success = json.getBoolean("success")
-
-        if(success){
-            val data = JSONArray(json["data"].toString())
-
-            for(i in 0 until data.length()){
-                val obj = data.getJSONObject(i)
-                val userId = obj.getLong("user_id")
-                val keyword = obj.getString("keyword")
-
-                if(userId == kakaoAccountId){
-                    list.add(SearchItem(
-                        userId = userId,
-                        keyword = keyword
-                    ))
+                // 응답
+                val response = client.newCall(request).execute()
+                if (response.isSuccessful) {
+                    val resultText = response.body?.string()!!.trim()
+                    val json = JSONObject(resultText)
+                    isSuccess = json.getBoolean("success")
                 }
             }
+
+            job.join()
+            deleteRecentCallback?.onDeleteRecent(isSuccess)
         }
     }
-
-    return list
-}
-
-suspend fun deleteRecent(kakaoAccountId: Long, keyword: String?): Boolean{
-    var success = false
-
-    // 클라이언트 생성
-    val client = OkHttpClient()
-
-    val site = if(keyword.isNullOrEmpty()){
-        "http://happybuyer.co.kr/search/api/app/recent/delete?id=${kakaoAccountId}"
-    } else {
-        "http://happybuyer.co.kr/search/api/app/recent/delete?id=${kakaoAccountId}&keyword=${keyword}"
-    }
-
-    val request = Request.Builder().url(site).get().build()
-
-    // 응답
-    val response = client.newCall(request).execute()
-
-    if (response.isSuccessful) {
-        val resultText = response.body?.string()!!.trim()
-        val json = JSONObject(resultText)
-        success = json.getBoolean("success")
-    }
-
-    return success
-}
-
-suspend fun readHistory(): ArrayList<String>{
-    val list = ArrayList<String>()
-
-    // 클라이언트 생성
-    val client = OkHttpClient()
-    
-    // 요청
-    val site = "http://happybuyer.co.kr/search/api/app/history/read"
-    val request = Request.Builder().url(site).get().build()
-
-    // 응답
-    val response = client.newCall(request).execute()
-
-    if (response.isSuccessful) {
-        val resultText = response.body?.string()!!.trim()
-        val json = JSONObject(resultText)
-        val success = json.getBoolean("success")
-
-        if(success){
-            val data = JSONArray(json["data"].toString())
-
-            for(i in 0 until data.length()){
-                val obj = data.getJSONObject(i)
-                val keyword = obj.getString("keyword")
-                list.add(keyword)
-            }
-        }
-    }
-
-
-    return list
 }

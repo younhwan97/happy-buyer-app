@@ -3,7 +3,7 @@ package kr.co.younhwan.happybuyer.view.search
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.adapter.product.contract.ProductAdapterContract
 import kr.co.younhwan.happybuyer.data.ProductItem
-import kr.co.younhwan.happybuyer.data.SearchItem
+import kr.co.younhwan.happybuyer.data.RecentItem
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
 import kr.co.younhwan.happybuyer.data.source.product.ProductSource
 import kr.co.younhwan.happybuyer.data.source.search.SearchRepository
@@ -44,7 +44,7 @@ class SearchPresenter(
     val app = view.getAct().application as GlobalApplication
 
     // 최근 검색
-    override fun createRecentSearch(keyword: String) {
+    override fun createRecentWithHistory(keyword: String) {
         if (app.isLogined) { // 로그인 상태에서만 최근 검색 기록을 생성
             var alreadyExistsKeyword = false
             for (i in 0 until recentAdapterModel.getItemCount()) {
@@ -55,7 +55,7 @@ class SearchPresenter(
             }
 
             if (!alreadyExistsKeyword) {
-                searchData.createRecentSearch(
+                searchData.createRecentWithHistory(
                     kakaoAccountId = app.kakaoAccountId,
                     keyword = keyword
                 )
@@ -63,12 +63,12 @@ class SearchPresenter(
         }
     }
 
-    override fun loadRecentSearch() {
+    override fun loadRecent() {
         if (app.isLogined) { // 로그인한 유저의 최근 검색 기록을 읽어온다.
-            searchData.readRecentSearch(
+            searchData.readRecent(
                 kakaoAccountId = app.kakaoAccountId,
-                readRecentSearchCallback = object : SearchSource.ReadRecentSearchCallback {
-                    override fun onReadRecentSearch(list: ArrayList<SearchItem>) {
+                readRecentCallback = object : SearchSource.ReadRecentCallback {
+                    override fun onReadRecent(list: ArrayList<RecentItem>) {
                         recentAdapterModel.addItems(list)
                         recentAdapterView.notifyAdapter()
                     }
@@ -76,21 +76,21 @@ class SearchPresenter(
             )
         } else { // 로그인하지 않은 유저
             // list 가 비어있더라도 addItems, notifyAdapter 를 호출해야 에러가 발생하지 않는다.
-            recentAdapterModel.addItems(ArrayList<SearchItem>())
+            recentAdapterModel.addItems(ArrayList<RecentItem>())
             recentAdapterView.notifyAdapter()
         }
     }
 
-    override fun deleteAllRecentSearch() {
+    override fun deleteAllRecent() {
         if (app.isLogined) {
             if (recentAdapterModel.getItemCount() != 0) { // 저장된 검색어가 있는 경우 (불필요한 api 호출 방지)
                 // keyword == null -> 모든 최근 검색어 삭제
                 // keyword !== null -> keyword 에 해당하는 검색어만 삭제
-                searchData.deleteRecentSearch(
+                searchData.deleteRecent(
                     kakaoAccountId = app.kakaoAccountId,
                     keyword = null,
-                    deleteRecentSearchCallback = object : SearchSource.DeleteRecentSearchCallback {
-                        override fun onDeleteRecentSearch(isSuccess: Boolean) {
+                    deleteRecentCallback = object : SearchSource.DeleteRecentCallback {
+                        override fun onDeleteRecent(isSuccess: Boolean) {
                             if (isSuccess) {
                                 recentAdapterModel.clearItem()
                                 recentAdapterView.notifyAdapter()
@@ -106,11 +106,11 @@ class SearchPresenter(
         if (app.isLogined) {
             // keyword == null -> 모든 최근 검색어 삭제
             // keyword !== null -> keyword 에 해당하는 검색어만 삭제
-            searchData.deleteRecentSearch(
+            searchData.deleteRecent(
                 kakaoAccountId = app.kakaoAccountId,
                 keyword = keyword,
-                deleteRecentSearchCallback = object : SearchSource.DeleteRecentSearchCallback {
-                    override fun onDeleteRecentSearch(isSuccess: Boolean) {
+                deleteRecentCallback = object : SearchSource.DeleteRecentCallback {
+                    override fun onDeleteRecent(isSuccess: Boolean) {
                         if (isSuccess) {
                             recentAdapterModel.deleteItem(position)
                             recentAdapterView.notifyRemoved(position)
@@ -123,9 +123,9 @@ class SearchPresenter(
 
     // 추천 검색
     override fun loadSearchHistory() {
-        searchData.readSearchHistory(
-            readSearchHistoryCallback = object : SearchSource.ReadSearchHistoryCallback {
-                override fun onReadSearchHistory(list: ArrayList<String>) {
+        searchData.readHistory(
+            readHistoryCallback = object : SearchSource.ReadHistoryCallback {
+                override fun onReadHistory(list: ArrayList<String>) {
                     suggestedAdapterModel.addItems(list)
                     suggestedAdapterModel.addItemsOnHistoryItemList(list)
                     suggestedAdapterView.notifyAdapter()

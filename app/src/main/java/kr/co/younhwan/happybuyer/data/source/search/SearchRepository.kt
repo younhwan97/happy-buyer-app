@@ -1,49 +1,48 @@
 package kr.co.younhwan.happybuyer.data.source.search
 
-import kr.co.younhwan.happybuyer.data.SearchItem
+import kr.co.younhwan.happybuyer.data.RecentItem
 
 object SearchRepository : SearchSource{
 
     private val searchRemoteDataSource = SearchRemoteDataSource
 
-    override fun createRecentSearch(
+    override fun createRecentWithHistory(
         kakaoAccountId: Long,
         keyword: String,
 
     ) {
-        searchRemoteDataSource.createRecentSearch(kakaoAccountId, keyword)
+        searchRemoteDataSource.createRecentWithHistory(kakaoAccountId, keyword)
     }
 
-    override fun readRecentSearch(
+    override fun readRecent(
         kakaoAccountId: Long,
-        readRecentSearchCallback: SearchSource.ReadRecentSearchCallback?
+        readRecentCallback: SearchSource.ReadRecentCallback?
     ) {
-        searchRemoteDataSource.readRecentSearch(kakaoAccountId, object : SearchSource.ReadRecentSearchCallback{
-            override fun onReadRecentSearch(list: ArrayList<SearchItem>) {
-                readRecentSearchCallback?.onReadRecentSearch(list)
+        searchRemoteDataSource.readRecent(kakaoAccountId, object : SearchSource.ReadRecentCallback{
+            override fun onReadRecent(list: ArrayList<RecentItem>) {
+                readRecentCallback?.onReadRecent(list)
             }
         })
     }
 
-    override fun deleteRecentSearch(
+    override fun readHistory(
+        readHistoryCallback: SearchSource.ReadHistoryCallback?
+    ) {
+        searchRemoteDataSource.readHistory(object : SearchSource.ReadHistoryCallback{
+            override fun onReadHistory(list: ArrayList<String>) {
+                readHistoryCallback?.onReadHistory(list)
+            }
+        })
+    }
+
+    override fun deleteRecent(
         kakaoAccountId: Long,
         keyword: String?,
-        deleteRecentSearchCallback: SearchSource.DeleteRecentSearchCallback?
+        deleteRecentCallback: SearchSource.DeleteRecentCallback?
     ) {
-        searchRemoteDataSource.deleteRecentSearch(kakaoAccountId, keyword, object : SearchSource.DeleteRecentSearchCallback{
-            override fun onDeleteRecentSearch(isSuccess: Boolean) {
-                deleteRecentSearchCallback?.onDeleteRecentSearch(isSuccess)
-            }
-        })
-    }
-
-
-    override fun readSearchHistory(
-        readSearchHistoryCallback: SearchSource.ReadSearchHistoryCallback?
-    ) {
-        searchRemoteDataSource.readSearchHistory(object : SearchSource.ReadSearchHistoryCallback{
-            override fun onReadSearchHistory(list: ArrayList<String>) {
-                readSearchHistoryCallback?.onReadSearchHistory(list)
+        searchRemoteDataSource.deleteRecent(kakaoAccountId, keyword, object : SearchSource.DeleteRecentCallback{
+            override fun onDeleteRecent(isSuccess: Boolean) {
+                deleteRecentCallback?.onDeleteRecent(isSuccess)
             }
         })
     }

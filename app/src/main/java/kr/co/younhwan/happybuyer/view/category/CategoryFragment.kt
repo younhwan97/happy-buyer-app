@@ -17,6 +17,7 @@ import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.adapter.product.ProductAdapter
 import kr.co.younhwan.happybuyer.data.ProductItem
 import kr.co.younhwan.happybuyer.data.source.basket.BasketRepository
+import kr.co.younhwan.happybuyer.data.source.event.EventRepository
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
 import kr.co.younhwan.happybuyer.data.source.user.UserRepository
 import kr.co.younhwan.happybuyer.databinding.FragmentCategoryBinding
@@ -38,6 +39,7 @@ class CategoryFragment : Fragment(), CategoryContract.View {
         CategoryPresenter(
             this,
             productData = ProductRepository,
+            eventData = EventRepository,
             basketData= BasketRepository,
             userData = UserRepository,
             adapterModel = productAdapter,

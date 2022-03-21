@@ -1,34 +1,28 @@
 package kr.co.younhwan.happybuyer.data.source.search
 
-import kr.co.younhwan.happybuyer.data.SearchItem
+import kr.co.younhwan.happybuyer.data.RecentItem
 
 interface SearchSource{
-
     // CREATE
-    fun createRecentSearch(kakaoAccountId:Long, keyword:String)
+    fun createRecentWithHistory(kakaoAccountId:Long, keyword:String)
 
     // READ
-    interface ReadRecentSearchCallback{
-        fun onReadRecentSearch(list: ArrayList<SearchItem>)
+    fun readRecent(kakaoAccountId: Long, readRecentCallback: ReadRecentCallback?)
+
+    interface ReadRecentCallback{
+        fun onReadRecent(list: ArrayList<RecentItem>)
     }
 
-    fun readRecentSearch(kakaoAccountId: Long, readRecentSearchCallback: ReadRecentSearchCallback?)
+    fun readHistory(readHistoryCallback: ReadHistoryCallback?)
 
-    // UPDATE
-    // Not implemented..
+    interface ReadHistoryCallback{
+        fun onReadHistory(list: ArrayList<String>)
+    }
 
     // DELETE
-    interface DeleteRecentSearchCallback{
-        fun onDeleteRecentSearch(isSuccess: Boolean)
+    fun deleteRecent(kakaoAccountId: Long, keyword: String?, deleteRecentCallback: DeleteRecentCallback?)
+
+    interface DeleteRecentCallback{
+        fun onDeleteRecent(isSuccess: Boolean)
     }
-
-    fun deleteRecentSearch(kakaoAccountId: Long, keyword: String?, deleteRecentSearchCallback: DeleteRecentSearchCallback?)
-
-    interface ReadSearchHistoryCallback{
-        fun onReadSearchHistory(list: ArrayList<String>)
-    }
-
-    fun readSearchHistory(
-        readSearchHistoryCallback: ReadSearchHistoryCallback?
-    )
 }

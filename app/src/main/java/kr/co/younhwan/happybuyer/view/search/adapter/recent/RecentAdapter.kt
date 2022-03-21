@@ -5,38 +5,38 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kr.co.younhwan.happybuyer.data.SearchItem
+import kr.co.younhwan.happybuyer.data.RecentItem
 import kr.co.younhwan.happybuyer.databinding.RecyclerRecentSearchItemBinding
 import kr.co.younhwan.happybuyer.view.search.adapter.recent.contract.RecentAdapterContract
 
 class RecentAdapter : RecyclerView.Adapter<RecentViewHolder>(), RecentAdapterContract.Model, RecentAdapterContract.View {
 
-    private lateinit var recentSearchItem: ArrayList<SearchItem>
+    private lateinit var recentRecentItem: ArrayList<RecentItem>
 
     override var onClickFuncOfDeleteBtn: ((String, Int) -> Unit)? = null
 
     override var onClickFuncOfRecentSearch: ((String) -> Unit)? = null
 
-    override fun getItemCount() = recentSearchItem.size
+    override fun getItemCount() = recentRecentItem.size
 
-    override fun clearItem() = recentSearchItem.clear()
+    override fun clearItem() = recentRecentItem.clear()
 
-    override fun getItem(position: Int) = recentSearchItem[position]
+    override fun getItem(position: Int) = recentRecentItem[position]
 
     override fun notifyAdapter() = notifyDataSetChanged()
 
     override fun notifyRemoved(position: Int) = notifyItemRemoved(position)
 
-    override fun addItems(recentSearchItems: ArrayList<SearchItem>) {
-        this.recentSearchItem = recentSearchItems
+    override fun addItems(recentRecentItems: ArrayList<RecentItem>) {
+        this.recentRecentItem = recentRecentItems
     }
 
     override fun deleteItem(position: Int) {
-        recentSearchItem.removeAt(position)
+        recentRecentItem.removeAt(position)
     }
 
     override fun onBindViewHolder(holder: RecentViewHolder, position: Int) {
-        recentSearchItem[position].let {
+        recentRecentItem[position].let {
             holder.onBind(it)
         }
     }

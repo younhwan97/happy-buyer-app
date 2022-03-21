@@ -4,13 +4,16 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kr.co.younhwan.happybuyer.data.BasketItem
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONArray
 import org.json.JSONObject
 
 object BasketRemoteDataSource : BasketSource {
     private val client = OkHttpClient() // 클라이언트
+    private const val serverInfo = "http://happybuyer.co.kr/basket/api" // API 서버
+    private val jsonMediaType = "application/json; charset=utf-8".toMediaTypeOrNull()
 
     override fun createProduct(
         kakaoAccountId: Long,
@@ -22,10 +25,16 @@ object BasketRemoteDataSource : BasketSource {
             var resultCount = 0
 
             val job = GlobalScope.launch {
-                // 요청
-                val site =
-                    "http://happybuyer.co.kr/basket/api/app/create?pid=${productId}&uid=${kakaoAccountId}&count=${count}"
-                val request = Request.Builder().url(site).get().build()
+                // API 서버 주소
+                val site = serverInfo
+
+                // 새로운 데이터 생성을 위한 POST Request 생성
+                val jsonData = JSONObject()
+                jsonData.put("user_id", kakaoAccountId)
+                jsonData.put("product_id", productId)
+                jsonData.put("count", count)
+                val requestBody = jsonData.toString().toRequestBody(jsonMediaType)
+                val request = Request.Builder().url(site).post(requestBody).build()
 
                 // 응답
                 val response = client.newCall(request).execute()
@@ -34,8 +43,9 @@ object BasketRemoteDataSource : BasketSource {
                     val json = JSONObject(resultText)
                     val success = json.getBoolean("success")
 
-                    if (success)
+                    if (success) {
                         resultCount = json.getInt("result_count")
+                    }
                 }
             }
 
@@ -52,8 +62,10 @@ object BasketRemoteDataSource : BasketSource {
             val list = ArrayList<BasketItem>()
 
             val job = GlobalScope.launch {
-                // 요청
-                val site = "http://happybuyer.co.kr/basket/api/app/read?id=${kakaoAccountId}"
+                // API 서버 주소
+                val site = "${serverInfo}?id=${kakaoAccountId}"
+
+                // 데이터를 읽기 위한 GET Request 생성
                 val request = Request.Builder().url(site).get().build()
 
                 // 응답
@@ -63,7 +75,6 @@ object BasketRemoteDataSource : BasketSource {
                     val json = JSONObject(resultText)
 
                     val success = json.getBoolean("success")
-
                     if (success) {
                         val data = JSONArray(json["data"].toString())
 
@@ -78,8 +89,10 @@ object BasketRemoteDataSource : BasketSource {
                                 val productPrice = obj.getInt("price")
                                 val productImage = obj.getString("image_url")
                                 val countInBasket = obj.getInt("count_in_basket")
-                                val onSale = if (obj.isNull("on_sale")) false else obj.getBoolean("on_sale")
-                                val eventPrice = if (obj.isNull("event_price")) 0 else obj.getInt("event_price")
+                                val onSale =
+                                    if (obj.isNull("on_sale")) false else obj.getBoolean("on_sale")
+                                val eventPrice =
+                                    if (obj.isNull("event_price")) 0 else obj.getInt("event_price")
 
                                 list.add(
                                     BasketItem(
@@ -115,10 +128,16 @@ object BasketRemoteDataSource : BasketSource {
             var isSuccess = false
 
             val job = GlobalScope.launch {
-                // 요청
-                val site =
-                    "http://happybuyer.co.kr/basket/api/app/update?pid=${productId}&uid=${kakaoAccountId}&perform=${perform}"
-                val request = Request.Builder().url(site).get().build()
+                // API 서버 주소
+                val site = serverInfo
+
+                // 데이터 수정을 위한 PUT Request 생성
+                val jsonData = JSONObject()
+                jsonData.put("user_id", kakaoAccountId)
+                jsonData.put("product_id", productId)
+                jsonData.put("perform", perform)
+                val requestBody = jsonData.toString().toRequestBody(jsonMediaType)
+                val request = Request.Builder().url(site).put(requestBody).build()
 
                 // 응답
                 val response = client.newCall(request).execute()
@@ -136,17 +155,26 @@ object BasketRemoteDataSource : BasketSource {
 
     override fun deleteProduct(
         kakaoAccountId: Long,
-        productId: Int,
+        productId: ArrayList<Int>,
         deleteProductCallback: BasketSource.DeleteProductCallback?
     ) {
         runBlocking {
             var isSuccess = false
 
             val job = GlobalScope.launch {
-                // 요청
-                val site =
-                    "http://happybuyer.co.kr/basket/api/app/delete?pid=${productId}&uid=${kakaoAccountId}"
-                val request = Request.Builder().url(site).get().build()
+                // API 서버 주소
+                val site = serverInfo
+
+                // 데이터 삭제를 위한 DELETE Request 생성
+                val jsonData = JSONArray()
+                for (id in productId) {
+                    val jsonTemp = JSONObject()
+                    jsonTemp.put("user_id", kakaoAccountId)
+                    jsonTemp.put("product_id", id)
+                    jsonData.put(jsonTemp)
+                }
+                val requestBody = jsonData.toString().toRequestBody(jsonMediaType)
+                val request = Request.Builder().url(site).delete(requestBody).build()
 
                 // 응답
                 val response = client.newCall(request).execute()
