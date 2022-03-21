@@ -4,15 +4,15 @@ import kr.co.younhwan.happybuyer.data.BasketItem
 
 interface BasketSource {
     // CREATE
-    fun createProduct(
+    fun createOrUpdateProduct(
         kakaoAccountId: Long,
         productId: Int,
         count: Int,
-        createProductCallback: CreateProductCallback?
+        createOrUpdateProductCallback: CreateOrUpdateProductCallback?
     )
 
-    interface CreateProductCallback {
-        fun onCreateProduct(resultCount: Int)
+    interface CreateOrUpdateProductCallback {
+        fun onCreateOrUpdateProduct(resultCount: Int)
     }
 
     // READ
@@ -38,13 +38,13 @@ interface BasketSource {
     }
 
     // DELETE
-    fun deleteProduct(
+    fun deleteProducts(
         kakaoAccountId: Long,
         productId: ArrayList<Int>,
-        deleteProductCallback: DeleteProductCallback?
+        deleteProductsCallback: DeleteProductsCallback?
     )
 
-    interface DeleteProductCallback {
-        fun onDeleteProduct(isSuccess: Boolean)
+    interface DeleteProductsCallback {
+        fun onDeleteProducts(isSuccess: Boolean)
     }
 }

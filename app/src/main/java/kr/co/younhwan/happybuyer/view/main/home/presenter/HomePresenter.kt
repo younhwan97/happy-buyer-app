@@ -109,26 +109,27 @@ class HomePresenter(
         val app = view.getAct().application as GlobalApplication
 
         productData.readProducts(
-            "total",
-            "popular",
+            selectedCategory = "total",
             keyword = null,
             object : ProductSource.ReadProductsCallback {
                 override fun onReadProducts(list: ArrayList<ProductItem>) {
                     if (isClear)
                         popularAdapterModel.clearItem()
 
+                    val sortedList = ArrayList(list.sortedBy { it.sales }.reversed().subList(0,6))
+
                     val wishedProductId = app.wishedProductId
 
-                    for (index in 0 until list.size) {
+                    for (index in 0 until sortedList.size) {
                         for (item in wishedProductId) {
-                            if (item == list[index].productId) {
-                                list[index].isWished = true
+                            if (item == sortedList[index].productId) {
+                                sortedList[index].isWished = true
                                 break;
                             }
                         }
                     }
 
-                    popularAdapterModel.addItems(list)
+                    popularAdapterModel.addItems(sortedList)
                     popularAdapterView.notifyAdapter()
                 }
             }
@@ -144,15 +145,15 @@ class HomePresenter(
         if (!app.isLogined) {
             view.createLoginActivity()
         } else {
-            basketData.createProduct(
+            basketData.createOrUpdateProduct(
                 kakaoAccountId = app.kakaoAccountId,
                 productId = productId,
                 count = 1,
-                object : BasketSource.CreateProductCallback {
-                    override fun onCreateProduct(count: Int) {
-                        if (count in 1..20) {
+                object : BasketSource.CreateOrUpdateProductCallback {
+                    override fun onCreateOrUpdateProduct(resultCount: Int) {
+                        if (resultCount in 1..20) {
 
-                            view.createProductInBasketResultCallback(count)
+                            view.createProductInBasketResultCallback(resultCount)
                         }
                     }
                 }

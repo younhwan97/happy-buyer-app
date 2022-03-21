@@ -6,23 +6,25 @@ object BasketRepository : BasketSource {
 
     private val basketRemoteDataSource = BasketRemoteDataSource
 
-    override fun createProduct(
+    // CREATE
+    override fun createOrUpdateProduct(
         kakaoAccountId: Long,
         productId: Int,
         count: Int,
-        createProductCallback: BasketSource.CreateProductCallback?
+        createOrUpdateProductCallback: BasketSource.CreateOrUpdateProductCallback?
     ) {
-        basketRemoteDataSource.createProduct(
+        basketRemoteDataSource.createOrUpdateProduct(
             kakaoAccountId,
             productId,
             count,
-            object : BasketSource.CreateProductCallback {
-                override fun onCreateProduct(resultCount: Int) {
-                    createProductCallback?.onCreateProduct(resultCount)
+            object : BasketSource.CreateOrUpdateProductCallback {
+                override fun onCreateOrUpdateProduct(resultCount: Int) {
+                    createOrUpdateProductCallback?.onCreateOrUpdateProduct(resultCount)
                 }
             })
     }
 
+    // READ
     override fun readProducts(
         kakaoAccountId: Long,
         readProductsCallback: BasketSource.ReadProductsCallback?
@@ -36,6 +38,7 @@ object BasketRepository : BasketSource {
             })
     }
 
+    // UPDATE
     override fun updateProduct(
         kakaoAccountId: Long,
         productId: Int,
@@ -53,19 +56,19 @@ object BasketRepository : BasketSource {
             })
     }
 
-    override fun deleteProduct(
+    // DELETE
+    override fun deleteProducts(
         kakaoAccountId: Long,
         productId: ArrayList<Int>,
-        deleteProductCallback: BasketSource.DeleteProductCallback?
+        deleteProductsCallback: BasketSource.DeleteProductsCallback?
     ) {
-        basketRemoteDataSource.deleteProduct(
+        basketRemoteDataSource.deleteProducts(
             kakaoAccountId,
             productId,
-            object : BasketSource.DeleteProductCallback {
-                override fun onDeleteProduct(isSuccess: Boolean) {
-                    deleteProductCallback?.onDeleteProduct(isSuccess)
+            object : BasketSource.DeleteProductsCallback {
+                override fun onDeleteProducts(isSuccess: Boolean) {
+                    deleteProductsCallback?.onDeleteProducts(isSuccess)
                 }
             })
     }
-
 }

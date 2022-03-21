@@ -29,7 +29,7 @@ class WishedAdapter :
     override fun getItem(position: Int) = productItemList[position]
 
     override fun addItems(productItems: ArrayList<ProductItem>) {
-        this.productItemList = productItems
+        productItemList = productItems
     }
 
     override fun deleteItem(position: Int) {

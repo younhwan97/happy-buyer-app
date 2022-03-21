@@ -2,6 +2,7 @@ package kr.co.younhwan.happybuyer.view.splash
 
 import com.kakao.sdk.user.UserApiClient
 import kr.co.younhwan.happybuyer.GlobalApplication
+import kr.co.younhwan.happybuyer.data.ProductItem
 import kr.co.younhwan.happybuyer.data.UserItem
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
 import kr.co.younhwan.happybuyer.data.source.product.ProductSource
@@ -43,12 +44,18 @@ class SplashPresenter(
                             app.activatedBasket =
                                 userItem?.activatedBasket // 유저 장바구니 활성화 여부 (activate, deactivate, null)
 
-                            wishedData.readProductsId(
+                            wishedData.readProducts(
                                 app.kakaoAccountId,
-                                object : WishedSource.ReadProductsIdCallback {
-                                    override fun onReadProductsId(list: ArrayList<Int>) {
+                                object : WishedSource.ReadProductsCallback {
+                                    override fun onReadProducts(list: ArrayList<ProductItem>) {
 
-                                        app.wishedProductId = list
+                                        val productIdList = ArrayList<Int>()
+                                        for(item in list){
+                                            productIdList.add(item.productId)
+                                        }
+
+
+                                        app.wishedProductId = productIdList
 
                                         if(app.activatedBasket == "activate"){
 //                                            productData.readProductsInBasketCount(

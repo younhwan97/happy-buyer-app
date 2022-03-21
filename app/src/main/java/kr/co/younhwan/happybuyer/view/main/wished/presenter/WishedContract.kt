@@ -8,14 +8,17 @@ interface WishedContract{
 
         fun getAct() : MainActivity
 
-        fun setEmpty()
+        fun loadWishedProductsCallback(count: Int)
 
-        fun deleteWishedResultCallback(perform: String?)
+        fun deleteWishedProductCallback(perform: String?)
 
         fun addBasketResultCallback(count: Int)
+
     }
 
     interface Presenter{
-        fun loadWishedItem(context: Context, isClear: Boolean)
+
+        fun loadWishedProducts(context: Context, isClear: Boolean)
+
     }
 }

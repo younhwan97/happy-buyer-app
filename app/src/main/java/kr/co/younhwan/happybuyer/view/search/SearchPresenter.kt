@@ -146,7 +146,6 @@ class SearchPresenter(
         } else { // 키워드가 존재할 때
             productData.readProducts(
                 selectedCategory = "total",
-                sort = "basic",
                 keyword = keyword,
                 readProductsCallback = object : ProductSource.ReadProductsCallback {
                     override fun onReadProducts(list: ArrayList<ProductItem>) {

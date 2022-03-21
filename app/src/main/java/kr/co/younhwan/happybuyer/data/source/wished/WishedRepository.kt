@@ -1,23 +1,34 @@
 package kr.co.younhwan.happybuyer.data.source.wished
 
-object WishedRepository : WishedSource{
+import kr.co.younhwan.happybuyer.data.ProductItem
+
+object WishedRepository : WishedSource {
 
     private val wishedRemoteDataSource = WishedRemoteDataSource
 
-    override fun createOrDeleteProduct(kakaoAccountId: Long, productId: Int, createOrDeleteProductCallback: WishedSource.CreateOrDeleteProductCallback?) {
+    // CREATE or DELETE
+    override fun createOrDeleteProduct(
+        kakaoAccountId: Long,
+        productId: Int,
+        createOrDeleteProductCallback: WishedSource.CreateOrDeleteProductCallback?
+    ) {
         wishedRemoteDataSource.createOrDeleteProduct(kakaoAccountId, productId, object :
-            WishedSource.CreateOrDeleteProductCallback{
+            WishedSource.CreateOrDeleteProductCallback {
             override fun onCreateOrDeleteProduct(perform: String?) {
                 createOrDeleteProductCallback?.onCreateOrDeleteProduct(perform)
             }
         })
     }
 
-
-    override fun readProductsId(kakaoAccountId: Long, readProductsIdCallback: WishedSource.ReadProductsIdCallback?) {
-        wishedRemoteDataSource.readProductsId(kakaoAccountId, object : WishedSource.ReadProductsIdCallback{
-            override fun onReadProductsId(list: ArrayList<Int>) {
-                readProductsIdCallback?.onReadProductsId(list)
+    // READ
+    override fun readProducts(
+        kakaoAccountId: Long,
+        readProductsCallback: WishedSource.ReadProductsCallback?
+    ) {
+        wishedRemoteDataSource.readProducts(kakaoAccountId, object :
+            WishedSource.ReadProductsCallback {
+            override fun onReadProducts(list: ArrayList<ProductItem>) {
+                readProductsCallback?.onReadProducts(list)
             }
         })
     }

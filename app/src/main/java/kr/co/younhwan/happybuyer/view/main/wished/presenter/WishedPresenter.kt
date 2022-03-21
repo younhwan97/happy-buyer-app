@@ -1,87 +1,66 @@
 package kr.co.younhwan.happybuyer.view.main.wished.presenter
 
 import android.content.Context
-import android.util.Log
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.data.ProductItem
 import kr.co.younhwan.happybuyer.data.source.basket.BasketRepository
 import kr.co.younhwan.happybuyer.data.source.basket.BasketSource
-import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
-import kr.co.younhwan.happybuyer.data.source.product.ProductSource
 import kr.co.younhwan.happybuyer.data.source.wished.WishedRepository
 import kr.co.younhwan.happybuyer.data.source.wished.WishedSource
 import kr.co.younhwan.happybuyer.view.main.wished.adapter.contract.WishedAdapterContract
 
 class WishedPresenter(
     val view: WishedContract.View,
-    private val productData: ProductRepository,
-    private val basketData: BasketRepository,
     private val wishedData: WishedRepository,
-    private val adapterModel: WishedAdapterContract.Model,
-    private val adapterView: WishedAdapterContract.View
+    private val basketData: BasketRepository,
+    private val wishedAdapterModel: WishedAdapterContract.Model,
+    private val wishedAdapterView: WishedAdapterContract.View
 ) : WishedContract.Presenter {
 
     init {
-        adapterView.onClickFuncOfBasketBtn = { i ->
+        wishedAdapterView.onClickFuncOfBasketBtn = { i ->
             onClickListenerOfBasketBtn(i)
         }
 
-        adapterView.onClickFuncOfDeleteBtn = { i, j ->
+        wishedAdapterView.onClickFuncOfDeleteBtn = { i, j ->
             onClickListenerOfDeleteBtn(i, j)
         }
     }
 
-    override fun loadWishedItem(context: Context, isClear: Boolean) {
-        val app = ((view.getAct()).application) as GlobalApplication
+    val app = ((view.getAct()).application) as GlobalApplication
 
+    override fun loadWishedProducts(context: Context, isClear: Boolean) {
         if (app.isLogined) { // 로그인 상태
-            productData.readProducts(
-                "total",
-                sort = "basic",
-                keyword = null,
-                object : ProductSource.ReadProductsCallback {
+            wishedData.readProducts(
+                kakaoAccountId = app.kakaoAccountId,
+                readProductsCallback = object : WishedSource.ReadProductsCallback{
                     override fun onReadProducts(list: ArrayList<ProductItem>) {
                         if (isClear) {
-                            adapterModel.clearItem()
+                            wishedAdapterModel.clearItem()
                         }
 
-                        val wishedProductId = app.wishedProductId
-                        val wishedItem = ArrayList<ProductItem>()
-
-                        for(index in 0 until list.size){
-                            for(id in wishedProductId){
-                                if(id == list[index].productId){
-                                    wishedItem.add(list[index])
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (wishedItem.isEmpty()) { // 사용자가 찜한 상품이 하나도 없을 때
-                            view.setEmpty()
-                        } else {
-                            adapterModel.addItems(wishedItem)
-                            adapterView.notifyAdapter()
-                        }
+                        view.loadWishedProductsCallback(list.size)
+                        wishedAdapterModel.addItems(list)
+                        wishedAdapterView.notifyAdapter()
                     }
                 }
             )
         } else { // 비 로그인 상태
-            view.setEmpty()
+            view.loadWishedProductsCallback(0)
+            wishedAdapterModel.addItems(ArrayList<ProductItem>())
+            wishedAdapterView.notifyAdapter()
         }
     }
 
     private fun onClickListenerOfDeleteBtn(productId: Int, position: Int) {
-        val app = view.getAct().application as GlobalApplication
-
         if (app.isLogined) {
             wishedData.createOrDeleteProduct(
-                app.kakaoAccountId,
-                productId,
-                object : WishedSource.CreateOrDeleteProductCallback {
+                kakaoAccountId = app.kakaoAccountId,
+                productId = productId,
+                createOrDeleteProductCallback = object : WishedSource.CreateOrDeleteProductCallback {
                     override fun onCreateOrDeleteProduct(perform: String?) {
                         if (perform == null || perform == "error") {
-                            view.deleteWishedResultCallback(perform)
+                            view.deleteWishedProductCallback(perform)
                         } else if (perform == "delete") {
                             for (index in 0 until app.wishedProductId.size) {
                                 if (app.wishedProductId[index] == productId) {
@@ -90,33 +69,27 @@ class WishedPresenter(
                                 }
                             }
 
-                            adapterModel.deleteItem(position)
-                            view.deleteWishedResultCallback(perform)
-
-                            if(adapterModel.getItemCount() == 0){
-                                view.setEmpty()
-                            }
+                            wishedAdapterModel.deleteItem(position)
+                            view.deleteWishedProductCallback(perform)
                         }
                     }
                 }
             )
         } else {
-            view.deleteWishedResultCallback("error")
+            view.deleteWishedProductCallback("error")
         }
     }
 
     private fun onClickListenerOfBasketBtn(productId: Int) {
-        val app = view.getAct().application as GlobalApplication
-
         if (app.isLogined) {
-            basketData.createProduct(
-                kakaoAccountId = app.kakaoAccountId!!,
+            basketData.createOrUpdateProduct(
+                kakaoAccountId = app.kakaoAccountId,
                 productId = productId,
                 count = 1,
-                object : BasketSource.CreateProductCallback {
-                    override fun onCreateProduct(count: Int) {
-                        if(count in 1..20){
-                            view.addBasketResultCallback(count)
+                object : BasketSource.CreateOrUpdateProductCallback {
+                    override fun onCreateOrUpdateProduct(resultCount: Int) {
+                        if(resultCount in 1..20){
+                            view.addBasketResultCallback(resultCount)
                         }
                     }
                 }

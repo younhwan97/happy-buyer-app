@@ -126,13 +126,13 @@ class BasketPresenter(
 
     private fun onClickListenerOfPlusBtn(basketItem: BasketItem, position: Int) {
         if (app.isLogined) {
-            basketData.createProduct(
+            basketData.createOrUpdateProduct(
                 kakaoAccountId = app.kakaoAccountId,
                 productId = basketItem.productId,
                 count = 1,
-                createProductCallback = object :
-                    BasketSource.CreateProductCallback {
-                    override fun onCreateProduct(resultCount: Int) {
+                createOrUpdateProductCallback = object :
+                    BasketSource.CreateOrUpdateProductCallback {
+                    override fun onCreateOrUpdateProduct(resultCount: Int) {
                         if (resultCount == basketItem.countInBasket + 1) {
                             for (index in 0 until basketAdapterModel.getItemCount()) {
                                 if (basketAdapterModel.getItem(index).productId == basketItem.productId) {
@@ -185,12 +185,12 @@ class BasketPresenter(
             productIdList.add(basketItem.productId)
 
             if(basketItem.productStatus == "품절"){
-                basketData.deleteProduct(
+                basketData.deleteProducts(
                     kakaoAccountId = app.kakaoAccountId,
                     productId = productIdList,
-                    deleteProductCallback = object :
-                        BasketSource.DeleteProductCallback {
-                        override fun onDeleteProduct(isSuccess: Boolean) {
+                    deleteProductsCallback = object :
+                        BasketSource.DeleteProductsCallback {
+                        override fun onDeleteProducts(isSuccess: Boolean) {
                             if (isSuccess) {
                                 basketAdapterModel.deleteItem(position)
 
@@ -206,11 +206,11 @@ class BasketPresenter(
                         // Respond to negative button press
                     }
                     .setPositiveButton("확인") { dialog, which ->
-                        basketData.deleteProduct(
+                        basketData.deleteProducts(
                             kakaoAccountId = app.kakaoAccountId,
                             productId = productIdList,
-                            deleteProductCallback = object : BasketSource.DeleteProductCallback{
-                                override fun onDeleteProduct(isSuccess: Boolean) {
+                            deleteProductsCallback = object : BasketSource.DeleteProductsCallback{
+                                override fun onDeleteProducts(isSuccess: Boolean) {
                                     if(isSuccess){
                                         basketAdapterModel.deleteItem(position)
 
@@ -247,11 +247,11 @@ class BasketPresenter(
                         // Respond to negative button press
                     }
                     .setPositiveButton("확인") { dialog, which ->
-                        basketData.deleteProduct(
+                        basketData.deleteProducts(
                             kakaoAccountId = app.kakaoAccountId,
                             productId = selectedItemList,
-                            deleteProductCallback = object : BasketSource.DeleteProductCallback{
-                                override fun onDeleteProduct(isSuccess: Boolean) {
+                            deleteProductsCallback = object : BasketSource.DeleteProductsCallback{
+                                override fun onDeleteProducts(isSuccess: Boolean) {
                                     if(isSuccess){
                                         basketAdapterModel.addItems(newBasketItemList)
                                         basketAdapterView.notifyAdapter()

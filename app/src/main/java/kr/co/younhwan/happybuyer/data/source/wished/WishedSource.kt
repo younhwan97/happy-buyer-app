@@ -1,6 +1,9 @@
 package kr.co.younhwan.happybuyer.data.source.wished
 
+import kr.co.younhwan.happybuyer.data.ProductItem
+
 interface WishedSource {
+    // CREATE or DELETE
     fun createOrDeleteProduct(
         kakaoAccountId: Long,
         productId: Int,
@@ -11,12 +14,13 @@ interface WishedSource {
         fun onCreateOrDeleteProduct(perform: String?)
     }
 
-    fun readProductsId(
+    // READ
+    fun readProducts(
         kakaoAccountId: Long,
-        readProductsIdCallback: ReadProductsIdCallback?
+        readProductsCallback: ReadProductsCallback?
     )
 
-    interface ReadProductsIdCallback {
-        fun onReadProductsId(list: ArrayList<Int>)
+    interface ReadProductsCallback {
+        fun onReadProducts(list: ArrayList<ProductItem>)
     }
 }

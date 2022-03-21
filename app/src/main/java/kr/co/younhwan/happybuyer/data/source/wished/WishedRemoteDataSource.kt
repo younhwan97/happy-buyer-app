@@ -3,6 +3,7 @@ package kr.co.younhwan.happybuyer.data.source.wished
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kr.co.younhwan.happybuyer.data.ProductItem
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -10,11 +11,12 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONArray
 import org.json.JSONObject
 
-object WishedRemoteDataSource : WishedSource{
+object WishedRemoteDataSource : WishedSource {
     private val client = OkHttpClient() // 클라이언트
     private const val serverInfo = "http://happybuyer.co.kr/wished/api" // API 서버
     private val jsonMediaType = "application/json; charset=utf-8".toMediaTypeOrNull()
 
+    // CREATE or DELETE
     override fun createOrDeleteProduct(
         kakaoAccountId: Long,
         productId: Int,
@@ -42,8 +44,11 @@ object WishedRemoteDataSource : WishedSource{
                     val success = json.getBoolean("success")
                     val resultPerform = json.getString("perform")
 
-                    if (success)
-                        perform = resultPerform
+                    perform = if (success) {
+                        resultPerform
+                    } else {
+                        "error"
+                    }
                 }
             }
 
@@ -52,12 +57,13 @@ object WishedRemoteDataSource : WishedSource{
         }
     }
 
-    override fun readProductsId(
+    // READ
+    override fun readProducts(
         kakaoAccountId: Long,
-        readProductsIdCallback: WishedSource.ReadProductsIdCallback?
+        readProductsCallback: WishedSource.ReadProductsCallback?
     ) {
         runBlocking {
-            val list = ArrayList<Int>()
+            val list = ArrayList<ProductItem>()
 
             val job = GlobalScope.launch {
                 // 요청
@@ -73,14 +79,37 @@ object WishedRemoteDataSource : WishedSource{
                     val json = JSONObject(resultText)
 
                     val success = json.getBoolean("success")
-                    if (success) { // 유저가 찜한 상품이 있을 때
+
+                    if (success) {
                         val data = JSONArray(json["data"].toString())
+
                         for (i in 0 until data.length()) {
                             val obj = data.getJSONObject(i)
-                            val userId = obj.getLong("user_id")
+                            val productStatus = obj.getString("status")
+                            val productCategory = obj.getString("category")
 
-                            if (kakaoAccountId == userId) {
-                                list.add(obj.getInt("product_id"))
+                            if (productStatus == "판매중") {
+                                val productId = obj.getInt("product_id")
+                                val productName = obj.getString("name")
+                                val productPrice = obj.getInt("price")
+                                val productImage = obj.getString("image_url")
+                                val onSale =
+                                    if (obj.isNull("on_sale")) false else obj.getBoolean("on_sale")
+                                val eventPrice =
+                                    if (obj.isNull("event_price")) 0 else obj.getInt("event_price")
+                                val sales = if (obj.isNull("sales")) 0 else obj.getInt("sales")
+
+                                list.add(
+                                    ProductItem(
+                                        productId = productId,
+                                        productName = productName,
+                                        productPrice = productPrice,
+                                        productImageUrl = productImage,
+                                        onSale = onSale,
+                                        eventPrice = eventPrice,
+                                        sales = sales
+                                    )
+                                )
                             }
                         }
                     }
@@ -88,7 +117,7 @@ object WishedRemoteDataSource : WishedSource{
             }
 
             job.join()
-            readProductsIdCallback?.onReadProductsId(list)
+            readProductsCallback?.onReadProducts(list)
         }
     }
 }

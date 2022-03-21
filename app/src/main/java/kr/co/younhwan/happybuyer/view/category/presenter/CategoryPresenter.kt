@@ -49,7 +49,6 @@ class CategoryPresenter(
         } else {
             productData.readProducts(
                 selectedCategory = selectedCategory,
-                sort = "basic",
                 keyword = null,
                 object : ProductSource.ReadProductsCallback {
                     override fun onReadProducts(list: ArrayList<ProductItem>) {
@@ -81,15 +80,15 @@ class CategoryPresenter(
         val app = ((view.getAct()).application) as GlobalApplication
 
         if (app.isLogined) {
-            basketData.createProduct(
+            basketData.createOrUpdateProduct(
                 kakaoAccountId = app.kakaoAccountId,
                 productId = productId,
                 count = 1,
-                object : BasketSource.CreateProductCallback {
-                    override fun onCreateProduct(count: Int) {
+                object : BasketSource.CreateOrUpdateProductCallback {
+                    override fun onCreateOrUpdateProduct(resultCount: Int) {
 
-                        if(count in 1..20){
-                            view.createProductInBasketResultCallback(count)
+                        if(resultCount in 1..20){
+                            view.createProductInBasketResultCallback(resultCount)
                         }
 
                     }

@@ -3,7 +3,6 @@ package kr.co.younhwan.happybuyer.data.source.user
 import kr.co.younhwan.happybuyer.data.UserItem
 
 interface UserSource {
-
     // Create User
     interface CreateUserCallback {
         fun onCreateUser(isSuccess: Boolean)

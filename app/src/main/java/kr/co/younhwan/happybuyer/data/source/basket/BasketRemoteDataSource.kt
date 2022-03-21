@@ -15,11 +15,12 @@ object BasketRemoteDataSource : BasketSource {
     private const val serverInfo = "http://happybuyer.co.kr/basket/api" // API 서버
     private val jsonMediaType = "application/json; charset=utf-8".toMediaTypeOrNull()
 
-    override fun createProduct(
+    // CREATE
+    override fun createOrUpdateProduct(
         kakaoAccountId: Long,
         productId: Int,
         count: Int,
-        createProductCallback: BasketSource.CreateProductCallback?
+        createOrUpdateProductCallback: BasketSource.CreateOrUpdateProductCallback?
     ) {
         runBlocking {
             var resultCount = 0
@@ -50,10 +51,11 @@ object BasketRemoteDataSource : BasketSource {
             }
 
             job.join()
-            createProductCallback?.onCreateProduct(resultCount)
+            createOrUpdateProductCallback?.onCreateOrUpdateProduct(resultCount)
         }
     }
 
+    // READ
     override fun readProducts(
         kakaoAccountId: Long,
         readProductsCallback: BasketSource.ReadProductsCallback?
@@ -118,6 +120,7 @@ object BasketRemoteDataSource : BasketSource {
         }
     }
 
+    // UPDATE
     override fun updateProduct(
         kakaoAccountId: Long,
         productId: Int,
@@ -153,10 +156,11 @@ object BasketRemoteDataSource : BasketSource {
         }
     }
 
-    override fun deleteProduct(
+    // DELETE
+    override fun deleteProducts(
         kakaoAccountId: Long,
         productId: ArrayList<Int>,
-        deleteProductCallback: BasketSource.DeleteProductCallback?
+        deleteProductsCallback: BasketSource.DeleteProductsCallback?
     ) {
         runBlocking {
             var isSuccess = false
@@ -186,7 +190,7 @@ object BasketRemoteDataSource : BasketSource {
             }
 
             job.join()
-            deleteProductCallback?.onDeleteProduct(isSuccess)
+            deleteProductsCallback?.onDeleteProducts(isSuccess)
         }
     }
 }
