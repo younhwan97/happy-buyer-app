@@ -10,7 +10,7 @@ interface WishedContract{
 
         fun loadWishedProductsCallback(count: Int)
 
-        fun deleteWishedProductCallback(perform: String?)
+        fun deleteWishedProductCallback(perform: String?) // 추후 변경
 
         fun addBasketResultCallback(count: Int)
 

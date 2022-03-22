@@ -28,10 +28,8 @@ import kr.co.younhwan.happybuyer.view.product.ProductActivity
 import kr.co.younhwan.happybuyer.view.search.SearchActivity
 
 class HomeFragment : Fragment(), HomeContract.View {
-    /* View Binding */
     private lateinit var viewDataBinding: FragmentHomeBinding
 
-    /* Adapter */
     private val homeAdapter: HomeAdapter by lazy {
         HomeAdapter()
     }
@@ -44,10 +42,7 @@ class HomeFragment : Fragment(), HomeContract.View {
         ProductAdapter("home")
     }
 
-    /* Presenter */
     private val homePresenter: HomePresenter by lazy {
-        // View 영역은 사용자 이벤트 등에 대응하기 위해서 Presenter 변수가 필요하다.
-        // 실제 처리는 Presenter, Model 에서 이뤄지기 때문이다.
         HomePresenter(
             this,
             categoryData = CategoryRepository,

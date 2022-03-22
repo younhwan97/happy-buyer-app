@@ -28,6 +28,6 @@
     <string name="basket_empty">장바구니에 담긴 상품이 없습니다.</string>
 
     <!-- HappyBuyer address page strings -->
-    <string name="address_title">배송지 추가</string>
+    <string name="address_title">배송지 관리</string>
 
 </resources>

@@ -17,6 +17,7 @@ import com.bumptech.glide.load.engine.executor.GlideExecutor.UncaughtThrowableSt
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.databinding.FragmentAccountBinding
+import kr.co.younhwan.happybuyer.view.address.AddressActivity
 import kr.co.younhwan.happybuyer.view.main.MainActivity
 import kr.co.younhwan.happybuyer.view.main.account.presenter.AccountContract
 import kr.co.younhwan.happybuyer.view.main.account.presenter.AccountPresenter
@@ -58,6 +59,13 @@ class AccountFragment : Fragment(), AccountContract.View {
         viewDataBinding.accountProfileNickname.text =
             if (app.nickname != null) app.nickname else "${app.kakaoAccountId}"
 
+
+
+
+        viewDataBinding.accountTopSecondBtn.setOnClickListener {
+            val addressIntent = Intent(context, AddressActivity::class.java)
+            startActivity(addressIntent)
+        }
 
         // set event listener
         viewDataBinding.accountTopThirdBtn.setOnClickListener {

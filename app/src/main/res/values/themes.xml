@@ -118,6 +118,10 @@
 
 
 
+
+
+
+
     <!-- 텍스트 버튼 시작 -->
     <style name="TextButton" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:textColor">@color/fontColorBlack</item>
@@ -125,9 +129,6 @@
         <item name="android:textSize">12sp</item>
     </style>
     <!-- 종료 텍스트 버튼 -->
-
-
-
 
     <style name="LightTextButton" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:textColor">@color/fontColorGray</item>
