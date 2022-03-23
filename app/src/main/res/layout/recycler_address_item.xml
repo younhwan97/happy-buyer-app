@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textView4"
+        style="@style/TextView.Badge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="기본배송지" />
+
+    <TextView
+        android:id="@+id/addressItemAddress"
+        style="@style/TextView.Bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textView4"
+        android:layout_marginTop="8dp"
+        android:includeFontPadding="false"
+        android:text="주소"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/addressItemReceiver"
+        style="@style/TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/addressItemAddress"
+        android:layout_marginTop="8dp"
+        android:includeFontPadding="false"
+        android:text="받으실 분" />
+
+    <TextView
+        android:id="@+id/textView3"
+        style="@style/NumberTextView.Light"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/addressItemReceiver"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_toRightOf="@id/addressItemReceiver"
+        android:includeFontPadding="false"
+        android:text="|"
+        android:textColor="@color/LineColorLightGray" />
+
+    <TextView
+        android:id="@+id/addressItemPhone"
+        style="@style/NumberTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/addressItemReceiver"
+        android:layout_toRightOf="@id/textView3"
+        android:includeFontPadding="false"
+        android:text="폰" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/addressItemReceiver"
+        android:layout_marginTop="8dp">
+
+        <Button
+            android:id="@+id/outlinedButton"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="수정"
+            android:textColor="@color/hbPrimaryDarkColor"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/outlinedButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:backgroundTint="@color/hbPrimaryDarkColor"
+            android:text="선택"
+            android:textColor="@color/bgColorWhite"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+</RelativeLayout>

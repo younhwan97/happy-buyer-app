@@ -108,6 +108,13 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <CheckBox
+                    android:id="@+id/addAddressDefaultAddressCheckBox"
+                    style="@style/Widget.App.CheckBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="기본 배송지로 선택" />
+
                 <Button
                     android:id="@+id/addAddressBtn"
                     style="@style/Button.Bold"

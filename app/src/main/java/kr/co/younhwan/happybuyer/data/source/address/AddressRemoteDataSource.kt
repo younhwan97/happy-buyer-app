@@ -4,7 +4,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kr.co.younhwan.happybuyer.data.AddressItem
-import kr.co.younhwan.happybuyer.data.BasketItem
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -36,6 +35,7 @@ object AddressRemoteDataSource : AddressSource {
                 jsonData.put("receiver_name", addressItem.addressReceiver)
                 jsonData.put("phone_number", addressItem.addressPhone)
                 jsonData.put("address", addressItem.address)
+                jsonData.put("is_default", addressItem.isDefault)
                 val requestBody = jsonData.toString().toRequestBody(jsonMediaType)
                 val request = Request.Builder().url(site).post(requestBody).build()
 
@@ -86,14 +86,16 @@ object AddressRemoteDataSource : AddressSource {
                                 val addressId = obj.getInt("address_id")
                                 val receiver = obj.getString("receiver")
                                 val phone = obj.getString("phone")
-                                val address = obj.getString("phone")
+                                val address = obj.getString("address")
+                                val isDefaultAddress = obj.getInt("is_default") != 0
 
                                 list.add(
                                     AddressItem(
                                         addressId = addressId,
                                         addressReceiver = receiver,
                                         addressPhone = phone,
-                                        address = address
+                                        address = address,
+                                        isDefault = isDefaultAddress
                                     )
                                 )
                             }

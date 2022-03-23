@@ -64,6 +64,7 @@ class AccountFragment : Fragment(), AccountContract.View {
 
         viewDataBinding.accountTopSecondBtn.setOnClickListener {
             val addressIntent = Intent(context, AddressActivity::class.java)
+            addressIntent.putExtra("is_select_mode", false)
             startActivity(addressIntent)
         }
 

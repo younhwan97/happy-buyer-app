@@ -12,17 +12,45 @@ class AddAddressPresenter(
 
     val app = view.getAct().application as GlobalApplication
 
-    override fun addAddress(addressItem: AddressItem) {
-        if (app.isLogined) {
-            addressData.create(
+    override fun checkHasDefaultAddress() {
+        if(app.isLogined){
+            addressData.read(
                 kakaoAccountId = app.kakaoAccountId,
-                addressItem = addressItem,
-                object : AddressSource.CreateCallback {
-                    override fun onCreate(addressId: Int) {
-                        view.addAddressCallback(addressId, addressItem)
+                readCallback = object : AddressSource.ReadCallback{
+                    override fun onRead(list: ArrayList<AddressItem>) {
+                        var hasDefaultAddress = false
+
+                        if(list.size != 0){
+                            for(item in list){
+                                if(item.isDefault == true){
+                                    hasDefaultAddress = true
+                                    break
+                                }
+                            }
+                        }
+
+                        view.checkHasDefaultAddressCallback(hasDefaultAddress)
                     }
                 }
             )
+        }
+    }
+
+    override fun addAddress(addressItem: AddressItem) {
+        if (app.isLogined) {
+            if(addressItem.addressId == -1){
+                addressData.create(
+                    kakaoAccountId = app.kakaoAccountId,
+                    addressItem = addressItem,
+                    object : AddressSource.CreateCallback {
+                        override fun onCreate(addressId: Int) {
+                            view.addAddressCallback(addressId, addressItem)
+                        }
+                    }
+                )
+            } else {
+
+            }
         }
     }
 }
