@@ -23,4 +23,26 @@ interface AddressSource {
     interface ReadCallback {
         fun onRead(list: ArrayList<AddressItem>)
     }
+
+    // UPDATE
+    fun update(
+        kakaoAccountId: Long,
+        addressItem: AddressItem,
+        updateCallback: UpdateCallback?
+    )
+
+    interface UpdateCallback {
+        fun onUpdate(isSuccess: Boolean)
+    }
+
+    // DELETE
+    fun delete(
+        kakaoAccountId: Long,
+        addressId: Int,
+        deleteCallback: DeleteCallback?
+    )
+
+    interface DeleteCallback {
+        fun onDelete(isSuccess: Boolean)
+    }
 }

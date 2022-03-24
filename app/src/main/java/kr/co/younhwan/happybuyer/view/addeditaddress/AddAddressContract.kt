@@ -11,8 +11,9 @@ interface AddAddressContract {
 
         fun checkValidation()
 
+        fun addAddressCallback(addressItem: AddressItem, isSuccess: Boolean)
 
-        fun addAddressCallback(addressId: Int, addressItem: AddressItem)
+        fun deleteAddressCallback(isSuccess: Boolean)
     }
 
     interface Model {
@@ -21,5 +22,6 @@ interface AddAddressContract {
 
         fun addAddress(addressItem: AddressItem)
 
+        fun deleteAddress(addressId: Int)
     }
 }

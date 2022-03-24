@@ -57,7 +57,10 @@ object AddressRemoteDataSource : AddressSource {
     }
 
     // READ
-    override fun read(kakaoAccountId: Long, readCallback: AddressSource.ReadCallback?) {
+    override fun read(
+        kakaoAccountId: Long,
+        readCallback: AddressSource.ReadCallback?
+    ) {
         runBlocking {
             val list = ArrayList<AddressItem>()
 
@@ -107,6 +110,78 @@ object AddressRemoteDataSource : AddressSource {
 
             job.join()
             readCallback?.onRead(list)
+        }
+    }
+
+    // UPDATE
+    override fun update(
+        kakaoAccountId: Long,
+        addressItem: AddressItem,
+        updateCallback: AddressSource.UpdateCallback?
+    ) {
+        runBlocking {
+            var isSuccess = false
+
+            val job = GlobalScope.launch {
+                // API 서버 주소
+                val site = serverInfo
+
+                // 데이터를 수정하기 위한 PUT Request 생성
+                val jsonData = JSONObject()
+                jsonData.put("user_id", kakaoAccountId)
+                jsonData.put("address_id", addressItem.addressId)
+                jsonData.put("receiver_name", addressItem.addressReceiver)
+                jsonData.put("phone_number", addressItem.addressPhone)
+                jsonData.put("address", addressItem.address)
+                jsonData.put("is_default", addressItem.isDefault)
+                val requestBody = jsonData.toString().toRequestBody(jsonMediaType)
+                val request = Request.Builder().url(site).put(requestBody).build()
+
+                // 응답
+                val response = client.newCall(request).execute()
+                if (response.isSuccessful) {
+                    val resultText = response.body?.string()!!.trim()
+                    val json = JSONObject(resultText)
+                    isSuccess = json.getBoolean("success")
+                }
+            }
+
+            job.join()
+            updateCallback?.onUpdate(isSuccess)
+        }
+    }
+
+    // DELETE
+    override fun delete(
+        kakaoAccountId: Long,
+        addressId: Int,
+        deleteCallback: AddressSource.DeleteCallback?
+    ) {
+        runBlocking {
+            var isSuccess = false
+
+            val job = GlobalScope.launch {
+                // API 서버 주소
+                val site = serverInfo
+
+                // 데이터를 삭제하기 위한 DELETE Request 생성
+                val jsonData = JSONObject()
+                jsonData.put("user_id", kakaoAccountId)
+                jsonData.put("address_id", addressId)
+                val requestBody = jsonData.toString().toRequestBody(jsonMediaType)
+                val request = Request.Builder().url(site).delete(requestBody).build()
+
+                // 응답
+                val response = client.newCall(request).execute()
+                if (response.isSuccessful) {
+                    val resultText = response.body?.string()!!.trim()
+                    val json = JSONObject(resultText)
+                    isSuccess = json.getBoolean("success")
+                }
+            }
+
+            job.join()
+            deleteCallback?.onDelete(isSuccess)
         }
     }
 }

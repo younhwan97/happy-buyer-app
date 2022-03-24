@@ -36,4 +36,38 @@ object AddressRepository : AddressSource {
             }
         )
     }
+
+    // UPDATE
+    override fun update(
+        kakaoAccountId: Long,
+        addressItem: AddressItem,
+        updateCallback: AddressSource.UpdateCallback?
+    ) {
+        addressRemoteDataSource.update(
+            kakaoAccountId,
+            addressItem,
+            object : AddressSource.UpdateCallback {
+                override fun onUpdate(isSuccess: Boolean) {
+                    updateCallback?.onUpdate(isSuccess)
+                }
+            }
+        )
+    }
+
+    // DELETE
+    override fun delete(
+        kakaoAccountId: Long,
+        addressId: Int,
+        deleteCallback: AddressSource.DeleteCallback?
+    ) {
+        addressRemoteDataSource.delete(
+            kakaoAccountId,
+            addressId,
+            object : AddressSource.DeleteCallback {
+                override fun onDelete(isSuccess: Boolean) {
+                    deleteCallback?.onDelete(isSuccess)
+                }
+            }
+        )
+    }
 }

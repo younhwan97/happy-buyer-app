@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import kr.co.younhwan.happybuyer.data.AddressItem
 import kr.co.younhwan.happybuyer.data.source.address.AddressRepository
@@ -22,20 +21,36 @@ class AddAddressActivity : AppCompatActivity(), AddAddressContract.View {
         )
     }
 
-    private val addressId = -1
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewDataBinding = ActivityAddAddressBinding.inflate(layoutInflater)
         setContentView(viewDataBinding.root)
 
+        // 기본 배송지의 존재 유무 확인
+        addAddressPresenter.checkHasDefaultAddress()
+
+        // 아이템
         val oldAddressItem = if (intent.hasExtra("address")) {
+            // 기존 주소를 수정하는 경우
             intent.getParcelableExtra<AddressItem>("address")
         } else {
-            null
+            // 새롭게 주소를 추가하는 경우
+            AddressItem(
+                addressId = -1,
+                addressReceiver = "",
+                address = "",
+                addressPhone = "",
+                isDefault = false
+            )
+            // address id  = -1 -> 기존 주소 수정
+            // address id != -1 -> 새롭게 주소 추가
         }
 
-        addAddressPresenter.checkHasDefaultAddress() // 기본 배송지가 존재하는지 확인
+        val addressId = if (oldAddressItem?.addressId != null) {
+            oldAddressItem.addressId
+        } else {
+            -1
+        }
 
         // 툴바
         viewDataBinding.addAddressToolbar.setNavigationOnClickListener {
@@ -94,9 +109,15 @@ class AddAddressActivity : AppCompatActivity(), AddAddressContract.View {
                 Editable.Factory.getInstance().newEditable(oldAddressItem.address)
         }
 
-        // 체크 박스
+        // 기본 배송지 체크 박스
+        viewDataBinding.addAddressDefaultAddressCheckBox.setOnCheckedChangeListener { _, _ ->
+            checkValidation()
+        }
+
         if (oldAddressItem != null && oldAddressItem.isDefault == true) {
             viewDataBinding.addAddressDefaultAddressCheckBox.isChecked = true
+            viewDataBinding.addAddressDefaultAddressCheckBox.isClickable = false
+            viewDataBinding.addAddressDefaultAddressCheckBox.visibility = View.GONE
         }
 
         // 저장 버튼
@@ -118,7 +139,16 @@ class AddAddressActivity : AppCompatActivity(), AddAddressContract.View {
             )
         }
 
-        checkValidation()
+        // 삭제 버튼
+        viewDataBinding.addAddressDeleteBtn.visibility = View.VISIBLE
+        if (oldAddressItem == null || oldAddressItem.isDefault == true || oldAddressItem.addressId == -1) {
+            viewDataBinding.addAddressDeleteBtn.visibility = View.GONE
+            viewDataBinding.addAddressDeleteBtn.isEnabled = false
+        }
+
+        viewDataBinding.addAddressDeleteBtn.setOnClickListener {
+            addAddressPresenter.deleteAddress(addressId)
+        }
     }
 
     override fun getAct() = this
@@ -146,17 +176,23 @@ class AddAddressActivity : AppCompatActivity(), AddAddressContract.View {
             !(receiver.isNullOrBlank() || phone.isNullOrBlank() || address.isNullOrBlank() || phone.length < 12)
     }
 
-    override fun addAddressCallback(addressId: Int, addressItem: AddressItem) {
-        if (addressId == -1) {
-            setResult(RESULT_CANCELED)
-        } else { // 정상적으로 디비에 새로운 배송지가 추가되었을 때
+    override fun addAddressCallback(addressItem: AddressItem, isSuccess: Boolean) {
+        if (isSuccess) {
+            // 정상적으로 주소가 추가되거나 수정되었을 때
             val resultIntent = Intent()
-            resultIntent.putExtra("address_id", addressId)
-            resultIntent.putExtra("receiver", addressItem.addressReceiver)
-            resultIntent.putExtra("phone", addressItem.addressPhone)
-            resultIntent.putExtra("address", addressItem.address)
-            resultIntent.putExtra("is_default", addressItem.isDefault)
+            resultIntent.putExtra("address", addressItem)
             setResult(RESULT_OK, resultIntent)
+        } else {
+            // 정상적으로 주소가 추가되거나 수정되지 않았을 때
+            setResult(RESULT_CANCELED)
+        }
+        finish()
+    }
+
+    override fun deleteAddressCallback(isSuccess: Boolean) {
+        if (!isSuccess) {
+            // 정상적으로 주소가 삭제되지 않았을 때
+
         }
         finish()
     }

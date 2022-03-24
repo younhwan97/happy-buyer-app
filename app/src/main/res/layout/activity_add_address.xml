@@ -104,7 +104,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:maxLength="20" />
+                        android:maxLength="25" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -122,6 +122,17 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="저장" />
+
+                <Button
+                    android:id="@+id/addAddressDeleteBtn"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/notosans_kr_regular"
+                    android:text="삭제"
+                    android:textColor="@android:color/holo_red_dark"
+                    android:textStyle="bold"
+                    app:strokeColor="@color/LineColorGray" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

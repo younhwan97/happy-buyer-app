@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class AddressItem(
-    val addressId: Int,
+    var addressId: Int,
     val address: String?,
     val addressPhone: String?,
     val addressReceiver: String?,
