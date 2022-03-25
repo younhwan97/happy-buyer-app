@@ -8,6 +8,8 @@ interface AddressAdapterContract {
         fun notifyAdapter()
 
         var onClickFunOfEditBtn: ((AddressItem) -> Unit)?
+
+        var onClickFunOfSelectBtn: ((AddressItem) -> Unit)?
     }
 
     interface Model {

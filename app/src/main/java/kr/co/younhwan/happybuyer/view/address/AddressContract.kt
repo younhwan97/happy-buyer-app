@@ -10,6 +10,8 @@ interface AddressContract {
         fun loadAddressCallback(addressItemCount: Int)
 
         fun createAddAddressAct(addressItem: AddressItem)
+
+        fun finishAddressAct(addressItem: AddressItem)
     }
 
     interface Model {

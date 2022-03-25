@@ -11,6 +11,7 @@ class AddressViewHolder(
     private val parent: ViewGroup,
     addressItemBinding: RecyclerAddressItemBinding,
     private val listenerFunOfEditBtn: ((AddressItem) -> Unit)?,
+    private val listenerFunOfSelectBtn: ((AddressItem) -> Unit)?
 ) : RecyclerView.ViewHolder(addressItemBinding.root) {
 
     private val receiver by lazy {
@@ -37,28 +38,32 @@ class AddressViewHolder(
         addressItemBinding.outlinedButton
     }
 
+
     fun onBind(addressItem: AddressItem, isSelectMode: Boolean) {
         address.text = addressItem.address
         receiver.text = addressItem.addressReceiver
         phone.text = addressItem.addressPhone
         defaultAddress.visibility = View.GONE
-        if(addressItem.isDefault == true){
+        if (addressItem.isDefault == true) {
             defaultAddress.visibility = View.VISIBLE
         }
 
         itemView.setBackgroundResource(R.drawable.bg_address_item)
 
-        selectButton.visibility = View.VISIBLE
-        if(!isSelectMode){
-            selectButton.visibility = View.GONE
-        }
-
         editButton.setOnClickListener {
             listenerFunOfEditBtn?.invoke(addressItem)
         }
+
+        selectButton.visibility = View.VISIBLE
+        if (!isSelectMode) {
+            selectButton.visibility = View.GONE
+        }
+        selectButton.setOnClickListener {
+            listenerFunOfSelectBtn?.invoke(addressItem)
+        }
     }
 
-    fun onBindLast(addressItem: AddressItem, isSelectMode: Boolean){
+    fun onBindLast(addressItem: AddressItem, isSelectMode: Boolean) {
         onBind(addressItem, isSelectMode)
         itemView.setBackgroundResource(R.drawable.bg_address_end_item)
     }

@@ -1,6 +1,26 @@
 <resources>
     <string name="app_name">HappyBuyer</string>
 
+    <!-- HappyBuyer wished view -->
+    <string name="wished_item_count_sub_text_1">전체</string>
+    <string name="wished_item_count_sub_text_2">개</string>
+    <string name="wished_item_count_text">0</string>
+
+    <!-- HappyBuyer wished recycler item -->
+    <string name="wished_item_name">상품 이름</string>
+    <string name="wished_item_delete_btn">삭제</string>
+    <string name="wished_item_basket_btn">담기</string>
+    <string name="wished_item_price">0</string>
+    <string name="wished_item_price_sub_text">원</string>
+    <string name="wished_item_percent">%</string>
+    <string name="wished_item_image_des">상품 이미지</string>
+
+
+
+
+
+
+
     <!-- HappyBuyer product strings -->
     <string name="product_price_sub">원</string>
 

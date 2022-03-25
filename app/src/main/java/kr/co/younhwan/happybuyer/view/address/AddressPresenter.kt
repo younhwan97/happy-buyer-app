@@ -17,6 +17,10 @@ class AddressPresenter(
         addressAdapterView.onClickFunOfEditBtn = {
             onClickListenerOfEditBtn(it)
         }
+
+        addressAdapterView.onClickFunOfSelectBtn = {
+            onClickListenerOfSelectBtn(it)
+        }
     }
 
     val app = view.getAct().application as GlobalApplication
@@ -27,7 +31,7 @@ class AddressPresenter(
                 kakaoAccountId = app.kakaoAccountId,
                 readCallback = object : AddressSource.ReadCallback {
                     override fun onRead(list: ArrayList<AddressItem>) {
-                        view.loadAddressCallback(addressItemCount = list.size)
+                        view.loadAddressCallback(list.size)
                         addressAdapterModel.setSelectMode(isSelectMode)
                         addressAdapterModel.addItems(list)
                         addressAdapterView.notifyAdapter()
@@ -35,14 +39,14 @@ class AddressPresenter(
                 }
             )
         } else {
-            view.loadAddressCallback(addressItemCount = 0)
-            addressAdapterModel.setSelectMode(isSelectMode)
+            view.loadAddressCallback(0)
+            addressAdapterModel.setSelectMode(false)
             addressAdapterModel.addItems(ArrayList<AddressItem>())
             addressAdapterView.notifyAdapter()
         }
     }
 
-    private fun onClickListenerOfEditBtn(addressItem: AddressItem){
-        view.createAddAddressAct(addressItem)
-    }
+    private fun onClickListenerOfEditBtn(addressItem: AddressItem) = view.createAddAddressAct(addressItem)
+
+    private fun onClickListenerOfSelectBtn(addressItem: AddressItem) = view.finishAddressAct(addressItem)
 }

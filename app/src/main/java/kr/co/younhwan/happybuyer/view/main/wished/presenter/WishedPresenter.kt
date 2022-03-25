@@ -1,6 +1,5 @@
 package kr.co.younhwan.happybuyer.view.main.wished.presenter
 
-import android.content.Context
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.data.ProductItem
 import kr.co.younhwan.happybuyer.data.source.basket.BasketRepository
@@ -27,13 +26,13 @@ class WishedPresenter(
         }
     }
 
-    val app = ((view.getAct()).application) as GlobalApplication
+    val app = view.getAct().application as GlobalApplication
 
-    override fun loadWishedProducts(context: Context, isClear: Boolean) {
-        if (app.isLogined) { // 로그인 상태
+    override fun loadWishedProducts(isClear: Boolean) {
+        if (app.isLogined) {
             wishedData.readProducts(
                 kakaoAccountId = app.kakaoAccountId,
-                readProductsCallback = object : WishedSource.ReadProductsCallback{
+                readProductsCallback = object : WishedSource.ReadProductsCallback {
                     override fun onReadProducts(list: ArrayList<ProductItem>) {
                         if (isClear) {
                             wishedAdapterModel.clearItem()
@@ -45,7 +44,7 @@ class WishedPresenter(
                     }
                 }
             )
-        } else { // 비 로그인 상태
+        } else {
             view.loadWishedProductsCallback(0)
             wishedAdapterModel.addItems(ArrayList<ProductItem>())
             wishedAdapterView.notifyAdapter()
@@ -57,10 +56,11 @@ class WishedPresenter(
             wishedData.createOrDeleteProduct(
                 kakaoAccountId = app.kakaoAccountId,
                 productId = productId,
-                createOrDeleteProductCallback = object : WishedSource.CreateOrDeleteProductCallback {
+                createOrDeleteProductCallback = object :
+                    WishedSource.CreateOrDeleteProductCallback {
                     override fun onCreateOrDeleteProduct(perform: String?) {
                         if (perform == null || perform == "error") {
-                            view.deleteWishedProductCallback(perform)
+                            view.deleteWishedProductCallback(perform, 0)
                         } else if (perform == "delete") {
                             for (index in 0 until app.wishedProductId.size) {
                                 if (app.wishedProductId[index] == productId) {
@@ -70,13 +70,16 @@ class WishedPresenter(
                             }
 
                             wishedAdapterModel.deleteItem(position)
-                            view.deleteWishedProductCallback(perform)
+                            view.deleteWishedProductCallback(
+                                perform,
+                                wishedAdapterModel.getItemCount()
+                            )
                         }
                     }
                 }
             )
         } else {
-            view.deleteWishedProductCallback("error")
+            view.deleteWishedProductCallback("error", 0)
         }
     }
 
@@ -88,9 +91,7 @@ class WishedPresenter(
                 count = 1,
                 object : BasketSource.CreateOrUpdateProductCallback {
                     override fun onCreateOrUpdateProduct(resultCount: Int) {
-                        if(resultCount in 1..20){
-                            view.addBasketResultCallback(resultCount)
-                        }
+                        view.addBasketResultCallback(resultCount)
                     }
                 }
             )

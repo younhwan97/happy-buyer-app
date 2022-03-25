@@ -19,10 +19,6 @@ import kr.co.younhwan.happybuyer.view.main.wished.presenter.WishedPresenter
 class WishedFragment : Fragment(), WishedContract.View {
     private lateinit var viewDataBinding: FragmentWishedBinding
 
-    private val wishedAdapter: WishedAdapter by lazy {
-        WishedAdapter()
-    }
-
     private val wishedPresenter: WishedPresenter by lazy {
         WishedPresenter(
             view = this,
@@ -31,6 +27,10 @@ class WishedFragment : Fragment(), WishedContract.View {
             wishedAdapterModel = wishedAdapter,
             wishedAdapterView = wishedAdapter
         )
+    }
+
+    private val wishedAdapter: WishedAdapter by lazy {
+        WishedAdapter()
     }
 
     override fun onCreateView(
@@ -45,52 +45,73 @@ class WishedFragment : Fragment(), WishedContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        wishedPresenter.loadWishedProducts(requireContext(), false)
+        wishedPresenter.loadWishedProducts(false)
 
+        // 리사이클러 뷰
         viewDataBinding.wishedRecycler.adapter = wishedAdapter
         viewDataBinding.wishedRecycler.layoutManager = LinearLayoutManager(context)
         viewDataBinding.wishedRecycler.addItemDecoration(wishedAdapter.RecyclerDecoration())
     }
 
+    override fun getAct() = activity as MainActivity
+
     override fun loadWishedProductsCallback(count: Int) {
-        when(count){
+        when (count) {
             0 -> {
+                viewDataBinding.wishedTopContainer.visibility = View.GONE
                 viewDataBinding.wishedEmptyContainer.visibility = View.VISIBLE
                 viewDataBinding.wishedRecycler.visibility = View.GONE
             }
 
             else -> {
+                viewDataBinding.wishedTopContainer.visibility = View.VISIBLE
                 viewDataBinding.wishedEmptyContainer.visibility = View.GONE
                 viewDataBinding.wishedRecycler.visibility = View.VISIBLE
+
+                viewDataBinding.wishedItemCount.text = count.toString()
             }
         }
     }
 
-    override fun getAct() = activity as MainActivity
-
-    override fun deleteWishedProductCallback(perform: String?) {
-        when (perform) {
+    override fun deleteWishedProductCallback(perform: String?, resultCount: Int) {
+        val snack = when (perform) {
             "delete" -> {
+                if (resultCount != 0) {
+                    viewDataBinding.wishedItemCount.text = resultCount.toString()
+                } else {
+                    viewDataBinding.wishedTopContainer.visibility = View.GONE
+                    viewDataBinding.wishedEmptyContainer.visibility = View.VISIBLE
+                    viewDataBinding.wishedRecycler.visibility = View.GONE
+                }
+
                 Snackbar.make(viewDataBinding.root, "상품을 찜 목록에서 제외했습니다.", Snackbar.LENGTH_SHORT)
             }
 
             else -> {
                 Snackbar.make(viewDataBinding.root, "알 수 없는 에러가 발생했습니다.", Snackbar.LENGTH_SHORT)
             }
-        }.apply {
-            setAnchorView(R.id.mainBottomNavigation)
-            show()
         }
+
+        snack.setAnchorView(R.id.mainBottomNavigation)
+        snack.show()
     }
 
     override fun addBasketResultCallback(count: Int) {
-        when (count) {
+        val snack = when (count) {
             0 -> {
-                Snackbar.make(viewDataBinding.root, "알 수 없는 에러가 발생했습니다.", Snackbar.LENGTH_SHORT)
+                Snackbar.make(
+                    viewDataBinding.root,
+                    "알 수 없는 에러가 발생했습니다.",
+                    Snackbar.LENGTH_SHORT
+                )
             }
 
             1 -> {
-                Snackbar.make(viewDataBinding.root, "장바구니에 상품을 담았습니다.", Snackbar.LENGTH_SHORT)
+                Snackbar.make(
+                    viewDataBinding.root,
+                    "장바구니에 상품을 담았습니다.",
+                    Snackbar.LENGTH_SHORT
+                )
             }
 
             20 -> {
@@ -108,9 +129,9 @@ class WishedFragment : Fragment(), WishedContract.View {
                     Snackbar.LENGTH_SHORT
                 )
             }
-        }.apply {
-            setAnchorView(R.id.mainBottomNavigation)
-            show()
         }
+
+        snack.setAnchorView(R.id.mainBottomNavigation)
+        snack.show()
     }
 }

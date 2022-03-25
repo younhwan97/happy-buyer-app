@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                     true
                 }
                 R.id.wishedInBottomNav -> {
-                    viewDataBinding.mainToolbar.title = "찜"
+                    viewDataBinding.mainToolbar.title = "찜한 상품"
                     replace(R.id.mainContentContainer, wishedFragment)
                     true
                 }

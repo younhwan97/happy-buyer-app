@@ -27,17 +27,14 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/mainTopAppBarContainer"
+            android:fillViewport="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <!-- Scrollable content -->
-            <FrameLayout
+            <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/mainContentContainer"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_above="@id/mainBottomNavigation"
-                android:layout_below="@id/mainTopAppBarContainer"
-                android:background="@color/bgColorWhite" />
+                android:layout_height="match_parent" />
         </androidx.core.widget.NestedScrollView>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView

@@ -21,22 +21,20 @@ class WishedViewHolder(
         wishedItemBinding.wishedItemImage
     }
 
-    private val itemPrice by lazy {
-        wishedItemBinding.wishedItemPrice
-    }
-
     private val itemName by lazy {
         wishedItemBinding.wishedItemName
     }
 
-    private val basketBtn by lazy {
-        wishedItemBinding.wishedBasketBtn
+    // 상품 가격
+    private val itemPrice by lazy {
+        wishedItemBinding.wishedItemPrice
     }
 
-    private val deleteBtn by lazy {
-        wishedItemBinding.wishedDeleteBtn
+    private val itemPriceSubText by lazy {
+        wishedItemBinding.wishedItemPriceSubText
     }
 
+    // 상품 행사 가격 및 퍼센트
     private val itemEventPriceContainer by lazy {
         wishedItemBinding.wishedItemEventPriceContainer
     }
@@ -45,44 +43,92 @@ class WishedViewHolder(
         wishedItemBinding.wishedItemEventPrice
     }
 
+    private val itemEventPriceSubText by lazy {
+        wishedItemBinding.wishedItemEventPriceSubText
+    }
+
     private val itemEventPercent by lazy {
         wishedItemBinding.wishedItemEventPercent
     }
 
+    private val itemEventPercentSubText by lazy {
+        wishedItemBinding.wishedItemEventPercentSubText
+    }
+
+    // 버튼
+    private val basketBtn by lazy {
+        wishedItemBinding.wishedBasketBtn
+    }
+
+    private val deleteBtn by lazy {
+        wishedItemBinding.wishedDeleteBtn
+    }
+
+    // 가격 표시 방식
     private val decimal = DecimalFormat("#,###")
 
     fun onBind(productItem: ProductItem) {
-        // 상품 이름
-        itemName.text = productItem.productName
-
         // 상품 이미지
         Glide.with(this.itemView.context)
             .load(productItem.productImageUrl)
             .error(R.mipmap.ic_launcher)
             .into(itemImage)
 
-        // 상품 가격 (이벤트 상품일 경우 할인률과 할인 가격도 표시)
-        itemEventPriceContainer.visibility = View.GONE
+        // 상품 이름
+        itemName.text = productItem.productName
+
+        // 상품 가격
         itemPrice.text = decimal.format(productItem.productPrice)
         itemPrice.paintFlags = 0
+        itemPrice.setTextAppearance(R.style.NumberTextView_Bold)
+        itemPrice.textSize = 16F
+        itemPriceSubText.text = "원"
+        itemPriceSubText.paintFlags = 0
+        itemPriceSubText.setTextAppearance(R.style.TextView_Bold)
+        itemPriceSubText.textSize = 16F
 
-        if(productItem.onSale){
-            itemEventPriceContainer.visibility = View.VISIBLE
-            itemEventPrice.text = decimal.format(productItem.eventPrice)
+        itemEventPriceContainer.visibility = View.GONE
+        if (productItem.onSale) {
+            // 상품 가격
             itemPrice.text = decimal.format(productItem.productPrice)
             itemPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-            itemEventPercent.text = ((100 - (productItem.productPrice / productItem.eventPrice)).toString()).plus("%")
+            itemPrice.setTextAppearance(R.style.NumberTextView_Light)
+            itemPrice.textSize = 14F
+            itemPriceSubText.text = "원"
+            itemPriceSubText.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+            itemPriceSubText.setTextAppearance(R.style.TextView_Light)
+            itemPriceSubText.textSize = 14F
+
+            // 행사 가격
+            itemEventPrice.text = decimal.format(productItem.eventPrice)
+            itemEventPrice.paintFlags = 0
+            itemEventPrice.setTextAppearance(R.style.NumberTextView_Bold)
+            itemEventPrice.textSize = 16F
+            itemEventPriceSubText.text = "원"
+            itemEventPriceSubText.paintFlags = 0
+            itemEventPriceSubText.setTextAppearance(R.style.TextView_Bold)
+            itemEventPriceSubText.textSize = 16F
+
+            // 행사 퍼센트
+            itemEventPercent.text =
+                (100 - (productItem.productPrice / productItem.eventPrice)).toString()
+            itemEventPercent.paintFlags = 0
+            itemEventPercent.textSize = 16F
+            itemEventPercentSubText.text = "%"
+            itemEventPercentSubText.paintFlags = 0
+            itemEventPercentSubText.textSize = 16F
+
+            itemEventPriceContainer.visibility = View.VISIBLE
         }
 
-        // 장바구니 추가, 찜 삭제 버튼
+        // 삭제, 장바구니 추가 버튼
         deleteBtn.isEnabled = true
-        basketBtn.isEnabled = true
-
         deleteBtn.setOnClickListener {
             deleteBtn.isEnabled = false
             listenerFuncOfDeleteBtn?.invoke(productItem.productId, adapterPosition)
         }
 
+        basketBtn.isEnabled = true
         basketBtn.setOnClickListener {
             listenerFuncOfBasketBtn?.invoke(productItem.productId)
         }

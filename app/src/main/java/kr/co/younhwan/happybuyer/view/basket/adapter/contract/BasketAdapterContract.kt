@@ -35,5 +35,7 @@ interface BasketAdapterContract{
         fun updateItem(position: Int, basketItem: BasketItem)
 
         fun updateItemCount(position: Int, count: Int)
+
+        fun updateItemChecked(position: Int, newStatus: Boolean)
     }
 }

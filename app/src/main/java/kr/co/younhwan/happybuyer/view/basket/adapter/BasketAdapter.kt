@@ -85,6 +85,10 @@ class BasketAdapter :
         basketItemList[position] = basketItem
     }
 
+    override fun updateItemChecked(position: Int, newStatus: Boolean) {
+        basketItemList[position].isChecked = newStatus
+    }
+
     override fun updateItemCount(position: Int, count: Int) {
         basketItemList[position].countInBasket = count
     }

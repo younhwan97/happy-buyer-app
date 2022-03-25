@@ -10,6 +10,8 @@ interface BasketContract{
         fun calculatePriceCallback(totalPrice: Int, originalTotalPrice: Int, basketItemCount: Int)
 
         fun onClickCheckBoxCallback(isCheckedAllBasketItem: Boolean)
+
+        fun createOrderActCallback(passValidationCheck: Boolean, selectedBasketItem: ArrayList<BasketItem>)
     }
 
     interface Model{
@@ -21,5 +23,7 @@ interface BasketContract{
         fun calculatePrice()
 
         fun deleteSelectedItems()
+
+        fun createOrderAct()
     }
 }

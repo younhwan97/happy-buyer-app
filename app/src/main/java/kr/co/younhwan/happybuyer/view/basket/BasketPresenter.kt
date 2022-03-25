@@ -85,13 +85,7 @@ class BasketPresenter(
         if (app.isLogined && basketAdapterModel.getItemCount() != 0) { // 로그인 상태이며 장바구니에 상품이 있을 때
             for (index in 0 until basketAdapterModel.getItemCount()) {
                 if (basketAdapterModel.getItem(index).productStatus != "품절") {
-                    val basketItem = basketAdapterModel.getItem(index)
-                    basketItem.isChecked = newStatus
-
-                    basketAdapterModel.updateItem(
-                        position = index,
-                        basketItem = basketItem
-                    )
+                    basketAdapterModel.updateItemChecked(index, newStatus)
                 }
             }
 
@@ -105,18 +99,15 @@ class BasketPresenter(
         var isCheckedAllBasketItem = true // 품절 상품을 제외하고 장바구니에 존재하는 모든상품이 체크상태인지
 
         for (index in 0 until basketAdapterModel.getItemCount()) {
-            val basketItem = basketAdapterModel.getItem(index)
-
-            if (basketItem.productId == productId && basketItem.productStatus != "품절") {
-                basketItem.isChecked = newStatus
-                basketAdapterModel.updateItem(
-                    position = index,
-                    basketItem = basketItem
-                )
+            if (basketAdapterModel.getItem(index).productId == productId && basketAdapterModel.getItem(
+                    index
+                ).productStatus != "품절"
+            ) {
+                basketAdapterModel.updateItemChecked(index, newStatus)
                 calculatePrice()
             }
 
-            if (!basketItem.isChecked) {
+            if (!basketAdapterModel.getItem(index).isChecked) {
                 isCheckedAllBasketItem = false
             }
         }
@@ -184,7 +175,7 @@ class BasketPresenter(
             val productIdList = ArrayList<Int>()
             productIdList.add(basketItem.productId)
 
-            if(basketItem.productStatus == "품절"){
+            if (basketItem.productStatus == "품절") {
                 basketData.deleteProducts(
                     kakaoAccountId = app.kakaoAccountId,
                     productId = productIdList,
@@ -209,9 +200,9 @@ class BasketPresenter(
                         basketData.deleteProducts(
                             kakaoAccountId = app.kakaoAccountId,
                             productId = productIdList,
-                            deleteProductsCallback = object : BasketSource.DeleteProductsCallback{
+                            deleteProductsCallback = object : BasketSource.DeleteProductsCallback {
                                 override fun onDeleteProducts(isSuccess: Boolean) {
-                                    if(isSuccess){
+                                    if (isSuccess) {
                                         basketAdapterModel.deleteItem(position)
 
                                         calculatePrice()
@@ -250,9 +241,9 @@ class BasketPresenter(
                         basketData.deleteProducts(
                             kakaoAccountId = app.kakaoAccountId,
                             productId = selectedItemList,
-                            deleteProductsCallback = object : BasketSource.DeleteProductsCallback{
+                            deleteProductsCallback = object : BasketSource.DeleteProductsCallback {
                                 override fun onDeleteProducts(isSuccess: Boolean) {
-                                    if(isSuccess){
+                                    if (isSuccess) {
                                         basketAdapterModel.addItems(newBasketItemList)
                                         basketAdapterView.notifyAdapter()
                                         calculatePrice()
@@ -263,6 +254,40 @@ class BasketPresenter(
                     }
                     .show()
             }
+        }
+    }
+
+    override fun createOrderAct() {
+        if (app.isLogined) {
+            basketData.readProducts(
+                kakaoAccountId = app.kakaoAccountId,
+                readProductsCallback = object : BasketSource.ReadProductsCallback {
+                    override fun onReadProducts(list: ArrayList<BasketItem>) {
+                        var passValidationCheck = true
+                        val selectedBasketItem = ArrayList<BasketItem>()
+
+                        for (index in 0 until basketAdapterModel.getItemCount()) {
+                            for (item in list) {
+                                if (basketAdapterModel.getItem(index).productId == item.productId) {
+                                    item.isChecked = basketAdapterModel.getItem(index).isChecked
+
+                                    if (basketAdapterModel.getItem(index) != item) {
+                                        passValidationCheck = false
+                                        break
+                                    }
+                                }
+                            }
+
+                            if (!passValidationCheck) break
+
+                            if (basketAdapterModel.getItem(index).isChecked)
+                                selectedBasketItem.add(basketAdapterModel.getItem(index))
+                        }
+
+                        view.createOrderActCallback(passValidationCheck, selectedBasketItem)
+                    }
+                }
+            )
         }
     }
 }

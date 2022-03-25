@@ -20,6 +20,7 @@ class AddressAdapter :
 
     // 이벤트 리스너
     override var onClickFunOfEditBtn: ((AddressItem) -> Unit)? = null
+    override var onClickFunOfSelectBtn: ((AddressItem) -> Unit)? = null
     
     // 메서드
     override fun getItemCount() = addressItemList.size
@@ -39,7 +40,8 @@ class AddressAdapter :
         return AddressViewHolder(
             parent = parent,
             addressItemBinding = itemBinding,
-            listenerFunOfEditBtn = onClickFunOfEditBtn
+            listenerFunOfEditBtn = onClickFunOfEditBtn,
+            listenerFunOfSelectBtn = onClickFunOfSelectBtn
         )
     }
 

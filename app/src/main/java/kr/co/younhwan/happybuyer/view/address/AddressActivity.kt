@@ -34,7 +34,15 @@ class AddressActivity : AppCompatActivity(), AddressContract.View {
         viewDataBinding = ActivityAddressBinding.inflate(layoutInflater)
         setContentView(viewDataBinding.root)
 
-        isSelectMode = intent.getBooleanExtra("is_select_mode",false)
+        // 주소록 모드를 설정
+        // 주소록 엑티비티가 주문 엑티비티에서 호출된 경우 -> select mode
+        // 주소록 엑티비티가 계정 프래그먼트에서 호출된 경우 -> not select mode
+        isSelectMode = if (intent.hasExtra("is_select_mode")) {
+            intent.getBooleanExtra("is_select_mode", false)
+        } else {
+            false
+        }
+
         addressPresenter.loadAddress(isSelectMode)
 
         // 툴바
@@ -64,18 +72,26 @@ class AddressActivity : AppCompatActivity(), AddressContract.View {
 
     override fun onResume() {
         super.onResume()
+
         addressPresenter.loadAddress(isSelectMode)
     }
 
     override fun getAct() = this
 
     override fun loadAddressCallback(addressItemCount: Int) {
-
+        // 주소가 없을 때 처리
     }
 
     override fun createAddAddressAct(addressItem: AddressItem) {
         val addAddressIntent = Intent(this, AddAddressActivity::class.java)
         addAddressIntent.putExtra("address", addressItem)
         startActivity(addAddressIntent)
+    }
+
+    override fun finishAddressAct(addressItem: AddressItem) {
+        val resultIntent = Intent()
+        resultIntent.putExtra("address", addressItem)
+        setResult(RESULT_OK, resultIntent)
+        finish()
     }
 }
