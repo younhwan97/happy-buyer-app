@@ -119,9 +119,11 @@
     </style>
     <!-- 종료 버튼 -->
 
-
-
-
+    <!-- 라디오 버튼 시작 -->
+    <style name="Widget.App.RadioButton" parent="Widget.MaterialComponents.CompoundButton.RadioButton">
+        <item name="buttonTint">@color/radio_button_tint</item>
+    </style>
+    <!-- 종료 라디오 버튼 -->
 
 
 

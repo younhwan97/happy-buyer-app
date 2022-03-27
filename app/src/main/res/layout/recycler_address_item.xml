@@ -65,7 +65,7 @@
         android:layout_marginTop="8dp">
 
         <Button
-            android:id="@+id/outlinedButton"
+            android:id="@+id/outlineButton"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

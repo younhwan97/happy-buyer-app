@@ -1,15 +1,19 @@
 package kr.co.younhwan.happybuyer.view.order
 
+import android.util.Log
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.data.AddressItem
+import kr.co.younhwan.happybuyer.data.BasketItem
 import kr.co.younhwan.happybuyer.data.source.address.AddressRepository
 import kr.co.younhwan.happybuyer.data.source.address.AddressSource
+import kr.co.younhwan.happybuyer.view.order.adapter.contract.OrderAdapterContract
 
 class OrderPresenter(
     private val view: OrderContract.View,
-    private val addressData: AddressRepository
+    private val addressData: AddressRepository,
+    private val orderAdapterModel: OrderAdapterContract.Model,
+    private val orderAdapterView: OrderAdapterContract.View
 ) : OrderContract.Model {
-
 
     val app = view.getAct().application as GlobalApplication
 
@@ -32,6 +36,12 @@ class OrderPresenter(
                     }
                 }
             )
+        }
+    }
+
+    override fun setOrderProduct(list: ArrayList<BasketItem>) {
+        if (app.isLogined) {
+            orderAdapterModel.addItems(list)
         }
     }
 }

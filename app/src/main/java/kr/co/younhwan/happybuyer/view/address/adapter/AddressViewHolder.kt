@@ -35,7 +35,7 @@ class AddressViewHolder(
     }
 
     private val editButton by lazy {
-        addressItemBinding.outlinedButton
+        addressItemBinding.outlineButton
     }
 
 

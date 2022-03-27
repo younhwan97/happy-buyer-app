@@ -20,10 +20,6 @@ import java.text.DecimalFormat
 class BasketActivity : AppCompatActivity(), BasketContract.View {
     lateinit var viewDataBinding: ActivityBasketBinding
 
-    private val basketAdapter: BasketAdapter by lazy {
-        BasketAdapter()
-    }
-
     private val basketPresenter: BasketPresenter by lazy {
         BasketPresenter(
             view = this,
@@ -31,6 +27,10 @@ class BasketActivity : AppCompatActivity(), BasketContract.View {
             basketAdapterModel = basketAdapter,
             basketAdapterView = basketAdapter
         )
+    }
+
+    private val basketAdapter: BasketAdapter by lazy {
+        BasketAdapter()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -134,6 +134,7 @@ class BasketActivity : AppCompatActivity(), BasketContract.View {
     ) {
         if (passValidationCheck) {
             val orderIntent = Intent(this, OrderActivity::class.java)
+            orderIntent.putExtra("selected_basket_item", selectedBasketItem)
             startActivity(orderIntent)
         } else {
 
