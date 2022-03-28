@@ -134,7 +134,7 @@ class BasketActivity : AppCompatActivity(), BasketContract.View {
     ) {
         if (passValidationCheck) {
             val orderIntent = Intent(this, OrderActivity::class.java)
-            orderIntent.putExtra("selected_basket_item", selectedBasketItem)
+            orderIntent.putExtra("selected_item_list", selectedBasketItem)
             startActivity(orderIntent)
         } else {
 

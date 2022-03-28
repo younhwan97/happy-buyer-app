@@ -3,19 +3,21 @@ package kr.co.younhwan.happybuyer.view.order
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.telephony.PhoneNumberFormattingTextWatcher
+import android.text.Editable
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.data.AddressItem
 import kr.co.younhwan.happybuyer.data.BasketItem
 import kr.co.younhwan.happybuyer.data.source.address.AddressRepository
+import kr.co.younhwan.happybuyer.data.source.basket.BasketRepository
 import kr.co.younhwan.happybuyer.databinding.ActivityOrderBinding
 import kr.co.younhwan.happybuyer.view.addeditaddress.AddAddressActivity
 import kr.co.younhwan.happybuyer.view.address.AddressActivity
 import kr.co.younhwan.happybuyer.view.order.adapter.OrderAdapter
+import java.text.DecimalFormat
 
 class OrderActivity : AppCompatActivity(), OrderContract.View {
     lateinit var viewDataBinding: ActivityOrderBinding
@@ -24,6 +26,7 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
         OrderPresenter(
             view = this,
             addressData = AddressRepository,
+            basketData = BasketRepository,
             orderAdapterModel = orderAdapter,
             orderAdapterView = orderAdapter
         )
@@ -33,19 +36,28 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
         OrderAdapter()
     }
 
+    private var selectedItemList: ArrayList<BasketItem>? = null
+
+    override fun onResume() {
+        super.onResume()
+        orderPresenter.setOrderProduct(selectedItemList)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewDataBinding = ActivityOrderBinding.inflate(layoutInflater)
         setContentView(viewDataBinding.root)
 
-        orderPresenter.loadDefaultAddress()
-        if (intent.hasExtra("selected_basket_item")) {
-            val selectedBasketItem =
-                intent.getParcelableArrayListExtra<BasketItem>("selected_basket_item")
-
-            orderPresenter.setOrderProduct(selectedBasketItem!!)
-        } else {
+        if (!intent.hasExtra("selected_item_list")) {
+            // 장바구니에서 고객이 선택한 아이템 정보가 넘어오지 않았을 때
+            setResult(RESULT_CANCELED)
             finish()
+        } else {
+            // 장바구니에서 고객이 선택한 아이템 정보가 정상적으로 넘어왔을 때
+            selectedItemList = intent.getParcelableArrayListExtra<BasketItem>("selected_item_list")
+
+            orderPresenter.loadDefaultAddress()
+            orderPresenter.setOrderProduct(selectedItemList)
         }
 
         // 툴바
@@ -78,7 +90,11 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
                             viewDataBinding.orderAddressPhone.text = newAddress?.addressPhone
                         }
 
-                        Snackbar.make(viewDataBinding.root, "주소가 변경되었습니다.", Snackbar.LENGTH_SHORT)
+                        Snackbar.make(
+                            viewDataBinding.root,
+                            "주소가 변경되었습니다.",
+                            Snackbar.LENGTH_SHORT
+                        )
                     } else {
                         orderPresenter.loadDefaultAddress()
 
@@ -99,7 +115,26 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
             startAddressActForResult.launch(addressIntent)
         }
 
-        // 요청사항
+        // 배달 요청사항
+        viewDataBinding.orderPointNumber.editText?.addTextChangedListener(object : PhoneNumberFormattingTextWatcher ("KR"){
+            override fun afterTextChanged(s: Editable?) {
+                super.afterTextChanged(s)
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                super.beforeTextChanged(s, start, count, after)
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                super.onTextChanged(s, start, before, count)
+            }
+        })
+
+        // 결제수단
+        viewDataBinding.orderPaymentRadioOptionCash.isChecked = false
+        viewDataBinding.orderPaymentRadioOptionCard.isChecked = true
+
+        // 주문 상품 확인
         viewDataBinding.orderProductRecycler.adapter = orderAdapter
         viewDataBinding.orderProductRecycler.layoutManager = object : LinearLayoutManager(this) {
             override fun canScrollHorizontally() = false
@@ -124,5 +159,23 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
             viewDataBinding.orderAddressContent.visibility = View.GONE
             viewDataBinding.orderAddressEmptyContent.visibility = View.VISIBLE
         }
+    }
+
+    override fun setOrderProductCallback(isSuccess: Boolean) {
+        if (!isSuccess) {
+            setResult(RESULT_CANCELED)
+            finish()
+        }
+    }
+
+    override fun calculatePriceCallback(
+        totalPrice: Int,
+        originalTotalPrice: Int,
+        basketItemCount: Int
+    ) {
+        val decimal = DecimalFormat("#,###")
+        viewDataBinding.orderOriginalPrice.text = decimal.format(originalTotalPrice)
+        viewDataBinding.orderEventPrice.text = decimal.format(totalPrice - originalTotalPrice)
+        viewDataBinding.orderBePaidPrice.text = decimal.format(totalPrice)
     }
 }

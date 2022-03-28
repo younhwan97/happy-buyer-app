@@ -38,6 +38,12 @@ class OrderAdapter :
         orderItemList = orderItems
     }
 
+    override fun notifyAdapter() {
+        notifyDataSetChanged()
+    }
+
+    override fun getItem(position: Int) = orderItemList[position]
+
     inner class RecyclerDecoration : RecyclerView.ItemDecoration() {
         override fun getItemOffsets(
             outRect: Rect,
