@@ -177,5 +177,7 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
         viewDataBinding.orderOriginalPrice.text = decimal.format(originalTotalPrice)
         viewDataBinding.orderEventPrice.text = decimal.format(totalPrice - originalTotalPrice)
         viewDataBinding.orderBePaidPrice.text = decimal.format(totalPrice)
+        
+        viewDataBinding.orderBtn.text = decimal.format(totalPrice).plus("원 주문하기")
     }
 }

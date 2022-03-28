@@ -39,7 +39,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="8dp"
                     android:background="@color/bgColorGray"
-                    android:orientation="horizontal"></LinearLayout>
+                    android:orientation="horizontal" />
 
                 <LinearLayout
                     android:id="@+id/orderAddressContainer"
@@ -438,7 +438,7 @@
 
                         <com.google.android.material.divider.MaterialDivider
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -590,10 +590,33 @@
                     </LinearLayout>
                 </LinearLayout>
 
-
-
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="88dp"
+                    android:background="@color/bgColorWhite"
+                    android:orientation="horizontal" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="68dp"
+            android:layout_gravity="bottom"
+            android:background="@color/bgColorWhite"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/orderBtn"
+                style="@style/Button.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="4dp"
+                android:layout_weight="1"
+                android:text="0원 주문하기"
+                android:textColor="@color/white" />
+        </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 </RelativeLayout>
