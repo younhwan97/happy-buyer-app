@@ -48,6 +48,7 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
         viewDataBinding = ActivityOrderBinding.inflate(layoutInflater)
         setContentView(viewDataBinding.root)
 
+        // ㅌㅔ스트
         if (!intent.hasExtra("selected_item_list")) {
             // 장바구니에서 고객이 선택한 아이템 정보가 넘어오지 않았을 때
             setResult(RESULT_CANCELED)
