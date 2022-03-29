@@ -7,11 +7,18 @@ object OrderRepository : OrderSource {
 
     private val orderRemoteDataSource = OrderRemoteDataSource
 
-    override fun create(kakaoAccountId: Long, orderItem: OrderItem, createCallback: OrderSource.CreateCallback?) {
-        orderRemoteDataSource.create(kakaoAccountId, orderItem, object : OrderSource.CreateCallback {
-            override fun onCreate(isSuccess: Boolean) {
-                createCallback?.onCreate(isSuccess)
-            }
-        })
+    override fun create(
+        kakaoAccountId: Long,
+        orderItem: OrderItem,
+        createCallback: OrderSource.CreateCallback?
+    ) {
+        orderRemoteDataSource.create(
+            kakaoAccountId,
+            orderItem,
+            object : OrderSource.CreateCallback {
+                override fun onCreate(isSuccess: Boolean) {
+                    createCallback?.onCreate(isSuccess)
+                }
+            })
     }
 }

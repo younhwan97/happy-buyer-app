@@ -16,7 +16,11 @@ object OrderRemoteDataSource : OrderSource {
     private const val serverInfo = "http://happybuyer.co.kr/api" // API 서버
     private val jsonMediaType = "application/json; charset=utf-8".toMediaTypeOrNull()
 
-    override fun create(kakaoAccountId: Long, orderItem: OrderItem, createCallback: OrderSource.CreateCallback?) {
+    override fun create(
+        kakaoAccountId: Long,
+        orderItem: OrderItem,
+        createCallback: OrderSource.CreateCallback?
+    ) {
         runBlocking {
             var isSuccess = false
 
@@ -30,11 +34,11 @@ object OrderRemoteDataSource : OrderSource {
                 jsonData.put("user_id", kakaoAccountId) // 유저 정보
 
                 jsonData.put("receiver", orderItem.receiver) // 배달 정보
-                jsonData.put("phone_number", orderItem.phone)
+                jsonData.put("phone", orderItem.phone)
                 jsonData.put("address", orderItem.address)
 
                 jsonData.put("requirement", orderItem.requirement) /// 배달 요청사항
-                jsonData.put("point_number", orderItem.pointNumber)
+                jsonData.put("point", orderItem.point)
                 jsonData.put("detective_handling_method", orderItem.detectiveHandlingMethod)
 
                 jsonData.put("payment", orderItem.payment) // 결제수단
@@ -43,15 +47,14 @@ object OrderRemoteDataSource : OrderSource {
                 jsonData.put("event_price", orderItem.eventPrice)
                 jsonData.put("be_paid_price", orderItem.bePaidPrice)
 
-                val orderProducts = JSONArray()
-                for(index in 0 until orderItem.orderProducts.size){
-                    val temp = JSONObject()
-                    temp.put("product_id", orderItem.orderProducts[index].productId)
-                    temp.put("count", orderItem.orderProducts[index].countInBasket)
-                    orderProducts.put(temp)
+                val products = JSONArray()
+                for (item in orderItem.products) {
+                    val product = JSONObject()
+                    product.put("product_id", item.productId)
+                    product.put("count", item.countInBasket)
+                    products.put(product)
                 }
-                jsonData.put("order_products", orderProducts)
-
+                jsonData.put("products", products)
 
                 val requestBody = jsonData.toString().toRequestBody(jsonMediaType)
                 val request = Request.Builder().url(site).post(requestBody).build()

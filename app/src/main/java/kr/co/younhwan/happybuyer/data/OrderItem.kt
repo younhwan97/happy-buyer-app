@@ -5,11 +5,11 @@ data class OrderItem(
     val phone: String,
     val address: String,
     val requirement: String?,
-    val pointNumber: String?,
+    val point: String?,
     val detectiveHandlingMethod: String,
     val payment: String,
-    val orderProducts: ArrayList<BasketItem>,
     val originalPrice: String,
     val eventPrice: String,
-    val bePaidPrice: String
+    val bePaidPrice: String,
+    val products: ArrayList<BasketItem>
 )

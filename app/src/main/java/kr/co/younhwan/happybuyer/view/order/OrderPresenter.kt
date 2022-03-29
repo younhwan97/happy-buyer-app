@@ -118,7 +118,7 @@ class OrderPresenter(
                         if (isSuccess) { // 주문이 성공적으로 완료되었을 때
                             val orderProductsId = ArrayList<Int>()
 
-                            for (item in orderItem.orderProducts) {
+                            for (item in orderItem.products) {
                                 orderProductsId.add(item.productId)
                             }
 

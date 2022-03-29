@@ -163,6 +163,7 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
         // 주문 버튼
         viewDataBinding.orderBtn.isEnabled = true
         viewDataBinding.orderBtn.setOnClickListener {
+            // 중복 주문 생성 방지
             it.isEnabled = false
 
             // 배달정보
@@ -172,7 +173,7 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
 
             // 요청사항
             val requirement = viewDataBinding.orderRequirement.editText?.text.toString()
-            val pointNumber = viewDataBinding.orderPointNumber.editText?.text.toString()
+            val point = viewDataBinding.orderPointNumber.editText?.text.toString()
             val defectiveHandlingMethod =
                 if (viewDataBinding.orderDefectiveHandlingOption1.isChecked) {
                     viewDataBinding.orderDefectiveHandlingOption1.text.toString()
@@ -192,21 +193,21 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
             val eventPrice = viewDataBinding.orderEventPrice.text.toString()
             val bePaidPrice = viewDataBinding.orderBePaidPrice.text.toString()
 
-            val orderItem = OrderItem(
-                receiver = receiver,
-                phone = phone,
-                address = address,
-                requirement = requirement,
-                pointNumber = pointNumber,
-                detectiveHandlingMethod = defectiveHandlingMethod,
-                payment = payment,
-                orderProducts = orderProducts,
-                originalPrice = originalPrice,
-                eventPrice = eventPrice,
-                bePaidPrice = bePaidPrice
+            orderPresenter.createOrder(
+                OrderItem(
+                    receiver = receiver,
+                    phone = phone,
+                    address = address,
+                    requirement = requirement,
+                    point = point,
+                    detectiveHandlingMethod = defectiveHandlingMethod,
+                    payment = payment,
+                    originalPrice = originalPrice,
+                    eventPrice = eventPrice,
+                    bePaidPrice = bePaidPrice,
+                    products = orderProducts
+                )
             )
-
-            orderPresenter.createOrder(orderItem)
         }
     }
 
@@ -253,7 +254,7 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
     }
 
     override fun createOrderCallback(isSuccess: Boolean) {
-        if(isSuccess){
+        if (isSuccess) {
 
         } else {
 
