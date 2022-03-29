@@ -24,7 +24,9 @@
             android:exported="false" />
         <activity
             android:name=".view.order.OrderActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustNothing"
+            />
         <activity
             android:name=".view.product.ProductActivity"
             android:exported="false" />

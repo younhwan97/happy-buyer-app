@@ -13,7 +13,7 @@ import org.json.JSONObject
 
 object AddressRemoteDataSource : AddressSource {
     private val client = OkHttpClient() // 클라이언트
-    private const val serverInfo = "http://192.168.0.11/address/api" // API 서버
+    private const val serverInfo = "http://happybuyer.co.kr/address/api" // API 서버
     private val jsonMediaType = "application/json; charset=utf-8".toMediaTypeOrNull()
 
     // CREATE
