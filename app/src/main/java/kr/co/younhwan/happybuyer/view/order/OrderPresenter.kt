@@ -115,8 +115,7 @@ class OrderPresenter(
                 orderItem = orderItem,
                 createCallback = object : OrderSource.CreateCallback {
                     override fun onCreate(isSuccess: Boolean) {
-                        if (isSuccess) {
-                            // 주문이 성공적으로 완료되었을 때
+                        if (isSuccess) { // 주문이 성공적으로 완료되었을 때
                             val orderProductsId = ArrayList<Int>()
 
                             for (item in orderItem.orderProducts) {
@@ -130,7 +129,7 @@ class OrderPresenter(
                                 deleteProductsCallback = object :
                                     BasketSource.DeleteProductsCallback {
                                     override fun onDeleteProducts(isSuccess: Boolean) {
-
+                                        view.createOrderCallback(isSuccess)
                                     }
                                 }
                             )
