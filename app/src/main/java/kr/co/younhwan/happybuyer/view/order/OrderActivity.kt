@@ -9,6 +9,7 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.data.AddressItem
 import kr.co.younhwan.happybuyer.data.BasketItem
 import kr.co.younhwan.happybuyer.data.source.address.AddressRepository
@@ -48,7 +49,6 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
         viewDataBinding = ActivityOrderBinding.inflate(layoutInflater)
         setContentView(viewDataBinding.root)
 
-        // ㅌㅔ스트
         if (!intent.hasExtra("selected_item_list")) {
             // 장바구니에서 고객이 선택한 아이템 정보가 넘어오지 않았을 때
             setResult(RESULT_CANCELED)
@@ -56,7 +56,6 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
         } else {
             // 장바구니에서 고객이 선택한 아이템 정보가 정상적으로 넘어왔을 때
             selectedItemList = intent.getParcelableArrayListExtra<BasketItem>("selected_item_list")
-
             orderPresenter.loadDefaultAddress()
             orderPresenter.setOrderProduct(selectedItemList)
         }
@@ -106,6 +105,7 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
                         )
                     }
 
+                    snack.setAnchorView(R.id.orderBtnContainer)
                     snack.show()
                 }
             }
