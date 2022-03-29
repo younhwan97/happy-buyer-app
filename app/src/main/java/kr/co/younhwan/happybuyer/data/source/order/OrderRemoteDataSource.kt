@@ -22,7 +22,7 @@ object OrderRemoteDataSource : OrderSource {
         createCallback: OrderSource.CreateCallback?
     ) {
         runBlocking {
-            var isSuccess = false
+            var orderId = -1
 
             val job = GlobalScope.launch {
                 // API 서버 주소
@@ -64,12 +64,16 @@ object OrderRemoteDataSource : OrderSource {
                 if (response.isSuccessful) {
                     val resultText = response.body?.string()!!.trim()
                     val json = JSONObject(resultText)
-                    isSuccess = json.getBoolean("success")
+                    val success = json.getBoolean("success")
+
+                    if(success){
+                        orderId = json.getInt("order_id")
+                    }
                 }
             }
 
             job.join()
-            createCallback?.onCreate(isSuccess)
+            createCallback?.onCreate(orderId)
         }
     }
 }

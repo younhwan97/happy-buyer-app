@@ -203,6 +203,7 @@
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.17592592592592593" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2074074074074074" />
         <entry key="app/src/main/res/layout/activity_order.xml" value="0.27783452502553624" />
+        <entry key="app/src/main/res/layout/activity_order_success.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_account.xml" value="0.17592592592592593" />
         <entry key="app/src/main/res/layout/fragment_account_login.xml" value="0.20462962962962963" />
         <entry key="app/src/main/res/layout/fragment_account_login_temp.xml" value="0.17592592592592593" />

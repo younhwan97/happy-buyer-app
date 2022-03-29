@@ -11,6 +11,6 @@ interface OrderSource {
     )
 
     interface CreateCallback {
-        fun onCreate(isSuccess: Boolean)
+        fun onCreate(orderId: Int)
     }
 }

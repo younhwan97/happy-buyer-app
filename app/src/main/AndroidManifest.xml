@@ -17,6 +17,15 @@
         android:theme="@style/Theme.HappyBuyer"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".view.orderdetail.OrderDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.orderhistory.OrderHistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ordersuccess.OrderSuccessActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.addeditaddress.AddAddressActivity"
             android:exported="false" />
         <activity
@@ -25,8 +34,7 @@
         <activity
             android:name=".view.order.OrderActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustNothing"
-            />
+            android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".view.product.ProductActivity"
             android:exported="false" />

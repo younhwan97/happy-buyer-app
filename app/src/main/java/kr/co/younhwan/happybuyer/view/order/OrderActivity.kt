@@ -20,6 +20,7 @@ import kr.co.younhwan.happybuyer.databinding.ActivityOrderBinding
 import kr.co.younhwan.happybuyer.view.addeditaddress.AddAddressActivity
 import kr.co.younhwan.happybuyer.view.address.AddressActivity
 import kr.co.younhwan.happybuyer.view.order.adapter.OrderAdapter
+import kr.co.younhwan.happybuyer.view.ordersuccess.OrderSuccessActivity
 import java.text.DecimalFormat
 
 class OrderActivity : AppCompatActivity(), OrderContract.View {
@@ -253,11 +254,10 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
         viewDataBinding.orderBtn.text = decimal.format(totalPrice).plus("원 주문하기")
     }
 
-    override fun createOrderCallback(isSuccess: Boolean) {
-        if (isSuccess) {
-
-        } else {
-
-        }
+    override fun createOrderCallback(orderId: Int) {
+        val orderSuccessIntent = Intent(this, OrderSuccessActivity::class.java)
+        orderSuccessIntent.putExtra("order_id", orderId)
+        orderSuccessIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(orderSuccessIntent)
     }
 }

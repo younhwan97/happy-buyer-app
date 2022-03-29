@@ -16,8 +16,8 @@ object OrderRepository : OrderSource {
             kakaoAccountId,
             orderItem,
             object : OrderSource.CreateCallback {
-                override fun onCreate(isSuccess: Boolean) {
-                    createCallback?.onCreate(isSuccess)
+                override fun onCreate(orderId: Int) {
+                    createCallback?.onCreate(orderId)
                 }
             })
     }

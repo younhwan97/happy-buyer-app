@@ -114,8 +114,8 @@ class OrderPresenter(
                 kakaoAccountId = app.kakaoAccountId,
                 orderItem = orderItem,
                 createCallback = object : OrderSource.CreateCallback {
-                    override fun onCreate(isSuccess: Boolean) {
-                        if (isSuccess) { // 주문이 성공적으로 완료되었을 때
+                    override fun onCreate(orderId: Int) {
+                        if (orderId != -1) { // 주문이 성공적으로 완료되었을 때
                             val orderProductsId = ArrayList<Int>()
 
                             for (item in orderItem.products) {
@@ -129,7 +129,9 @@ class OrderPresenter(
                                 deleteProductsCallback = object :
                                     BasketSource.DeleteProductsCallback {
                                     override fun onDeleteProducts(isSuccess: Boolean) {
-                                        view.createOrderCallback(isSuccess)
+                                        if(isSuccess){
+                                            view.createOrderCallback(orderId)
+                                        }
                                     }
                                 }
                             )
