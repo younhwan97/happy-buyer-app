@@ -8,7 +8,7 @@ interface WishedContract{
 
         fun getAct() : MainActivity
 
-        fun loadWishedProductsCallback(count: Int)
+        fun loadWishedProductsCallback(resultCount: Int)
 
         fun deleteWishedProductCallback(perform: String?, resultCount: Int) // 추후 변경
 

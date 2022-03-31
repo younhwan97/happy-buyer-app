@@ -47,29 +47,28 @@ class WishedFragment : Fragment(), WishedContract.View {
 
         wishedPresenter.loadWishedProducts(false)
 
-        // 리사이클러 뷰
+        // 찜한 상품 리사이클러뷰
         viewDataBinding.wishedRecycler.adapter = wishedAdapter
-        viewDataBinding.wishedRecycler.layoutManager = LinearLayoutManager(context)
+        viewDataBinding.wishedRecycler.layoutManager = object : LinearLayoutManager(context) {
+            override fun canScrollHorizontally() = false
+            override fun canScrollVertically() = false
+        }
         viewDataBinding.wishedRecycler.addItemDecoration(wishedAdapter.RecyclerDecoration())
     }
 
     override fun getAct() = activity as MainActivity
 
-    override fun loadWishedProductsCallback(count: Int) {
-        when (count) {
-            0 -> {
-                viewDataBinding.wishedTopContainer.visibility = View.GONE
-                viewDataBinding.wishedEmptyContainer.visibility = View.VISIBLE
-                viewDataBinding.wishedRecycler.visibility = View.GONE
-            }
+    override fun loadWishedProductsCallback(resultCount: Int) {
+        if (resultCount == 0) {
+            // 찜한 상품이 없을 때
+            viewDataBinding.wishedEmptyView.visibility = View.VISIBLE
+            viewDataBinding.wishedContainer.visibility = View.GONE
+        } else {
+            // 찜한 상품이 있을 때
+            viewDataBinding.wishedEmptyView.visibility = View.GONE
+            viewDataBinding.wishedContainer.visibility = View.VISIBLE
 
-            else -> {
-                viewDataBinding.wishedTopContainer.visibility = View.VISIBLE
-                viewDataBinding.wishedEmptyContainer.visibility = View.GONE
-                viewDataBinding.wishedRecycler.visibility = View.VISIBLE
-
-                viewDataBinding.wishedItemCount.text = count.toString()
-            }
+            viewDataBinding.wishedItemCount.text = resultCount.toString()
         }
     }
 
@@ -79,9 +78,8 @@ class WishedFragment : Fragment(), WishedContract.View {
                 if (resultCount != 0) {
                     viewDataBinding.wishedItemCount.text = resultCount.toString()
                 } else {
-                    viewDataBinding.wishedTopContainer.visibility = View.GONE
-                    viewDataBinding.wishedEmptyContainer.visibility = View.VISIBLE
-                    viewDataBinding.wishedRecycler.visibility = View.GONE
+                    viewDataBinding.wishedEmptyView.visibility = View.VISIBLE
+                    viewDataBinding.wishedContainer.visibility = View.GONE
                 }
 
                 Snackbar.make(viewDataBinding.root, "상품을 찜 목록에서 제외했습니다.", Snackbar.LENGTH_SHORT)

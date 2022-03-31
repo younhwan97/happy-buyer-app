@@ -2,6 +2,7 @@
     <string name="app_name">HappyBuyer</string>
 
     <!-- HappyBuyer wished view -->
+    <string name="wished_empty_text">자주 찾는 상품을 찜 해보세요.</string>
     <string name="wished_item_count_sub_text_1">전체</string>
     <string name="wished_item_count_sub_text_2">개</string>
     <string name="wished_item_count_text">0</string>
