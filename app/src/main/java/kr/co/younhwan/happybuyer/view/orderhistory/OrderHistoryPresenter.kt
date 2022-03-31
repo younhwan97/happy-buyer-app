@@ -1,6 +1,5 @@
 package kr.co.younhwan.happybuyer.view.orderhistory
 
-import android.util.Log
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.data.OrderItem
 import kr.co.younhwan.happybuyer.data.source.order.OrderRepository
@@ -22,21 +21,25 @@ class OrderHistoryPresenter(
 
     val app = view.getView().application as GlobalApplication
 
+    private fun onClickListener(orderHistoryItem: OrderItem) =
+        view.createOrderDetailAct(orderHistoryItem)
+
     override fun loadOrderHistory() {
         if (app.isLogined) {
             orderData.read(
                 kakaoAccountId = app.kakaoAccountId,
                 readCallback = object : OrderSource.ReadCallback {
                     override fun onRead(list: ArrayList<OrderItem>) {
+                        view.loadOrderHistoryCallback(list.size)
                         orderHistoryAdapterModel.addItems(list)
                         orderHistoryAdapterView.notifyAdapter()
                     }
                 }
             )
+        } else {
+            view.loadOrderHistoryCallback(0)
+            orderHistoryAdapterModel.addItems(ArrayList())
+            orderHistoryAdapterView.notifyAdapter()
         }
-    }
-
-    private fun onClickListener(orderId: Int) {
-        view.createOrderDetailAct(orderId)
     }
 }

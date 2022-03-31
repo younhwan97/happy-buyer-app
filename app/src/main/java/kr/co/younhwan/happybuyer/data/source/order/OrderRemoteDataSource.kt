@@ -7,6 +7,7 @@ import kotlinx.coroutines.runBlocking
 import kr.co.younhwan.happybuyer.data.AddressItem
 import kr.co.younhwan.happybuyer.data.BasketItem
 import kr.co.younhwan.happybuyer.data.OrderItem
+import kr.co.younhwan.happybuyer.data.ProductItem
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -58,6 +59,11 @@ object OrderRemoteDataSource : OrderSource {
                     val product = JSONObject()
                     product.put("product_id", orderItem.products[index].productId)
                     product.put("count", orderItem.products[index].countInBasket)
+                    if(orderItem.products[index].onSale){
+                        product.put("price", orderItem.products[index].eventPrice)
+                    } else {
+                        product.put("price", orderItem.products[index].productPrice)
+                    }
                     products.put(product)
                 }
                 jsonData.put("products", products)
@@ -156,6 +162,61 @@ object OrderRemoteDataSource : OrderSource {
 
             job.join()
             readCallback?.onRead(list)
+        }
+    }
+
+    override fun readProducts(
+        orderId: Int,
+        readProductsCallback: OrderSource.ReadProductsCallback?
+    ) {
+        runBlocking {
+            val list = ArrayList<BasketItem>()
+
+            val job = GlobalScope.launch {
+                // API 서버 주소
+                val site = "${serverInfo}/products?id=${orderId}"
+
+                // 데이터를 읽어오기 위한 GET Request 생성
+                val request = Request.Builder().url(site).get().build()
+
+                // 응답
+                val response = client.newCall(request).execute()
+                if (response.isSuccessful) {
+                    val resultText = response.body?.string()!!.trim()
+                    val json = JSONObject(resultText)
+
+                    val success = json.getBoolean("success")
+                    if(success){
+                        val data = JSONArray(json["data"].toString())
+
+                        for (i in 0 until data.length()) {
+                            val obj = data.getJSONObject(i)
+
+                            val productId = obj.getInt("product_id")
+                            val productStatus = obj.getString("status")
+                            val productName = obj.getString("name")
+                            val productPrice = obj.getInt("price")
+                            val productImage = obj.getString("image_url")
+                            val count = obj.getInt("count")
+
+                            list.add(
+                                BasketItem(
+                                    isChecked = true,
+                                    productStatus = productStatus,
+                                    productId = productId,
+                                    productName = productName,
+                                    productPrice = productPrice,
+                                    productImageUrl = productImage,
+                                    countInBasket = count
+                                )
+                            )
+                        }
+                    }
+                }
+            }
+
+            job.join()
+            readProductsCallback?.onReadProducts(list)
         }
     }
 }

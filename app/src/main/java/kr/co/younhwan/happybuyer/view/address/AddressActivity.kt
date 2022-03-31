@@ -3,6 +3,7 @@ package kr.co.younhwan.happybuyer.view.address
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.data.AddressItem
@@ -29,13 +30,18 @@ class AddressActivity : AppCompatActivity(), AddressContract.View {
 
     private var isSelectMode = false
 
+    override fun onResume() {
+        super.onResume()
+        addressPresenter.loadAddress(isSelectMode)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewDataBinding = ActivityAddressBinding.inflate(layoutInflater)
         setContentView(viewDataBinding.root)
 
         // 주소록 모드를 설정
-        // 주소록 엑티비티가 주문 엑티비티에서 호출된 경우 -> select mode
+        // 주소록 엑티비티가 주문 엑티비티에서 호출된 경우  -> select mode
         // 주소록 엑티비티가 계정 프래그먼트에서 호출된 경우 -> not select mode
         isSelectMode = if (intent.hasExtra("is_select_mode")) {
             intent.getBooleanExtra("is_select_mode", false)
@@ -61,7 +67,7 @@ class AddressActivity : AppCompatActivity(), AddressContract.View {
             }
         }
 
-        // 리사이클러뷰
+        // 배송지 리사이클러뷰
         viewDataBinding.addressRecycler.adapter = addressAdapter
         viewDataBinding.addressRecycler.layoutManager = object : LinearLayoutManager(this) {
             override fun canScrollHorizontally() = false
@@ -70,16 +76,18 @@ class AddressActivity : AppCompatActivity(), AddressContract.View {
         viewDataBinding.addressRecycler.addItemDecoration(addressAdapter.RecyclerDecoration())
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        addressPresenter.loadAddress(isSelectMode)
-    }
-
     override fun getAct() = this
 
-    override fun loadAddressCallback(addressItemCount: Int) {
-        // 주소가 없을 때 처리
+    override fun loadAddressCallback(resultCount: Int) {
+        if (resultCount == 0) {
+            // 주소가 존재하지 않을 때 (-> Empty view 를 표시)
+            viewDataBinding.addressEmptyView.visibility = View.VISIBLE
+            viewDataBinding.addressRecycler.visibility = View.GONE
+        } else {
+            // 주소가 존재할 때
+            viewDataBinding.addressEmptyView.visibility = View.GONE
+            viewDataBinding.addressRecycler.visibility = View.VISIBLE
+        }
     }
 
     override fun createAddAddressAct(addressItem: AddressItem) {
@@ -88,7 +96,7 @@ class AddressActivity : AppCompatActivity(), AddressContract.View {
         startActivity(addAddressIntent)
     }
 
-    override fun finishAddressAct(addressItem: AddressItem) {
+    override fun finishAct(addressItem: AddressItem) {
         val resultIntent = Intent()
         resultIntent.putExtra("address", addressItem)
         setResult(RESULT_OK, resultIntent)

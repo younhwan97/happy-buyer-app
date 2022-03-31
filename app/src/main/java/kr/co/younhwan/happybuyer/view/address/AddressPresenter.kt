@@ -23,17 +23,42 @@ class AddressPresenter(
         }
     }
 
-    val app = view.getAct().application as GlobalApplication
+    private fun onClickListenerOfEditBtn(addressItem: AddressItem) =
+        view.createAddAddressAct(addressItem)
+
+    private fun onClickListenerOfSelectBtn(addressItem: AddressItem) =
+        view.finishAct(addressItem)
 
     override fun loadAddress(isSelectMode: Boolean) {
+        val app = view.getAct().application as GlobalApplication
         if (app.isLogined) {
             addressData.read(
                 kakaoAccountId = app.kakaoAccountId,
                 readCallback = object : AddressSource.ReadCallback {
                     override fun onRead(list: ArrayList<AddressItem>) {
-                        view.loadAddressCallback(list.size)
+                        // 기본 배송지가 제일 상단에 위치하도록 변경
+                        val sortedList = ArrayList<AddressItem>()
+                        var defaultAddressIndex = -1
+
+                        for (index in 0 until list.size) {
+                            if (list[index].isDefault == true) {
+                                defaultAddressIndex = index
+                                sortedList.add(list[index])
+                                break
+                            }
+                        }
+
+                        if (defaultAddressIndex != -1) {
+                            for (index in 0 until list.size) {
+                                if (index != defaultAddressIndex) {
+                                    sortedList.add(list[index])
+                                }
+                            }
+                        }
+
+                        view.loadAddressCallback(sortedList.size)
                         addressAdapterModel.setSelectMode(isSelectMode)
-                        addressAdapterModel.addItems(list)
+                        addressAdapterModel.addItems(sortedList)
                         addressAdapterView.notifyAdapter()
                     }
                 }
@@ -45,8 +70,4 @@ class AddressPresenter(
             addressAdapterView.notifyAdapter()
         }
     }
-
-    private fun onClickListenerOfEditBtn(addressItem: AddressItem) = view.createAddAddressAct(addressItem)
-
-    private fun onClickListenerOfSelectBtn(addressItem: AddressItem) = view.finishAddressAct(addressItem)
 }

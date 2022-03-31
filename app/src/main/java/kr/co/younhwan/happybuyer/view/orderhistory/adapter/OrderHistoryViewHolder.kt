@@ -8,7 +8,7 @@ import kr.co.younhwan.happybuyer.databinding.RecyclerOrderHistoryItemBinding
 class OrderHistoryViewHolder(
     private val parent: ViewGroup,
     orderHistoryItemBinding: RecyclerOrderHistoryItemBinding,
-    private val listenerFun: ((Int) -> Unit)?
+    private val listenerFun: ((OrderItem) -> Unit)?
 ) : RecyclerView.ViewHolder(orderHistoryItemBinding.root) {
 
     private val itemId by lazy {
@@ -49,7 +49,7 @@ class OrderHistoryViewHolder(
         itemStatus.text = orderHistoryItem.status
 
         itemView.setOnClickListener {
-            listenerFun?.invoke(orderHistoryItem.orderId)
+            listenerFun?.invoke(orderHistoryItem)
         }
     }
 }

@@ -7,11 +7,11 @@ interface AddressContract {
 
         fun getAct(): AddressActivity
 
-        fun loadAddressCallback(addressItemCount: Int)
+        fun loadAddressCallback(resultCount: Int)
 
         fun createAddAddressAct(addressItem: AddressItem)
 
-        fun finishAddressAct(addressItem: AddressItem)
+        fun finishAct(addressItem: AddressItem)
     }
 
     interface Model {

@@ -1,5 +1,6 @@
 package kr.co.younhwan.happybuyer.data.source.order
 
+import kr.co.younhwan.happybuyer.data.BasketItem
 import kr.co.younhwan.happybuyer.data.OrderItem
 
 
@@ -28,6 +29,20 @@ object OrderRepository : OrderSource {
             object : OrderSource.ReadCallback {
                 override fun onRead(list: ArrayList<OrderItem>) {
                     readCallback?.onRead(list)
+                }
+            }
+        )
+    }
+
+    override fun readProducts(
+        orderId: Int,
+        readProductsCallback: OrderSource.ReadProductsCallback?
+    ) {
+        orderRemoteDataSource.readProducts(
+            orderId,
+            object : OrderSource.ReadProductsCallback {
+                override fun onReadProducts(list: ArrayList<BasketItem>) {
+                    readProductsCallback?.onReadProducts(list)
                 }
             }
         )

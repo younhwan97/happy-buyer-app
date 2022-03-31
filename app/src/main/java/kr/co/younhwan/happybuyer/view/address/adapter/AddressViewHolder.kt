@@ -27,7 +27,7 @@ class AddressViewHolder(
     }
 
     private val defaultAddress by lazy {
-        addressItemBinding.textView4
+        addressItemBinding.addressDefaultBadge
     }
 
     private val selectButton by lazy {
@@ -38,22 +38,31 @@ class AddressViewHolder(
         addressItemBinding.outlineButton
     }
 
-
     fun onBind(addressItem: AddressItem, isSelectMode: Boolean) {
-        address.text = addressItem.address
-        receiver.text = addressItem.addressReceiver
-        phone.text = addressItem.addressPhone
+        // 테두리
+        itemView.setBackgroundResource(R.drawable.bg_address_item)
+        
+        // 기본 배송지 뱃지
         defaultAddress.visibility = View.GONE
         if (addressItem.isDefault == true) {
             defaultAddress.visibility = View.VISIBLE
         }
+        
+        // 주소
+        address.text = addressItem.address
 
-        itemView.setBackgroundResource(R.drawable.bg_address_item)
+        // 받으실 분
+        receiver.text = addressItem.addressReceiver
 
+        // 휴대폰
+        phone.text = addressItem.addressPhone
+        
+        // 수정 버튼
         editButton.setOnClickListener {
             listenerFunOfEditBtn?.invoke(addressItem)
         }
 
+        // 선택 버튼
         selectButton.visibility = View.VISIBLE
         if (!isSelectMode) {
             selectButton.visibility = View.GONE
@@ -65,6 +74,8 @@ class AddressViewHolder(
 
     fun onBindLast(addressItem: AddressItem, isSelectMode: Boolean) {
         onBind(addressItem, isSelectMode)
+        
+        // 테두리
         itemView.setBackgroundResource(R.drawable.bg_address_end_item)
     }
 }

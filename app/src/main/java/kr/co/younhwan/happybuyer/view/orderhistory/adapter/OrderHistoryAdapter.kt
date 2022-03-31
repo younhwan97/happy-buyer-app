@@ -18,8 +18,9 @@ class OrderHistoryAdapter :
     private lateinit var orderHistoryItemList: ArrayList<OrderItem>
 
     // 이벤트 리스너
-    override var onClickFun: ((Int) -> Unit)? = null
+    override var onClickFun: ((OrderItem) -> Unit)? = null
 
+    // 메서드
     override fun getItemCount() = orderHistoryItemList.size
 
     override fun addItems(orderHistoryItems: ArrayList<OrderItem>) {
@@ -44,6 +45,7 @@ class OrderHistoryAdapter :
         }
     }
 
+    // 데코레이션
     inner class RecyclerDecoration : RecyclerView.ItemDecoration() {
         override fun getItemOffsets(
             outRect: Rect,
@@ -53,9 +55,7 @@ class OrderHistoryAdapter :
         ) {
             super.getItemOffsets(outRect, view, parent, state)
 
-            val itemPosition = parent.getChildAdapterPosition(view)
             val density = parent.resources.displayMetrics.density
-
             outRect.top = (8 * density).toInt()
         }
     }
