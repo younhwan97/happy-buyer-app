@@ -129,7 +129,7 @@ class OrderPresenter(
                                 deleteProductsCallback = object :
                                     BasketSource.DeleteProductsCallback {
                                     override fun onDeleteProducts(isSuccess: Boolean) {
-                                        if(isSuccess){
+                                        if (isSuccess) {
                                             view.createOrderCallback(orderId)
                                         }
                                     }

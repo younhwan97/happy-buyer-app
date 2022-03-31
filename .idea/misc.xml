@@ -117,6 +117,8 @@
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_login.xml" value="0.27685185185185185" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_order.xml" value="0.4298978644382544" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_order_detail.xml" value="0.1607638888888889" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_order_history.xml" value="0.33" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_product.xml" value="0.33" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_result.xml" value="0.37962962962962965" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_search.xml" value="0.33" />
@@ -152,6 +154,7 @@
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/recycler_basket_item.xml" value="0.5" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/recycler_category_item.xml" value="0.4559386973180077" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/recycler_event_item.xml" value="0.48333333333333334" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/recycler_order_history_item.xml" value="0.5" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/recycler_order_item.xml" value="0.33" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/recycler_order_product_item.xml" value="0.5" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/recycler_popular_item.xml" value="0.48333333333333334" />
@@ -203,7 +206,6 @@
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.17592592592592593" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2074074074074074" />
         <entry key="app/src/main/res/layout/activity_order.xml" value="0.27783452502553624" />
-        <entry key="app/src/main/res/layout/activity_order_success.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_account.xml" value="0.17592592592592593" />
         <entry key="app/src/main/res/layout/fragment_account_login.xml" value="0.20462962962962963" />
         <entry key="app/src/main/res/layout/fragment_account_login_temp.xml" value="0.17592592592592593" />

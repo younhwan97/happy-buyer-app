@@ -21,4 +21,15 @@ object OrderRepository : OrderSource {
                 }
             })
     }
+
+    override fun read(kakaoAccountId: Long, readCallback: OrderSource.ReadCallback?) {
+        orderRemoteDataSource.read(
+            kakaoAccountId,
+            object : OrderSource.ReadCallback {
+                override fun onRead(list: ArrayList<OrderItem>) {
+                    readCallback?.onRead(list)
+                }
+            }
+        )
+    }
 }

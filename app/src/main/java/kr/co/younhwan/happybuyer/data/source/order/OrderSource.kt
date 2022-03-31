@@ -13,4 +13,13 @@ interface OrderSource {
     interface CreateCallback {
         fun onCreate(orderId: Int)
     }
+
+    fun read(
+        kakaoAccountId: Long,
+        readCallback: ReadCallback?
+    )
+
+    interface ReadCallback {
+        fun onRead(list: ArrayList<OrderItem>)
+    }
 }

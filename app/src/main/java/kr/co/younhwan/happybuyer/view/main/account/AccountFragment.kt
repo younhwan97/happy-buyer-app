@@ -21,6 +21,7 @@ import kr.co.younhwan.happybuyer.view.address.AddressActivity
 import kr.co.younhwan.happybuyer.view.main.MainActivity
 import kr.co.younhwan.happybuyer.view.main.account.presenter.AccountContract
 import kr.co.younhwan.happybuyer.view.main.account.presenter.AccountPresenter
+import kr.co.younhwan.happybuyer.view.orderhistory.OrderHistoryActivity
 import kr.co.younhwan.happybuyer.view.update.UpdateActivity
 
 class AccountFragment : Fragment(), AccountContract.View {
@@ -67,6 +68,12 @@ class AccountFragment : Fragment(), AccountContract.View {
             addressIntent.putExtra("is_select_mode", false)
             startActivity(addressIntent)
         }
+
+        viewDataBinding.accountTopFirstBtn.setOnClickListener {
+            val orderHistoryIntent = Intent(context, OrderHistoryActivity::class.java)
+            startActivity(orderHistoryIntent)
+        }
+
 
         // set event listener
         viewDataBinding.accountTopThirdBtn.setOnClickListener {

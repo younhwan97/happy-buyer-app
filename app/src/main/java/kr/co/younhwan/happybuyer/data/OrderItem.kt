@@ -1,6 +1,10 @@
 package kr.co.younhwan.happybuyer.data
 
 data class OrderItem(
+    val orderId: Int,
+    val name: String,
+    val status: String,
+    val date: String?,
     val receiver: String,
     val phone: String,
     val address: String,

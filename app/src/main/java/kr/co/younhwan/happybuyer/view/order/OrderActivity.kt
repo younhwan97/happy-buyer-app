@@ -167,6 +167,14 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
             // 중복 주문 생성 방지
             it.isEnabled = false
 
+            // 주문정보
+            val status = "주문접수"
+            val name = if(orderProducts.size == 1){
+                orderProducts[0].productName
+            } else {
+                "${orderProducts[0].productName} 외 ${orderProducts.size - 1}건"
+            }
+
             // 배달정보
             val receiver = viewDataBinding.orderAddressReceiver.text.toString()
             val phone = viewDataBinding.orderAddressPhone.text.toString()
@@ -196,6 +204,10 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
 
             orderPresenter.createOrder(
                 OrderItem(
+                    orderId = -1,
+                    name = name,
+                    status = status,
+                    date = null,
                     receiver = receiver,
                     phone = phone,
                     address = address,
