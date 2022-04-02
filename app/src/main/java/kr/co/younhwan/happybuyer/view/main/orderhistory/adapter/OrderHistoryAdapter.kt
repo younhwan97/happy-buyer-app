@@ -1,4 +1,4 @@
-package kr.co.younhwan.happybuyer.view.orderhistory.adapter
+package kr.co.younhwan.happybuyer.view.main.orderhistory.adapter
 
 import android.graphics.Rect
 import android.view.LayoutInflater
@@ -55,8 +55,13 @@ class OrderHistoryAdapter :
         ) {
             super.getItemOffsets(outRect, view, parent, state)
 
+            val itemPosition = parent.getChildAdapterPosition(view)
             val density = parent.resources.displayMetrics.density
-            outRect.top = (8 * density).toInt()
+
+            if(itemPosition == 0){
+                outRect.top = (16 * density).toInt()
+            }
+            outRect.bottom = (12 * density).toInt()
         }
     }
 }

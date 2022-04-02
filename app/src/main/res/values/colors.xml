@@ -22,10 +22,11 @@
 
     <color name="bgColorWhite">#FFFFFFFF</color>
     <color name="bgColorDarkGray">#DDDDDD</color>
+    <color name="bgColorLightGray">#F4F4F4</color>
     <color name="bgColorGray">#F1F1F5</color>
     <color name="bgColorBlack">#FF000000</color>
 
     <color name="LineColorBlack">#191919</color>
     <color name="LineColorGray">#DBDBDB</color>
-    <color name="LineColorLightGray">#EDEDED</color>
+    <color name="LineColorLightGray">#CCEDEDED</color>
 </resources>

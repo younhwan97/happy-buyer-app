@@ -13,6 +13,7 @@ import kr.co.younhwan.happybuyer.util.replace
 import kr.co.younhwan.happybuyer.view.main.account.AccountFragment
 import kr.co.younhwan.happybuyer.view.main.wished.WishedFragment
 import kr.co.younhwan.happybuyer.view.main.home.HomeFragment
+import kr.co.younhwan.happybuyer.view.main.orderhistory.OrderHistoryFragment
 
 class MainActivity : AppCompatActivity(), MainContract.View {
     lateinit var viewDataBinding: ActivityMainBinding
@@ -26,9 +27,15 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     private val homeFragment: HomeFragment by lazy {
         HomeFragment()
     }
+
     private val wishedFragment: WishedFragment by lazy {
         WishedFragment()
     }
+
+    private val orderHistoryFragment: OrderHistoryFragment by lazy {
+        OrderHistoryFragment()
+    }
+
     private val accountFragment: AccountFragment by lazy {
         AccountFragment()
     }
@@ -72,6 +79,11 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                         val loginIntent = Intent(this, LoginActivity::class.java)
                         startForResult.launch(loginIntent)
                     }
+                    true
+                }
+                R.id.orderHistoryInBottomNav -> {
+                    viewDataBinding.mainToolbar.title = "주문내역"
+                    replace(R.id.mainContentContainer, orderHistoryFragment)
                     true
                 }
                 else -> false

@@ -45,6 +45,11 @@ class WishedFragment : Fragment(), WishedContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 로딩 뷰 셋팅
+        viewDataBinding.wishedLoadingView.visibility = View.VISIBLE
+        viewDataBinding.wishedLoadingImage.playAnimation()
+
+        // 찜한 상품 로드
         wishedPresenter.loadWishedProducts(false)
 
         // 찜한 상품 리사이클러뷰
@@ -62,14 +67,20 @@ class WishedFragment : Fragment(), WishedContract.View {
         if (resultCount == 0) {
             // 찜한 상품이 없을 때
             viewDataBinding.wishedEmptyView.visibility = View.VISIBLE
-            viewDataBinding.wishedContainer.visibility = View.GONE
+            viewDataBinding.wishedItemCountContainer.visibility = View.GONE
+            viewDataBinding.wishedRecycler.visibility = View.GONE
         } else {
             // 찜한 상품이 있을 때
             viewDataBinding.wishedEmptyView.visibility = View.GONE
-            viewDataBinding.wishedContainer.visibility = View.VISIBLE
+            viewDataBinding.wishedItemCountContainer.visibility = View.VISIBLE
+            viewDataBinding.wishedRecycler.visibility = View.VISIBLE
 
             viewDataBinding.wishedItemCount.text = resultCount.toString()
         }
+
+        // 로딩 뷰 종료
+        viewDataBinding.wishedLoadingView.visibility = View.GONE
+        viewDataBinding.wishedLoadingImage.pauseAnimation()
     }
 
     override fun deleteWishedProductCallback(perform: String?, resultCount: Int) {
@@ -79,7 +90,8 @@ class WishedFragment : Fragment(), WishedContract.View {
                     viewDataBinding.wishedItemCount.text = resultCount.toString()
                 } else {
                     viewDataBinding.wishedEmptyView.visibility = View.VISIBLE
-                    viewDataBinding.wishedContainer.visibility = View.GONE
+                    viewDataBinding.wishedItemCountContainer.visibility = View.GONE
+                    viewDataBinding.wishedRecycler.visibility = View.GONE
                 }
 
                 Snackbar.make(viewDataBinding.root, "상품을 찜 목록에서 제외했습니다.", Snackbar.LENGTH_SHORT)

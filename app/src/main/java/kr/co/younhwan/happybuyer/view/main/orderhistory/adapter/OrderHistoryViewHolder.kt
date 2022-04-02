@@ -1,4 +1,4 @@
-package kr.co.younhwan.happybuyer.view.orderhistory.adapter
+package kr.co.younhwan.happybuyer.view.main.orderhistory.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView

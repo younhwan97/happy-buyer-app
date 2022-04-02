@@ -1,4 +1,4 @@
-package kr.co.younhwan.happybuyer.view.orderhistory
+package kr.co.younhwan.happybuyer.view.main.orderhistory.presenter
 
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.data.OrderItem
@@ -19,7 +19,7 @@ class OrderHistoryPresenter(
         }
     }
 
-    val app = view.getView().application as GlobalApplication
+    val app = view.getAct().application as GlobalApplication
 
     private fun onClickListener(orderHistoryItem: OrderItem) =
         view.createOrderDetailAct(orderHistoryItem)

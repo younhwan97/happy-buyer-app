@@ -1,6 +1,5 @@
 package kr.co.younhwan.happybuyer.view.main.account
 
-import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.net.Uri
@@ -10,18 +9,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.load.engine.executor.GlideExecutor.UncaughtThrowableStrategy.LOG
 import kr.co.younhwan.happybuyer.GlobalApplication
-import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.databinding.FragmentAccountBinding
 import kr.co.younhwan.happybuyer.view.address.AddressActivity
 import kr.co.younhwan.happybuyer.view.main.MainActivity
 import kr.co.younhwan.happybuyer.view.main.account.presenter.AccountContract
 import kr.co.younhwan.happybuyer.view.main.account.presenter.AccountPresenter
-import kr.co.younhwan.happybuyer.view.orderhistory.OrderHistoryActivity
 import kr.co.younhwan.happybuyer.view.update.UpdateActivity
 
 class AccountFragment : Fragment(), AccountContract.View {
@@ -69,10 +64,10 @@ class AccountFragment : Fragment(), AccountContract.View {
             startActivity(addressIntent)
         }
 
-        viewDataBinding.accountTopFirstBtn.setOnClickListener {
-            val orderHistoryIntent = Intent(context, OrderHistoryActivity::class.java)
-            startActivity(orderHistoryIntent)
-        }
+//        viewDataBinding.accountTopFirstBtn.setOnClickListener {
+//            val orderHistoryIntent = Intent(context, OrderHistoryActivity::class.java)
+//            startActivity(orderHistoryIntent)
+//        }
 
 
         // set event listener

@@ -6,15 +6,24 @@
         android:id="@+id/homeInBottomNav"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_home_24"
-        android:title="홈" />
+        android:title="홈"
+        app:showAsAction="withText" />
     <item
         android:id="@+id/wishedInBottomNav"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_favorite_24"
-        android:title="찜" />
+        android:title="찜"
+        app:showAsAction="withText" />
+    <item
+        android:id="@+id/orderHistoryInBottomNav"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_do_disturb_24"
+        android:title="주문내역"
+        app:showAsAction="withText" />
     <item
         android:id="@+id/accountInBottomNav"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_person_24"
-        android:title="계정" />
+        android:title="계정"
+        app:showAsAction="withText" />
 </menu>

@@ -1,19 +1,17 @@
 package kr.co.younhwan.happybuyer.data.source.order
 
 import android.util.Log
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import kr.co.younhwan.happybuyer.data.AddressItem
 import kr.co.younhwan.happybuyer.data.BasketItem
 import kr.co.younhwan.happybuyer.data.OrderItem
 import kr.co.younhwan.happybuyer.data.ProductItem
+import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.OkHttpClient
-import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.IOException
 
 object OrderRemoteDataSource : OrderSource {
     private val client = OkHttpClient() // 클라이언트
@@ -59,7 +57,7 @@ object OrderRemoteDataSource : OrderSource {
                     val product = JSONObject()
                     product.put("product_id", orderItem.products[index].productId)
                     product.put("count", orderItem.products[index].countInBasket)
-                    if(orderItem.products[index].onSale){
+                    if (orderItem.products[index].onSale) {
                         product.put("price", orderItem.products[index].eventPrice)
                     } else {
                         product.put("price", orderItem.products[index].productPrice)
@@ -93,7 +91,7 @@ object OrderRemoteDataSource : OrderSource {
         runBlocking {
             val list = ArrayList<OrderItem>()
 
-            val job = GlobalScope.launch {
+            launch {
                 // API 서버 주소
                 val site = "${serverInfo}?id=${kakaoAccountId}"
 
@@ -101,67 +99,75 @@ object OrderRemoteDataSource : OrderSource {
                 val request = Request.Builder().url(site).get().build()
 
                 // 응답
-                val response = client.newCall(request).execute()
-                if (response.isSuccessful) {
-                    val resultText = response.body?.string()!!.trim()
-                    val json = JSONObject(resultText)
-
-                    val success = json.getBoolean("success")
-                    if (success) {
-                        val data = JSONArray(json["data"].toString())
-
-                        for (i in 0 until data.length()) {
-                            val obj = data.getJSONObject(i)
-                            val userId = obj.getLong("user_id")
-
-                            if (userId == kakaoAccountId) {
-                                val orderId = obj.getInt("order_id")
-                                val name = obj.getString("name")
-                                val status = obj.getString("status")
-                                val date = obj.getString("date")
-
-                                val receiver = obj.getString("receiver")
-                                val phone = obj.getString("phone")
-                                val address = obj.getString("address")
-
-                                val requirement = obj.getString("requirement")
-                                val point = obj.getString("point")
-                                val detectiveHandlingMethod =
-                                    obj.getString("detective_handling_method")
-
-                                val payment = obj.getString("payment")
-
-                                val originalPrice = obj.getString("original_price")
-                                val eventPrice = obj.getString("event_price")
-                                val bePaidPrice = obj.getString("be_paid_price")
-
-                                list.add(
-                                    OrderItem(
-                                        orderId = orderId,
-                                        name = name,
-                                        status = status,
-                                        date = date,
-                                        receiver = receiver,
-                                        phone = phone,
-                                        address = address,
-                                        requirement = requirement,
-                                        point = point,
-                                        detectiveHandlingMethod = detectiveHandlingMethod,
-                                        payment = payment,
-                                        originalPrice = originalPrice,
-                                        eventPrice = eventPrice,
-                                        bePaidPrice = bePaidPrice,
-                                        products = ArrayList<BasketItem>()
-                                    )
-                                )
-                            }
+                client.newCall(request).enqueue(object : Callback {
+                    override fun onFailure(call: Call, e: IOException) {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            readCallback?.onRead(list)
                         }
                     }
-                }
-            }
 
-            job.join()
-            readCallback?.onRead(list)
+                    override fun onResponse(call: Call, response: Response) {
+                        val resultText = response.body?.string()
+                        val json = JSONObject(resultText)
+
+                        val success = json.getBoolean("success")
+                        if (success) {
+                            val data = JSONArray(json["data"].toString())
+
+                            for (i in 0 until data.length()) {
+                                val obj = data.getJSONObject(i)
+                                val userId = obj.getLong("user_id")
+
+                                if (userId == kakaoAccountId) {
+                                    val orderId = obj.getInt("order_id")
+                                    val name = obj.getString("name")
+                                    val status = obj.getString("status")
+                                    val date = obj.getString("date")
+
+                                    val receiver = obj.getString("receiver")
+                                    val phone = obj.getString("phone")
+                                    val address = obj.getString("address")
+
+                                    val requirement = obj.getString("requirement")
+                                    val point = obj.getString("point")
+                                    val detectiveHandlingMethod =
+                                        obj.getString("detective_handling_method")
+
+                                    val payment = obj.getString("payment")
+
+                                    val originalPrice = obj.getString("original_price")
+                                    val eventPrice = obj.getString("event_price")
+                                    val bePaidPrice = obj.getString("be_paid_price")
+
+                                    list.add(
+                                        OrderItem(
+                                            orderId = orderId,
+                                            name = name,
+                                            status = status,
+                                            date = date,
+                                            receiver = receiver,
+                                            phone = phone,
+                                            address = address,
+                                            requirement = requirement,
+                                            point = point,
+                                            detectiveHandlingMethod = detectiveHandlingMethod,
+                                            payment = payment,
+                                            originalPrice = originalPrice,
+                                            eventPrice = eventPrice,
+                                            bePaidPrice = bePaidPrice,
+                                            products = ArrayList<BasketItem>()
+                                        )
+                                    )
+                                }
+                            }
+                        }
+
+                        CoroutineScope(Dispatchers.Main).launch {
+                            readCallback?.onRead(list)
+                        }
+                    }
+                })
+            }
         }
     }
 
@@ -180,39 +186,46 @@ object OrderRemoteDataSource : OrderSource {
                 val request = Request.Builder().url(site).get().build()
 
                 // 응답
-                val response = client.newCall(request).execute()
-                if (response.isSuccessful) {
-                    val resultText = response.body?.string()!!.trim()
-                    val json = JSONObject(resultText)
+                client.newCall(request).enqueue(object : Callback {
+                    override fun onFailure(call: Call, e: IOException) {
+                        Log.d("temp", "실패")
+                    }
 
-                    val success = json.getBoolean("success")
-                    if(success){
-                        val data = JSONArray(json["data"].toString())
+                    override fun onResponse(call: Call, response: Response) {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            val resultText = response.body?.toString()!!.trim()
+                            val json = JSONObject(resultText)
 
-                        for (i in 0 until data.length()) {
-                            val obj = data.getJSONObject(i)
+                            val success = json.getBoolean("success")
+                            if (success) {
+                                val data = JSONArray(json["data"].toString())
 
-                            val productId = obj.getInt("product_id")
-                            val productStatus = obj.getString("status")
-                            val productName = obj.getString("name")
-                            val productPrice = obj.getInt("price")
-                            val productImage = obj.getString("image_url")
-                            val count = obj.getInt("count")
+                                for (i in 0 until data.length()) {
+                                    val obj = data.getJSONObject(i)
 
-                            list.add(
-                                BasketItem(
-                                    isChecked = true,
-                                    productStatus = productStatus,
-                                    productId = productId,
-                                    productName = productName,
-                                    productPrice = productPrice,
-                                    productImageUrl = productImage,
-                                    countInBasket = count
-                                )
-                            )
+                                    val productId = obj.getInt("product_id")
+                                    val productStatus = obj.getString("status")
+                                    val productName = obj.getString("name")
+                                    val productPrice = obj.getInt("price")
+                                    val productImage = obj.getString("image_url")
+                                    val count = obj.getInt("count")
+
+                                    list.add(
+                                        BasketItem(
+                                            isChecked = true,
+                                            productStatus = productStatus,
+                                            productId = productId,
+                                            productName = productName,
+                                            productPrice = productPrice,
+                                            productImageUrl = productImage,
+                                            countInBasket = count
+                                        )
+                                    )
+                                }
+                            }
                         }
                     }
-                }
+                })
             }
 
             job.join()
@@ -220,3 +233,96 @@ object OrderRemoteDataSource : OrderSource {
         }
     }
 }
+
+//                val response = client.newCall(request).execute()
+//                if (response.isSuccessful) {
+//                    val resultText = response.body?.string()!!.trim()
+//                    val json = JSONObject(resultText)
+//
+//                    val success = json.getBoolean("success")
+//                    if (success) {
+//                        val data = JSONArray(json["data"].toString())
+//
+//                        for (i in 0 until data.length()) {
+//                            val obj = data.getJSONObject(i)
+//                            val userId = obj.getLong("user_id")
+//
+//                            if (userId == kakaoAccountId) {
+//                                val orderId = obj.getInt("order_id")
+//                                val name = obj.getString("name")
+//                                val status = obj.getString("status")
+//                                val date = obj.getString("date")
+//
+//                                val receiver = obj.getString("receiver")
+//                                val phone = obj.getString("phone")
+//                                val address = obj.getString("address")
+//
+//                                val requirement = obj.getString("requirement")
+//                                val point = obj.getString("point")
+//                                val detectiveHandlingMethod =
+//                                    obj.getString("detective_handling_method")
+//
+//                                val payment = obj.getString("payment")
+//
+//                                val originalPrice = obj.getString("original_price")
+//                                val eventPrice = obj.getString("event_price")
+//                                val bePaidPrice = obj.getString("be_paid_price")
+//
+//                                list.add(
+//                                    OrderItem(
+//                                        orderId = orderId,
+//                                        name = name,
+//                                        status = status,
+//                                        date = date,
+//                                        receiver = receiver,
+//                                        phone = phone,
+//                                        address = address,
+//                                        requirement = requirement,
+//                                        point = point,
+//                                        detectiveHandlingMethod = detectiveHandlingMethod,
+//                                        payment = payment,
+//                                        originalPrice = originalPrice,
+//                                        eventPrice = eventPrice,
+//                                        bePaidPrice = bePaidPrice,
+//                                        products = ArrayList<BasketItem>()
+//                                    )
+//                                )
+//                            }
+//                        }
+//                    }
+//                }
+
+
+//                val response = client.newCall(request).execute()
+//                if (response.isSuccessful) {
+//                    val resultText = response.body?.string()!!.trim()
+//                    val json = JSONObject(resultText)
+//
+//                    val success = json.getBoolean("success")
+//                    if(success){
+//                        val data = JSONArray(json["data"].toString())
+//
+//                        for (i in 0 until data.length()) {
+//                            val obj = data.getJSONObject(i)
+//
+//                            val productId = obj.getInt("product_id")
+//                            val productStatus = obj.getString("status")
+//                            val productName = obj.getString("name")
+//                            val productPrice = obj.getInt("price")
+//                            val productImage = obj.getString("image_url")
+//                            val count = obj.getInt("count")
+//
+//                            list.add(
+//                                BasketItem(
+//                                    isChecked = true,
+//                                    productStatus = productStatus,
+//                                    productId = productId,
+//                                    productName = productName,
+//                                    productPrice = productPrice,
+//                                    productImageUrl = productImage,
+//                                    countInBasket = count
+//                                )
+//                            )
+//                        }
+//                    }
+//                }
