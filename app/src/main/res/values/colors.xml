@@ -29,4 +29,5 @@
     <color name="LineColorBlack">#191919</color>
     <color name="LineColorGray">#DBDBDB</color>
     <color name="LineColorLightGray">#CCEDEDED</color>
+    <color name="LineColorLightGray2">#F5F4F4</color>
 </resources>

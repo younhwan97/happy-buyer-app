@@ -2,6 +2,7 @@ package kr.co.younhwan.happybuyer.view.orderdetail
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import kr.co.younhwan.happybuyer.data.OrderItem
 import kr.co.younhwan.happybuyer.data.source.order.OrderRepository
 import kr.co.younhwan.happybuyer.databinding.ActivityOrderDetailBinding
@@ -21,9 +22,14 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailContract.View {
         viewDataBinding = ActivityOrderDetailBinding.inflate(layoutInflater)
         setContentView(viewDataBinding.root)
 
+        // 로딩 뷰 셋팅
+        viewDataBinding.orderDetailLoadingView.visibility = View.VISIBLE
+        viewDataBinding.orderDetailLoadingImage.playAnimation()
+
+        // 인텐트에서 데이터 추출
         if (intent.hasExtra("order")) {
             val order = intent.getParcelableExtra<OrderItem>("order")
-            if(order != null){
+            if (order != null) {
                 orderDetailPresenter.loadOrderDetail(order.orderId)
             }
         } else {
@@ -37,4 +43,16 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailContract.View {
     }
 
     override fun getView() = this
+
+    override fun loadOrderDetailCallback(isSuccess: Boolean) {
+        if(isSuccess){
+
+        } else {
+            
+        }
+        
+        // 로딩 뷰 종료
+        viewDataBinding.orderDetailLoadingView.visibility = View.GONE
+        viewDataBinding.orderDetailLoadingImage.pauseAnimation()
+    }
 }

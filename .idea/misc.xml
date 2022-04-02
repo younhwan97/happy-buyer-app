@@ -117,7 +117,7 @@
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_login.xml" value="0.27685185185185185" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_order.xml" value="0.4298978644382544" />
-        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_order_detail.xml" value="0.5" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_order_detail.xml" value="0.33" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_order_history.xml" value="0.5" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_product.xml" value="0.33" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_result.xml" value="0.37962962962962965" />
@@ -132,7 +132,7 @@
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/dialog_lottie.xml" value="0.4869791666666667" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/event_item.xml" value="0.5" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/event_item_in_main.xml" value="0.33" />
-        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/fragment_account.xml" value="0.33" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/fragment_account.xml" value="0.5" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/fragment_address_create.xml" value="0.4822916666666667" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/fragment_address_management.xml" value="0.4822916666666667" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/fragment_category.xml" value="0.34270833333333334" />

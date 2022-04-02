@@ -20,7 +20,7 @@ class OrderDetailPresenter(
                 readProductsCallback = object : OrderSource.ReadProductsCallback{
                     override fun onReadProducts(list: ArrayList<BasketItem>) {
                         for(item in list){
-                            Log.d("temp", item.toString())
+
                         }
                     }
                 }

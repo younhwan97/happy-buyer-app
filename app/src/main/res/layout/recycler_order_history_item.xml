@@ -27,7 +27,6 @@
             style="@style/NumberTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_weight="1"
             android:includeFontPadding="false"
             android:text="0000000000001"
@@ -44,7 +43,9 @@
     <com.google.android.material.divider.MaterialDivider
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="16dp"
+        app:dividerColor="@color/LineColorLightGray2"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -57,7 +58,7 @@
         <TextView
             android:id="@+id/orderHistoryItemNameTitle"
             style="@style/TextView"
-            android:layout_width="112dp"
+            android:layout_width="104dp"
             android:layout_height="wrap_content"
             android:includeFontPadding="false"
             android:text="상품명" />
@@ -87,7 +88,7 @@
         <TextView
             android:id="@+id/orderHistoryItemDateTitle"
             style="@style/TextView"
-            android:layout_width="112dp"
+            android:layout_width="104dp"
             android:layout_height="wrap_content"
             android:includeFontPadding="false"
             android:text="주문 일시" />
@@ -117,7 +118,7 @@
         <TextView
             android:id="@+id/orderHistoryItemPaymentTitle"
             style="@style/TextView"
-            android:layout_width="112dp"
+            android:layout_width="104dp"
             android:layout_height="wrap_content"
             android:includeFontPadding="false"
             android:text="결제 방법" />
@@ -147,7 +148,7 @@
         <TextView
             android:id="@+id/orderHistoryItemPriceTitle"
             style="@style/TextView"
-            android:layout_width="112dp"
+            android:layout_width="104dp"
             android:layout_height="wrap_content"
             android:includeFontPadding="false"
             android:text="결제 금액" />
@@ -177,7 +178,7 @@
         <TextView
             android:id="@+id/orderHistoryItemDeliveryStatusTitle"
             style="@style/TextView"
-            android:layout_width="112dp"
+            android:layout_width="104dp"
             android:layout_height="wrap_content"
             android:includeFontPadding="false"
             android:text="주문 상태" />
