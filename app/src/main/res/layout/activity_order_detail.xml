@@ -34,15 +34,507 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="16dp"
                 android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/orderDetailView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="8dp"
+                        android:background="@color/bgColorLightGray"
+                        android:orientation="horizontal" />
+
+                    <LinearLayout
+                        android:id="@+id/orderDetailProductContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginRight="16dp"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="16dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/orderDetailIdTitle"
+                                style="@style/TextView.Bold"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:includeFontPadding="false"
+                                android:text="주문번호"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/orderDetailId"
+                                style="@style/TextView.Bold"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:layout_weight="1"
+                                android:includeFontPadding="false"
+                                android:text="0"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/orderDetailProductContent"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="16dp"
+                            android:background="@drawable/bg_order_content"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/orderDetailProductRecycler"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/bg_order_content"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="52dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/orderDetailOriginalPriceTitle"
+                                    style="@style/TextView"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:includeFontPadding="false"
+                                    android:text="상품금액" />
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:gravity="bottom|end"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/orderDetailOriginalPrice"
+                                        style="@style/NumberTextView"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:includeFontPadding="false"
+                                        android:text="0"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/orderDetailOriginalPriceSubText"
+                                        style="@style/TextView"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:includeFontPadding="false"
+                                        android:text="원"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <com.google.android.material.divider.MaterialDivider
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="52dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/orderDetailEventPriceTitle"
+                                    style="@style/TextView"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:includeFontPadding="false"
+                                    android:text="상품할인금액" />
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:gravity="end"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/orderDetailEventPrice"
+                                        style="@style/NumberTextView"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:includeFontPadding="false"
+                                        android:text="0"
+                                        android:textColor="@android:color/holo_red_dark"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/orderDetailEventPriceSubText"
+                                        style="@style/TextView"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:includeFontPadding="false"
+                                        android:text="원"
+                                        android:textColor="@android:color/holo_red_dark"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="52dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/orderDetailShippingPriceTitle"
+                                    style="@style/TextView"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:includeFontPadding="false"
+                                    android:text="배송비" />
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:gravity="bottom|end"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/orderDetailShippingPrice"
+                                        style="@style/NumberTextView"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:includeFontPadding="false"
+                                        android:text="0"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/orderDetailShippingPriceSubText"
+                                        style="@style/TextView"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:includeFontPadding="false"
+                                        android:text="원"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <com.google.android.material.divider.MaterialDivider
+                                android:layout_width="match_parent"
+                                android:layout_height="2dp"
+                                android:layout_marginTop="4dp"
+                                android:layout_marginBottom="4dp"
+                                app:dividerColor="@color/black" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="52dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/orderDetailBePaidPriceTitle"
+                                    style="@style/TextView.Bold"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:includeFontPadding="false"
+                                    android:text="최종 결제금액"
+                                    android:textSize="16sp" />
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:gravity="bottom|end"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/orderDetailBePaidPrice"
+                                        style="@style/NumberTextView.Bold"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:includeFontPadding="false"
+                                        android:text="0"
+                                        android:textSize="18sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/orderDetailBePaidPriceSubText"
+                                        style="@style/TextView.Bold"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:includeFontPadding="false"
+                                        android:text="원"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/orderDetailPayment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginRight="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/orderDetailPaymentTitle"
+                            style="@style/TextView.Bold"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:includeFontPadding="false"
+                            android:text="결제수단"
+                            android:textSize="18sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/bg_order_content"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <RadioGroup
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:checkedButton="@+id/orderDetailPaymentRadioOptionCard">
+
+                                <RadioButton
+                                    android:id="@+id/orderDetailPaymentRadioOptionCard"
+                                    style="@style/Widget.App.RadioButton"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:fontFamily="@font/notosans_kr_regular"
+                                    android:text="만나서 카드결제"
+                                    android:textColor="@color/fontColorBlack" />
+
+                                <RadioButton
+                                    android:id="@+id/orderDetailPaymentRadioOptionCash"
+                                    style="@style/Widget.App.RadioButton"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:fontFamily="@font/notosans_kr_regular"
+                                    android:text="만나서 현금결제"
+                                    android:textColor="@color/fontColorBlack" />
+                            </RadioGroup>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/orderDetailAddressContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginRight="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/orderDetailAddressTitle"
+                            style="@style/TextView.Bold"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:includeFontPadding="false"
+                            android:text="배달정보"
+                            android:textSize="18sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/bg_order_content"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <TextView
+                                android:id="@+id/orderDetailAddressReceiver"
+                                style="@style/TextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:includeFontPadding="false"
+                                android:text="받으실 분"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/orderDetailAddressPhone"
+                                style="@style/NumberTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="16dp"
+                                android:layout_marginBottom="16dp"
+                                android:includeFontPadding="false"
+                                android:text="휴대폰"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/orderDetailAddress"
+                                style="@style/TextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:includeFontPadding="false"
+                                android:text="주소"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/orderDetailRequirementContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginRight="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/orderDetailRequirementTitle"
+                            style="@style/TextView.Bold"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:includeFontPadding="false"
+                            android:text="배달 요청사항"
+                            android:textSize="18sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="16dp"
+                            android:background="@drawable/bg_order_content"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/orderDetailRequirement"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:boxBackgroundColor="@color/bgColorWhite"
+                                app:boxStrokeColor="@color/text_input_layout_stroke_color"
+                                app:boxStrokeWidthFocused="1dp"
+                                app:counterEnabled="true"
+                                app:counterMaxLength="50">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:maxLength="50" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <TextView
+                                android:id="@+id/orderDetailPointTitle"
+                                style="@style/TextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="16dp"
+                                android:includeFontPadding="false"
+                                android:text="포인트 번호"
+                                android:textStyle="bold" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/orderDetailPoint"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                app:boxBackgroundColor="@color/bgColorWhite"
+                                app:boxStrokeColor="@color/text_input_layout_stroke_color"
+                                app:boxStrokeWidthFocused="1dp">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="phone"
+                                    android:maxLength="13" />
+                            </com.google.android.material.textfield.TextInputLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/bg_order_content"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <TextView
+                                android:id="@+id/textView26"
+                                style="@style/TextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:includeFontPadding="false"
+                                android:text="결품발생 시 처리 방법"
+                                android:textStyle="bold" />
+
+                            <RadioGroup
+                                android:id="@+id/orderDetailDefectiveHandlingMethod"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:checkedButton="@+id/orderDefectiveHandlingOption1">
+
+                                <RadioButton
+                                    android:id="@+id/orderDetailDefectiveHandlingOption1"
+                                    style="@style/Widget.App.RadioButton"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:fontFamily="@font/notosans_kr_regular"
+                                    android:text="해당 상품 제외 후 배달"
+                                    android:textColor="@color/fontColorBlack" />
+
+                                <RadioButton
+                                    android:id="@+id/orderDetailDefectiveHandlingOption2"
+                                    style="@style/Widget.App.RadioButton"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:fontFamily="@font/notosans_kr_regular"
+                                    android:text="주문 전체 취소"
+                                    android:textColor="@color/fontColorBlack" />
+                            </RadioGroup>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
                 <RelativeLayout
                     android:id="@+id/orderDetailLoadingView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:visibility="gone">
 
                     <com.airbnb.lottie.LottieAnimationView
                         android:id="@+id/orderDetailLoadingImage"

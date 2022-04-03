@@ -1,4 +1,4 @@
-package kr.co.younhwan.happybuyer.view.order.adapter.contract
+package kr.co.younhwan.happybuyer.adapter.orderproduct.contract
 
 import kr.co.younhwan.happybuyer.data.BasketItem
 

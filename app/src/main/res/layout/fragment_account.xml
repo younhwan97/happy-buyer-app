@@ -7,7 +7,6 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/accountTopContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -117,7 +116,6 @@
         android:orientation="horizontal"/>
 
     <LinearLayout
-        android:id="@+id/accountProfileContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -252,7 +250,6 @@
         android:orientation="horizontal"/>
 
     <LinearLayout
-        android:id="@+id/accountNotificationContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -317,7 +314,6 @@
         android:orientation="horizontal"/>
 
     <LinearLayout
-        android:id="@+id/accountEtcContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">

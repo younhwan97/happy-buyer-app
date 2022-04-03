@@ -61,7 +61,7 @@ class OrderHistoryAdapter :
             if(itemPosition == 0){
                 outRect.top = (16 * density).toInt()
             }
-            outRect.bottom = (12 * density).toInt()
+            outRect.bottom = (8 * density).toInt()
         }
     }
 }

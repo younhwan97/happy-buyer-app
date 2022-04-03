@@ -10,7 +10,7 @@ import kr.co.younhwan.happybuyer.data.source.basket.BasketRepository
 import kr.co.younhwan.happybuyer.data.source.basket.BasketSource
 import kr.co.younhwan.happybuyer.data.source.order.OrderRepository
 import kr.co.younhwan.happybuyer.data.source.order.OrderSource
-import kr.co.younhwan.happybuyer.view.order.adapter.contract.OrderAdapterContract
+import kr.co.younhwan.happybuyer.adapter.orderproduct.contract.OrderAdapterContract
 
 class OrderPresenter(
     private val view: OrderContract.View,

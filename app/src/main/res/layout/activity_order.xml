@@ -324,7 +324,7 @@
                             android:id="@+id/orderPaymentRadioGroup"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:checkedButton="@+id/orderDefectiveHandlingOption1">
+                            android:checkedButton="@+id/orderPaymentRadioOptionCard">
 
                             <RadioButton
                                 android:id="@+id/orderPaymentRadioOptionCard"
@@ -578,7 +578,7 @@
 
                                 <TextView
                                     android:id="@+id/orderBePainPriceSubText"
-                                    style="@style/TextView"
+                                    style="@style/TextView.Bold"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:includeFontPadding="false"

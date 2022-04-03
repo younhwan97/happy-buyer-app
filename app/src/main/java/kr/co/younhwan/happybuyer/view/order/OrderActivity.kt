@@ -19,7 +19,7 @@ import kr.co.younhwan.happybuyer.data.source.order.OrderRepository
 import kr.co.younhwan.happybuyer.databinding.ActivityOrderBinding
 import kr.co.younhwan.happybuyer.view.addeditaddress.AddAddressActivity
 import kr.co.younhwan.happybuyer.view.address.AddressActivity
-import kr.co.younhwan.happybuyer.view.order.adapter.OrderAdapter
+import kr.co.younhwan.happybuyer.adapter.orderproduct.OrderAdapter
 import kr.co.younhwan.happybuyer.view.ordersuccess.OrderSuccessActivity
 import java.text.DecimalFormat
 

@@ -1,4 +1,4 @@
-package kr.co.younhwan.happybuyer.view.order.adapter
+package kr.co.younhwan.happybuyer.adapter.orderproduct
 
 import android.graphics.Rect
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kr.co.younhwan.happybuyer.data.BasketItem
 import kr.co.younhwan.happybuyer.databinding.RecyclerOrderProductItemBinding
-import kr.co.younhwan.happybuyer.view.order.adapter.contract.OrderAdapterContract
+import kr.co.younhwan.happybuyer.adapter.orderproduct.contract.OrderAdapterContract
 
 class OrderAdapter :
     RecyclerView.Adapter<OrderViewHolder>(),
@@ -15,7 +15,7 @@ class OrderAdapter :
     OrderAdapterContract.Model {
 
     // 아이템
-    private lateinit var orderItemList: ArrayList<BasketItem>
+    private var orderItemList: ArrayList<BasketItem> = ArrayList()
 
     // 메서드
     override fun getItemCount() = orderItemList.size
