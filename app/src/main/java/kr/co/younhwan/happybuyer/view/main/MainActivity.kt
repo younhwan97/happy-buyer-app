@@ -45,8 +45,23 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         viewDataBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewDataBinding.root)
 
+        // 인텐트에서 데이터 추출
+        if(intent.hasExtra("init_frag")){
+            when(intent.getStringExtra("init_frag")){
+                "order_history" -> {
+                    viewDataBinding.mainBottomNavigation.selectedItemId = R.id.orderHistoryInBottomNav
+                    replace(R.id.mainContentContainer, orderHistoryFragment)
+                }
+
+                else -> {
+                    replace(R.id.mainContentContainer, homeFragment)
+                }
+            }
+        } else {
+            replace(R.id.mainContentContainer, homeFragment)
+        }
+
         mainPresenter.requestPermission() // 권한 요청
-        replace(R.id.mainContentContainer, homeFragment) // set init fragment
 
         viewDataBinding.mainToolbar.setOnMenuItemClickListener {
             when (it.itemId) {

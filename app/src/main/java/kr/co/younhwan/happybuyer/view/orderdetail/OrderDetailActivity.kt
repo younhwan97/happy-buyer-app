@@ -1,14 +1,17 @@
 package kr.co.younhwan.happybuyer.view.orderdetail
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
+import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import kr.co.younhwan.happybuyer.adapter.orderproduct.OrderAdapter
 import kr.co.younhwan.happybuyer.data.OrderItem
 import kr.co.younhwan.happybuyer.data.source.order.OrderRepository
 import kr.co.younhwan.happybuyer.databinding.ActivityOrderDetailBinding
+import kr.co.younhwan.happybuyer.view.main.MainActivity
 
 class OrderDetailActivity : AppCompatActivity(), OrderDetailContract.View {
     lateinit var viewDataBinding: ActivityOrderDetailBinding
@@ -50,7 +53,15 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailContract.View {
 
             // 툴바
             viewDataBinding.orderDetailToolbar.setNavigationOnClickListener {
-                finish()
+                if(isTaskRoot){
+                    val mainIntent = Intent(this, MainActivity::class.java)
+                    mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    mainIntent.putExtra("init_frag", "order_history")
+                    startActivity(mainIntent)
+                } else {
+                    finish()
+                }
             }
 
             // 주문 번호 및 주문 상태

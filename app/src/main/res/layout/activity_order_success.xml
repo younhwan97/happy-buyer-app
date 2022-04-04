@@ -28,6 +28,7 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fillViewport="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout
@@ -35,117 +36,142 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/orderSuccessImage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="64dp"
-                    android:background="@color/bgColorWhite"
-                    app:lottie_autoPlay="false"
-                    app:lottie_loop="false"
-                    app:lottie_rawRes="@raw/success"
-                    app:lottie_speed="1" />
-
-                <TextView
-                    android:id="@+id/orderSuccessText"
-                    style="@style/TextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="22dp"
-                    android:layout_marginEnd="16dp"
-                    android:includeFontPadding="false"
-                    android:text="주문이 완료되었습니다."
-                    android:textAlignment="center"
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:id="@+id/orderSuccessText2"
-                    style="@style/TextView.Bold"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:includeFontPadding="false"
-                    android:text="감사합니다 :)"
-                    android:textAlignment="center"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <com.google.android.material.divider.MaterialDivider
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="82dp"
-                    app:dividerInsetEnd="16dp"
-                    app:dividerInsetStart="16dp" />
-
                 <LinearLayout
+                    android:id="@+id/orderSuccessView"
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:layout_margin="16dp"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/orderSuccessImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="64dp"
+                        android:background="@color/bgColorWhite"
+                        app:lottie_autoPlay="false"
+                        app:lottie_loop="false"
+                        app:lottie_rawRes="@raw/success"
+                        app:lottie_speed="1" />
 
                     <TextView
-                        android:id="@+id/orderSuccessBePaidPriceTitle"
+                        android:id="@+id/orderSuccessText"
                         style="@style/TextView"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="22dp"
+                        android:layout_marginEnd="16dp"
                         android:includeFontPadding="false"
-                        android:text="결제금액"
-                        android:textSize="16sp" />
+                        android:text="주문이 완료되었습니다."
+                        android:textAlignment="center"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/orderSuccessText2"
+                        style="@style/TextView.Bold"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:includeFontPadding="false"
+                        android:text="감사합니다 :)"
+                        android:textAlignment="center"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="82dp"
+                        app:dividerInsetEnd="16dp"
+                        app:dividerInsetStart="16dp" />
 
                     <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:gravity="bottom|end"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_margin="16dp"
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/orderSuccessBePaidPrice"
-                            style="@style/NumberTextView.Bold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:includeFontPadding="false"
-                            android:text="0"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/orderSuccessBePaidPriceSubText"
+                            android:id="@+id/orderSuccessBePaidPriceTitle"
                             style="@style/TextView"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
                             android:includeFontPadding="false"
-                            android:text="원"
+                            android:text="결제금액"
                             android:textSize="16sp" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:gravity="bottom|end"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/orderSuccessBePaidPrice"
+                                style="@style/NumberTextView.Bold"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:includeFontPadding="false"
+                                android:text="0"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/orderSuccessBePaidPriceSubText"
+                                style="@style/TextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:includeFontPadding="false"
+                                android:text="원"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+
                     </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/orderSuccessSubText"
+                        style="@style/TextView.Light"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:includeFontPadding="false"
+                        android:text="· [주문접수] 상태일 때 주문내역 상세페이지에서 주문 취소가 가능합니다." />
+
+                    <TextView
+                        android:id="@+id/orderSuccessSubText2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:text="· 주문 / 배달 및 기타 문의가 있을 경우, 마트로 문의주시면 신속히 해결해드리겠습니다." />
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/orderSuccessSubText"
-                    style="@style/TextView.Light"
+                <RelativeLayout
+                    android:id="@+id/orderSuccessLoadingView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="8dp"
-                    android:includeFontPadding="false"
-                    android:text="· [주문접수] 상태일 때 주문내역 상세페이지에서 주문 취소가 가능합니다." />
+                    android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/orderSuccessSubText2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:text="· 주문 / 배달 및 기타 문의가 있을 경우, 마트로 문의주시면 신속히 해결해드리겠습니다." />
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/orderSuccessLoadingImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:background="@color/bgColorWhite"
+                        app:lottie_autoPlay="false"
+                        app:lottie_loop="true"
+                        app:lottie_rawRes="@raw/loading"
+                        app:lottie_speed="1" />
+                </RelativeLayout>
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

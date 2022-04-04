@@ -269,7 +269,6 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
     override fun createOrderCallback(orderItem: OrderItem) {
         val orderSuccessIntent = Intent(this, OrderSuccessActivity::class.java)
         orderSuccessIntent.putExtra("order", orderItem)
-        orderSuccessIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(orderSuccessIntent)
     }
 }

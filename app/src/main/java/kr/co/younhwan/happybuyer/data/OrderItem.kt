@@ -7,7 +7,7 @@ data class OrderItem(
     var orderId: Int,
     val name: String,
     val status: String,
-    val date: String?,
+    var date: String?,
     val receiver: String,
     val phone: String,
     val address: String,
@@ -18,7 +18,7 @@ data class OrderItem(
     val originalPrice: String,
     val eventPrice: String,
     val bePaidPrice: String,
-    val products: ArrayList<BasketItem>
+    var products: ArrayList<BasketItem>
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
