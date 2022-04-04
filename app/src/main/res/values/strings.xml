@@ -1,6 +1,20 @@
 <resources>
     <string name="app_name">HappyBuyer</string>
 
+    <!-- Order Success -->
+    <string name="order_success_text_1">주문이 완료되었습니다.</string>
+    <string name="order_success_text_2">감사합니다 :)</string>
+    <string name="order_success_be_paid_price">결제금액</string>
+    <string name="order_success_price_zero">0</string>
+    <string name="order_success_price_sub_text">원</string>
+    <string name="order_success_sub_text_1">· [주문접수] 상태일 때 주문내역 상세페이지에서 주문 취소가 가능합니다.</string>
+    <string name="order_success_sub_text_2">· 주문 / 배달 및 기타 문의가 있을 경우, 마트로 문의주시면 신속히 해결해드리겠습니다.</string>
+    <string name="order_success_detail_btn_text">주문 상세보기</string>
+    <string name="order_success_close_btn_text">쇼핑 계속하기</string>
+
+
+
+
     <!-- HappyBuyer wished view -->
     <string name="wished_empty_text">자주 찾는 상품을 찜 해보세요.</string>
     <string name="wished_item_count_sub_text_1">전체</string>

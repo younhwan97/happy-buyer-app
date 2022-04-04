@@ -47,13 +47,25 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailContract.View {
         }
 
         if (orderInfo == null) {
-            finish()
+            // 메인(주문 내역 프래그먼트), 주문성공 엑티비티에서 주문 정보를 정상적으로 전달받지 못했을 때
+            if (isTaskRoot) {
+                // 백스택에 엑티비티가 존재하지 않을 때
+                val mainIntent = Intent(this, MainActivity::class.java)
+                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                mainIntent.putExtra("init_frag", "order_history")
+                startActivity(mainIntent)
+            } else {
+                // 백스택에 엑티비티가 존재할 때
+                finish()
+            }
         } else {
+            // 메인(주문 내역 프래그먼트), 주문성공 엑티비티에서 주문 정보를 정상적으로 전달받았을 때
             orderDetailPresenter.loadOrderDetail(orderInfo.orderId)
 
             // 툴바
             viewDataBinding.orderDetailToolbar.setNavigationOnClickListener {
-                if(isTaskRoot){
+                if (isTaskRoot) {
                     val mainIntent = Intent(this, MainActivity::class.java)
                     mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -76,7 +88,7 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailContract.View {
                     override fun canScrollVertically() = false
                 }
             viewDataBinding.orderDetailProductRecycler.addItemDecoration(orderAdapter.RecyclerDecoration())
-            
+
             // 가격
             viewDataBinding.orderDetailOriginalPrice.text = orderInfo.originalPrice
             viewDataBinding.orderDetailEventPrice.text = orderInfo.eventPrice
@@ -99,20 +111,22 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailContract.View {
             viewDataBinding.orderDetailAddress.text = orderInfo.address
 
             // 배달 요청사항
-            viewDataBinding.orderDetailRequirement.editText?.text = Editable.Factory.getInstance().newEditable(orderInfo.requirement)
+            viewDataBinding.orderDetailRequirement.editText?.text =
+                Editable.Factory.getInstance().newEditable(orderInfo.requirement)
             viewDataBinding.orderDetailRequirement.editText?.isEnabled = false
 
-            viewDataBinding.orderDetailPoint.editText?.text = Editable.Factory.getInstance().newEditable(orderInfo.point)
+            viewDataBinding.orderDetailPoint.editText?.text =
+                Editable.Factory.getInstance().newEditable(orderInfo.point)
             viewDataBinding.orderDetailPoint.editText?.isEnabled = false
 
-            if(orderInfo.detectiveHandlingMethod == "주문 전체 취소"){
+            if (orderInfo.detectiveHandlingMethod == "주문 전체 취소") {
                 viewDataBinding.orderDetailDefectiveHandlingOption1.isChecked = false
                 viewDataBinding.orderDetailDefectiveHandlingOption2.isChecked = true
             } else {
                 viewDataBinding.orderDetailDefectiveHandlingOption1.isChecked = true
                 viewDataBinding.orderDetailDefectiveHandlingOption2.isChecked = false
             }
-            viewDataBinding.orderDetailDefectiveHandlingOption1.isEnabled= false
+            viewDataBinding.orderDetailDefectiveHandlingOption1.isEnabled = false
             viewDataBinding.orderDetailDefectiveHandlingOption2.isEnabled = false
         }
     }

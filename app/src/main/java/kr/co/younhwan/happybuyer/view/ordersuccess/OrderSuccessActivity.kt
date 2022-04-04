@@ -27,6 +27,7 @@ class OrderSuccessActivity : AppCompatActivity(), OrderSuccessContract.View {
 
         // 로딩 뷰 셋팅
         viewDataBinding.orderSuccessView.visibility = View.GONE
+        viewDataBinding.orderSuccessBtnContainer.visibility = View.GONE
         viewDataBinding.orderSuccessLoadingView.visibility = View.VISIBLE
         viewDataBinding.orderSuccessLoadingImage.playAnimation()
 
@@ -57,7 +58,7 @@ class OrderSuccessActivity : AppCompatActivity(), OrderSuccessContract.View {
                 startActivity(mainIntent)
             }
 
-            // 성공 이미지
+            // 성공 애니메이션
             viewDataBinding.orderSuccessImage.setOnClickListener {
                 viewDataBinding.orderSuccessImage.playAnimation()
             }
@@ -66,14 +67,18 @@ class OrderSuccessActivity : AppCompatActivity(), OrderSuccessContract.View {
             viewDataBinding.orderSuccessBePaidPrice.text = orderInfo.bePaidPrice
 
             // 하단 버튼
+            viewDataBinding.orderSuccessCloseBtn.isClickable = true
             viewDataBinding.orderSuccessCloseBtn.setOnClickListener {
+                it.isClickable = false
                 val mainIntent = Intent(this, MainActivity::class.java)
                 mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(mainIntent)
             }
 
+            viewDataBinding.orderSuccessDetailBtn.isClickable = true
             viewDataBinding.orderSuccessDetailBtn.setOnClickListener {
+                it.isClickable = false
                 val orderDetailIntent = Intent(this, OrderDetailActivity::class.java)
                 orderDetailIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 orderDetailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -89,11 +94,12 @@ class OrderSuccessActivity : AppCompatActivity(), OrderSuccessContract.View {
         if (isSuccess) {
             // 유효성 검사를 통과했을 때
             // 로딩 뷰 종료
+            viewDataBinding.orderSuccessBtnContainer.visibility = View.VISIBLE
             viewDataBinding.orderSuccessView.visibility = View.VISIBLE
             viewDataBinding.orderSuccessLoadingView.visibility = View.GONE
             viewDataBinding.orderSuccessLoadingImage.pauseAnimation()
 
-            // 성공 이미지
+            // 성공 이미지 애니메이션
             viewDataBinding.orderSuccessImage.playAnimation()
         } else {
             // 유효성 검사를 통과하지 못했을 때
