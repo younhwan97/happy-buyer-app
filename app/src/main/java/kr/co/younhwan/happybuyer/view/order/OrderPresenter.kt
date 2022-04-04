@@ -122,6 +122,8 @@ class OrderPresenter(
                                 orderProductsId.add(item.productId)
                             }
 
+                            orderItem.orderId = orderId
+
                             // 주문이 완료된 상품을 장바구니에서 제거
                             basketData.deleteProducts(
                                 kakaoAccountId = app.kakaoAccountId,
@@ -130,7 +132,7 @@ class OrderPresenter(
                                     BasketSource.DeleteProductsCallback {
                                     override fun onDeleteProducts(isSuccess: Boolean) {
                                         if (isSuccess) {
-                                            view.createOrderCallback(orderId)
+                                            view.createOrderCallback(orderItem)
                                         }
                                     }
                                 }

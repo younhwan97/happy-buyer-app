@@ -53,8 +53,10 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailContract.View {
                 finish()
             }
 
-            // 주문 번호
+            // 주문 번호 및 주문 상태
             viewDataBinding.orderDetailId.text = orderInfo.orderId.toString()
+            viewDataBinding.orderDetailStatus.text = orderInfo.status
+            viewDataBinding.orderDetailDate.text = "(".plus(orderInfo.date).plus(")")
 
             viewDataBinding.orderDetailProductRecycler.adapter = orderAdapter
             viewDataBinding.orderDetailProductRecycler.layoutManager =

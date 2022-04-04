@@ -266,9 +266,9 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
         viewDataBinding.orderBtn.text = decimal.format(totalPrice).plus("원 주문하기")
     }
 
-    override fun createOrderCallback(orderId: Int) {
+    override fun createOrderCallback(orderItem: OrderItem) {
         val orderSuccessIntent = Intent(this, OrderSuccessActivity::class.java)
-        orderSuccessIntent.putExtra("order_id", orderId)
+        orderSuccessIntent.putExtra("order", orderItem)
         orderSuccessIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(orderSuccessIntent)
     }

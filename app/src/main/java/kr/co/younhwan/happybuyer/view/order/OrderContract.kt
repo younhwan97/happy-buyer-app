@@ -15,7 +15,7 @@ interface OrderContract {
 
         fun calculatePriceCallback(totalPrice: Int, originalTotalPrice: Int, basketItemCount: Int)
 
-        fun createOrderCallback(orderId: Int)
+        fun createOrderCallback(orderItem: OrderItem)
     }
 
     interface Model {

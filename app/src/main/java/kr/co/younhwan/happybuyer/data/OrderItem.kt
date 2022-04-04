@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class OrderItem(
-    val orderId: Int,
+    var orderId: Int,
     val name: String,
     val status: String,
     val date: String?,
