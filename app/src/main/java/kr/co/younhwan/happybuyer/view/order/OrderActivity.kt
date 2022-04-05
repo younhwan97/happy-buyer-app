@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.text.Editable
+import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +21,7 @@ import kr.co.younhwan.happybuyer.databinding.ActivityOrderBinding
 import kr.co.younhwan.happybuyer.view.addeditaddress.AddAddressActivity
 import kr.co.younhwan.happybuyer.view.address.AddressActivity
 import kr.co.younhwan.happybuyer.adapter.orderproduct.OrderAdapter
+import kr.co.younhwan.happybuyer.view.order.dialog.OrderDialogFragment
 import kr.co.younhwan.happybuyer.view.ordersuccess.OrderSuccessActivity
 import java.text.DecimalFormat
 
@@ -42,6 +44,8 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
     }
 
     private var completeAsyncTask = false
+
+    private val orderDialog = OrderDialogFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,7 +90,7 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
                         viewDataBinding.orderBtnContainer.visibility = View.GONE
                         viewDataBinding.orderLoadingView.visibility = View.VISIBLE
                         viewDataBinding.orderLoadingImage.playAnimation()
-                        completeAsyncTask =true
+                        completeAsyncTask = true
 
                         orderPresenter.loadDefaultAddress()
                     }
@@ -175,6 +179,10 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
             // 주문 버튼
             viewDataBinding.orderBtn.isEnabled = true
             viewDataBinding.orderBtn.setOnClickListener {
+                // 다이얼로그 시작
+                orderDialog.isCancelable = false
+                orderDialog.show(supportFragmentManager, "order_dialog")
+
                 // 중복 주문 생성 방지
                 it.isEnabled = false
 
@@ -299,8 +307,22 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
     }
 
     override fun createOrderCallback(orderItem: OrderItem) {
-        val orderSuccessIntent = Intent(this, OrderSuccessActivity::class.java)
-        orderSuccessIntent.putExtra("order", orderItem)
-        startActivity(orderSuccessIntent)
+        // 다이얼로그 종료
+        orderDialog.isCancelable = true
+        orderDialog.dismiss()
+
+        if (orderItem.orderId == -1) {
+            // 주문이 실패했을 때
+            val snack = Snackbar.make(viewDataBinding.root, "주문에 실패했습니다.", Snackbar.LENGTH_LONG)
+            snack.setAnchorView(R.id.orderBtnContainer)
+            snack.show()
+        } else {
+            // 주문이 성공적으로 완료되었을 때
+            val orderSuccessIntent = Intent(this, OrderSuccessActivity::class.java)
+            orderSuccessIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            orderSuccessIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            orderSuccessIntent.putExtra("order", orderItem)
+            startActivity(orderSuccessIntent)
+        }
     }
 }

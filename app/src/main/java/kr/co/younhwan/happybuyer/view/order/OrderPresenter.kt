@@ -115,12 +115,14 @@ class OrderPresenter(
 
     override fun createOrder(orderItem: OrderItem) {
         if (app.isLogined) {
+            // 로그인 상태일 때
             orderData.create(
                 kakaoAccountId = app.kakaoAccountId,
                 orderItem = orderItem,
                 createCallback = object : OrderSource.CreateCallback {
                     override fun onCreate(orderId: Int) {
-                        if (orderId != -1) { // 주문이 성공적으로 완료되었을 때
+                        if (orderId != -1) {
+                            // 주문이 성공적으로 완료되었을 때
                             val orderProductsId = ArrayList<Int>()
 
                             for (item in orderItem.products) {
@@ -136,16 +138,20 @@ class OrderPresenter(
                                 deleteProductsCallback = object :
                                     BasketSource.DeleteProductsCallback {
                                     override fun onDeleteProducts(isSuccess: Boolean) {
-                                        if (isSuccess) {
-                                            view.createOrderCallback(orderItem)
-                                        }
+                                        view.createOrderCallback(orderItem)
                                     }
                                 }
                             )
+                        } else {
+                            // 주문이 실패했을 때
+                            view.createOrderCallback(orderItem)
                         }
                     }
                 }
             )
+        } else {
+            // 로그인 상태가 아닐 때
+            view.createOrderCallback(orderItem)
         }
     }
 }

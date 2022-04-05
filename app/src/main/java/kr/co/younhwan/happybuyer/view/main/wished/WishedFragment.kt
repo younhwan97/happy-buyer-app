@@ -46,6 +46,9 @@ class WishedFragment : Fragment(), WishedContract.View {
         super.onViewCreated(view, savedInstanceState)
 
         // 로딩 뷰 셋팅
+        viewDataBinding.wishedItemCountContainer.visibility = View.GONE
+        viewDataBinding.wishedRecycler.visibility = View.GONE
+        viewDataBinding.wishedEmptyView.visibility = View.GONE
         viewDataBinding.wishedLoadingView.visibility = View.VISIBLE
         viewDataBinding.wishedLoadingImage.playAnimation()
 

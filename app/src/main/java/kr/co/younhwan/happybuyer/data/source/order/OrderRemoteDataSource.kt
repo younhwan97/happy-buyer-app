@@ -26,7 +26,7 @@ object OrderRemoteDataSource : OrderSource {
         runBlocking {
             var orderId = -1
 
-            val job = GlobalScope.launch {
+            launch {
                 // API 서버 주소
                 val site = serverInfo
 
@@ -36,7 +36,6 @@ object OrderRemoteDataSource : OrderSource {
                 jsonData.put("user_id", kakaoAccountId) // 주문 정보
                 jsonData.put("name", orderItem.name)
                 jsonData.put("status", orderItem.status)
-                // jsonData.put("date", orderItem.date)
 
                 jsonData.put("receiver", orderItem.receiver) // 배달 정보
                 jsonData.put("phone", orderItem.phone)
@@ -70,20 +69,28 @@ object OrderRemoteDataSource : OrderSource {
                 val request = Request.Builder().url(site).post(requestBody).build()
 
                 // 응답
-                val response = client.newCall(request).execute()
-                if (response.isSuccessful) {
-                    val resultText = response.body?.string()!!.trim()
-                    val json = JSONObject(resultText)
-                    val success = json.getBoolean("success")
-
-                    if (success) {
-                        orderId = json.getInt("order_id")
+                client.newCall(request).enqueue(object : Callback {
+                    override fun onFailure(call: Call, e: IOException) {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            createCallback?.onCreate(orderId)
+                        }
                     }
-                }
-            }
 
-            job.join()
-            createCallback?.onCreate(orderId)
+                    override fun onResponse(call: Call, response: Response) {
+                        val resultText = response.body?.string()!!.trim()
+                        val json = JSONObject(resultText)
+                        val success = json.getBoolean("success")
+
+                        if (success) {
+                            orderId = json.getInt("order_id")
+                        }
+
+                        CoroutineScope(Dispatchers.Main).launch {
+                            createCallback?.onCreate(orderId)
+                        }
+                    }
+                })
+            }
         }
     }
 

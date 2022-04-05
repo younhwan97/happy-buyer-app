@@ -202,6 +202,8 @@ class AddAddressActivity : AppCompatActivity(), AddAddressContract.View {
             // 정상적으로 주소가 삭제되지 않았을 때
 
         }
+
+        setResult(RESULT_OK)
         finish()
     }
 }

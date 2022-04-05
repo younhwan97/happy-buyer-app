@@ -92,6 +92,14 @@ class OrderSuccessActivity : AppCompatActivity(), OrderSuccessContract.View {
         }
     }
 
+    override fun onBackPressed() {
+        // BACK 버튼을 눌렀을 때 메인 엑티비티로 이동하고 주문 성공 엑티비티를 백스택에서 제거
+        val mainIntent = Intent(this, MainActivity::class.java)
+        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(mainIntent)
+    }
+
     override fun getAct() = this
 
     override fun checkValidationCallback(isSuccess: Boolean) {

@@ -131,6 +131,10 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailContract.View {
         }
     }
 
+    override fun onBackPressed() {
+        finishAct()
+    }
+
     private fun finishAct() {
         if (isTaskRoot) {
             // 현재 엑티비티가 첫번째 엑티비티 일 때 (= 백스택에 다른 엑티비티가 존재하지 않을 때)
