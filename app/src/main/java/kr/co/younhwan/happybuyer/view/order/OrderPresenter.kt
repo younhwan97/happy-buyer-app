@@ -25,6 +25,7 @@ class OrderPresenter(
 
     override fun loadDefaultAddress() {
         if (app.isLogined) {
+            // 로그인 상태일 때
             addressData.read(
                 kakaoAccountId = app.kakaoAccountId,
                 readCallback = object : AddressSource.ReadCallback {
@@ -45,14 +46,17 @@ class OrderPresenter(
         }
     }
 
-    override fun setOrderProduct(selectedItemList: ArrayList<BasketItem>?) {
+    override fun setOrderProducts(selectedItemList: ArrayList<BasketItem>?) {
+        var passValidationCheck = true
+
         if (app.isLogined) {
+            // 로그인 상태일 때
             if (!selectedItemList.isNullOrEmpty()) {
+                // 장바구니에서 고객이 선택한 아이템 정보가 정상적으로 넘어왔을 때
                 basketData.readProducts(
                     kakaoAccountId = app.kakaoAccountId,
                     readProductsCallback = object : BasketSource.ReadProductsCallback {
                         override fun onReadProducts(list: ArrayList<BasketItem>) {
-                            var passValidationCheck = true
 
                             for (index in 0 until list.size) {
                                 for (item in selectedItemList) {
@@ -67,19 +71,20 @@ class OrderPresenter(
                                 if (!passValidationCheck) break
                             }
 
-                            if (passValidationCheck) {
-                                orderAdapterModel.addItems(selectedItemList)
-                                orderAdapterView.notifyAdapter()
-                                calculatePrice()
-                            } else {
-                                view.setOrderProductCallback(false)
-                            }
+                            view.setOrderProductsCallback(passValidationCheck)
+                            orderAdapterModel.addItems(selectedItemList)
+                            orderAdapterView.notifyAdapter()
+                            calculatePrice()
                         }
                     }
                 )
             } else {
-                view.setOrderProductCallback(false)
+                // 장바구니에서 고객이 선택한 아이템 정보가 넘어오지 않았을 때
+                view.setOrderProductsCallback(!passValidationCheck)
             }
+        } else {
+            // 로그인 상태가 아닐 때
+            view.setOrderProductsCallback(!passValidationCheck)
         }
     }
 

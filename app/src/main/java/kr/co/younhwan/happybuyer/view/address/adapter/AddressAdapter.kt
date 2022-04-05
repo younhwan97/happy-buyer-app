@@ -15,7 +15,7 @@ class AddressAdapter :
     AddressAdapterContract.View {
 
     // 아이템 
-    private lateinit var addressItemList: ArrayList<AddressItem>
+    private var addressItemList: ArrayList<AddressItem> = ArrayList()
     private var isSelectMode: Boolean = false
 
     // 이벤트 리스너

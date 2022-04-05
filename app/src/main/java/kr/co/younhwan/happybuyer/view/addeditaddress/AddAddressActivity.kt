@@ -26,10 +26,12 @@ class AddAddressActivity : AppCompatActivity(), AddAddressContract.View {
         viewDataBinding = ActivityAddAddressBinding.inflate(layoutInflater)
         setContentView(viewDataBinding.root)
 
-        // 기본 배송지의 존재 유무 확인
-        addAddressPresenter.checkHasDefaultAddress()
+        // 로딩 뷰 셋팅
+        viewDataBinding.addAddressView.visibility = View.GONE
+        viewDataBinding.addAddressLoadingView.visibility = View.VISIBLE
+        viewDataBinding.addAddressLoadingImage.playAnimation()
 
-        // 아이템
+        // 인텐트에서 데이터 추출
         val oldAddressItem = if (intent.hasExtra("address")) {
             // 기존 주소를 수정하는 경우
             intent.getParcelableExtra<AddressItem>("address")
@@ -42,129 +44,135 @@ class AddAddressActivity : AppCompatActivity(), AddAddressContract.View {
                 addressPhone = "",
                 isDefault = false
             )
-            // address id  = -1 -> 기존 주소 수정
-            // address id != -1 -> 새롭게 주소 추가
         }
 
-        val addressId = if (oldAddressItem?.addressId != null) {
-            oldAddressItem.addressId
-        } else {
-            -1
-        }
-
-        // 툴바
-        viewDataBinding.addAddressToolbar.setNavigationOnClickListener {
+        if (oldAddressItem == null) {
             finish()
-        }
+        } else {
+            // 기본 배송지 존재 유무를 확인
+            addAddressPresenter.checkHasDefaultAddress()
 
-        // 받으실 분
-        viewDataBinding.addAddressReceiver.editText?.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun afterTextChanged(p0: Editable?) {}
+            // 툴바
+            viewDataBinding.addAddressToolbar.setNavigationOnClickListener {
+                finish()
+            }
 
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            // 받으실 분
+            viewDataBinding.addAddressReceiver.editText?.addTextChangedListener(object :
+                TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+                override fun afterTextChanged(p0: Editable?) {}
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    checkValidation()
+                }
+            })
+
+            if (!oldAddressItem.addressReceiver.isNullOrBlank()) {
+                viewDataBinding.addAddressReceiver.editText?.text =
+                    Editable.Factory.getInstance().newEditable(oldAddressItem.addressReceiver)
+            }
+
+            // 휴대폰
+            viewDataBinding.addAddressPhone.editText?.addTextChangedListener(object :
+                PhoneNumberFormattingTextWatcher("KR") {
+                override fun afterTextChanged(s: Editable?) {
+                    super.afterTextChanged(s)
+                }
+
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                    super.beforeTextChanged(s, start, count, after)
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    super.onTextChanged(s, start, before, count)
+                    checkValidation()
+                }
+            })
+
+            if (!oldAddressItem.addressPhone.isNullOrBlank()) {
+                viewDataBinding.addAddressPhone.editText?.text =
+                    Editable.Factory.getInstance().newEditable(oldAddressItem.addressPhone)
+            }
+
+            // 주소
+            viewDataBinding.addAddressAddress.editText?.addTextChangedListener(object :
+                TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+                override fun afterTextChanged(p0: Editable?) {}
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    checkValidation()
+                }
+            })
+
+            if (!oldAddressItem.address.isNullOrBlank()) {
+                viewDataBinding.addAddressAddress.editText?.text =
+                    Editable.Factory.getInstance().newEditable(oldAddressItem.address)
+            }
+
+            // 기본 배송지 체크 박스
+            viewDataBinding.addAddressDefaultAddressCheckBox.setOnCheckedChangeListener { _, _ ->
                 checkValidation()
             }
-        })
 
-        if (oldAddressItem != null && !oldAddressItem.addressReceiver.isNullOrBlank()) {
-            viewDataBinding.addAddressReceiver.editText?.text =
-                Editable.Factory.getInstance().newEditable(oldAddressItem.addressReceiver)
-        }
-
-        // 휴대폰
-        viewDataBinding.addAddressPhone.editText?.addTextChangedListener(object :
-            PhoneNumberFormattingTextWatcher("KR") {
-            override fun afterTextChanged(s: Editable?) {
-                super.afterTextChanged(s)
+            if (oldAddressItem.isDefault == true) {
+                viewDataBinding.addAddressDefaultAddressCheckBox.isChecked = true
+                viewDataBinding.addAddressDefaultAddressCheckBox.isClickable = false
+                viewDataBinding.addAddressDefaultAddressCheckBox.visibility = View.GONE
             }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                super.beforeTextChanged(s, start, count, after)
-            }
+            // 저장 버튼
+            viewDataBinding.addAddressBtn.isEnabled = false
+            viewDataBinding.addAddressBtn.setOnClickListener {
+                val receiver = viewDataBinding.addAddressReceiver.editText?.text?.trim().toString()
+                val phone = viewDataBinding.addAddressPhone.editText?.text?.trim().toString()
+                val address = viewDataBinding.addAddressAddress.editText?.text?.trim().toString()
+                val isDefault = viewDataBinding.addAddressDefaultAddressCheckBox.isChecked
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                super.onTextChanged(s, start, before, count)
-                checkValidation()
-            }
-        })
-
-        if (oldAddressItem != null && !oldAddressItem.addressPhone.isNullOrBlank()) {
-            viewDataBinding.addAddressPhone.editText?.text =
-                Editable.Factory.getInstance().newEditable(oldAddressItem.addressPhone)
-        }
-
-        // 주소
-        viewDataBinding.addAddressAddress.editText?.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun afterTextChanged(p0: Editable?) {}
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                checkValidation()
-            }
-        })
-
-        if (oldAddressItem != null && !oldAddressItem.address.isNullOrBlank()) {
-            viewDataBinding.addAddressAddress.editText?.text =
-                Editable.Factory.getInstance().newEditable(oldAddressItem.address)
-        }
-
-        // 기본 배송지 체크 박스
-        viewDataBinding.addAddressDefaultAddressCheckBox.setOnCheckedChangeListener { _, _ ->
-            checkValidation()
-        }
-
-        if (oldAddressItem != null && oldAddressItem.isDefault == true) {
-            viewDataBinding.addAddressDefaultAddressCheckBox.isChecked = true
-            viewDataBinding.addAddressDefaultAddressCheckBox.isClickable = false
-            viewDataBinding.addAddressDefaultAddressCheckBox.visibility = View.GONE
-        }
-
-        // 저장 버튼
-        viewDataBinding.addAddressBtn.isEnabled = false
-        viewDataBinding.addAddressBtn.setOnClickListener {
-            val receiver = viewDataBinding.addAddressReceiver.editText?.text?.trim().toString()
-            val phone = viewDataBinding.addAddressPhone.editText?.text?.trim().toString()
-            val address = viewDataBinding.addAddressAddress.editText?.text?.trim().toString()
-            val isDefault = viewDataBinding.addAddressDefaultAddressCheckBox.isChecked
-
-            addAddressPresenter.addAddress(
-                AddressItem(
-                    addressId = addressId,
-                    address = address,
-                    addressPhone = phone,
-                    addressReceiver = receiver,
-                    isDefault = isDefault
+                addAddressPresenter.addAddress(
+                    AddressItem(
+                        addressId = oldAddressItem.addressId,
+                        address = address,
+                        addressPhone = phone,
+                        addressReceiver = receiver,
+                        isDefault = isDefault
+                    )
                 )
-            )
-        }
+            }
 
-        // 삭제 버튼
-        viewDataBinding.addAddressDeleteBtn.visibility = View.VISIBLE
-        if (oldAddressItem == null || oldAddressItem.isDefault == true || oldAddressItem.addressId == -1) {
-            viewDataBinding.addAddressDeleteBtn.visibility = View.GONE
-            viewDataBinding.addAddressDeleteBtn.isEnabled = false
-        }
+            // 삭제 버튼
+            viewDataBinding.addAddressDeleteBtn.visibility = View.VISIBLE
+            if (oldAddressItem.isDefault == true || oldAddressItem.addressId == -1) {
+                viewDataBinding.addAddressDeleteBtn.visibility = View.GONE
+                viewDataBinding.addAddressDeleteBtn.isEnabled = false
+            }
 
-        viewDataBinding.addAddressDeleteBtn.setOnClickListener {
-            addAddressPresenter.deleteAddress(addressId)
+            viewDataBinding.addAddressDeleteBtn.setOnClickListener {
+                addAddressPresenter.deleteAddress(oldAddressItem.addressId)
+            }
         }
     }
 
     override fun getAct() = this
 
     override fun checkHasDefaultAddressCallback(hasDefaultAddress: Boolean) {
-        if (hasDefaultAddress) {
-            // 기본 배송지를 가지고 있는 경우
-            viewDataBinding.addAddressDefaultAddressCheckBox.isChecked = false
-            viewDataBinding.addAddressDefaultAddressCheckBox.isClickable = true
-            viewDataBinding.addAddressDefaultAddressCheckBox.visibility = View.VISIBLE
-        } else {
-            // 기본 배송지가 없는 경우 -> 처음 배송지를 추가할 때
+        if (!hasDefaultAddress) {
+            // 기본 배송지를 가지고 있지 않은 경우
             viewDataBinding.addAddressDefaultAddressCheckBox.isChecked = true
             viewDataBinding.addAddressDefaultAddressCheckBox.isClickable = false
             viewDataBinding.addAddressDefaultAddressCheckBox.visibility = View.GONE
         }
+
+        // 로딩 뷰 종료
+        viewDataBinding.addAddressView.visibility = View.VISIBLE
+        viewDataBinding.addAddressLoadingView.visibility = View.GONE
+        viewDataBinding.addAddressLoadingImage.pauseAnimation()
     }
 
     override fun checkValidation() {

@@ -15,7 +15,7 @@ class BasketAdapter :
     BasketAdapterContract.View {
     
     // 아이템 (리사이클러뷰)
-    private lateinit var basketItemList: ArrayList<BasketItem>
+    private var basketItemList: ArrayList<BasketItem> = ArrayList()
 
     // 이벤트 리스너
     override var onClickFunOfCheckBox: ((Int, Boolean) -> Unit)? = null

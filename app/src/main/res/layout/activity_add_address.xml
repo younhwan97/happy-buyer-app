@@ -30,6 +30,7 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fillViewport="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
@@ -40,99 +41,124 @@
                 android:layout_marginRight="16dp"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/textView7"
-                    style="@style/TextView"
+                <LinearLayout
+                    android:id="@+id/addAddressView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="받으실 분"
-                    android:textStyle="bold" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/addAddressReceiver"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <com.google.android.material.textfield.TextInputEditText
+                    <TextView
+                        android:id="@+id/textView7"
+                        style="@style/TextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textPersonName"
-                        android:maxLength="5" />
+                        android:layout_marginTop="16dp"
+                        android:text="받으실 분"
+                        android:textStyle="bold" />
 
-                </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/addAddressReceiver"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/textView9"
-                    style="@style/TextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="휴대폰"
-                    android:textStyle="bold" />
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPersonName"
+                            android:maxLength="5" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/addAddressPhone"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <TextView
+                        android:id="@+id/textView9"
+                        style="@style/TextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="phone"
-                        android:maxLength="13" />
+                        android:text="휴대폰"
+                        android:textStyle="bold" />
 
-                </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/addAddressPhone"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/textView10"
-                    style="@style/TextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="주소"
-                    android:textStyle="bold" />
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="phone"
+                            android:maxLength="13" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/addAddressAddress"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:helperText="예시) 효링턴 몇동 몇호, sk뷰 몇동 몇호"
-                    app:helperTextEnabled="true">
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <TextView
+                        android:id="@+id/textView10"
+                        style="@style/TextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:maxLength="25" />
+                        android:text="주소"
+                        android:textStyle="bold" />
 
-                </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/addAddressAddress"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:helperText="예시) 효링턴 몇동 몇호, sk뷰 몇동 몇호"
+                        app:helperTextEnabled="true">
 
-                <CheckBox
-                    android:id="@+id/addAddressDefaultAddressCheckBox"
-                    style="@style/Widget.App.CheckBox"
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxLength="25" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <CheckBox
+                        android:id="@+id/addAddressDefaultAddressCheckBox"
+                        style="@style/Widget.App.CheckBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="기본 배송지로 선택" />
+
+                    <Button
+                        android:id="@+id/addAddressBtn"
+                        style="@style/Button.Bold"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="저장" />
+
+                    <Button
+                        android:id="@+id/addAddressDeleteBtn"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/notosans_kr_regular"
+                        android:text="삭제"
+                        android:textColor="@android:color/holo_red_dark"
+                        android:textStyle="bold"
+                        app:strokeColor="@color/LineColorGray" />
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/addAddressLoadingView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="기본 배송지로 선택" />
+                    android:layout_height="match_parent">
 
-                <Button
-                    android:id="@+id/addAddressBtn"
-                    style="@style/Button.Bold"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="저장" />
-
-                <Button
-                    android:id="@+id/addAddressDeleteBtn"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/notosans_kr_regular"
-                    android:text="삭제"
-                    android:textColor="@android:color/holo_red_dark"
-                    android:textStyle="bold"
-                    app:strokeColor="@color/LineColorGray" />
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/addAddressLoadingImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:background="@color/bgColorWhite"
+                        app:lottie_autoPlay="false"
+                        app:lottie_loop="true"
+                        app:lottie_rawRes="@raw/loading"
+                        app:lottie_speed="1" />
+                </RelativeLayout>
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

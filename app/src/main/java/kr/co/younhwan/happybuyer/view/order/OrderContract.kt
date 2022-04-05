@@ -11,21 +11,23 @@ interface OrderContract {
 
         fun loadDefaultAddressCallback(defaultAddressItem: AddressItem?)
 
-        fun setOrderProductCallback(isSuccess: Boolean)
+        fun setOrderProductsCallback(isSuccess: Boolean)
 
         fun calculatePriceCallback(totalPrice: Int, originalTotalPrice: Int, basketItemCount: Int)
 
         fun createOrderCallback(orderItem: OrderItem)
+
     }
 
     interface Model {
 
         fun loadDefaultAddress()
 
-        fun setOrderProduct(selectedItemList: ArrayList<BasketItem>?)
+        fun setOrderProducts(selectedItemList: ArrayList<BasketItem>?)
 
         fun calculatePrice()
 
         fun createOrder(orderItem: OrderItem)
+
     }
 }

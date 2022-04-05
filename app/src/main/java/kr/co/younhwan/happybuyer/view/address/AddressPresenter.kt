@@ -31,6 +31,7 @@ class AddressPresenter(
 
     override fun loadAddress(isSelectMode: Boolean) {
         val app = view.getAct().application as GlobalApplication
+
         if (app.isLogined) {
             addressData.read(
                 kakaoAccountId = app.kakaoAccountId,

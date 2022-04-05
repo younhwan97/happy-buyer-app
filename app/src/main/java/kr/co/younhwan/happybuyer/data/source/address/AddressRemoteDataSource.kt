@@ -1,19 +1,17 @@
 package kr.co.younhwan.happybuyer.data.source.address
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import kr.co.younhwan.happybuyer.data.AddressItem
+import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.OkHttpClient
-import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.IOException
 
 object AddressRemoteDataSource : AddressSource {
     private val client = OkHttpClient() // 클라이언트
-    private const val serverInfo = "http://happybuyer.co.kr/address/api" // API 서버
+    private const val serverInfo = "http://192.168.0.11/address/api" // API 서버
     private val jsonMediaType = "application/json; charset=utf-8".toMediaTypeOrNull()
 
     // CREATE
@@ -64,7 +62,7 @@ object AddressRemoteDataSource : AddressSource {
         runBlocking {
             val list = ArrayList<AddressItem>()
 
-            val job = GlobalScope.launch {
+            launch {
                 // API 서버 주소
                 val site = "${serverInfo}?id=${kakaoAccountId}"
 
@@ -72,44 +70,51 @@ object AddressRemoteDataSource : AddressSource {
                 val request = Request.Builder().url(site).get().build()
 
                 // 응답
-                val response = client.newCall(request).execute()
-                if (response.isSuccessful) {
-                    val resultText = response.body?.string()!!.trim()
-                    val json = JSONObject(resultText)
-
-                    val success = json.getBoolean("success")
-                    if (success) {
-                        val data = JSONArray(json["data"].toString())
-
-                        for (i in 0 until data.length()) {
-                            val obj = data.getJSONObject(i)
-                            val userId = obj.getLong("user_id")
-
-                            if (userId == kakaoAccountId) {
-                                val addressId = obj.getInt("address_id")
-                                val receiver = obj.getString("receiver")
-                                val phone = obj.getString("phone")
-                                val address = obj.getString("address")
-                                val isDefaultAddress = obj.getInt("is_default") != 0
-
-                                list.add(
-                                    AddressItem(
-                                        addressId = addressId,
-                                        addressReceiver = receiver,
-                                        addressPhone = phone,
-                                        address = address,
-                                        isDefault = isDefaultAddress
-                                    )
-                                )
-                            }
+                client.newCall(request).enqueue(object : Callback {
+                    override fun onFailure(call: Call, e: IOException) {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            readCallback?.onRead(list)
                         }
                     }
 
-                }
-            }
+                    override fun onResponse(call: Call, response: Response) {
+                        val resultText = response.body?.string()!!.trim()
+                        val json = JSONObject(resultText)
 
-            job.join()
-            readCallback?.onRead(list)
+                        val success = json.getBoolean("success")
+                        if (success) {
+                            val data = JSONArray(json["data"].toString())
+
+                            for (i in 0 until data.length()) {
+                                val obj = data.getJSONObject(i)
+                                val userId = obj.getLong("user_id")
+
+                                if (userId == kakaoAccountId) {
+                                    val addressId = obj.getInt("address_id")
+                                    val receiver = obj.getString("receiver")
+                                    val phone = obj.getString("phone")
+                                    val address = obj.getString("address")
+                                    val isDefaultAddress = obj.getInt("is_default") != 0
+
+                                    list.add(
+                                        AddressItem(
+                                            addressId = addressId,
+                                            addressReceiver = receiver,
+                                            addressPhone = phone,
+                                            address = address,
+                                            isDefault = isDefaultAddress
+                                        )
+                                    )
+                                }
+                            }
+                        }
+
+                        CoroutineScope(Dispatchers.Main).launch {
+                            readCallback?.onRead(list)
+                        }
+                    }
+                })
+            }
         }
     }
 
