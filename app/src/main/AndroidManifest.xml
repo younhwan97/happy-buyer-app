@@ -20,9 +20,6 @@
             android:name=".view.orderdetail.OrderDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".view.orderhistory.OrderHistoryActivity"
-            android:exported="false" />
-        <activity
             android:name=".view.ordersuccess.OrderSuccessActivity"
             android:exported="false" />
         <activity

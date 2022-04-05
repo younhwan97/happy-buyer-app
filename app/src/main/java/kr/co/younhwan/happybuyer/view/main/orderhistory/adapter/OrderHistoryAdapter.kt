@@ -15,7 +15,7 @@ class OrderHistoryAdapter :
     OrderHistoryAdapterContract.View {
 
     // 아이템
-    private lateinit var orderHistoryItemList: ArrayList<OrderItem>
+    private var orderHistoryItemList: ArrayList<OrderItem> = ArrayList()
 
     // 이벤트 리스너
     override var onClickFun: ((OrderItem) -> Unit)? = null
@@ -23,8 +23,12 @@ class OrderHistoryAdapter :
     // 메서드
     override fun getItemCount() = orderHistoryItemList.size
 
+    override fun clearItem() {
+        orderHistoryItemList.clear()
+    }
+
     override fun addItems(orderHistoryItems: ArrayList<OrderItem>) {
-        orderHistoryItemList = orderHistoryItems
+        orderHistoryItemList.addAll(orderHistoryItems)
     }
 
     override fun notifyAdapter() = notifyDataSetChanged()

@@ -18,6 +18,7 @@ class OrderSuccessPresenter(
             // 로그인 상태일 때
             orderData.read(
                 kakaoAccountId = app.kakaoAccountId,
+                pageNum = 1,
                 readCallback = object : OrderSource.ReadCallback {
                     override fun onRead(list: ArrayList<OrderItem>) {
                         for (item in list) {

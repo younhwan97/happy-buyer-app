@@ -59,7 +59,7 @@ class WishedFragment : Fragment(), WishedContract.View {
         viewDataBinding.wishedRecycler.adapter = wishedAdapter
         viewDataBinding.wishedRecycler.layoutManager = object : LinearLayoutManager(context) {
             override fun canScrollHorizontally() = false
-            override fun canScrollVertically() = false
+            override fun canScrollVertically() = true
         }
         viewDataBinding.wishedRecycler.addItemDecoration(wishedAdapter.RecyclerDecoration())
     }

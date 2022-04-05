@@ -24,13 +24,21 @@ class OrderHistoryPresenter(
     private fun onClickListener(orderHistoryItem: OrderItem) =
         view.createOrderDetailAct(orderHistoryItem)
 
-    override fun loadOrderHistory() {
+    override fun loadOrderHistory(isClear:Boolean, page:Int) {
         if (app.isLogined) {
             orderData.read(
                 kakaoAccountId = app.kakaoAccountId,
+                pageNum = page,
                 readCallback = object : OrderSource.ReadCallback {
                     override fun onRead(list: ArrayList<OrderItem>) {
-                        view.loadOrderHistoryCallback(list.size)
+                        if(isClear){
+                            orderHistoryAdapterModel.clearItem()
+                        }
+
+                        if(page == 1){
+                            view.loadOrderHistoryCallback(list.size)
+                        }
+
                         orderHistoryAdapterModel.addItems(list)
                         orderHistoryAdapterView.notifyAdapter()
                     }

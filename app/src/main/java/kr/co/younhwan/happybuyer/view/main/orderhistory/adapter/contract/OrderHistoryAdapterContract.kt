@@ -15,5 +15,7 @@ interface OrderHistoryAdapterContract {
 
         fun addItems(orderHistoryItems: ArrayList<OrderItem>)
 
+        fun clearItem()
+
     }
 }

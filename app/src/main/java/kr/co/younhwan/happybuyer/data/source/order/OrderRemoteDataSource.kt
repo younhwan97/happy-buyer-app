@@ -94,13 +94,13 @@ object OrderRemoteDataSource : OrderSource {
         }
     }
 
-    override fun read(kakaoAccountId: Long, readCallback: OrderSource.ReadCallback?) {
+    override fun read(kakaoAccountId: Long, pageNum:Int, readCallback: OrderSource.ReadCallback?) {
         runBlocking {
             val list = ArrayList<OrderItem>()
 
             launch {
                 // API 서버 주소
-                val site = "${serverInfo}?id=${kakaoAccountId}"
+                val site = "${serverInfo}?id=${kakaoAccountId}&page=${pageNum}"
 
                 // 데이터를 읽어오기 위한 GET Request 생성
                 val request = Request.Builder().url(site).get().build()
