@@ -1,10 +1,8 @@
 package kr.co.younhwan.happybuyer.view.orderdetail
 
-import android.util.Log
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.adapter.orderproduct.contract.OrderAdapterContract
 import kr.co.younhwan.happybuyer.data.BasketItem
-import kr.co.younhwan.happybuyer.data.OrderItem
 import kr.co.younhwan.happybuyer.data.source.order.OrderRepository
 import kr.co.younhwan.happybuyer.data.source.order.OrderSource
 
@@ -15,22 +13,32 @@ class OrderDetailPresenter(
     private val orderAdapterView: OrderAdapterContract.View
 ) : OrderDetailContract.Model {
 
-    val app = view.getView().application as GlobalApplication
+    override fun loadOrderProducts(orderId: Int) {
+        val app = view.getAct().application as GlobalApplication
 
-    override fun loadOrderDetail(orderId: Int) {
-        if(app.isLogined){
+        if (app.isLogined) {
+            // 로그인 상태일 때
             orderData.readProducts(
                 orderId = orderId,
-                readProductsCallback = object : OrderSource.ReadProductsCallback{
+                readProductsCallback = object : OrderSource.ReadProductsCallback {
                     override fun onReadProducts(list: ArrayList<BasketItem>) {
-                        view.loadOrderDetailCallback(true)
+                        if (list.size == 0) {
+                            // 주문한 상품이 없을 때 (= 에러)
+                            view.loadOrderProductsCallback(false)
+                        } else {
+                            // 주문한 상품이 존재할 때
+                            view.loadOrderProductsCallback(true)
+                        }
                         orderAdapterModel.addItems(list)
                         orderAdapterView.notifyAdapter()
                     }
                 }
             )
         } else {
-
+            // 로그인 상태가 아닐 때
+            view.loadOrderProductsCallback(false)
+            orderAdapterModel.addItems(ArrayList())
+            orderAdapterView.notifyAdapter()
         }
     }
 }

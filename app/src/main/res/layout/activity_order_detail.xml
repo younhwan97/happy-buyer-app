@@ -68,7 +68,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:includeFontPadding="false"
-                                android:text="주문번호"
+                                android:text="@string/order_detail_id_title"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
 
@@ -79,7 +79,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="6dp"
                                 android:includeFontPadding="false"
-                                android:text="0"
+                                android:text="@string/order_detail_id"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
 
@@ -91,7 +91,7 @@
                                 android:layout_weight="1"
                                 android:gravity="end"
                                 android:includeFontPadding="false"
-                                android:text="주문상태" />
+                                android:text="@string/order_detail_status" />
                         </LinearLayout>
 
                         <TextView
@@ -101,7 +101,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="16dp"
                             android:includeFontPadding="false"
-                            android:text="(2020-04-03 16:55:44)"
+                            android:text="@string/order_detail_date"
                             android:textColor="@color/fontColorLightGray"
                             android:textSize="12sp" />
 
@@ -140,7 +140,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
                                     android:includeFontPadding="false"
-                                    android:text="상품금액" />
+                                    android:text="@string/order_detail_original_price_title" />
 
                                 <LinearLayout
                                     android:layout_width="0dp"
@@ -156,7 +156,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:includeFontPadding="false"
-                                        android:text="0"
+                                        android:text="@string/order_detail_price_zero"
                                         android:textSize="16sp"
                                         android:textStyle="bold" />
 
@@ -166,7 +166,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:includeFontPadding="false"
-                                        android:text="원"
+                                        android:text="@string/order_detail_price_sub_text"
                                         android:textStyle="bold" />
                                 </LinearLayout>
                             </LinearLayout>
@@ -188,7 +188,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
                                     android:includeFontPadding="false"
-                                    android:text="상품할인금액" />
+                                    android:text="@string/order_detail_event_price_title" />
 
                                 <LinearLayout
                                     android:layout_width="0dp"
@@ -204,7 +204,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:includeFontPadding="false"
-                                        android:text="0"
+                                        android:text="@string/order_detail_price_zero"
                                         android:textColor="@android:color/holo_red_dark"
                                         android:textSize="16sp"
                                         android:textStyle="bold" />
@@ -215,7 +215,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:includeFontPadding="false"
-                                        android:text="원"
+                                        android:text="@string/order_detail_price_sub_text"
                                         android:textColor="@android:color/holo_red_dark"
                                         android:textStyle="bold" />
                                 </LinearLayout>
@@ -234,7 +234,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
                                     android:includeFontPadding="false"
-                                    android:text="배송비" />
+                                    android:text="@string/order_detail_shipping_price_title" />
 
                                 <LinearLayout
                                     android:layout_width="0dp"
@@ -250,7 +250,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:includeFontPadding="false"
-                                        android:text="0"
+                                        android:text="@string/order_detail_price_zero"
                                         android:textSize="16sp"
                                         android:textStyle="bold" />
 
@@ -260,7 +260,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:includeFontPadding="false"
-                                        android:text="원"
+                                        android:text="@string/order_detail_price_sub_text"
                                         android:textStyle="bold" />
                                 </LinearLayout>
                             </LinearLayout>
@@ -285,7 +285,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
                                     android:includeFontPadding="false"
-                                    android:text="최종 결제금액"
+                                    android:text="@string/order_detail_be_paid_price_title"
                                     android:textSize="16sp" />
 
                                 <LinearLayout
@@ -302,7 +302,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:includeFontPadding="false"
-                                        android:text="0"
+                                        android:text="@string/order_detail_price_zero"
                                         android:textSize="18sp"
                                         android:textStyle="bold" />
 
@@ -312,7 +312,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:includeFontPadding="false"
-                                        android:text="원"
+                                        android:text="@string/order_detail_price_sub_text"
                                         android:textStyle="bold" />
                                 </LinearLayout>
                             </LinearLayout>
@@ -336,7 +336,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="16dp"
                             android:includeFontPadding="false"
-                            android:text="결제수단"
+                            android:text="@string/order_detail_payment_title"
                             android:textSize="18sp" />
 
                         <LinearLayout
@@ -357,7 +357,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:fontFamily="@font/notosans_kr_regular"
-                                    android:text="만나서 카드결제"
+                                    android:text="@string/order_detail_payment_method_card"
                                     android:textColor="@color/fontColorBlack" />
 
                                 <RadioButton
@@ -366,7 +366,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:fontFamily="@font/notosans_kr_regular"
-                                    android:text="만나서 현금결제"
+                                    android:text="@string/order_detail_payment_method_cash"
                                     android:textColor="@color/fontColorBlack" />
                             </RadioGroup>
                         </LinearLayout>
@@ -388,7 +388,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="16dp"
                             android:includeFontPadding="false"
-                            android:text="배달정보"
+                            android:text="@string/order_detail_address_title"
                             android:textSize="18sp" />
 
                         <LinearLayout
@@ -404,7 +404,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:includeFontPadding="false"
-                                android:text="받으실 분"
+                                android:text="@string/order_detail_address_receiver"
                                 android:textSize="16sp" />
 
                             <TextView
@@ -415,7 +415,7 @@
                                 android:layout_marginTop="16dp"
                                 android:layout_marginBottom="16dp"
                                 android:includeFontPadding="false"
-                                android:text="휴대폰"
+                                android:text="@string/order_detail_address_phone"
                                 android:textSize="16sp" />
 
                             <TextView
@@ -424,7 +424,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:includeFontPadding="false"
-                                android:text="주소"
+                                android:text="@string/order_detail_address"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -446,7 +446,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="16dp"
                             android:includeFontPadding="false"
-                            android:text="배달 요청사항"
+                            android:text="@string/order_detail_requirement_title"
                             android:textSize="18sp" />
 
                         <LinearLayout
@@ -481,7 +481,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="16dp"
                                 android:includeFontPadding="false"
-                                android:text="포인트 번호"
+                                android:text="@string/order_detail_point_title"
                                 android:textStyle="bold" />
 
                             <com.google.android.material.textfield.TextInputLayout
@@ -515,7 +515,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:includeFontPadding="false"
-                                android:text="결품발생 시 처리 방법"
+                                android:text="@string/order_detail_defective_handling_method_title"
                                 android:textStyle="bold" />
 
                             <RadioGroup
@@ -531,7 +531,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:fontFamily="@font/notosans_kr_regular"
-                                    android:text="해당 상품 제외 후 배달"
+                                    android:text="@string/order_detail_defective_handling_method_option_1"
                                     android:textColor="@color/fontColorBlack" />
 
                                 <RadioButton
@@ -540,7 +540,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:fontFamily="@font/notosans_kr_regular"
-                                    android:text="주문 전체 취소"
+                                    android:text="@string/order_detail_defective_handling_method_option_2"
                                     android:textColor="@color/fontColorBlack" />
                             </RadioGroup>
                         </LinearLayout>

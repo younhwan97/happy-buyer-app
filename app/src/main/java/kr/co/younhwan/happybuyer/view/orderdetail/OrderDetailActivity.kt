@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
-import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import kr.co.younhwan.happybuyer.adapter.orderproduct.OrderAdapter
@@ -47,33 +46,16 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailContract.View {
         }
 
         if (orderInfo == null) {
-            // 메인(주문 내역 프래그먼트), 주문성공 엑티비티에서 주문 정보를 정상적으로 전달받지 못했을 때
-            if (isTaskRoot) {
-                // 백스택에 엑티비티가 존재하지 않을 때
-                val mainIntent = Intent(this, MainActivity::class.java)
-                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                mainIntent.putExtra("init_frag", "order_history")
-                startActivity(mainIntent)
-            } else {
-                // 백스택에 엑티비티가 존재할 때
-                finish()
-            }
+            // 메인(주문 내역 프래그먼트), 주문성공 엑티비티에서 주문 정보를 전달받지 못했을 때
+            finishAct()
         } else {
-            // 메인(주문 내역 프래그먼트), 주문성공 엑티비티에서 주문 정보를 정상적으로 전달받았을 때
-            orderDetailPresenter.loadOrderDetail(orderInfo.orderId)
+            // 메인(주문 내역 프래그먼트), 주문성공 엑티비티에서 주문 정보를 전달받았을 때
+            // 주문번호를 이용해 주문한 상품을 로드
+            orderDetailPresenter.loadOrderProducts(orderInfo.orderId)
 
             // 툴바
             viewDataBinding.orderDetailToolbar.setNavigationOnClickListener {
-                if (isTaskRoot) {
-                    val mainIntent = Intent(this, MainActivity::class.java)
-                    mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    mainIntent.putExtra("init_frag", "order_history")
-                    startActivity(mainIntent)
-                } else {
-                    finish()
-                }
+                finishAct()
             }
 
             // 주문 번호 및 주문 상태
@@ -81,6 +63,7 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailContract.View {
             viewDataBinding.orderDetailStatus.text = orderInfo.status
             viewDataBinding.orderDetailDate.text = "(".plus(orderInfo.date).plus(")")
 
+            // 주문 상품
             viewDataBinding.orderDetailProductRecycler.adapter = orderAdapter
             viewDataBinding.orderDetailProductRecycler.layoutManager =
                 object : LinearLayoutManager(this) {
@@ -95,12 +78,20 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailContract.View {
             viewDataBinding.orderDetailBePaidPrice.text = orderInfo.bePaidPrice
 
             // 결제 수단
-            if (orderInfo.payment == "만나서 현금결제") {
-                viewDataBinding.orderDetailPaymentRadioOptionCash.isChecked = true
-                viewDataBinding.orderDetailPaymentRadioOptionCard.isChecked = false
-            } else {
-                viewDataBinding.orderDetailPaymentRadioOptionCash.isChecked = false
-                viewDataBinding.orderDetailPaymentRadioOptionCard.isChecked = true
+            when (orderInfo.payment.replace(" ", "")) {
+                "만나서 현금결제".replace(" ", "") -> {
+                    viewDataBinding.orderDetailPaymentRadioOptionCash.isChecked = true
+                    viewDataBinding.orderDetailPaymentRadioOptionCard.isChecked = false
+                }
+
+                "만나서 카드결제".replace(" ", "") -> {
+                    viewDataBinding.orderDetailPaymentRadioOptionCash.isChecked = false
+                    viewDataBinding.orderDetailPaymentRadioOptionCard.isChecked = true
+                }
+
+                else -> {
+                    finishAct()
+                }
             }
             viewDataBinding.orderDetailPaymentRadioOptionCard.isEnabled = false
             viewDataBinding.orderDetailPaymentRadioOptionCash.isEnabled = false
@@ -119,29 +110,54 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailContract.View {
                 Editable.Factory.getInstance().newEditable(orderInfo.point)
             viewDataBinding.orderDetailPoint.editText?.isEnabled = false
 
-            if (orderInfo.detectiveHandlingMethod == "주문 전체 취소") {
-                viewDataBinding.orderDetailDefectiveHandlingOption1.isChecked = false
-                viewDataBinding.orderDetailDefectiveHandlingOption2.isChecked = true
-            } else {
-                viewDataBinding.orderDetailDefectiveHandlingOption1.isChecked = true
-                viewDataBinding.orderDetailDefectiveHandlingOption2.isChecked = false
+            // 결품발생 시 처리 방법
+            when (orderInfo.detectiveHandlingMethod.replace(" ", "")) {
+                "주문 전체 취소".replace(" ", "") -> {
+                    viewDataBinding.orderDetailDefectiveHandlingOption1.isChecked = false
+                    viewDataBinding.orderDetailDefectiveHandlingOption2.isChecked = true
+                }
+
+                "해당 상품 제외 후 배달".replace(" ", "") -> {
+                    viewDataBinding.orderDetailDefectiveHandlingOption1.isChecked = true
+                    viewDataBinding.orderDetailDefectiveHandlingOption2.isChecked = false
+                }
+
+                else -> {
+                    finishAct()
+                }
             }
             viewDataBinding.orderDetailDefectiveHandlingOption1.isEnabled = false
             viewDataBinding.orderDetailDefectiveHandlingOption2.isEnabled = false
         }
     }
 
-    override fun getView() = this
-
-    override fun loadOrderDetailCallback(isSuccess: Boolean) {
-        if (isSuccess) {
-            viewDataBinding.orderDetailView.visibility = View.VISIBLE
+    private fun finishAct() {
+        if (isTaskRoot) {
+            // 현재 엑티비티가 첫번째 엑티비티 일 때 (= 백스택에 다른 엑티비티가 존재하지 않을 때)
+            val mainIntent = Intent(this, MainActivity::class.java)
+            mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            mainIntent.putExtra("init_frag", "order_history")
+            startActivity(mainIntent)
         } else {
-
+            // 현재 엑티비티가 첫번째 엑티비티가 아닐 때 (= 백스택에 다른 엑티비티가 존재할 때)
+            finish()
         }
+    }
 
-        // 로딩 뷰 종료
-        viewDataBinding.orderDetailLoadingView.visibility = View.GONE
-        viewDataBinding.orderDetailLoadingImage.pauseAnimation()
+    override fun getAct() = this
+
+    override fun loadOrderProductsCallback(isSuccess: Boolean) {
+        if (isSuccess) {
+            // 성공적으로 디비에서 주문한 상품 목록을 로드했을 때
+            viewDataBinding.orderDetailView.visibility = View.VISIBLE
+
+            // 로딩 뷰 종료
+            viewDataBinding.orderDetailLoadingView.visibility = View.GONE
+            viewDataBinding.orderDetailLoadingImage.pauseAnimation()
+        } else {
+            // 디비에서 주문한 상품 목록을 로드하는데 실패했을 때
+            finishAct()
+        }
     }
 }
