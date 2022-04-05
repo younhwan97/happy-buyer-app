@@ -52,6 +52,7 @@ class OrderSuccessActivity : AppCompatActivity(), OrderSuccessContract.View {
 
             // 툴바
             viewDataBinding.orderSuccessToolbar.setNavigationOnClickListener {
+                // 백스택에 존재하는 모든 엑티비티를 지우고 메인 엑티비티로 이동
                 val mainIntent = Intent(this, MainActivity::class.java)
                 mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -60,6 +61,7 @@ class OrderSuccessActivity : AppCompatActivity(), OrderSuccessContract.View {
 
             // 성공 애니메이션
             viewDataBinding.orderSuccessImage.setOnClickListener {
+                // 애니메이션 플레이
                 viewDataBinding.orderSuccessImage.playAnimation()
             }
 
@@ -70,6 +72,7 @@ class OrderSuccessActivity : AppCompatActivity(), OrderSuccessContract.View {
             viewDataBinding.orderSuccessCloseBtn.isClickable = true
             viewDataBinding.orderSuccessCloseBtn.setOnClickListener {
                 it.isClickable = false
+                // 백스택에 존재하는 모든 엑티비티를 지우고 메인 엑티비티로 이동
                 val mainIntent = Intent(this, MainActivity::class.java)
                 mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -79,6 +82,7 @@ class OrderSuccessActivity : AppCompatActivity(), OrderSuccessContract.View {
             viewDataBinding.orderSuccessDetailBtn.isClickable = true
             viewDataBinding.orderSuccessDetailBtn.setOnClickListener {
                 it.isClickable = false
+                // 백스택에 존재하는 모든 엑티비티를 지우고 메인 엑티비티의 주문내역 프래그먼트로 이동
                 val orderDetailIntent = Intent(this, OrderDetailActivity::class.java)
                 orderDetailIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 orderDetailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

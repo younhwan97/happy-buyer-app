@@ -12,14 +12,14 @@ class OrderSuccessPresenter(
 
     override fun checkValidation(order: OrderItem) {
         val app = view.getAct().application as GlobalApplication
+        var passValidationCheck = false
 
         if (app.isLogined) {
+            // 로그인 상태일 때
             orderData.read(
                 kakaoAccountId = app.kakaoAccountId,
                 readCallback = object : OrderSource.ReadCallback {
                     override fun onRead(list: ArrayList<OrderItem>) {
-                        var passValidationCheck = false
-
                         for (item in list) {
                             if (item.orderId == order.orderId) {
                                 order.date = item.date
@@ -35,6 +35,9 @@ class OrderSuccessPresenter(
                     }
                 }
             )
+        } else {
+            // 로그인 상태가 아닐 때
+            view.checkValidationCallback(passValidationCheck)
         }
     }
 }
