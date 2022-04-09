@@ -134,7 +134,7 @@ class HomeFragment : Fragment(), HomeContract.View {
     override fun createCategoryActivity(adapterPosition: Int) {
         val act = activity as MainActivity
         val categoryIntent = Intent(act, CategoryActivity::class.java)
-        categoryIntent.putExtra("position", adapterPosition)
+        categoryIntent.putExtra("init_position", adapterPosition)
         categoryIntent.putExtra("label", categoryLabelList)
         act.startActivity(categoryIntent)
     }

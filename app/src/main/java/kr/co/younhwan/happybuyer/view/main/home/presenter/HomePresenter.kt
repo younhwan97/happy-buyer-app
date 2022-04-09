@@ -110,13 +110,14 @@ class HomePresenter(
 
         productData.readProducts(
             selectedCategory = "total",
+            page = 1,
             keyword = null,
             object : ProductSource.ReadProductsCallback {
                 override fun onReadProducts(list: ArrayList<ProductItem>) {
                     if (isClear)
                         popularAdapterModel.clearItem()
 
-                    val sortedList = ArrayList(list.sortedBy { it.sales }.reversed().subList(0,6))
+                    val sortedList = ArrayList(list.sortedBy { it.sales }.reversed().subList(0,2))
 
                     val wishedProductId = app.wishedProductId
 

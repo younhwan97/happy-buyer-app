@@ -2,18 +2,15 @@ package kr.co.younhwan.happybuyer.view.category
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import androidx.annotation.MenuRes
-import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.adapter.product.ProductAdapter
 import kr.co.younhwan.happybuyer.data.ProductItem
 import kr.co.younhwan.happybuyer.data.source.basket.BasketRepository
@@ -24,38 +21,30 @@ import kr.co.younhwan.happybuyer.databinding.FragmentCategoryBinding
 import kr.co.younhwan.happybuyer.view.category.presenter.CategoryContract
 import kr.co.younhwan.happybuyer.view.category.presenter.CategoryPresenter
 import kr.co.younhwan.happybuyer.view.login.LoginActivity
-import kr.co.younhwan.happybuyer.view.main.MainActivity
 import kr.co.younhwan.happybuyer.view.product.ProductActivity
 
-class CategoryFragment : Fragment(), CategoryContract.View {
 
-    /* View Binding */
+class CategoryFragment : Fragment(), CategoryContract.View {
     private lateinit var viewDataBinding: FragmentCategoryBinding
 
-    /* Presenter */
     private val categoryPresenter: CategoryPresenter by lazy {
-        // View 영역은 사용자 이벤트 등에 대응하기 위해서 Presenter 변수가 필요하다.
-        // 실제 처리는 Presenter, Model 에서 이뤄지기 때문이다.
         CategoryPresenter(
             this,
             productData = ProductRepository,
             eventData = EventRepository,
-            basketData= BasketRepository,
+            basketData = BasketRepository,
             userData = UserRepository,
             adapterModel = productAdapter,
             adapterView = productAdapter
         )
     }
 
-    /* Adapter */
     private val productAdapter: ProductAdapter by lazy {
         ProductAdapter("category")
     }
 
-    /* Data */
-    private lateinit var selectedCateogory: String
+    private var nowPage = 1
 
-    /* Method */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -68,32 +57,83 @@ class CategoryFragment : Fragment(), CategoryContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        selectedCateogory = arguments?.getString("category").toString()
+        // 로딩 뷰 셋팅
+        viewDataBinding.categoryView.visibility = View.GONE
+        viewDataBinding.categoryEmptyView.visibility = View.GONE
+        viewDataBinding.categoryLoadingView.visibility = View.VISIBLE
+        viewDataBinding.categoryLoadingImage.playAnimation()
 
-        categoryPresenter.loadProducts(false, selectedCateogory)
+        // 인텐트에서 데이터 추출
+        val selectedCategory = arguments?.getString("category")
 
-        viewDataBinding.run {
-            itemContainer.adapter = productAdapter
-            itemContainer.layoutManager = GridLayoutManager(activity as CategoryActivity, 2)
-            itemContainer.addItemDecoration(productAdapter.RecyclerDecoration())
+        if (selectedCategory == null) {
+            activity?.finish()
+        } else {
+            // 카테고리 상품 로드
+            nowPage = 1
+            categoryPresenter.loadProducts(true, selectedCategory, nowPage)
 
-            categoryItemCountText.text =
-                "총".plus(" ").plus(productAdapter.itemCount.toString()).plus("개")
-
-            categorySortBtn.setOnClickListener {
-
+            // 리사이클러 뷰
+            viewDataBinding.itemContainer.adapter = productAdapter
+            viewDataBinding.itemContainer.layoutManager = object : GridLayoutManager(activity, 2) {
+                override fun canScrollHorizontally() = false
+                override fun canScrollVertically() = true
             }
+            viewDataBinding.itemContainer.addOnScrollListener(object :
+                RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+
+                    if (!recyclerView.canScrollVertically(1)) {
+                        // 제일 끝까지 스크롤 했을 때
+                        if (nowPage != -1) {
+                            nowPage += 1
+                            categoryPresenter.loadProducts(false, selectedCategory, nowPage)
+                        }
+                    }
+                }
+            })
+            viewDataBinding.itemContainer.addItemDecoration(productAdapter.RecyclerDecoration())
+
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        // 프래그먼트 전환 시 화면 크기가 달라지는 것을 방지
+        viewDataBinding.root.requestLayout()
+    }
 
     override fun getAct() = activity as CategoryActivity
+
+    override fun loadProductsCallback(resultCount: Int) {
+        if (resultCount == 0) {
+            if (nowPage == 1) {
+                // 카테고리에 해당하는 상품이 하나도 없을 때
+                viewDataBinding.categoryView.visibility = View.GONE
+                viewDataBinding.categoryEmptyView.visibility = View.VISIBLE
+            }
+            // 더이상 로드할 데이터가 존재하지 않을 때
+            nowPage = -1
+        } else {
+            // 카테고리에 해당하는 상품이 존재할 때
+            viewDataBinding.categoryView.visibility = View.VISIBLE
+            viewDataBinding.categoryEmptyView.visibility = View.GONE
+
+            viewDataBinding.categoryItemCountText.text = "총".plus(" ").plus(resultCount).plus("개")
+        }
+
+        // 로딩 뷰 종료
+        viewDataBinding.categoryLoadingView.visibility = View.GONE
+        viewDataBinding.categoryLoadingImage.pauseAnimation()
+    }
 
     override fun createLoginActivity() =
         startActivity(Intent(requireContext(), LoginActivity::class.java))
 
     override fun createProductInBasketResultCallback(count: Int) {
-        when(count){
+        when (count) {
             0 -> {
                 Snackbar.make(viewDataBinding.root, "알 수 없는 에러가 발생했습니다.", Snackbar.LENGTH_SHORT)
             }

@@ -31,8 +31,8 @@ class CategoryPresenter(
         }
     }
 
-    override fun loadProducts(isClear: Boolean, selectedCategory: String) {
-        val app = ((view.getAct()).application) as GlobalApplication
+    override fun loadProducts(isClear: Boolean, selectedCategory: String, page:Int) {
+        val app = view.getAct().application as GlobalApplication
 
         if (selectedCategory == "행사") {
             eventData.readProducts(
@@ -41,6 +41,7 @@ class CategoryPresenter(
                         if (isClear)
                             adapterModel.clearItem()
 
+                        view.loadProductsCallback(list.size)
                         adapterModel.addItems(list)
                         adapterView.notifyAdapter()
                     }
@@ -49,6 +50,7 @@ class CategoryPresenter(
         } else {
             productData.readProducts(
                 selectedCategory = selectedCategory,
+                page = page,
                 keyword = null,
                 object : ProductSource.ReadProductsCallback {
                     override fun onReadProducts(list: ArrayList<ProductItem>) {
@@ -61,11 +63,12 @@ class CategoryPresenter(
                             for (id in wishedProductId) {
                                 if (id == list[index].productId) {
                                     list[index].isWished = true
-                                    break;
+                                    break
                                 }
                             }
                         }
 
+                        view.loadProductsCallback(list.size)
                         adapterModel.addItems(list)
                         adapterView.notifyAdapter()
                     }

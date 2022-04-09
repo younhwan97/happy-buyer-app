@@ -1,63 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/categoryTopContainer"
+    <LinearLayout
+        android:id="@+id/categoryView"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp">
-
-        <TextView
-            android:id="@+id/categoryItemCountText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentBottom="true"
-            android:fontFamily="@font/notosans_kr_regular"
-            android:gravity="center"
-            android:text="총 0개"
-            android:textStyle="bold" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <RelativeLayout
-            android:id="@+id/categorySortBtn"
-            android:layout_width="80dp"
-            android:layout_height="34dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerHorizontal="false"
-            android:layout_centerVertical="true"
-            android:background="?android:attr/selectableItemBackground">
+            android:id="@+id/categoryTopContainer"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp">
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/categoryItemCountText"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_toLeftOf="@id/imageView"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
                 android:fontFamily="@font/notosans_kr_regular"
                 android:gravity="center"
-                android:includeFontPadding="false"
-                android:text="추천순"
-                android:textStyle="bold" />
+                android:text="총 0개"
+                android:textStyle="bold"
+                android:visibility="gone" />
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+            <RelativeLayout
+                android:id="@+id/categorySortBtn"
+                android:layout_width="80dp"
+                android:layout_height="34dp"
                 android:layout_alignParentRight="true"
-                app:srcCompat="@drawable/ic_baseline_keyboard_arrow_down_24" />
+                android:layout_centerHorizontal="false"
+                android:layout_centerVertical="true"
+                android:background="?android:attr/selectableItemBackground">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_toLeftOf="@id/imageView"
+                    android:fontFamily="@font/notosans_kr_regular"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:text="추천순"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    app:srcCompat="@drawable/ic_baseline_keyboard_arrow_down_24" />
+            </RelativeLayout>
+
         </RelativeLayout>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/itemContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp" />
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/categoryEmptyView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/textView4"
+            style="@style/TextView.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:text="준비된 상품이 없습니다." />
 
     </RelativeLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/itemContainer"
+    <RelativeLayout
+        android:id="@+id/categoryLoadingView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/categoryTopContainer"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp" />
-</RelativeLayout>
+        android:visibility="gone">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/categoryLoadingImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@color/bgColorWhite"
+            app:lottie_autoPlay="false"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/loading"
+            app:lottie_speed="1" />
+    </RelativeLayout>
+
+</LinearLayout>

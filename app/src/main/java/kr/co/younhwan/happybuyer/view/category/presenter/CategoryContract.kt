@@ -14,11 +14,13 @@ interface CategoryContract{
         fun createLoginActivity()
 
         fun createProductActivity(productItem: ProductItem)
+
+        fun loadProductsCallback(resultCount: Int)
     }
 
     interface Model{
 
-        fun loadProducts(isClear: Boolean, selectedCategory: String)
+        fun loadProducts(isClear: Boolean, selectedCategory: String, page:Int)
 
     }
 }

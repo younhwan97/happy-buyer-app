@@ -16,7 +16,7 @@ class ProductAdapter(private val usingBy: String?) :
     RecyclerView.Adapter<ProductViewHolder>() {
 
     /* Item */
-    private lateinit var productItemList: ArrayList<ProductItem>
+    private var productItemList: ArrayList<ProductItem> = ArrayList()
     override var onClickFuncOfProduct: ((ProductItem) -> Unit)? = null
     override var onClickFuncOfBasketBtn: ((Int, Int) -> Unit)? = null
 
@@ -32,7 +32,7 @@ class ProductAdapter(private val usingBy: String?) :
     override fun getItems() = productItemList
 
     override fun addItems(productItems: ArrayList<ProductItem>) {
-        this.productItemList = productItems
+        productItemList.addAll(productItems)
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {

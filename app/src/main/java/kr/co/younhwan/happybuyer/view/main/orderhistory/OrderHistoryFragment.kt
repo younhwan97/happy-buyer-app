@@ -42,7 +42,6 @@ class OrderHistoryFragment : Fragment(), OrderHistoryContract.View {
         savedInstanceState: Bundle?
     ): View {
         viewDataBinding = FragmentOrderHistoryBinding.inflate(inflater)
-        nowPage = 1
         return viewDataBinding.root
     }
 
@@ -55,40 +54,43 @@ class OrderHistoryFragment : Fragment(), OrderHistoryContract.View {
         viewDataBinding.orderHistoryLoadingView.visibility = View.VISIBLE
         viewDataBinding.orderHistoryLoadingImage.playAnimation()
 
-        // 주문내역 로드
+        // (첫번째 페이지) 주문내역 로드
+        nowPage = 1
         orderHistoryPresenter.loadOrderHistory(true, nowPage)
 
-        // 리사이클러뷰
+        // 주문 내역 리사이클러 뷰
         viewDataBinding.orderHistoryRecycler.adapter = orderHistoryAdapter
         viewDataBinding.orderHistoryRecycler.layoutManager =
             object : LinearLayoutManager(activity) {
                 override fun canScrollHorizontally() = false
                 override fun canScrollVertically() = true
             }
-        viewDataBinding.orderHistoryRecycler.addItemDecoration(orderHistoryAdapter.RecyclerDecoration())
-        viewDataBinding.orderHistoryRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+        viewDataBinding.orderHistoryRecycler.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                // 현재 화면에 보이는 항목 중 제일 마지막 항목의 인덱스
-                val lastIndex = (recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
 
-                // 리사이클러 뷰가 관리하는 항목의 총 개수
-                val count = recyclerView.adapter?.itemCount
-
-                if(lastIndex + 1 == count){
+                if (!recyclerView.canScrollVertically(1)) {
                     // 제일 끝까지 스크롤 했을 때
-                    nowPage += 1
-                    orderHistoryPresenter.loadOrderHistory(false, nowPage)
+                    if (nowPage != -1) {
+                        nowPage += 1
+                        orderHistoryPresenter.loadOrderHistory(false, nowPage)
+                    }
                 }
             }
         })
+        viewDataBinding.orderHistoryRecycler.addItemDecoration(orderHistoryAdapter.RecyclerDecoration())
     }
 
     override fun loadOrderHistoryCallback(resultCount: Int) {
         if (resultCount == 0) {
-            // 주문 내역이 존재하지 않을 때
-            viewDataBinding.orderHistoryRecycler.visibility = View.GONE
-            viewDataBinding.orderHistoryEmptyView.visibility = View.VISIBLE
+            if (nowPage == 1) {
+                // 주문 내역이 하나도 존재하지 않을 때 (= Empty view 를 나타낸다.)
+                viewDataBinding.orderHistoryRecycler.visibility = View.GONE
+                viewDataBinding.orderHistoryEmptyView.visibility = View.VISIBLE
+            }
+            // 주문 내역은 있고, 더이상 로드할 데이터가 존재하지 않을 때
+            nowPage = -1
         } else {
             // 주문 내역이 존재할 때
             viewDataBinding.orderHistoryRecycler.visibility = View.VISIBLE

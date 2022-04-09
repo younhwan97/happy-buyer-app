@@ -2,11 +2,14 @@ package kr.co.younhwan.happybuyer.view.category
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
+import android.util.Log
+import android.view.MotionEvent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
+import androidx.viewpager2.widget.ViewPager2.SCROLL_STATE_DRAGGING
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kr.co.younhwan.happybuyer.R
@@ -15,74 +18,89 @@ import kr.co.younhwan.happybuyer.view.basket.BasketActivity
 import kr.co.younhwan.happybuyer.view.search.SearchActivity
 
 class CategoryActivity : AppCompatActivity() {
-    /* View Binding */
     lateinit var viewDataBinding: ActivityCategoryBinding
 
-    /* Fragment list */
-    val fragmentList = ArrayList<Fragment>()
+    val fragmentList = ArrayList<Fragment>() // Viewpager2에 셋팅하기 위한 프래그먼트를 가지고 있는 리스트
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewDataBinding = ActivityCategoryBinding.inflate(layoutInflater)
         setContentView(viewDataBinding.root)
 
-        // Main Activity 로 부터 전달 받은 데이터
-        val label = intent.getStringArrayListExtra("label")
-        val position = intent.getIntExtra("position", 0)
-
-        for (i in 1..label!!.size) {
-            val category = CategoryFragment()
-            val bundle = Bundle()
-            bundle.putString("category", label[i-1])
-            category.arguments = bundle
-            fragmentList.add(category)
+        // 인텐트에서 데이터 추출
+        val initPosition = intent.getIntExtra("init_position", -1)
+        val label = if (intent.hasExtra("label")) {
+            intent.getStringArrayListExtra("label")
+        } else {
+            null
         }
 
-        viewDataBinding.categoryViewPager2.adapter = object : FragmentStateAdapter(this){
-            override fun createFragment(position: Int)= fragmentList[position]
-            override fun getItemCount() = fragmentList.size
-        }
+        if (label == null || initPosition == -1) {
+            finish()
+        } else {
+            // 툴바
+            viewDataBinding.categoryToolbar.setNavigationOnClickListener {
+                finish()
+            }
 
-        // Tab과 view pager2를 연결
-        var selectTab: TabLayout.Tab? = null
-        TabLayoutMediator(viewDataBinding.tabs, viewDataBinding.categoryViewPager2) { tab: TabLayout.Tab, i: Int ->
-            tab.text = label[i]
-            if (i == position)
-                selectTab = tab
-        }.attach()
+            viewDataBinding.categoryToolbar.setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.searchIconInCategoryMenu -> {
+                        val categoryIntent = Intent(this, SearchActivity::class.java)
+                        startActivity(categoryIntent)
+                        true
+                    }
+                    R.id.baksetIconInCategoryMenu -> {
+                        val basketIntent = Intent(this, BasketActivity::class.java)
+                        startActivity(basketIntent)
+                        true
+                    }
+                    else -> false
+                }
+            }
 
-        viewDataBinding.run {
-            tabs.selectTab(selectTab) // toolbar에 선택된 탭을 표기하도록 설정
+            // ViewPager2에 셋팅할 프래그먼트 생성
+            for (i in 1..label.size) {
+                val frag = CategoryFragment()
+                val bundle = Bundle()
+                bundle.putString("category", label[i - 1])
+                frag.arguments = bundle
+                fragmentList.add(frag)
+            }
 
-            tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            // ViewPager2의 어댑터 셋팅
+            viewDataBinding.categoryViewPager2.adapter = object : FragmentStateAdapter(this) {
+                override fun createFragment(position: Int) = fragmentList[position]
+                override fun getItemCount() = fragmentList.size
+            }
+            viewDataBinding.categoryViewPager2.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+            
+            // ViewPager2와 Tab 버튼을 연결
+            var selectTab: TabLayout.Tab? = null
+            TabLayoutMediator(
+                viewDataBinding.tabs,
+                viewDataBinding.categoryViewPager2
+            ) { tab: TabLayout.Tab, position: Int ->
+
+                tab.text = label[position] // Tab 이름
+
+                if (position == initPosition) {
+                    selectTab = tab
+                    viewDataBinding.categoryToolbar.title = tab.text
+                }
+            }.attach()
+
+            // Init Tab 및 이벤트 리스너 셋팅
+            viewDataBinding.tabs.selectTab(selectTab)
+            viewDataBinding.tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabReselected(tab: TabLayout.Tab?) {}
                 override fun onTabUnselected(tab: TabLayout.Tab?) {}
 
                 override fun onTabSelected(tab: TabLayout.Tab?) {
-                    categoryTitle.text = tab?.text
+                    viewDataBinding.categoryToolbar.title = tab?.text
+                    selectTab = tab
                 }
             })
-            categoryTitle.text = selectTab?.text
-        }
-
-        viewDataBinding.categoryToolbar.setNavigationOnClickListener {
-            finish()
-        }
-
-        viewDataBinding.categoryToolbar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.searchIconInCategoryMenu -> {
-                    val categoryIntent = Intent(this, SearchActivity::class.java)
-                    startActivity(categoryIntent)
-                    true
-                }
-                R.id.baksetIconInCategoryMenu-> {
-                    val basketIntent = Intent(this, BasketActivity::class.java)
-                    startActivity(basketIntent)
-                    true
-                }
-                else -> false
-            }
         }
     }
 }

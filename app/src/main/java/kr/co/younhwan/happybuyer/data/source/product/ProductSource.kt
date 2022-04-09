@@ -6,6 +6,7 @@ interface ProductSource {
 
     fun readProducts(
         selectedCategory: String,
+        page: Int,
         keyword: String?,
         readProductsCallback: ReadProductsCallback?
     )

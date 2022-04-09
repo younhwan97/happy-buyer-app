@@ -1,5 +1,6 @@
 package kr.co.younhwan.happybuyer.view.main.orderhistory.presenter
 
+import android.util.Log
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.data.OrderItem
 import kr.co.younhwan.happybuyer.data.source.order.OrderRepository
@@ -25,6 +26,7 @@ class OrderHistoryPresenter(
         view.createOrderDetailAct(orderHistoryItem)
 
     override fun loadOrderHistory(isClear:Boolean, page:Int) {
+        Log.d("temp", "호출")
         if (app.isLogined) {
             orderData.read(
                 kakaoAccountId = app.kakaoAccountId,
@@ -35,10 +37,7 @@ class OrderHistoryPresenter(
                             orderHistoryAdapterModel.clearItem()
                         }
 
-                        if(page == 1){
-                            view.loadOrderHistoryCallback(list.size)
-                        }
-
+                        view.loadOrderHistoryCallback(list.size)
                         orderHistoryAdapterModel.addItems(list)
                         orderHistoryAdapterView.notifyAdapter()
                     }
