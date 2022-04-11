@@ -2,13 +2,11 @@ package kr.co.younhwan.happybuyer.view.category
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import android.view.*
+import android.view.ViewTreeObserver.OnScrollChangedListener
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import kr.co.younhwan.happybuyer.adapter.product.ProductAdapter
@@ -88,13 +86,13 @@ class CategoryFragment : Fragment(), CategoryContract.View {
                         // 제일 끝까지 스크롤 했을 때
                         if (nowPage != -1) {
                             nowPage += 1
+                            Log.d("temp", nowPage.toString())
                             categoryPresenter.loadProducts(false, selectedCategory, nowPage)
                         }
                     }
                 }
             })
             viewDataBinding.itemContainer.addItemDecoration(productAdapter.RecyclerDecoration())
-
         }
     }
 

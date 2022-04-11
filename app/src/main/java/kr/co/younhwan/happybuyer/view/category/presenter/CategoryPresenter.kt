@@ -31,7 +31,7 @@ class CategoryPresenter(
         }
     }
 
-    override fun loadProducts(isClear: Boolean, selectedCategory: String, page:Int) {
+    override fun loadProducts(isClear: Boolean, selectedCategory: String, page: Int) {
         val app = view.getAct().application as GlobalApplication
 
         if (selectedCategory == "행사") {
@@ -90,7 +90,7 @@ class CategoryPresenter(
                 object : BasketSource.CreateOrUpdateProductCallback {
                     override fun onCreateOrUpdateProduct(resultCount: Int) {
 
-                        if(resultCount in 1..20){
+                        if (resultCount in 1..20) {
                             view.createProductInBasketResultCallback(resultCount)
                         }
 

@@ -10,6 +10,8 @@ interface ProductAdapterContract {
         var onClickFuncOfBasketBtn: ((Int, Int) -> Unit)?
 
         fun notifyAdapter()
+
+        fun deleteLoading()
     }
 
     interface Model{

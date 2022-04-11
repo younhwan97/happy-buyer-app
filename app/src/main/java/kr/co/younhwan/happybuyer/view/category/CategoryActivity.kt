@@ -4,9 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.SCROLL_STATE_DRAGGING
@@ -73,8 +77,10 @@ class CategoryActivity : AppCompatActivity() {
                 override fun createFragment(position: Int) = fragmentList[position]
                 override fun getItemCount() = fragmentList.size
             }
-            viewDataBinding.categoryViewPager2.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-            
+
+            viewDataBinding.categoryViewPager2.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+            viewDataBinding.categoryViewPager2.reduceDragSensitivity()
+
             // ViewPager2와 Tab 버튼을 연결
             var selectTab: TabLayout.Tab? = null
             TabLayoutMediator(
@@ -102,5 +108,16 @@ class CategoryActivity : AppCompatActivity() {
                 }
             })
         }
+    }
+
+    fun ViewPager2.reduceDragSensitivity() {
+        val recyclerViewField = ViewPager2::class.java.getDeclaredField("mRecyclerView")
+        recyclerViewField.isAccessible = true
+        val recyclerView = recyclerViewField.get(this) as RecyclerView
+
+        val touchSlopField = RecyclerView::class.java.getDeclaredField("mTouchSlop")
+        touchSlopField.isAccessible = true
+        val touchSlop = touchSlopField.get(recyclerView) as Int
+        touchSlopField.set(recyclerView, touchSlop*8)       // "8" was obtained experimentally
     }
 }

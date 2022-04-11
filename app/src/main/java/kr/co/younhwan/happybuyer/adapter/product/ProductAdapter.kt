@@ -9,18 +9,18 @@ import kr.co.younhwan.happybuyer.adapter.product.contract.ProductAdapterContract
 import kr.co.younhwan.happybuyer.data.ProductItem
 import kr.co.younhwan.happybuyer.databinding.ProductItemBinding
 
-
 class ProductAdapter(private val usingBy: String?) :
     ProductAdapterContract.View,
     ProductAdapterContract.Model,
     RecyclerView.Adapter<ProductViewHolder>() {
 
-    /* Item */
     private var productItemList: ArrayList<ProductItem> = ArrayList()
+
+    // 이벤트 리스너
     override var onClickFuncOfProduct: ((ProductItem) -> Unit)? = null
     override var onClickFuncOfBasketBtn: ((Int, Int) -> Unit)? = null
 
-    /* Method */
+    // 메서드
     override fun getItemCount() = this.productItemList.size
 
     override fun clearItem() = this.productItemList.clear()
@@ -30,6 +30,10 @@ class ProductAdapter(private val usingBy: String?) :
     override fun getItem(position: Int) = this.productItemList[position]
 
     override fun getItems() = productItemList
+
+    override fun deleteLoading() {
+        productItemList.removeAt(productItemList.lastIndex)
+    }
 
     override fun addItems(productItems: ArrayList<ProductItem>) {
         productItemList.addAll(productItems)
@@ -64,7 +68,7 @@ class ProductAdapter(private val usingBy: String?) :
             val density = parent.resources.displayMetrics.density
 
             // 사용되는 엑티비티에 따라 아이템 데코레이션을 조정
-            if(usingBy == "home"){
+            if (usingBy == "home") {
                 val outsideSpaceByPx = (16 * density).toInt()
                 val insideSpaceByPx = (10 * density).toInt()
 
@@ -84,10 +88,10 @@ class ProductAdapter(private val usingBy: String?) :
                 }
 
                 outRect.bottom = outsideSpaceByPx
-            } else if(usingBy == "category" || usingBy == "search"){
+            } else if (usingBy == "category" || usingBy == "search") {
                 val insideSpaceByPx = (4 * density).toInt()
 
-                if(itemPosition % 2 != 0){
+                if (itemPosition % 2 != 0) {
                     outRect.left = insideSpaceByPx
                 } else {
                     outRect.right = insideSpaceByPx

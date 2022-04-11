@@ -1,47 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/categoryToolbar"
-            style="@style/Widget.App.Toolbar.Light"
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:elevation="0dp"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:menu="@menu/category_menu"
-            app:navigationIcon="@drawable/ic_back_24"
-            app:title="상품"
-            app:titleCentered="true">
+            android:layout_height="wrap_content">
 
-        </com.google.android.material.appbar.MaterialToolbar>
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/categoryToolbar"
+                style="@style/Widget.App.Toolbar.Light"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:elevation="0dp"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:menu="@menu/category_menu"
+                app:navigationIcon="@drawable/ic_back_24"
+                app:title="상품"
+                app:titleCentered="true">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs"
+            </com.google.android.material.appbar.MaterialToolbar>
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/bgColorWhite"
+                app:tabIndicatorColor="@color/hbPrimaryDarkColor"
+                app:tabIndicatorHeight="3dp"
+                app:tabMode="scrollable"
+                app:tabSelectedTextColor="@color/hbPrimaryDarkColor"
+                app:tabTextAppearance="@style/CategoryTabTheme" />
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/categoryViewPager2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/bgColorWhite"
-            app:tabIndicatorColor="@color/hbPrimaryDarkColor"
-            app:tabIndicatorHeight="3dp"
-            app:tabMode="scrollable"
-            app:tabSelectedTextColor="@color/hbPrimaryDarkColor"
-            app:tabTextAppearance="@style/CategoryTabTheme" />
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/categoryViewPager2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-
-
+            android:layout_height="match_parent"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</RelativeLayout>
