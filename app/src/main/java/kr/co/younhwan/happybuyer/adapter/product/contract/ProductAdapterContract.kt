@@ -12,6 +12,10 @@ interface ProductAdapterContract {
         fun notifyAdapter()
 
         fun notifyAdapterByRange(start: Int, count: Int)
+
+        fun notifyLastItemRemoved()
+
+        fun deleteLoading()
     }
 
     interface Model{

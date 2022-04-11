@@ -110,8 +110,15 @@ class CategoryPresenter(
                         }
 
                         view.loadProductsCallback(list.size)
-                        adapterModel.addItems(list)
-                        adapterView.notifyAdapterByRange((page - 1) * 30, 30)
+                        adapterView.deleteLoading()
+
+                        if (list.size == 0) {
+                            // 더 이상 로드할 데이터가 없는 경우 리사이클러 뷰 마지막에 들어가 있는 로딩뷰만 제거
+                            adapterView.notifyLastItemRemoved()
+                        } else {
+                            adapterModel.addItems(list)
+                            adapterView.notifyAdapterByRange(adapterModel.getItemCount() - list.size - 1, list.size)
+                        }
                     }
                 })
         }

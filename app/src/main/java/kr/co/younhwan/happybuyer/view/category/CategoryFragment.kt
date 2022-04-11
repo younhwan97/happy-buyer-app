@@ -77,10 +77,28 @@ class CategoryFragment : Fragment(), CategoryContract.View {
 
             // 리사이클러 뷰
             viewDataBinding.itemContainer.adapter = productAdapter
-            viewDataBinding.itemContainer.layoutManager = object : GridLayoutManager(activity, 2) {
+            val gridLayoutManager = object : GridLayoutManager(activity, 2) {
                 override fun canScrollHorizontally() = false
                 override fun canScrollVertically() = true
             }
+            gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                override fun getSpanSize(position: Int): Int {
+                    return when (productAdapter.getItemViewType(position)) {
+                        productAdapter.VIEW_TYPE_ITEM -> {
+                            1
+                        }
+
+                        productAdapter.VIEW_TYPE_LOADING -> {
+                            2
+                        }
+
+                        else -> {
+                            -1
+                        }
+                    }
+                }
+            }
+            viewDataBinding.itemContainer.layoutManager = gridLayoutManager
 
             viewDataBinding.itemContainer.addOnScrollListener(object :
                 RecyclerView.OnScrollListener() {
@@ -99,7 +117,10 @@ class CategoryFragment : Fragment(), CategoryContract.View {
             viewDataBinding.itemContainer.addItemDecoration(productAdapter.RecyclerDecoration())
 
             // 리사이클러 뷰 바운스 효과 추가
-            OverScrollDecoratorHelper.setUpOverScroll(viewDataBinding.itemContainer, OverScrollDecoratorHelper.ORIENTATION_VERTICAL)
+            OverScrollDecoratorHelper.setUpOverScroll(
+                viewDataBinding.itemContainer,
+                OverScrollDecoratorHelper.ORIENTATION_VERTICAL
+            )
         }
     }
 

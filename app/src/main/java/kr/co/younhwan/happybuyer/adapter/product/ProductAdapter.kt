@@ -8,11 +8,16 @@ import androidx.recyclerview.widget.RecyclerView
 import kr.co.younhwan.happybuyer.adapter.product.contract.ProductAdapterContract
 import kr.co.younhwan.happybuyer.data.ProductItem
 import kr.co.younhwan.happybuyer.databinding.ProductItemBinding
+import kr.co.younhwan.happybuyer.databinding.RecyclerProductLoadingItemBinding
 
 class ProductAdapter(private val usingBy: String?) :
     ProductAdapterContract.View,
     ProductAdapterContract.Model,
-    RecyclerView.Adapter<ProductViewHolder>() {
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    // 뷰타입
+    val VIEW_TYPE_ITEM = 0
+    val VIEW_TYPE_LOADING = 1
 
     // 아이템
     private var productItemList: ArrayList<ProductItem> = ArrayList()
@@ -34,24 +39,62 @@ class ProductAdapter(private val usingBy: String?) :
 
     override fun notifyAdapterByRange(start:Int, count:Int) = notifyItemRangeInserted(start, count)
 
-    override fun addItems(productItems: ArrayList<ProductItem>) {
-        productItemList.addAll(productItems)
+    override fun notifyLastItemRemoved() {
+        notifyItemRemoved(productItemList.lastIndex)
     }
 
-    override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
-        productItemList[position].let {
-            holder.onBind(productItem = productItemList[position], usingBy = usingBy)
+    override fun addItems(productItems: ArrayList<ProductItem>) {
+        productItemList.addAll(productItems)
+        productItemList.add(ProductItem(
+            productId = -1,
+            productName = " ",
+            productPrice = 0,
+            productImageUrl = ""
+        ))
+    }
+
+    override fun deleteLoading() {
+        productItemList.removeAt(productItemList.lastIndex)
+    }
+
+    // 뷰 타입 지정
+    override fun getItemViewType(position: Int): Int {
+        return when(productItemList[position].productId){
+            -1 -> VIEW_TYPE_LOADING
+            else -> VIEW_TYPE_ITEM
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
-        val itemBinding = ProductItemBinding.inflate(LayoutInflater.from(parent.context))
-        return ProductViewHolder(
-            parent = parent,
-            itemBinding = itemBinding,
-            listenerFuncOfProduct = onClickFuncOfProduct,
-            listenerFuncOfBasketBtn = onClickFuncOfBasketBtn
-        )
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if(holder is ProductViewHolder){
+            productItemList[position].let {
+                holder.onBind(productItem = productItemList[position], usingBy = usingBy)
+            }
+        } else {
+
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when(viewType){
+            VIEW_TYPE_ITEM -> {
+                val itemBinding = ProductItemBinding.inflate(LayoutInflater.from(parent.context))
+                ProductViewHolder(
+                    parent = parent,
+                    itemBinding = itemBinding,
+                    listenerFuncOfProduct = onClickFuncOfProduct,
+                    listenerFuncOfBasketBtn = onClickFuncOfBasketBtn
+                )
+            }
+
+            else -> {
+                val itemBinding = RecyclerProductLoadingItemBinding.inflate(LayoutInflater.from(parent.context))
+                ProductLoadingViewHolder(
+                    parent = parent,
+                    itemBinding = itemBinding
+                )
+            }
+        }
     }
 
     inner class RecyclerDecoration : RecyclerView.ItemDecoration() {
