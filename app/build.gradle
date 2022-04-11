@@ -70,4 +70,7 @@ dependencies {
 
     /* Power Spinner */
     implementation "com.github.skydoves:powerspinner:1.1.9"
+
+    /* overscroll-decor */
+    implementation 'io.github.everythingme:overscroll-decor-android:1.1.1'
 }

@@ -2,18 +2,10 @@ package kr.co.younhwan.happybuyer.view.category
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.view.MotionEvent
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.widget.ViewPager2
-import androidx.viewpager2.widget.ViewPager2.SCROLL_STATE_DRAGGING
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kr.co.younhwan.happybuyer.R
@@ -25,7 +17,7 @@ import kr.co.younhwan.happybuyer.view.search.SearchActivity
 class CategoryActivity : AppCompatActivity() {
     lateinit var viewDataBinding: ActivityCategoryBinding
 
-    val fragmentList = ArrayList<Fragment>() // Viewpager2에 셋팅하기 위한 프래그먼트를 가지고 있는 리스트
+    val fragmentList = ArrayList<Fragment>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,33 +71,34 @@ class CategoryActivity : AppCompatActivity() {
                 override fun getItemCount() = fragmentList.size
             }
 
+            // ViewPager2 스크롤 민감도 조절 및 오버스크롤 설정
             viewDataBinding.categoryViewPager2.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
             viewDataBinding.categoryViewPager2.reduceDragSensitivity()
 
             // ViewPager2와 Tab 버튼을 연결
-            var selectTab: TabLayout.Tab? = null
+            var initTab: TabLayout.Tab? = null
             TabLayoutMediator(
-                viewDataBinding.tabs,
+                viewDataBinding.categoryTabs,
                 viewDataBinding.categoryViewPager2
             ) { tab: TabLayout.Tab, position: Int ->
 
                 tab.text = label[position] // Tab 이름
 
                 if (position == initPosition) {
-                    selectTab = tab
+                    initTab = tab
                     viewDataBinding.categoryToolbar.title = tab.text
                 }
             }.attach()
 
             // Init Tab 및 이벤트 리스너 셋팅
-            viewDataBinding.tabs.selectTab(selectTab)
-            viewDataBinding.tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            viewDataBinding.categoryTabs.selectTab(initTab)
+            viewDataBinding.categoryTabs.addOnTabSelectedListener(object :
+                TabLayout.OnTabSelectedListener {
                 override fun onTabReselected(tab: TabLayout.Tab?) {}
                 override fun onTabUnselected(tab: TabLayout.Tab?) {}
 
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     viewDataBinding.categoryToolbar.title = tab?.text
-                    selectTab = tab
                 }
             })
         }

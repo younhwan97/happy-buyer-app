@@ -12,53 +12,32 @@
         android:orientation="vertical"
         android:visibility="visible">
 
-        <RelativeLayout
-            android:id="@+id/categoryTopContainer"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp">
-
-            <TextView
-                android:id="@+id/categoryItemCountText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentBottom="true"
-                android:fontFamily="@font/notosans_kr_regular"
-                android:gravity="center"
-                android:text="총 0개"
-                android:textStyle="bold"
-                android:visibility="gone" />
-
-            <RelativeLayout
-                android:id="@+id/categorySortBtn"
-                android:layout_width="80dp"
-                android:layout_height="34dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerHorizontal="false"
-                android:layout_centerVertical="true"
-                android:background="?android:attr/selectableItemBackground">
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_toStartOf="@id/imageView"
-                    android:fontFamily="@font/notosans_kr_regular"
-                    android:gravity="center"
-                    android:includeFontPadding="false"
-                    android:text="추천순"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentEnd="true"
-                    app:srcCompat="@drawable/ic_baseline_keyboard_arrow_down_24" />
-            </RelativeLayout>
-        </RelativeLayout>
+        <com.skydoves.powerspinner.PowerSpinnerView
+            android:id="@+id/categoryProductsSortingSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/bgColorWhite"
+            android:fontFamily="@font/notosans_kr_regular"
+            android:hint="@string/result_item_sort_by"
+            android:includeFontPadding="false"
+            android:padding="10dp"
+            android:textColor="@color/fontColorBlack"
+            android:textColorHint="@color/fontColorBlack"
+            android:textSize="14.5sp"
+            app:spinner_arrow_gravity="end"
+            app:spinner_arrow_padding="8dp"
+            app:spinner_arrow_tint="@color/black"
+            app:spinner_divider_color="@color/LineColorGray"
+            app:spinner_divider_show="false"
+            app:spinner_divider_size="0.4dp"
+            app:spinner_item_array="@array/sorting_items"
+            app:spinner_popup_animation="dropdown"
+            app:spinner_popup_background="@color/bgColorWhite"
+            app:spinner_popup_elevation="14dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/itemContainer"

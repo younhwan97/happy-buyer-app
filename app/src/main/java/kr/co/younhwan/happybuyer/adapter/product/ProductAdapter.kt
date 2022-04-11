@@ -14,6 +14,7 @@ class ProductAdapter(private val usingBy: String?) :
     ProductAdapterContract.Model,
     RecyclerView.Adapter<ProductViewHolder>() {
 
+    // 아이템
     private var productItemList: ArrayList<ProductItem> = ArrayList()
 
     // 이벤트 리스너
@@ -25,15 +26,13 @@ class ProductAdapter(private val usingBy: String?) :
 
     override fun clearItem() = this.productItemList.clear()
 
-    override fun notifyAdapter() = notifyDataSetChanged()
-
     override fun getItem(position: Int) = this.productItemList[position]
 
     override fun getItems() = productItemList
 
-    override fun deleteLoading() {
-        productItemList.removeAt(productItemList.lastIndex)
-    }
+    override fun notifyAdapter() = notifyDataSetChanged()
+
+    override fun notifyAdapterByRange(start:Int, count:Int) = notifyItemRangeInserted(start, count)
 
     override fun addItems(productItems: ArrayList<ProductItem>) {
         productItemList.addAll(productItems)

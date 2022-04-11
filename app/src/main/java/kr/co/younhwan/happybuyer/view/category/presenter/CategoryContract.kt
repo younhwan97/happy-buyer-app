@@ -22,5 +22,7 @@ interface CategoryContract{
 
         fun loadProducts(isClear: Boolean, selectedCategory: String, page:Int)
 
+        fun loadMoreProducts(selectedCategory: String, page: Int)
+
     }
 }

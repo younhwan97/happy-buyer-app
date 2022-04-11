@@ -5,10 +5,13 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.view.ViewTreeObserver.OnScrollChangedListener
+import android.view.animation.AlphaAnimation
+import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.adapter.product.ProductAdapter
 import kr.co.younhwan.happybuyer.data.ProductItem
 import kr.co.younhwan.happybuyer.data.source.basket.BasketRepository
@@ -20,6 +23,7 @@ import kr.co.younhwan.happybuyer.view.category.presenter.CategoryContract
 import kr.co.younhwan.happybuyer.view.category.presenter.CategoryPresenter
 import kr.co.younhwan.happybuyer.view.login.LoginActivity
 import kr.co.younhwan.happybuyer.view.product.ProductActivity
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper
 
 
 class CategoryFragment : Fragment(), CategoryContract.View {
@@ -77,6 +81,7 @@ class CategoryFragment : Fragment(), CategoryContract.View {
                 override fun canScrollHorizontally() = false
                 override fun canScrollVertically() = true
             }
+
             viewDataBinding.itemContainer.addOnScrollListener(object :
                 RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -86,13 +91,15 @@ class CategoryFragment : Fragment(), CategoryContract.View {
                         // 제일 끝까지 스크롤 했을 때
                         if (nowPage != -1) {
                             nowPage += 1
-                            Log.d("temp", nowPage.toString())
-                            categoryPresenter.loadProducts(false, selectedCategory, nowPage)
+                            categoryPresenter.loadMoreProducts(selectedCategory, nowPage)
                         }
                     }
                 }
             })
             viewDataBinding.itemContainer.addItemDecoration(productAdapter.RecyclerDecoration())
+
+            // 리사이클러 뷰 바운스 효과 추가
+            OverScrollDecoratorHelper.setUpOverScroll(viewDataBinding.itemContainer, OverScrollDecoratorHelper.ORIENTATION_VERTICAL)
         }
     }
 
@@ -118,8 +125,6 @@ class CategoryFragment : Fragment(), CategoryContract.View {
             // 카테고리에 해당하는 상품이 존재할 때
             viewDataBinding.categoryView.visibility = View.VISIBLE
             viewDataBinding.categoryEmptyView.visibility = View.GONE
-
-            viewDataBinding.categoryItemCountText.text = "총".plus(" ").plus(resultCount).plus("개")
         }
 
         // 로딩 뷰 종료

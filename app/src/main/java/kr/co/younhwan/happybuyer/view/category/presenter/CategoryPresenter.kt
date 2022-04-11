@@ -1,5 +1,6 @@
 package kr.co.younhwan.happybuyer.view.category.presenter
 
+import android.util.Log
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.adapter.product.contract.ProductAdapterContract
 import kr.co.younhwan.happybuyer.data.ProductItem
@@ -71,6 +72,46 @@ class CategoryPresenter(
                         view.loadProductsCallback(list.size)
                         adapterModel.addItems(list)
                         adapterView.notifyAdapter()
+                    }
+                })
+        }
+    }
+
+    override fun loadMoreProducts(selectedCategory: String, page: Int) {
+        val app = view.getAct().application as GlobalApplication
+
+        if (selectedCategory == "행사") {
+            eventData.readProducts(
+                object : EventSource.ReadProductsCallback {
+                    override fun onReadProducts(list: ArrayList<ProductItem>) {
+
+                        view.loadProductsCallback(list.size)
+                        adapterModel.addItems(list)
+                        adapterView.notifyAdapterByRange((page - 1) * 30, 30)
+                    }
+                }
+            )
+        } else {
+            productData.readProducts(
+                selectedCategory = selectedCategory,
+                page = page,
+                keyword = null,
+                object : ProductSource.ReadProductsCallback {
+                    override fun onReadProducts(list: ArrayList<ProductItem>) {
+                        val wishedProductId = app.wishedProductId
+
+                        for (index in 0 until list.size) {
+                            for (id in wishedProductId) {
+                                if (id == list[index].productId) {
+                                    list[index].isWished = true
+                                    break
+                                }
+                            }
+                        }
+
+                        view.loadProductsCallback(list.size)
+                        adapterModel.addItems(list)
+                        adapterView.notifyAdapterByRange((page - 1) * 30, 30)
                     }
                 })
         }
