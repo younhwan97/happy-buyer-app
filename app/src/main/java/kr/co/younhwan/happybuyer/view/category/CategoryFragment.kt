@@ -2,7 +2,6 @@ package kr.co.younhwan.happybuyer.view.category
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -20,7 +19,6 @@ import kr.co.younhwan.happybuyer.view.category.presenter.CategoryPresenter
 import kr.co.younhwan.happybuyer.view.login.LoginActivity
 import kr.co.younhwan.happybuyer.view.product.ProductActivity
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper
-import org.jetbrains.annotations.NotNull
 
 class CategoryFragment : Fragment(), CategoryContract.View {
     private lateinit var viewDataBinding: FragmentCategoryBinding
@@ -41,9 +39,9 @@ class CategoryFragment : Fragment(), CategoryContract.View {
         ProductAdapter("category")
     }
 
-    private var nowPage = 1
-    lateinit var selectedCategory: String
-    lateinit var selectedSortingOption: String 
+    private var nowPage = 1 // 페이징
+    lateinit var selectedCategory: String // 프래그먼트 카테고리
+    lateinit var selectedSortingOption: String  // 카테고리 상품 정렬 옵션
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,37 +61,23 @@ class CategoryFragment : Fragment(), CategoryContract.View {
         // 인텐트에서 데이터 추출
         selectedCategory = arguments?.getString("category") ?: ""
 
+        // 엑티비티
+        val act = activity as CategoryActivity
+
         if (selectedCategory == "") {
-            activity?.finish()
+            act.finish()
         } else {
-            val act = activity as CategoryActivity
-
-            // 카테고리 상품 로드
+            // (페이징에 따라) 상품 로드
             nowPage = 1
-            categoryPresenter.loadProducts(true, selectedCategory, act.sortBy, nowPage)
+            categoryPresenter.loadProducts(
+                isClear = true,
+                selectedCategory = selectedCategory,
+                sortBy = act.sortBy,
+                page = nowPage
+            )
 
-            // 카테고리 상품 정렬 스피너
-            when (act.sortBy) {
-                "판매순" -> {
-                    viewDataBinding.categoryProductsSortingSpinner.selectItemByIndex(1)
-                    selectedSortingOption = "판매순"
-                }
-
-                "낮은 가격순" -> {
-                    viewDataBinding.categoryProductsSortingSpinner.selectItemByIndex(2)
-                    selectedSortingOption = "낮은 가격순"
-                }
-
-                "높은 가격순" -> {
-                    viewDataBinding.categoryProductsSortingSpinner.selectItemByIndex(3)
-                    selectedSortingOption = "높은 가격순"
-                }
-
-                else -> {
-                    viewDataBinding.categoryProductsSortingSpinner.selectItemByIndex(0)
-                    selectedSortingOption = "추천순"
-                }
-            }
+            // 상품 정렬 스피너
+            setSortingOption(act.sortBy)
             viewDataBinding.categoryProductsSortingSpinner.lifecycleOwner = this
             viewDataBinding.categoryProductsSortingSpinner.setOnSpinnerItemSelectedListener<String> { _, oldItem, _, newItem ->
                 if (oldItem != newItem) {
@@ -104,37 +88,43 @@ class CategoryFragment : Fragment(), CategoryContract.View {
                     selectedSortingOption = newItem
                     act.sortBy = newItem
 
-                    // 새로운 정렬기준에 따라 카페고리 상품 로드
+                    // 새로운 정렬기준에 따라 상품을 다시 로드
                     nowPage = 1
-                    categoryPresenter.loadProducts(true, selectedCategory, act.sortBy, nowPage)
+                    categoryPresenter.loadProducts(
+                        isClear = true,
+                        selectedCategory = selectedCategory,
+                        sortBy = act.sortBy,
+                        page = nowPage
+                    )
                 }
             }
 
-            // 리사이클러 뷰
-            viewDataBinding.itemContainer.adapter = productAdapter
-            val gridLayoutManager = object : GridLayoutManager(activity, 2) {
+            // 리사이클러 뷰의 어댑터 및 레이아웃 매니저 셋팅
+            val gridLayoutManager = object : GridLayoutManager(act, 2) {
                 override fun canScrollHorizontally() = false
                 override fun canScrollVertically() = true
             }
             gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-                override fun getSpanSize(position: Int): Int {
-                    return when (productAdapter.getItemViewType(position)) {
-                        productAdapter.VIEW_TYPE_ITEM -> {
-                            1
-                        }
-
-                        productAdapter.VIEW_TYPE_LOADING -> {
-                            2
-                        }
-
-                        else -> {
-                            -1
-                        }
+                override fun getSpanSize(position: Int) =
+                    when (productAdapter.getItemViewType(position)) {
+                        productAdapter.VIEW_TYPE_ITEM -> 1
+                        productAdapter.VIEW_TYPE_LOADING -> 2
+                        else -> -1
                     }
-                }
             }
+            viewDataBinding.itemContainer.adapter = productAdapter
             viewDataBinding.itemContainer.layoutManager = gridLayoutManager
 
+            // 리사이클러 뷰 데코레이션
+            viewDataBinding.itemContainer.addItemDecoration(productAdapter.RecyclerDecoration())
+
+            // 리사이클러 뷰 바운스 효과
+            OverScrollDecoratorHelper.setUpOverScroll(
+                viewDataBinding.itemContainer,
+                OverScrollDecoratorHelper.ORIENTATION_VERTICAL
+            )
+
+            // 리사이클러 뷰 스크롤 이벤트 리스너
             viewDataBinding.itemContainer.addOnScrollListener(object :
                 RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -145,21 +135,14 @@ class CategoryFragment : Fragment(), CategoryContract.View {
                         if (nowPage != -1) {
                             nowPage += 1
                             categoryPresenter.loadMoreProducts(
-                                selectedCategory,
-                                act.sortBy,
-                                nowPage
+                                selectedCategory = selectedCategory,
+                                sortBy = act.sortBy,
+                                page = nowPage
                             )
                         }
                     }
                 }
             })
-            viewDataBinding.itemContainer.addItemDecoration(productAdapter.RecyclerDecoration())
-
-            // 리사이클러 뷰 바운스 효과 추가
-            OverScrollDecoratorHelper.setUpOverScroll(
-                viewDataBinding.itemContainer,
-                OverScrollDecoratorHelper.ORIENTATION_VERTICAL
-            )
         }
     }
 
@@ -169,34 +152,22 @@ class CategoryFragment : Fragment(), CategoryContract.View {
         // 프래그먼트 전환 시 화면 크기가 달라지는 것을 방지
         viewDataBinding.root.requestLayout()
 
+        // 엑티비티
         val act = activity as CategoryActivity
 
-        if(selectedSortingOption != act.sortBy){
-            when (act.sortBy) {
-                "판매순" -> {
-                    viewDataBinding.categoryProductsSortingSpinner.selectItemByIndex(1)
-                    selectedSortingOption = "판매순"
-                }
-
-                "낮은 가격순" -> {
-                    viewDataBinding.categoryProductsSortingSpinner.selectItemByIndex(2)
-                    selectedSortingOption = "낮은 가격순"
-                }
-
-                "높은 가격순" -> {
-                    viewDataBinding.categoryProductsSortingSpinner.selectItemByIndex(3)
-                    selectedSortingOption = "높은 가격순"
-                }
-
-                else -> {
-                    viewDataBinding.categoryProductsSortingSpinner.selectItemByIndex(0)
-                    selectedSortingOption = "추천순"
-                }
-            }
-
+        // 정렬 기준이 다른 프래그먼트에서 바뀌었을 때
+        if (selectedSortingOption != act.sortBy) {
+            // 새로운 정렬 기준에 따라 상품을 다시 로드 하고 페이징 처리를 처음부터
+            setSortingOption(act.sortBy)
             setLoadingView()
+
             nowPage = 1
-            categoryPresenter.loadProducts(true, selectedCategory, act.sortBy, nowPage)
+            categoryPresenter.loadProducts(
+                isClear = true,
+                selectedCategory = selectedCategory,
+                sortBy = act.sortBy,
+                page = nowPage
+            )
         }
     }
 
@@ -205,6 +176,30 @@ class CategoryFragment : Fragment(), CategoryContract.View {
         viewDataBinding.categoryEmptyView.visibility = View.GONE
         viewDataBinding.categoryLoadingView.visibility = View.VISIBLE
         viewDataBinding.categoryLoadingImage.playAnimation()
+    }
+
+    private fun setSortingOption(sortBy: String) {
+        when (sortBy) {
+            "판매순" -> {
+                viewDataBinding.categoryProductsSortingSpinner.selectItemByIndex(1)
+                selectedSortingOption = "판매순"
+            }
+
+            "낮은 가격순" -> {
+                viewDataBinding.categoryProductsSortingSpinner.selectItemByIndex(2)
+                selectedSortingOption = "낮은 가격순"
+            }
+
+            "높은 가격순" -> {
+                viewDataBinding.categoryProductsSortingSpinner.selectItemByIndex(3)
+                selectedSortingOption = "높은 가격순"
+            }
+
+            else -> {
+                viewDataBinding.categoryProductsSortingSpinner.selectItemByIndex(0)
+                selectedSortingOption = "추천순"
+            }
+        }
     }
 
     override fun getAct() = activity as CategoryActivity
