@@ -4,14 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.view.ViewTreeObserver.OnScrollChangedListener
-import android.view.animation.AlphaAnimation
-import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.adapter.product.ProductAdapter
 import kr.co.younhwan.happybuyer.data.ProductItem
 import kr.co.younhwan.happybuyer.data.source.basket.BasketRepository
@@ -24,7 +20,7 @@ import kr.co.younhwan.happybuyer.view.category.presenter.CategoryPresenter
 import kr.co.younhwan.happybuyer.view.login.LoginActivity
 import kr.co.younhwan.happybuyer.view.product.ProductActivity
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper
-
+import org.jetbrains.annotations.NotNull
 
 class CategoryFragment : Fragment(), CategoryContract.View {
     private lateinit var viewDataBinding: FragmentCategoryBinding
@@ -46,6 +42,8 @@ class CategoryFragment : Fragment(), CategoryContract.View {
     }
 
     private var nowPage = 1
+    lateinit var selectedCategory: String
+    lateinit var selectedSortingOption: String 
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,20 +58,57 @@ class CategoryFragment : Fragment(), CategoryContract.View {
         super.onViewCreated(view, savedInstanceState)
 
         // 로딩 뷰 셋팅
-        viewDataBinding.categoryView.visibility = View.GONE
-        viewDataBinding.categoryEmptyView.visibility = View.GONE
-        viewDataBinding.categoryLoadingView.visibility = View.VISIBLE
-        viewDataBinding.categoryLoadingImage.playAnimation()
+        setLoadingView()
 
         // 인텐트에서 데이터 추출
-        val selectedCategory = arguments?.getString("category")
+        selectedCategory = arguments?.getString("category") ?: ""
 
-        if (selectedCategory == null) {
+        if (selectedCategory == "") {
             activity?.finish()
         } else {
+            val act = activity as CategoryActivity
+
             // 카테고리 상품 로드
             nowPage = 1
-            categoryPresenter.loadProducts(true, selectedCategory, nowPage)
+            categoryPresenter.loadProducts(true, selectedCategory, act.sortBy, nowPage)
+
+            // 카테고리 상품 정렬 스피너
+            when (act.sortBy) {
+                "판매순" -> {
+                    viewDataBinding.categoryProductsSortingSpinner.selectItemByIndex(1)
+                    selectedSortingOption = "판매순"
+                }
+
+                "낮은 가격순" -> {
+                    viewDataBinding.categoryProductsSortingSpinner.selectItemByIndex(2)
+                    selectedSortingOption = "낮은 가격순"
+                }
+
+                "높은 가격순" -> {
+                    viewDataBinding.categoryProductsSortingSpinner.selectItemByIndex(3)
+                    selectedSortingOption = "높은 가격순"
+                }
+
+                else -> {
+                    viewDataBinding.categoryProductsSortingSpinner.selectItemByIndex(0)
+                    selectedSortingOption = "추천순"
+                }
+            }
+            viewDataBinding.categoryProductsSortingSpinner.lifecycleOwner = this
+            viewDataBinding.categoryProductsSortingSpinner.setOnSpinnerItemSelectedListener<String> { _, oldItem, _, newItem ->
+                if (oldItem != newItem) {
+                    // 로딩 뷰 셋팅
+                    setLoadingView()
+
+                    // 새로운 정렬기준을 엑티비티에 셋팅
+                    selectedSortingOption = newItem
+                    act.sortBy = newItem
+
+                    // 새로운 정렬기준에 따라 카페고리 상품 로드
+                    nowPage = 1
+                    categoryPresenter.loadProducts(true, selectedCategory, act.sortBy, nowPage)
+                }
+            }
 
             // 리사이클러 뷰
             viewDataBinding.itemContainer.adapter = productAdapter
@@ -109,7 +144,11 @@ class CategoryFragment : Fragment(), CategoryContract.View {
                         // 제일 끝까지 스크롤 했을 때
                         if (nowPage != -1) {
                             nowPage += 1
-                            categoryPresenter.loadMoreProducts(selectedCategory, nowPage)
+                            categoryPresenter.loadMoreProducts(
+                                selectedCategory,
+                                act.sortBy,
+                                nowPage
+                            )
                         }
                     }
                 }
@@ -129,6 +168,43 @@ class CategoryFragment : Fragment(), CategoryContract.View {
 
         // 프래그먼트 전환 시 화면 크기가 달라지는 것을 방지
         viewDataBinding.root.requestLayout()
+
+        val act = activity as CategoryActivity
+
+        if(selectedSortingOption != act.sortBy){
+            when (act.sortBy) {
+                "판매순" -> {
+                    viewDataBinding.categoryProductsSortingSpinner.selectItemByIndex(1)
+                    selectedSortingOption = "판매순"
+                }
+
+                "낮은 가격순" -> {
+                    viewDataBinding.categoryProductsSortingSpinner.selectItemByIndex(2)
+                    selectedSortingOption = "낮은 가격순"
+                }
+
+                "높은 가격순" -> {
+                    viewDataBinding.categoryProductsSortingSpinner.selectItemByIndex(3)
+                    selectedSortingOption = "높은 가격순"
+                }
+
+                else -> {
+                    viewDataBinding.categoryProductsSortingSpinner.selectItemByIndex(0)
+                    selectedSortingOption = "추천순"
+                }
+            }
+
+            setLoadingView()
+            nowPage = 1
+            categoryPresenter.loadProducts(true, selectedCategory, act.sortBy, nowPage)
+        }
+    }
+
+    private fun setLoadingView() {
+        viewDataBinding.categoryView.visibility = View.GONE
+        viewDataBinding.categoryEmptyView.visibility = View.GONE
+        viewDataBinding.categoryLoadingView.visibility = View.VISIBLE
+        viewDataBinding.categoryLoadingImage.playAnimation()
     }
 
     override fun getAct() = activity as CategoryActivity

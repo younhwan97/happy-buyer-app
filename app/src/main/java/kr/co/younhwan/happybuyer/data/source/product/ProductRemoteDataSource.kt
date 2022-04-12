@@ -13,7 +13,8 @@ object ProductRemoteDataSource : ProductSource {
 
     override fun readProducts(
         selectedCategory: String,
-        page:Int,
+        sortBy: String?,
+        page: Int,
         keyword: String?,
         readProductsCallback: ProductSource.ReadProductsCallback?
     ) {
@@ -23,6 +24,10 @@ object ProductRemoteDataSource : ProductSource {
             launch {
                 // API 서버 주소
                 var site = "${serverInfo}?category=${selectedCategory}&page=${page}"
+
+                if (!sortBy.isNullOrEmpty()) {
+                    site += "&sort=${sortBy}"
+                }
 
                 if (!keyword.isNullOrEmpty()) {
                     site += "&keyword=${keyword}"

@@ -8,12 +8,14 @@ object ProductRepository : ProductSource {
 
     override fun readProducts(
         selectedCategory: String,
+        sortBy:String?,
         page:Int,
         keyword: String?,
         readProductsCallback: ProductSource.ReadProductsCallback?
     ) {
         productRemoteDataSource.readProducts(
             selectedCategory,
+            sortBy,
             page,
             keyword,
             object : ProductSource.ReadProductsCallback {

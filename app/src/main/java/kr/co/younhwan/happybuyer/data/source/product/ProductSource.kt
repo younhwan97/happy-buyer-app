@@ -6,6 +6,7 @@ interface ProductSource {
 
     fun readProducts(
         selectedCategory: String,
+        sortBy: String?,
         page: Int,
         keyword: String?,
         readProductsCallback: ReadProductsCallback?
@@ -14,4 +15,5 @@ interface ProductSource {
     interface ReadProductsCallback {
         fun onReadProducts(list: ArrayList<ProductItem>)
     }
+
 }

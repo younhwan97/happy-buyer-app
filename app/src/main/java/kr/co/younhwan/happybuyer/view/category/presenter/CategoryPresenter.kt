@@ -31,7 +31,12 @@ class CategoryPresenter(
         }
     }
 
-    override fun loadProducts(isClear: Boolean, selectedCategory: String, page: Int) {
+    override fun loadProducts(
+        isClear: Boolean,
+        selectedCategory: String,
+        sortBy: String,
+        page: Int
+    ) {
         val app = view.getAct().application as GlobalApplication
 
         if (selectedCategory == "행사") {
@@ -50,6 +55,7 @@ class CategoryPresenter(
         } else {
             productData.readProducts(
                 selectedCategory = selectedCategory,
+                sortBy = sortBy,
                 page = page,
                 keyword = null,
                 object : ProductSource.ReadProductsCallback {
@@ -76,7 +82,7 @@ class CategoryPresenter(
         }
     }
 
-    override fun loadMoreProducts(selectedCategory: String, page: Int) {
+    override fun loadMoreProducts(selectedCategory: String, sortBy: String, page: Int) {
         val app = view.getAct().application as GlobalApplication
 
         if (selectedCategory == "행사") {
@@ -93,6 +99,7 @@ class CategoryPresenter(
         } else {
             productData.readProducts(
                 selectedCategory = selectedCategory,
+                sortBy = sortBy,
                 page = page,
                 keyword = null,
                 object : ProductSource.ReadProductsCallback {
@@ -116,11 +123,18 @@ class CategoryPresenter(
                             adapterView.notifyLastItemRemoved()
                         } else {
                             adapterModel.addItems(list)
-                            adapterView.notifyAdapterByRange(adapterModel.getItemCount() - list.size - 1, list.size)
+                            adapterView.notifyAdapterByRange(
+                                adapterModel.getItemCount() - list.size - 1,
+                                list.size
+                            )
                         }
                     }
                 })
         }
+    }
+
+    override fun sortCategoryProducts(newItem: String) {
+
     }
 
     private fun onClickListenerProduct(productItem: ProductItem) =

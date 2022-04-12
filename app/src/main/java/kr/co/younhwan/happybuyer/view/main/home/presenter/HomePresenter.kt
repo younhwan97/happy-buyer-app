@@ -110,6 +110,7 @@ class HomePresenter(
 
         productData.readProducts(
             selectedCategory = "total",
+            sortBy = null,
             page = 1,
             keyword = null,
             object : ProductSource.ReadProductsCallback {

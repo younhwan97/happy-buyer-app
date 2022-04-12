@@ -19,6 +19,8 @@ class CategoryActivity : AppCompatActivity() {
 
     val fragmentList = ArrayList<Fragment>()
 
+    var sortBy : String = "추천순"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewDataBinding = ActivityCategoryBinding.inflate(layoutInflater)

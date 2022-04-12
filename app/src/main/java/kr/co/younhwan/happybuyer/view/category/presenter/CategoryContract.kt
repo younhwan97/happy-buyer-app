@@ -4,10 +4,10 @@ import android.content.Context
 import kr.co.younhwan.happybuyer.data.ProductItem
 import kr.co.younhwan.happybuyer.view.category.CategoryActivity
 
-interface CategoryContract{
-    interface View{
+interface CategoryContract {
+    interface View {
 
-        fun getAct() : CategoryActivity
+        fun getAct(): CategoryActivity
 
         fun createProductInBasketResultCallback(count: Int)
 
@@ -18,11 +18,13 @@ interface CategoryContract{
         fun loadProductsCallback(resultCount: Int)
     }
 
-    interface Model{
+    interface Model {
 
-        fun loadProducts(isClear: Boolean, selectedCategory: String, page:Int)
+        fun sortCategoryProducts(newItem: String)
 
-        fun loadMoreProducts(selectedCategory: String, page: Int)
+        fun loadProducts(isClear: Boolean, selectedCategory: String,  sortBy: String, page: Int)
+
+        fun loadMoreProducts(selectedCategory: String, sortBy: String, page: Int)
 
     }
 }

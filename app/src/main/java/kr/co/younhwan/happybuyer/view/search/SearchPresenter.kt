@@ -146,6 +146,7 @@ class SearchPresenter(
         } else { // 키워드가 존재할 때
             productData.readProducts(
                 selectedCategory = "total",
+                sortBy = null,
                 page= 1,
                 keyword = keyword,
                 readProductsCallback = object : ProductSource.ReadProductsCallback {
