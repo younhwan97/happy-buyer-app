@@ -1,5 +1,6 @@
 package kr.co.younhwan.happybuyer.data.source.product
 
+import android.util.Log
 import kotlinx.coroutines.*
 import kr.co.younhwan.happybuyer.data.ProductItem
 import okhttp3.*
@@ -57,7 +58,7 @@ object ProductRemoteDataSource : ProductSource {
                                 val productStatus = obj.getString("status")
                                 val productCategory = obj.getString("category")
 
-                                if (productStatus == "판매중" && (selectedCategory == "total" || productCategory == selectedCategory)) {
+                                if (productStatus == "판매중" && (selectedCategory == "전체" || productCategory == selectedCategory)) {
                                     val productId = obj.getInt("product_id")
                                     val productName = obj.getString("name")
                                     val productPrice = obj.getInt("price")

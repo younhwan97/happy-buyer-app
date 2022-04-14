@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.adapter.product.ProductAdapter
@@ -26,21 +27,10 @@ import kr.co.younhwan.happybuyer.view.main.home.presenter.HomeContract
 import kr.co.younhwan.happybuyer.view.main.home.presenter.HomePresenter
 import kr.co.younhwan.happybuyer.view.product.ProductActivity
 import kr.co.younhwan.happybuyer.view.search.SearchActivity
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper
 
 class HomeFragment : Fragment(), HomeContract.View {
     private lateinit var viewDataBinding: FragmentHomeBinding
-
-    private val homeAdapter: HomeAdapter by lazy {
-        HomeAdapter()
-    }
-
-    private val eventAdapter: ProductAdapter by lazy {
-        ProductAdapter("home")
-    }
-
-    private val popularAdapter: ProductAdapter by lazy {
-        ProductAdapter("home")
-    }
 
     private val homePresenter: HomePresenter by lazy {
         HomePresenter(
@@ -58,7 +48,18 @@ class HomeFragment : Fragment(), HomeContract.View {
         )
     }
 
-    /* Data */
+    private val homeAdapter: HomeAdapter by lazy {
+        HomeAdapter()
+    }
+
+    private val eventAdapter: ProductAdapter by lazy {
+        ProductAdapter("home")
+    }
+
+    private val popularAdapter: ProductAdapter by lazy {
+        ProductAdapter("home")
+    }
+
     private lateinit var categoryLabelList: ArrayList<String>
 
     override fun onCreateView(
@@ -66,63 +67,68 @@ class HomeFragment : Fragment(), HomeContract.View {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewDataBinding = FragmentHomeBinding.inflate(inflater) // Data Binding
-
+        viewDataBinding = FragmentHomeBinding.inflate(inflater)
         return viewDataBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        homePresenter.run {
-            // load item by presenter
-            loadCategories(requireContext(), false)
-            loadEventProduct(false)
-            loadPopularProduct(false)
+        // 엑티비티
+        val act = activity as MainActivity
+
+        // 카테고리, 행사 상품 및 인기 상품 로드
+        homePresenter.loadCategories(true, requireContext())
+        homePresenter.loadEventProduct(true)
+        homePresenter.loadPopularProduct(true)
+
+        // 전체 컨테이너
+        OverScrollDecoratorHelper.setUpOverScroll(viewDataBinding.homeContentContainer)
+
+        // 검색
+        viewDataBinding.homeSearchContainer.setOnClickListener {
+            act.startActivity(Intent(act, SearchActivity::class.java))
         }
 
-        viewDataBinding.run {
-            // set item in data binding
-            homeCategoryRecycler.run {
-                adapter = homeAdapter
-                layoutManager = GridLayoutManager(requireContext(), 4)
-                addItemDecoration(homeAdapter.RecyclerDecoration())
+        // 카테고리 리사이클러 뷰
+        viewDataBinding.homeCategoryRecycler.adapter = homeAdapter
+        viewDataBinding.homeCategoryRecycler.layoutManager =
+            object : GridLayoutManager(context, 4) {
+                override fun canScrollHorizontally() = false
+                override fun canScrollVertically() = false
             }
+        viewDataBinding.homeCategoryRecycler.addItemDecoration(homeAdapter.RecyclerDecoration())
 
-            homeEventRecycler.run {
-                adapter = eventAdapter
-                layoutManager =
-                    LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-                addItemDecoration(eventAdapter.RecyclerDecoration())
+        // 행사 상품 리사이클러 뷰
+        viewDataBinding.homeEventRecycler.adapter = eventAdapter
+        viewDataBinding.homeEventRecycler.layoutManager =
+            object : LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false) {
+                override fun canScrollHorizontally() = true
+                override fun canScrollVertically() = false
             }
+        viewDataBinding.homeEventRecycler.addItemDecoration(eventAdapter.RecyclerDecoration())
+        viewDataBinding.homeEventRecycler.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+        OverScrollDecoratorHelper.setUpOverScroll(
+            viewDataBinding.homeEventRecycler,
+            OverScrollDecoratorHelper.ORIENTATION_HORIZONTAL
+        )
 
-            homePopularRecycler.run {
-                adapter = popularAdapter
-                layoutManager =
-                    LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-                addItemDecoration(popularAdapter.RecyclerDecoration())
+        // 인기 상품 리사이클러 뷰
+        viewDataBinding.homePopularRecycler.adapter = popularAdapter
+        viewDataBinding.homePopularRecycler.layoutManager =
+            object : LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false) {
+                override fun canScrollHorizontally() = true
+                override fun canScrollVertically() = false
             }
-
-            homeSearchContainer.setOnClickListener {
-                val act = activity as MainActivity
-                act.startActivity(Intent(act, SearchActivity::class.java))
-            }
-
-            homeMoreBtn.setOnClickListener {
-
-            }
-
-            homeEventMoreBtn.setOnClickListener {
-                createCategoryActivity(0)
-            }
-
-            homePopularMoreBtn.setOnClickListener {
-
-            }
-        }
+        viewDataBinding.homePopularRecycler.addItemDecoration(popularAdapter.RecyclerDecoration())
+        viewDataBinding.homePopularRecycler.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+        OverScrollDecoratorHelper.setUpOverScroll(
+            viewDataBinding.homePopularRecycler,
+            OverScrollDecoratorHelper.ORIENTATION_HORIZONTAL
+        )
     }
 
-    override fun setCategoryLabelList(list: ArrayList<CategoryItem>) {
+    override fun loadCategoriesCallback(list: ArrayList<CategoryItem>) {
         val temp = ArrayList<String>()
 
         for (index in list)
@@ -139,7 +145,7 @@ class HomeFragment : Fragment(), HomeContract.View {
         act.startActivity(categoryIntent)
     }
 
-    override fun createProductActivity(productItem: ProductItem){
+    override fun createProductActivity(productItem: ProductItem) {
         val act = activity as MainActivity
         val productIntent = Intent(act, ProductActivity::class.java)
         productIntent.putExtra("productItem", productItem)
@@ -152,7 +158,7 @@ class HomeFragment : Fragment(), HomeContract.View {
     override fun getAct() = activity as MainActivity
 
     override fun createProductInBasketResultCallback(count: Int) {
-        when(count){
+        when (count) {
             0 -> {
                 Snackbar.make(viewDataBinding.root, "알 수 없는 에러가 발생했습니다.", Snackbar.LENGTH_SHORT)
             }

@@ -12,10 +12,13 @@ import kr.co.younhwan.happybuyer.view.main.home.adapter.main.contract.HomeAdapte
 class HomeAdapter :
     RecyclerView.Adapter<HomeViewHolder>(), HomeAdapterContract.Model, HomeAdapterContract.View {
 
-    private lateinit var categoryList: ArrayList<CategoryItem>
+    // 아이템
+    private var categoryList = ArrayList<CategoryItem>()
 
+    // 이벤트 리스너
     override var onClickFuncOfCategoryItem: ((Int) -> Unit)? = null
 
+    // 메서드
     override fun getItemCount() = categoryList.size
 
     override fun getItem(position: Int) = categoryList[position]
@@ -25,7 +28,7 @@ class HomeAdapter :
     override fun notifyAdapter() = notifyDataSetChanged()
 
     override fun addItems(categoryItems: ArrayList<CategoryItem>) {
-        this.categoryList = categoryItems
+        categoryList.addAll(categoryItems)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {

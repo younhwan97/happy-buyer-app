@@ -7,8 +7,7 @@ import kr.co.younhwan.happybuyer.view.main.MainActivity
 
 interface HomeContract {
     interface View {
-        // View method
-        fun setCategoryLabelList(list: ArrayList<CategoryItem>)
+        fun loadCategoriesCallback(list: ArrayList<CategoryItem>)
 
         fun createCategoryActivity(adapterPosition: Int)
 
@@ -23,7 +22,7 @@ interface HomeContract {
 
     interface Presenter {
         // Presenter method
-        fun loadCategories(context: Context, isClear: Boolean)
+        fun loadCategories(isClear: Boolean, context: Context)
 
         fun loadEventProduct(isClear: Boolean)
 
