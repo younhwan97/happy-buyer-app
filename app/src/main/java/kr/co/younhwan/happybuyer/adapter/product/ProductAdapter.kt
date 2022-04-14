@@ -24,7 +24,7 @@ class ProductAdapter(private val usingBy: String?) :
 
     // 이벤트 리스너
     override var onClickFuncOfProduct: ((ProductItem) -> Unit)? = null
-    override var onClickFuncOfBasketBtn: ((Int, Int) -> Unit)? = null
+    override var onClickFuncOfBasketBtn: ((Int) -> Unit)? = null
 
     // 메서드
     override fun getItemCount() = this.productItemList.size

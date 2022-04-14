@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.text.Editable
-import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -54,7 +53,7 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
 
         // 로딩 뷰 셋팅
         viewDataBinding.orderView.visibility = View.GONE
-        viewDataBinding.orderBtnContainer.visibility = View.GONE
+        viewDataBinding.orderBottomBtnContainer.visibility = View.GONE
         viewDataBinding.orderLoadingView.visibility = View.VISIBLE
         viewDataBinding.orderLoadingImage.playAnimation()
 
@@ -87,7 +86,7 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
                     if (it.resultCode == RESULT_OK) {
                         // 로딩 뷰 셋팅
                         viewDataBinding.orderView.visibility = View.GONE
-                        viewDataBinding.orderBtnContainer.visibility = View.GONE
+                        viewDataBinding.orderBottomBtnContainer.visibility = View.GONE
                         viewDataBinding.orderLoadingView.visibility = View.VISIBLE
                         viewDataBinding.orderLoadingImage.playAnimation()
                         completeAsyncTask = true
@@ -129,7 +128,7 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
                             )
                         }
 
-                        snack.setAnchorView(R.id.orderBtnContainer)
+                        snack.setAnchorView(R.id.orderBottomBtnContainer)
                         snack.show()
                     }
                 }
@@ -268,7 +267,7 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
         if (completeAsyncTask) {
             // 로딩 뷰 종료
             viewDataBinding.orderView.visibility = View.VISIBLE
-            viewDataBinding.orderBtnContainer.visibility = View.VISIBLE
+            viewDataBinding.orderBottomBtnContainer.visibility = View.VISIBLE
             viewDataBinding.orderLoadingView.visibility = View.GONE
             viewDataBinding.orderLoadingImage.pauseAnimation()
         } else {
@@ -281,7 +280,7 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
             if (completeAsyncTask) {
                 // 로딩 뷰 종료
                 viewDataBinding.orderView.visibility = View.VISIBLE
-                viewDataBinding.orderBtnContainer.visibility = View.VISIBLE
+                viewDataBinding.orderBottomBtnContainer.visibility = View.VISIBLE
                 viewDataBinding.orderLoadingView.visibility = View.GONE
                 viewDataBinding.orderLoadingImage.pauseAnimation()
             } else {
@@ -314,7 +313,7 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
         if (orderItem.orderId == -1) {
             // 주문이 실패했을 때
             val snack = Snackbar.make(viewDataBinding.root, "주문에 실패했습니다.", Snackbar.LENGTH_LONG)
-            snack.setAnchorView(R.id.orderBtnContainer)
+            snack.setAnchorView(R.id.orderBottomBtnContainer)
             snack.show()
         } else {
             // 주문이 성공적으로 완료되었을 때

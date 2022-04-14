@@ -20,7 +20,7 @@ interface HomeContract {
 
         fun createProductActivity(productItem: ProductItem)
 
-        fun createProductInBasketResultCallback(count: Int)
+        fun createProductInBasketResultCallback(resultCount: Int)
 
         fun getAct() : MainActivity
     }

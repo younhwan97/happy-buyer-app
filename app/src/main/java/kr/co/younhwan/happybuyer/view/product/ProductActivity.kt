@@ -2,9 +2,9 @@ package kr.co.younhwan.happybuyer.view.product
 
 import android.content.Intent
 import android.graphics.Paint
+import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -29,130 +29,127 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
         )
     }
 
-    var productItem: ProductItem? = null
-    private val decimal = DecimalFormat("#,###")
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewDataBinding = ActivityProductBinding.inflate(layoutInflater)
         setContentView(viewDataBinding.root)
 
-        productItem = intent.getParcelableExtra("productItem")
-        if(productItem == null) finish()
+        // 인텐트에서 데이터 추출
+        val product = intent.getParcelableExtra<ProductItem>("product")
 
-        // 툴바
-        viewDataBinding.productToolbar.setNavigationOnClickListener {
+        if (product == null) {
             finish()
-        }
+        } else {
+            val decimal = DecimalFormat("#,###")
 
-        // 상품 및 바텀 시트
-        viewDataBinding.productName.text = productItem!!.productName // 상품 이름
-        viewDataBinding.bottomSheetProductName.text = productItem!!.productName // 바텀시트 상품이름
-        viewDataBinding.productPrice.text = decimal.format(productItem!!.productPrice) // 상품 가격
-        viewDataBinding.productPrice.paintFlags = 0
-        viewDataBinding.productPriceSubText.paintFlags = 0
-        viewDataBinding.productEventPriceContainer.visibility = View.GONE
-        viewDataBinding.bottomSheetProductTotalPrice.text = decimal.format(productItem!!.productPrice)
-        viewDataBinding.bottomSheetBtn.text =  decimal.format(productItem!!.productPrice).plus("원 장바구니 담기")
-
-
-        viewDataBinding.run {
-            // Bottom Sheet
-            val bottomSheetBehavior = BottomSheetBehavior.from(productBottomSheet)
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN // 처음 화면을 켰을 때 시트가 닫혀있도록 설정
-            bottomSheetCloseBtn.setOnClickListener {
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-            }
-
-            bottomSheetProductCount.text = "1"
-            bottomSheetPlusBtn.setOnClickListener {
-                var count = (bottomSheetProductCount.text).toString().toInt()
-
-                if (count < 20) {
-                    count = count.plus(1)
-                    bottomSheetProductCount.text = count.toString()
-
-                    if (productItem!!.onSale) {
-                        (productItem!!.eventPrice) * (count)
-                    } else {
-                        (productItem!!.productPrice) * (count)
-                    }.apply {
-                        bottomSheetProductTotalPrice.text = decimal.format(this)
-                        bottomSheetBtn.text = decimal.format(this).plus("원 장바구니 담기")
-                    }
-                }
-            }
-
-            bottomSheetMinusBtn.setOnClickListener {
-                var count = (bottomSheetProductCount.text).toString().toInt()
-
-                if (count > 1) {
-                    count = count.minus(1)
-                    bottomSheetProductCount.text = count.toString()
-
-                    if (productItem!!.onSale) {
-                        (productItem!!.eventPrice) * (count)
-                    } else {
-                        (productItem!!.productPrice) * (count)
-                    }.apply {
-                        bottomSheetProductTotalPrice.text = decimal.format(this)
-                        bottomSheetBtn.text = decimal.format(this).plus("원 장바구니 담기")
-                    }
-                }
-            }
-
-            bottomSheetBtn.setOnClickListener {
-                val count = (bottomSheetProductCount.text).toString().toInt()
-
-                val app = application as GlobalApplication
-                productPresenter.createProductInBasket(
-                    app.kakaoAccountId,
-                    productItem!!.productId,
-                    count
-                )
+            // 툴바
+            viewDataBinding.productToolbar.setNavigationOnClickListener {
+                finish()
             }
 
             // 상품 이미지
-            Glide.with(productImage.context).load(productItem!!.productImageUrl).into(productImage)
+            Glide.with(viewDataBinding.productImage.context)
+                .load(product.productImageUrl)
+                .into(viewDataBinding.productImage)
 
+            // 상품 이름
+            viewDataBinding.productName.text = product.productName
 
+            // 상품 가격
+            viewDataBinding.productPrice.text = decimal.format(product.productPrice)
+            if (product.onSale) {
+                // 상품이 행사중 일 때
+                viewDataBinding.productEventPriceContainer.visibility = View.VISIBLE
+                viewDataBinding.productEventPrice.text = decimal.format(product.eventPrice)
+                viewDataBinding.productEventPercent.text =
+                    ((100 - (product.productPrice / product.eventPrice)).toString())
 
-            if (productItem!!.onSale) {
-                productPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-                productPriceSubText.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-                //productPrice.setTextAppearance(R.style.ProductPriceTheme)
-                //productPriceSubText.setTextAppearance(R.style.ProductPriceTheme)
-                // 행사 가격
-                productEventPriceContainer.visibility = View.VISIBLE
-                productEventPrice.text = decimal.format(productItem!!.eventPrice)
-                productEventPercent.text =
-                    ((100 - (productItem!!.productPrice / productItem!!.eventPrice)).toString()).plus(
-                        "%"
-                    )
-                bottomSheetProductTotalPrice.text =
-                    decimal.format(productItem!!.eventPrice) // bottom sheet
-                bottomSheetBtn.text =
-                    decimal.format(productItem!!.eventPrice).plus("원 장바구니 담기") // bottom sheet
+                viewDataBinding.productPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+                viewDataBinding.productPriceSubText.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+            } else {
+                // 상품이 행사중이 아닐 때
+                viewDataBinding.productEventPriceContainer.visibility = View.GONE
+
+                viewDataBinding.productPrice.setTextAppearance(R.style.NumberTextView_Bold)
+                viewDataBinding.productPrice.textSize = 18F
+                viewDataBinding.productPrice.typeface = Typeface.DEFAULT_BOLD
+                viewDataBinding.productPriceSubText.setTextAppearance(R.style.TextView_Bold)
+                viewDataBinding.productPriceSubText.textSize = 14F
+                viewDataBinding.productPriceSubText.typeface = Typeface.DEFAULT_BOLD
+            }
+            
+            // 판매단위
+            
+            // 중량/용량
+            
+            // 상품 설명
+
+            // 바텀 시트
+            val bottomSheetBehavior = BottomSheetBehavior.from(viewDataBinding.productBottomSheet)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
+            // 구매 버튼
+            viewDataBinding.productPurchaseBtn.setOnClickListener {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             }
 
-            // 찜하기 버튼
-            image.isSelected = false
+            // (바텀 시트) 닫기 버튼
+            viewDataBinding.productBottomSheetClostBtn.setOnClickListener {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            }
 
-            val app = application as GlobalApplication
-            for (item in app.wishedProductId) {
-                if (productItem!!.productId == item) {
-                    image.isSelected = true
-                    break
+            // (바텀 시트) 상품 이름
+            viewDataBinding.productName.text = product.productName
+
+            // (바텀 시트) 상품 개수 및 개수 조절 버튼
+            viewDataBinding.productBottomSheetCount.text = "1"
+            viewDataBinding.productBottomSheetPlusBtn.setOnClickListener {
+                var count = (viewDataBinding.productBottomSheetCount.text).toString().toInt()
+
+                if (count < 20) {
+                    count = count.plus(1)
+                    viewDataBinding.productBottomSheetCount.text = count.toString()
+
+                    val calculatedPrice = if (product.onSale) {
+                        (product.eventPrice) * (count)
+                    } else {
+                        (product.productPrice) * (count)
+                    }
+
+                    viewDataBinding.productBottomSheetPrice.text = decimal.format(calculatedPrice)
+                    viewDataBinding.productBottomSheetBtn.text =
+                        decimal.format(calculatedPrice).plus("원 장바구니 담기")
                 }
             }
 
-            productWishedBtn.setOnClickListener {
-                productPresenter.clickWishedBtn(productItem!!.productId)
+            viewDataBinding.productBottomSheetMinusBtn.setOnClickListener {
+                var count = (viewDataBinding.productBottomSheetCount.text).toString().toInt()
+
+                if (count > 1) {
+                    count = count.minus(1)
+                    viewDataBinding.productBottomSheetCount.text = count.toString()
+
+                    val calculatedPrice = if (product.onSale) {
+                        (product.eventPrice) * (count)
+                    } else {
+                        (product.productPrice) * (count)
+                    }
+
+                    viewDataBinding.productBottomSheetPrice.text = decimal.format(calculatedPrice)
+                    viewDataBinding.productBottomSheetBtn.text =
+                        decimal.format(calculatedPrice).plus("원 장바구니 담기")
+                }
             }
 
-            // 구매하기 버튼
-            productPurchaseBtn.setOnClickListener {
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            // (바텀 시트) 상품 가격 및 장바구니 담기 버튼
+            if (product.onSale) {
+                viewDataBinding.productBottomSheetPrice.text = decimal.format(product.eventPrice)
+                viewDataBinding.productBottomSheetBtn.text =
+                    decimal.format(product.eventPrice).plus("원 장바구니 담기")
+            } else {
+                viewDataBinding.productBottomSheetPrice.text = decimal.format(product.productPrice)
+                viewDataBinding.productBottomSheetBtn.text =
+                    decimal.format(product.productPrice).plus("원 장바구니 담기")
             }
         }
     }
@@ -171,7 +168,7 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
                 app.wishedProductId.add(productId)
 
                 // 뷰 업데이트
-                viewDataBinding.image.isSelected = true
+               // viewDataBinding.image.isSelected = true
                 viewDataBinding.productWishedBtn.likeAnimation()
 
                 // 스낵바 리턴
@@ -192,7 +189,7 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
                 }
 
                 // 뷰 업데이트
-                viewDataBinding.image.isSelected = false
+                //viewDataBinding.image.isSelected = false
 
                 // 스낵바 리턴
                 Snackbar.make(
@@ -206,13 +203,13 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
                 Snackbar.make(viewDataBinding.root, "알 수 없는 에러가 발생했습니다.", Snackbar.LENGTH_SHORT)
             }
         }.apply {
-            setAnchorView(R.id.productBottomNav)
+            setAnchorView(R.id.productBottomBtnContainer)
             show()
         }
     }
 
     override fun createProductInBasketResultCallback(count: Int) {
-        when(count){
+        when (count) {
             0 -> {
                 Snackbar.make(viewDataBinding.root, "알 수 없는 에러가 발생했습니다.", Snackbar.LENGTH_SHORT)
             }

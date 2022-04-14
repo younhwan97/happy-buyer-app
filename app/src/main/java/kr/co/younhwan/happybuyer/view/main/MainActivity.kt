@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
     private val mainPresenter: MainPresenter by lazy {
         MainPresenter(
-            this
+            view = this
         )
     }
 
@@ -45,11 +45,12 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         viewDataBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewDataBinding.root)
 
-        // 인텐트에서 데이터 추출
-        if(intent.hasExtra("init_frag")){
-            when(intent.getStringExtra("init_frag")){
+        // 인텐트에서 데이터 추출 및 프래그먼트 셋팅
+        if (intent.hasExtra("init_frag")) {
+            when (intent.getStringExtra("init_frag")) {
                 "order_history" -> {
-                    viewDataBinding.mainBottomNavigation.selectedItemId = R.id.orderHistoryInBottomNav
+                    viewDataBinding.mainBottomNavigation.selectedItemId =
+                        R.id.orderHistoryInBottomNav
                     replace(R.id.mainContentContainer, orderHistoryFragment)
                 }
 
@@ -61,8 +62,10 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             replace(R.id.mainContentContainer, homeFragment)
         }
 
-        mainPresenter.requestPermission() // 권한 요청
+        // 권한 요청
+        mainPresenter.requestPermission()
 
+        // 툴바
         viewDataBinding.mainToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.basketInMain -> {
@@ -74,6 +77,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             }
         }
 
+        // 바텀 네비게이션
         viewDataBinding.mainBottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.homeInBottomNav -> {
@@ -81,26 +85,34 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                     replace(R.id.mainContentContainer, homeFragment)
                     true
                 }
+
                 R.id.wishedInBottomNav -> {
                     viewDataBinding.mainToolbar.title = "찜한 상품"
                     replace(R.id.mainContentContainer, wishedFragment)
                     true
                 }
-                R.id.accountInBottomNav -> {
-                    if ((application as GlobalApplication).isLogined) { // 로그인 상태
-                        viewDataBinding.mainToolbar.title = "계정"
-                        replace(R.id.mainContentContainer, accountFragment)
-                    } else { // 비로그인 상태
-                        val loginIntent = Intent(this, LoginActivity::class.java)
-                        startForResult.launch(loginIntent)
-                    }
-                    true
-                }
+
                 R.id.orderHistoryInBottomNav -> {
                     viewDataBinding.mainToolbar.title = "주문내역"
                     replace(R.id.mainContentContainer, orderHistoryFragment)
                     true
                 }
+
+                R.id.accountInBottomNav -> {
+                    val app = application as GlobalApplication
+
+                    if (app.isLogined) {
+                        // 로그인 상태
+                        viewDataBinding.mainToolbar.title = "계정"
+                        replace(R.id.mainContentContainer, accountFragment)
+                    } else {
+                        // 비로그인 상태
+                        val loginIntent = Intent(this, LoginActivity::class.java)
+                        startForResult.launch(loginIntent)
+                    }
+                    true
+                }
+
                 else -> false
             }
         }

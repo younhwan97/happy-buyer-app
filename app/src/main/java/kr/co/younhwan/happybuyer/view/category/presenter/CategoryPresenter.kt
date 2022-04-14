@@ -22,8 +22,8 @@ class CategoryPresenter(
 ) : CategoryContract.Model {
 
     init {
-        adapterView.onClickFuncOfBasketBtn = { i, j ->
-            onClickListenerOfBasketBtn(i, j)
+        adapterView.onClickFuncOfBasketBtn = {
+            onClickListenerOfBasketBtn(it)
         }
 
         adapterView.onClickFuncOfProduct = {
@@ -141,7 +141,7 @@ class CategoryPresenter(
     private fun onClickListenerProduct(productItem: ProductItem) =
         view.createProductActivity(productItem)
 
-    private fun onClickListenerOfBasketBtn(productId: Int, position: Int) {
+    private fun onClickListenerOfBasketBtn(productId: Int) {
         val app = ((view.getAct()).application) as GlobalApplication
 
         if (app.isLogined) {

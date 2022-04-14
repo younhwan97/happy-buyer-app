@@ -7,7 +7,7 @@ interface ProductAdapterContract {
     interface View{
 
         var onClickFuncOfProduct: ((ProductItem) -> Unit)?
-        var onClickFuncOfBasketBtn: ((Int, Int) -> Unit)?
+        var onClickFuncOfBasketBtn: ((Int) -> Unit)?
 
         fun notifyAdapter()
 

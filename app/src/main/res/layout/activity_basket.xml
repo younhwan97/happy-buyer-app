@@ -9,7 +9,8 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_above="@id/basketBottomBtnContainer">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
@@ -20,10 +21,10 @@
                 style="@style/Widget.App.Toolbar.Light"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                android:elevation="0dp"
                 app:navigationIcon="@drawable/ic_back_24"
                 app:title="장바구니"
-                app:titleCentered="true"
-                android:elevation="0dp"/>
+                app:titleCentered="true" />
 
             <RelativeLayout
                 android:id="@+id/basketTopContainer"
@@ -69,12 +70,11 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <!-- Note: A RecyclerView can also be used -->
-
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true"
+            android:overScrollMode="never"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout
@@ -293,11 +293,6 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="88dp"
-                        android:background="@color/bgColorWhite"
-                        android:orientation="horizontal"></LinearLayout>
                 </LinearLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -323,24 +318,28 @@
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="68dp"
-            android:layout_gravity="bottom"
-            android:background="@color/bgColorWhite"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/basketPurchaseBtn"
-                style="@style/Button.Bold"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="4dp"
-                android:layout_weight="1"
-                android:text="Button" />
-        </LinearLayout>
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <LinearLayout
+        android:id="@+id/basketBottomBtnContainer"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="4dp"
+        android:background="@color/bgColorWhite"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/basketPurchaseBtn"
+            style="@style/Button.Bold"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:text="Button"
+            android:textSize="16sp" />
+    </LinearLayout>
 </RelativeLayout>

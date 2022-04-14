@@ -35,16 +35,16 @@ class HomePresenter(
             onClickListenerCategoryItem(i)
         }
 
-        eventAdapterView.onClickFuncOfBasketBtn = { i: Int, j: Int ->
-            onClickListenerOfBasketBtn(i, j)
+        eventAdapterView.onClickFuncOfBasketBtn = {
+            onClickListenerOfBasketBtn(it)
         }
 
         eventAdapterView.onClickFuncOfProduct = {
             onClickListenerOfProduct(it)
         }
 
-        popularAdapterView.onClickFuncOfBasketBtn = { i: Int, j: Int ->
-            onClickListenerOfBasketBtn(i, j)
+        popularAdapterView.onClickFuncOfBasketBtn = {
+            onClickListenerOfBasketBtn(it)
         }
 
         popularAdapterView.onClickFuncOfProduct = {
@@ -114,29 +114,24 @@ class HomePresenter(
             }
         )
     }
-    
+
     private fun onClickListenerOfProduct(productItem: ProductItem) =
         view.createProductActivity(productItem)
 
-    private fun onClickListenerOfBasketBtn(productId: Int, position: Int) {
-        val app = ((view.getAct()).application) as GlobalApplication
-
-        if (!app.isLogined) {
-            view.createLoginActivity()
-        } else {
+    private fun onClickListenerOfBasketBtn(productId: Int) {
+        if (app.isLogined) {
             basketData.createOrUpdateProduct(
                 kakaoAccountId = app.kakaoAccountId,
                 productId = productId,
                 count = 1,
                 object : BasketSource.CreateOrUpdateProductCallback {
                     override fun onCreateOrUpdateProduct(resultCount: Int) {
-                        if (resultCount in 1..20) {
-
-                            view.createProductInBasketResultCallback(resultCount)
-                        }
+                        view.createProductInBasketResultCallback(resultCount)
                     }
                 }
             )
+        } else {
+            view.createLoginActivity()
         }
     }
 }

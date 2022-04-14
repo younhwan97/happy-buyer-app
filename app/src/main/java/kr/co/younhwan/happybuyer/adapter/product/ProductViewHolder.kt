@@ -15,7 +15,7 @@ class ProductViewHolder(
     private val parent: ViewGroup,
     itemBinding: ProductItemBinding,
     private val listenerFuncOfProduct: ((ProductItem) -> Unit)?,
-    private val listenerFuncOfBasketBtn: ((Int, Int) -> Unit)?
+    private val listenerFuncOfBasketBtn: ((Int) -> Unit)?
 ) : RecyclerView.ViewHolder(itemBinding.root) {
 
     private val productImage by lazy {
@@ -91,7 +91,7 @@ class ProductViewHolder(
         // 장바구니 버튼
         productBasketBtn.isClickable = true
         productBasketBtn.setOnClickListener {
-            listenerFuncOfBasketBtn?.invoke(productItem.productId, adapterPosition)
+            listenerFuncOfBasketBtn?.invoke(productItem.productId)
         }
 
         // 이미지

@@ -258,7 +258,7 @@ class CategoryFragment : Fragment(), CategoryContract.View {
     override fun createProductActivity(productItem: ProductItem) {
         val act = activity as CategoryActivity
         val productIntent = Intent(act, ProductActivity::class.java)
-        productIntent.putExtra("productItem", productItem)
+        productIntent.putExtra("product", productItem)
         act.startActivity(productIntent)
     }
 }

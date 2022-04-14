@@ -113,13 +113,13 @@
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/drawable/wished_btn_selector.xml" value="0.1585" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_add_address.xml" value="0.4822916666666667" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_address.xml" value="0.48333333333333334" />
-        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_basket.xml" value="0.5" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_basket.xml" value="0.33" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_category.xml" value="0.33" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_create_address.xml" value="0.4822916666666667" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_login.xml" value="0.27685185185185185" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_order.xml" value="0.33" />
-        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_order_detail.xml" value="0.4915254237288136" />
+        <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_order_detail.xml" value="0.33" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_order_history.xml" value="0.5" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_order_success.xml" value="0.33" />
         <entry key="..\:/Users/165705/Desktop/dev/happy-buyer-app/app/src/main/res/layout/activity_product.xml" value="0.33" />

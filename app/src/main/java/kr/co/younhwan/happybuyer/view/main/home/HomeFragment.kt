@@ -142,7 +142,7 @@ class HomeFragment : Fragment(), HomeContract.View {
     }
 
     override fun loadEventProductsCallback(resultCount: Int) {
-        if(resultCount == 0){
+        if (resultCount == 0) {
             viewDataBinding.homeEventContainer.visibility = View.GONE
         } else {
             viewDataBinding.homeEventContainer.visibility = View.VISIBLE
@@ -150,7 +150,7 @@ class HomeFragment : Fragment(), HomeContract.View {
     }
 
     override fun loadPopularProductsCallback(resultCount: Int) {
-        if(resultCount == 0){
+        if (resultCount == 0) {
             viewDataBinding.homePopularContainer.visibility = View.GONE
         } else {
             viewDataBinding.homePopularContainer.visibility = View.VISIBLE
@@ -177,14 +177,18 @@ class HomeFragment : Fragment(), HomeContract.View {
 
     override fun getAct() = activity as MainActivity
 
-    override fun createProductInBasketResultCallback(count: Int) {
-        when (count) {
-            0 -> {
-                Snackbar.make(viewDataBinding.root, "알 수 없는 에러가 발생했습니다.", Snackbar.LENGTH_SHORT)
-            }
-
+    override fun createProductInBasketResultCallback(resultCount: Int) {
+        val snack = when (resultCount) {
             1 -> {
                 Snackbar.make(viewDataBinding.root, "장바구니에 상품을 담았습니다.", Snackbar.LENGTH_SHORT)
+            }
+
+            in 2..19 -> {
+                Snackbar.make(
+                    viewDataBinding.root,
+                    "한 번 더 담으셨네요! \n담긴 수량이 ${resultCount}개가 되었습니다.",
+                    Snackbar.LENGTH_SHORT
+                )
             }
 
             20 -> {
@@ -196,15 +200,11 @@ class HomeFragment : Fragment(), HomeContract.View {
             }
 
             else -> {
-                Snackbar.make(
-                    viewDataBinding.root,
-                    "한 번 더 담으셨네요! \n담긴 수량이 ${count}개가 되었습니다.",
-                    Snackbar.LENGTH_SHORT
-                )
+                Snackbar.make(viewDataBinding.root, "알 수 없는 에러가 발생했습니다.", Snackbar.LENGTH_SHORT)
             }
-        }.apply {
-            setAnchorView(R.id.mainBottomNavigation)
-            show()
         }
+
+        snack.setAnchorView(R.id.mainBottomNavigation)
+        snack.show()
     }
 }

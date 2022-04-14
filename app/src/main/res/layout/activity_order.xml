@@ -10,7 +10,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/orderBtnContainer">
+        android:layout_above="@id/orderBottomBtnContainer">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
@@ -30,6 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true"
+            android:overScrollMode="never"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout
@@ -622,11 +623,13 @@
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <LinearLayout
-        android:id="@+id/orderBtnContainer"
+        android:id="@+id/orderBottomBtnContainer"
         android:layout_width="match_parent"
-        android:layout_height="68dp"
+        android:layout_height="62dp"
         android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="4dp"
         android:background="@color/bgColorWhite"
         android:orientation="horizontal">
 
@@ -635,12 +638,11 @@
             style="@style/Button.Bold"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="4dp"
             android:layout_weight="1"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
             android:text="0원 주문하기"
-            android:textColor="@color/white" />
+            android:textSize="16sp" />
     </LinearLayout>
 
 </RelativeLayout>

@@ -1,16 +1,15 @@
 <resources>
     <string name="app_name">HappyBuyer</string>
 
-    <!-- Order Success -->
-    <string name="order_success_text_1">주문이 완료되었습니다.</string>
-    <string name="order_success_text_2">감사합니다 :)</string>
-    <string name="order_success_be_paid_price">결제금액</string>
-    <string name="order_success_price_zero">0</string>
-    <string name="order_success_price_sub_text">원</string>
-    <string name="order_success_sub_text_1">· [주문접수] 상태일 때 주문내역 상세페이지에서 주문 취소가 가능합니다.</string>
-    <string name="order_success_sub_text_2">· 주문 / 배달 및 기타 문의가 있을 경우, 마트로 문의주시면 신속히 해결해드리겠습니다.</string>
-    <string name="order_success_detail_btn_text">주문 상세보기</string>
-    <string name="order_success_close_btn_text">쇼핑 계속하기</string>
+    <!-- Home -->
+    <string name="home_search_text">찾는 상품이 뭐예요?</string>
+    <string name="home_category_more_btn_text">모든 카테고리 보기</string>
+    <string name="home_event_title">행사 상품 추천</string>
+    <string name="home_event_more_btn_text">더보기</string>
+    <string name="home_popular_title">인기 상품 추천</string>
+
+    <!-- Wished -->
+
 
     <!-- Order Detail -->
     <string name="order_detail_id_title">주문번호</string>
@@ -35,6 +34,18 @@
     <string name="order_detail_defective_handling_method_title">결품발생 시 처리 방법</string>
     <string name="order_detail_defective_handling_method_option_1">해당 상품 제외 후 배달</string>
     <string name="order_detail_defective_handling_method_option_2">주문 전체 취소</string>
+
+    <!-- Order Success -->
+    <string name="order_success_text_1">주문이 완료되었습니다.</string>
+    <string name="order_success_text_2">감사합니다 :)</string>
+    <string name="order_success_be_paid_price">결제금액</string>
+    <string name="order_success_price_zero">0</string>
+    <string name="order_success_price_sub_text">원</string>
+    <string name="order_success_sub_text_1">· [주문접수] 상태일 때 주문내역 상세페이지에서 주문 취소가 가능합니다.</string>
+    <string name="order_success_sub_text_2">· 주문 / 배달 및 기타 문의가 있을 경우, 마트로 문의주시면 신속히 해결해드리겠습니다.</string>
+    <string name="order_success_detail_btn_text">주문 상세보기</string>
+    <string name="order_success_close_btn_text">쇼핑 계속하기</string>
+
 
 
 
