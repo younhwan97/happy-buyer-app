@@ -75,7 +75,7 @@ class HomePresenter(
 
     private fun onClickListenerCategoryItem(position: Int) = view.createCategoryActivity(position)
 
-    override fun loadEventProduct(isClear: Boolean) {
+    override fun loadEventProducts(isClear: Boolean) {
         eventData.readProducts(
             sortBy = "판매순",
             page = 1,
@@ -84,6 +84,7 @@ class HomePresenter(
                     if (isClear)
                         eventAdapterModel.clearItem()
 
+                    view.loadEventProductsCallback(list.size)
                     eventAdapterModel.addItems(list)
                     eventAdapterView.deleteLoading()
                     eventAdapterView.notifyAdapter()
@@ -92,7 +93,7 @@ class HomePresenter(
         )
     }
 
-    override fun loadPopularProduct(isClear: Boolean) {
+    override fun loadPopularProducts(isClear: Boolean) {
         productData.readProducts(
             selectedCategory = "전체",
             sortBy = "판매순",
@@ -105,6 +106,7 @@ class HomePresenter(
 
                     val sortedList = ArrayList(list.sortedBy { it.sales }.reversed())
 
+                    view.loadPopularProductsCallback(sortedList.size)
                     popularAdapterModel.addItems(sortedList)
                     popularAdapterView.deleteLoading()
                     popularAdapterView.notifyAdapter()

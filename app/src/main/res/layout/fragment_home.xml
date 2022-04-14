@@ -120,15 +120,24 @@
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
-                    <TextView
+                    <Button
                         android:id="@+id/homeEventMoreBtn"
+                        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignBaseline="@id/homeEventTitle"
-                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
                         android:fontFamily="@font/notosans_kr_regular"
+                        android:includeFontPadding="false"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
                         android:text="더보기"
-                        android:textColor="@color/fontColorGray" />
+                        android:textColor="@color/hbPrimaryDarkColor"
+                        android:textStyle="bold"
+                        app:icon="@drawable/ic_baseline_keyboard_arrow_right_primary_dark_24"
+                        app:iconGravity="textEnd"
+                        app:iconPadding="0dp"
+                        app:iconTint="@color/hbPrimaryDarkColor" />
                 </RelativeLayout>
 
                 <androidx.recyclerview.widget.RecyclerView

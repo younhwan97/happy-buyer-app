@@ -9,6 +9,11 @@ interface HomeContract {
     interface View {
         fun loadCategoriesCallback(list: ArrayList<CategoryItem>)
 
+        fun loadEventProductsCallback(resultCount: Int)
+
+        fun loadPopularProductsCallback(resultCount: Int)
+
+
         fun createCategoryActivity(adapterPosition: Int)
 
         fun createLoginActivity()
@@ -24,8 +29,8 @@ interface HomeContract {
         // Presenter method
         fun loadCategories(isClear: Boolean, context: Context)
 
-        fun loadEventProduct(isClear: Boolean)
+        fun loadEventProducts(isClear: Boolean)
 
-        fun loadPopularProduct(isClear: Boolean)
+        fun loadPopularProducts(isClear: Boolean)
     }
 }

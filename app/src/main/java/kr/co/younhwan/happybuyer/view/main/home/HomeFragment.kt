@@ -79,8 +79,8 @@ class HomeFragment : Fragment(), HomeContract.View {
 
         // 카테고리, 행사 상품 및 인기 상품 로드
         homePresenter.loadCategories(true, requireContext())
-        homePresenter.loadEventProduct(true)
-        homePresenter.loadPopularProduct(true)
+        homePresenter.loadEventProducts(true)
+        homePresenter.loadPopularProducts(true)
 
         // 전체 컨테이너
         OverScrollDecoratorHelper.setUpOverScroll(viewDataBinding.homeContentContainer)
@@ -90,7 +90,7 @@ class HomeFragment : Fragment(), HomeContract.View {
             act.startActivity(Intent(act, SearchActivity::class.java))
         }
 
-        // 카테고리 리사이클러 뷰
+        // 카테고리
         viewDataBinding.homeCategoryRecycler.adapter = homeAdapter
         viewDataBinding.homeCategoryRecycler.layoutManager =
             object : GridLayoutManager(context, 4) {
@@ -99,7 +99,7 @@ class HomeFragment : Fragment(), HomeContract.View {
             }
         viewDataBinding.homeCategoryRecycler.addItemDecoration(homeAdapter.RecyclerDecoration())
 
-        // 행사 상품 리사이클러 뷰
+        // 행사 상품
         viewDataBinding.homeEventRecycler.adapter = eventAdapter
         viewDataBinding.homeEventRecycler.layoutManager =
             object : LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false) {
@@ -113,7 +113,11 @@ class HomeFragment : Fragment(), HomeContract.View {
             OverScrollDecoratorHelper.ORIENTATION_HORIZONTAL
         )
 
-        // 인기 상품 리사이클러 뷰
+        viewDataBinding.homeEventMoreBtn.setOnClickListener {
+            createCategoryActivity(0)
+        }
+
+        // 인기 상품
         viewDataBinding.homePopularRecycler.adapter = popularAdapter
         viewDataBinding.homePopularRecycler.layoutManager =
             object : LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false) {
@@ -135,6 +139,22 @@ class HomeFragment : Fragment(), HomeContract.View {
             temp.add(index.title)
 
         categoryLabelList = temp
+    }
+
+    override fun loadEventProductsCallback(resultCount: Int) {
+        if(resultCount == 0){
+            viewDataBinding.homeEventContainer.visibility = View.GONE
+        } else {
+            viewDataBinding.homeEventContainer.visibility = View.VISIBLE
+        }
+    }
+
+    override fun loadPopularProductsCallback(resultCount: Int) {
+        if(resultCount == 0){
+            viewDataBinding.homePopularContainer.visibility = View.GONE
+        } else {
+            viewDataBinding.homePopularContainer.visibility = View.VISIBLE
+        }
     }
 
     override fun createCategoryActivity(adapterPosition: Int) {
