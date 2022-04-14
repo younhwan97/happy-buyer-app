@@ -14,5 +14,7 @@ interface OrderHistoryContract {
 
     interface Model {
         fun loadOrderHistory(isClear:Boolean, page:Int)
+
+        fun loadMoreOrderHistory(page: Int)
     }
 }

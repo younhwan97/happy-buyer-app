@@ -15,7 +15,7 @@ class ProductAdapter(private val usingBy: String?) :
     ProductAdapterContract.Model,
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    // 뷰타입
+    // 뷰 타입
     val VIEW_TYPE_ITEM = 0
     val VIEW_TYPE_LOADING = 1
 

@@ -7,7 +7,13 @@ interface OrderHistoryAdapterContract {
 
         fun notifyAdapter()
 
+        fun notifyAdapterByRange(start: Int, count:Int)
+
         var onClickFun: ((OrderItem) -> Unit)?
+
+        fun deleteLoading()
+
+        fun notifyLastItemRemoved()
 
     }
 
@@ -16,6 +22,8 @@ interface OrderHistoryAdapterContract {
         fun addItems(orderHistoryItems: ArrayList<OrderItem>)
 
         fun clearItem()
+
+        fun getItemCount(): Int
 
     }
 }

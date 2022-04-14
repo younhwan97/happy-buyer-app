@@ -15,6 +15,7 @@ import kr.co.younhwan.happybuyer.view.main.MainActivity
 import kr.co.younhwan.happybuyer.view.main.wished.adapter.WishedAdapter
 import kr.co.younhwan.happybuyer.view.main.wished.presenter.WishedContract
 import kr.co.younhwan.happybuyer.view.main.wished.presenter.WishedPresenter
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper
 
 class WishedFragment : Fragment(), WishedContract.View {
     private lateinit var viewDataBinding: FragmentWishedBinding
@@ -62,6 +63,10 @@ class WishedFragment : Fragment(), WishedContract.View {
             override fun canScrollVertically() = true
         }
         viewDataBinding.wishedRecycler.addItemDecoration(wishedAdapter.RecyclerDecoration())
+        OverScrollDecoratorHelper.setUpOverScroll(
+            viewDataBinding.wishedRecycler,
+            OverScrollDecoratorHelper.ORIENTATION_VERTICAL
+        )
     }
 
     override fun getAct() = activity as MainActivity

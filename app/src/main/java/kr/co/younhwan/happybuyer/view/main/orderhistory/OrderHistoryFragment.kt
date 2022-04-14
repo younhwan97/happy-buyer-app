@@ -17,6 +17,7 @@ import kr.co.younhwan.happybuyer.view.main.orderhistory.adapter.OrderHistoryAdap
 import kr.co.younhwan.happybuyer.view.main.orderhistory.presenter.OrderHistoryContract
 import kr.co.younhwan.happybuyer.view.main.orderhistory.presenter.OrderHistoryPresenter
 import kr.co.younhwan.happybuyer.view.orderdetail.OrderDetailActivity
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper
 
 class OrderHistoryFragment : Fragment(), OrderHistoryContract.View {
     private lateinit var viewDataBinding: FragmentOrderHistoryBinding
@@ -65,6 +66,13 @@ class OrderHistoryFragment : Fragment(), OrderHistoryContract.View {
                 override fun canScrollHorizontally() = false
                 override fun canScrollVertically() = true
             }
+        viewDataBinding.orderHistoryRecycler.addItemDecoration(orderHistoryAdapter.RecyclerDecoration())
+        OverScrollDecoratorHelper.setUpOverScroll(
+            viewDataBinding.orderHistoryRecycler,
+            OverScrollDecoratorHelper.ORIENTATION_VERTICAL
+        )
+
+        // 주문 내역 리사이클러 뷰 스크롤 이벤트 리스너
         viewDataBinding.orderHistoryRecycler.addOnScrollListener(object :
             RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -74,12 +82,11 @@ class OrderHistoryFragment : Fragment(), OrderHistoryContract.View {
                     // 제일 끝까지 스크롤 했을 때
                     if (nowPage != -1) {
                         nowPage += 1
-                        orderHistoryPresenter.loadOrderHistory(false, nowPage)
+                        orderHistoryPresenter.loadMoreOrderHistory(nowPage)
                     }
                 }
             }
         })
-        viewDataBinding.orderHistoryRecycler.addItemDecoration(orderHistoryAdapter.RecyclerDecoration())
     }
 
     override fun loadOrderHistoryCallback(resultCount: Int) {
