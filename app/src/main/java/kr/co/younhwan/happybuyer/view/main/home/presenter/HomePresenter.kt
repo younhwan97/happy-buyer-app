@@ -82,6 +82,8 @@ class HomePresenter(
         val app = view.getAct().application as GlobalApplication
 
         eventData.readProducts(
+            sortBy = null,
+            page = 1,
             object : EventSource.ReadProductsCallback {
                 override fun onReadProducts(list: ArrayList<ProductItem>) {
                     if (isClear)

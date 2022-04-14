@@ -31,17 +31,19 @@ class CategoryPresenter(
         }
     }
 
+    val app = view.getAct().application as GlobalApplication
+
     override fun loadProducts(
         isClear: Boolean,
         selectedCategory: String,
         sortBy: String,
         page: Int
     ) {
-        val app = view.getAct().application as GlobalApplication
-
         if (selectedCategory == "행사") {
             eventData.readProducts(
-                object : EventSource.ReadProductsCallback {
+                sortBy = sortBy,
+                page = page,
+                readProductsCallback = object : EventSource.ReadProductsCallback {
                     override fun onReadProducts(list: ArrayList<ProductItem>) {
                         if (isClear)
                             adapterModel.clearItem()
@@ -58,21 +60,10 @@ class CategoryPresenter(
                 sortBy = sortBy,
                 page = page,
                 keyword = null,
-                object : ProductSource.ReadProductsCallback {
+                readProductsCallback = object : ProductSource.ReadProductsCallback {
                     override fun onReadProducts(list: ArrayList<ProductItem>) {
                         if (isClear)
                             adapterModel.clearItem()
-
-                        val wishedProductId = app.wishedProductId
-
-                        for (index in 0 until list.size) {
-                            for (id in wishedProductId) {
-                                if (id == list[index].productId) {
-                                    list[index].isWished = true
-                                    break
-                                }
-                            }
-                        }
 
                         view.loadProductsCallback(list.size)
                         adapterModel.addItems(list)
@@ -82,17 +73,30 @@ class CategoryPresenter(
         }
     }
 
-    override fun loadMoreProducts(selectedCategory: String, sortBy: String, page: Int) {
-        val app = view.getAct().application as GlobalApplication
-
+    override fun loadMoreProducts(
+        selectedCategory: String,
+        sortBy: String,
+        page: Int
+    ) {
         if (selectedCategory == "행사") {
             eventData.readProducts(
-                object : EventSource.ReadProductsCallback {
+                sortBy = sortBy,
+                page = page,
+                readProductsCallback = object : EventSource.ReadProductsCallback {
                     override fun onReadProducts(list: ArrayList<ProductItem>) {
-
                         view.loadProductsCallback(list.size)
-                        adapterModel.addItems(list)
-                        adapterView.notifyAdapterByRange((page - 1) * 30, 30)
+                        adapterView.deleteLoading()
+
+                        if (list.size == 0) {
+                            // 더 이상 로드할 데이터가 없는 경우 리사이클러 뷰 마지막에 들어가 있는 로딩뷰만 제거
+                            adapterView.notifyLastItemRemoved()
+                        } else {
+                            adapterModel.addItems(list)
+                            adapterView.notifyAdapterByRange(
+                                adapterModel.getItemCount() - list.size - 1,
+                                list.size
+                            )
+                        }
                     }
                 }
             )
@@ -102,19 +106,8 @@ class CategoryPresenter(
                 sortBy = sortBy,
                 page = page,
                 keyword = null,
-                object : ProductSource.ReadProductsCallback {
+                readProductsCallback = object : ProductSource.ReadProductsCallback {
                     override fun onReadProducts(list: ArrayList<ProductItem>) {
-                        val wishedProductId = app.wishedProductId
-
-                        for (index in 0 until list.size) {
-                            for (id in wishedProductId) {
-                                if (id == list[index].productId) {
-                                    list[index].isWished = true
-                                    break
-                                }
-                            }
-                        }
-
                         view.loadProductsCallback(list.size)
                         adapterView.deleteLoading()
 

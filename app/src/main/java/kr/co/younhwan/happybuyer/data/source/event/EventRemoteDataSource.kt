@@ -13,6 +13,8 @@ object EventRemoteDataSource : EventSource {
 
     // READ
     override fun readProducts(
+        sortBy:String?,
+        page: Int,
         readProductsCallback: EventSource.ReadProductsCallback?
     ) {
         runBlocking {
@@ -20,7 +22,11 @@ object EventRemoteDataSource : EventSource {
 
             launch {
                 // API 서버 주소
-                val site = serverInfo
+                var site = "$serverInfo?page=${page}"
+
+                if (!sortBy.isNullOrEmpty()) {
+                    site += "&sort=${sortBy}"
+                }
 
                 // 데이터를 읽기 위한 GET Request 생성
                 val request = Request.Builder().url(site).get().build()
@@ -38,9 +44,9 @@ object EventRemoteDataSource : EventSource {
                         val json = JSONObject(resultText)
 
                         val success = json.getBoolean("success")
-                        val data = JSONArray(json["data"].toString())
+                        if (success) {
+                            val data = JSONArray(json["data"].toString())
 
-                        if (success) { // 이벤트 상품이 있는 경우
                             for (i in 0 until data.length()) {
                                 val obj = data.getJSONObject(i)
                                 val productStatus = obj.getString("status")
