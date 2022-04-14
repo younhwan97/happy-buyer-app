@@ -55,14 +55,14 @@ class CategoryFragment : Fragment(), CategoryContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 엑티비티
+        val act = activity as CategoryActivity
+
         // 로딩 뷰 셋팅
         setLoadingView()
 
         // 인텐트에서 데이터 추출
         selectedCategory = arguments?.getString("category") ?: ""
-
-        // 엑티비티
-        val act = activity as CategoryActivity
 
         if (selectedCategory == "") {
             act.finish()

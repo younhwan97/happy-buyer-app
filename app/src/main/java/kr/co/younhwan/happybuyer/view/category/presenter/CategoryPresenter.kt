@@ -39,7 +39,9 @@ class CategoryPresenter(
         sortBy: String,
         page: Int
     ) {
+        // 초기 상품을 셋팅할 때 호출되는 메서드
         if (selectedCategory == "행사") {
+            // 행사 카테고리가 선택된 경우 행사 데이터를 담당하는 모델에 분기
             eventData.readProducts(
                 sortBy = sortBy,
                 page = page,
@@ -55,6 +57,7 @@ class CategoryPresenter(
                 }
             )
         } else {
+            // 행사 카테고리가 아닌 나머지 카테고리의 경우 일반 카테고리를 처리하는 모델에 분기
             productData.readProducts(
                 selectedCategory = selectedCategory,
                 sortBy = sortBy,
@@ -78,7 +81,9 @@ class CategoryPresenter(
         sortBy: String,
         page: Int
     ) {
+        // 상품을 추가로 셋팅할 때 호출되는 메서드
         if (selectedCategory == "행사") {
+            // 행사 카테고리가 선택된 경우 행사 데이터를 담당하는 모델에 분기
             eventData.readProducts(
                 sortBy = sortBy,
                 page = page,
@@ -91,16 +96,18 @@ class CategoryPresenter(
                             // 더 이상 로드할 데이터가 없는 경우 리사이클러 뷰 마지막에 들어가 있는 로딩뷰만 제거
                             adapterView.notifyLastItemRemoved()
                         } else {
+                            // 디비로 부터 얻은 데이터를 어댑터에 추가하고 추가된 데이터의 범위 만큼 업데이트
                             adapterModel.addItems(list)
                             adapterView.notifyAdapterByRange(
-                                adapterModel.getItemCount() - list.size - 1,
-                                list.size
+                                start = adapterModel.getItemCount() - list.size - 1,
+                                count = list.size
                             )
                         }
                     }
                 }
             )
         } else {
+            // 행사 카테고리가 아닌 나머지 카테고리의 경우 일반 카테고리를 처리하는 모델에 분기
             productData.readProducts(
                 selectedCategory = selectedCategory,
                 sortBy = sortBy,
@@ -115,10 +122,11 @@ class CategoryPresenter(
                             // 더 이상 로드할 데이터가 없는 경우 리사이클러 뷰 마지막에 들어가 있는 로딩뷰만 제거
                             adapterView.notifyLastItemRemoved()
                         } else {
+                            // 디비로 부터 얻은 데이터를 어댑터에 추가하고 추가된 데이터의 범위 만큼 업데이트
                             adapterModel.addItems(list)
                             adapterView.notifyAdapterByRange(
-                                adapterModel.getItemCount() - list.size - 1,
-                                list.size
+                                start = adapterModel.getItemCount() - list.size - 1,
+                                count = list.size
                             )
                         }
                     }
