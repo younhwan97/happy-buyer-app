@@ -6,6 +6,7 @@ import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.LinearLayout
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.Snackbar
@@ -16,6 +17,7 @@ import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
 import kr.co.younhwan.happybuyer.data.source.wished.WishedRepository
 import kr.co.younhwan.happybuyer.databinding.ActivityProductBinding
 import kr.co.younhwan.happybuyer.view.login.LoginActivity
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper
 import java.text.DecimalFormat
 
 class ProductActivity : AppCompatActivity(), ProductContract.View {
@@ -28,6 +30,8 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
             wishedData = WishedRepository
         )
     }
+
+    lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +50,9 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
             viewDataBinding.productToolbar.setNavigationOnClickListener {
                 finish()
             }
+
+            // 스크롤 컨테이너
+            OverScrollDecoratorHelper.setUpOverScroll(viewDataBinding.productContentContainer)
 
             // 상품 이미지
             Glide.with(viewDataBinding.productImage.context)
@@ -71,21 +78,21 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
                 viewDataBinding.productEventPriceContainer.visibility = View.GONE
 
                 viewDataBinding.productPrice.setTextAppearance(R.style.NumberTextView_Bold)
-                viewDataBinding.productPrice.textSize = 18F
+                viewDataBinding.productPrice.textSize = 24F
                 viewDataBinding.productPrice.typeface = Typeface.DEFAULT_BOLD
-                viewDataBinding.productPriceSubText.setTextAppearance(R.style.TextView_Bold)
-                viewDataBinding.productPriceSubText.textSize = 14F
+                viewDataBinding.productPriceSubText.setTextAppearance(R.style.TextView)
+                viewDataBinding.productPriceSubText.textSize = 16F
                 viewDataBinding.productPriceSubText.typeface = Typeface.DEFAULT_BOLD
             }
-            
+
             // 판매단위
-            
+
             // 중량/용량
-            
+
             // 상품 설명
 
             // 바텀 시트
-            val bottomSheetBehavior = BottomSheetBehavior.from(viewDataBinding.productBottomSheet)
+            bottomSheetBehavior = BottomSheetBehavior.from(viewDataBinding.productBottomSheet)
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
             // 구매 버튼
@@ -94,12 +101,16 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
             }
 
             // (바텀 시트) 닫기 버튼
-            viewDataBinding.productBottomSheetClostBtn.setOnClickListener {
+            viewDataBinding.productBottomSheetCloseBtnContainer.setOnClickListener {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            }
+
+            viewDataBinding.productBottomSheetCloseBtn.setOnClickListener {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             }
 
             // (바텀 시트) 상품 이름
-            viewDataBinding.productName.text = product.productName
+            viewDataBinding.productBottomSheetName.text = product.productName
 
             // (바텀 시트) 상품 개수 및 개수 조절 버튼
             viewDataBinding.productBottomSheetCount.text = "1"
@@ -154,6 +165,14 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
         }
     }
 
+    override fun onBackPressed() {
+        if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_HIDDEN) {
+            super.onBackPressed()
+        } else {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        }
+    }
+
     override fun getAct() = this
 
     override fun createLoginActivity() =
@@ -168,7 +187,7 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
                 app.wishedProductId.add(productId)
 
                 // 뷰 업데이트
-               // viewDataBinding.image.isSelected = true
+                // viewDataBinding.image.isSelected = true
                 viewDataBinding.productWishedBtn.likeAnimation()
 
                 // 스낵바 리턴

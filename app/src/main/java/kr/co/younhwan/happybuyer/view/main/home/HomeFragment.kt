@@ -168,7 +168,7 @@ class HomeFragment : Fragment(), HomeContract.View {
     override fun createProductActivity(productItem: ProductItem) {
         val act = activity as MainActivity
         val productIntent = Intent(act, ProductActivity::class.java)
-        productIntent.putExtra("productItem", productItem)
+        productIntent.putExtra("product", productItem)
         act.startActivity(productIntent)
     }
 

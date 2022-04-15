@@ -18,6 +18,7 @@ import kr.co.younhwan.happybuyer.view.main.MainActivity
 import kr.co.younhwan.happybuyer.view.main.account.presenter.AccountContract
 import kr.co.younhwan.happybuyer.view.main.account.presenter.AccountPresenter
 import kr.co.younhwan.happybuyer.view.update.UpdateActivity
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper
 
 class AccountFragment : Fragment(), AccountContract.View {
 
@@ -55,6 +56,8 @@ class AccountFragment : Fragment(), AccountContract.View {
         viewDataBinding.accountProfileNickname.text =
             if (app.nickname != null) app.nickname else "${app.kakaoAccountId}"
 
+        // 전체 컨테이너
+        OverScrollDecoratorHelper.setUpOverScroll(viewDataBinding.accountContentContainer)
 
 
 
