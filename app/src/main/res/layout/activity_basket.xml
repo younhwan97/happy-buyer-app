@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,327 +7,324 @@
     android:background="@color/bgColorWhite"
     tools:context=".view.basket.BasketActivity">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/basketBottomBtnContainer">
+        android:layout_height="wrap_content">
 
-        <com.google.android.material.appbar.AppBarLayout
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/basketToolbar"
+            style="@style/Widget.App.Toolbar.Light"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="?attr/actionBarSize"
+            android:elevation="0dp"
+            app:navigationIcon="@drawable/ic_back_24"
+            app:title="장바구니"
+            app:titleCentered="true" />
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/basketToolbar"
-                style="@style/Widget.App.Toolbar.Light"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:elevation="0dp"
-                app:navigationIcon="@drawable/ic_back_24"
-                app:title="장바구니"
-                app:titleCentered="true" />
-
-            <RelativeLayout
-                android:id="@+id/basketTopContainer"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/bgColorWhite"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp">
-
-                <CheckBox
-                    android:id="@+id/basketChechBox"
-                    style="@style/Widget.App.CheckBox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="6dp"
-                    android:fontFamily="@font/notosans_kr_regular"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    android:textColor="@color/fontColorBlack"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/basketCheckBoxText"
-                    style="@style/TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toEndOf="@id/basketChechBox"
-                    android:includeFontPadding="false"
-                    android:text="@string/basket_checkbox"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/basketDeleteBtn"
-                    style="@style/TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:text="@string/basket_delete"
-                    android:textStyle="bold" />
-            </RelativeLayout>
-
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <androidx.core.widget.NestedScrollView
+        <RelativeLayout
+            android:id="@+id/basketTopContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true"
-            android:overScrollMode="never"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:background="@color/bgColorWhite"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <CheckBox
+                android:id="@+id/basketChechBox"
+                style="@style/Widget.App.CheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
+                android:fontFamily="@font/notosans_kr_regular"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:textColor="@color/fontColorBlack"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/basketCheckBoxText"
+                style="@style/TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/basketChechBox"
+                android:includeFontPadding="false"
+                android:text="@string/basket_checkbox"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/basketDeleteBtn"
+                style="@style/TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:text="@string/basket_delete"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/basketContentContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="visible">
 
                 <LinearLayout
-                    android:id="@+id/basketContentContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="visible">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="8dp"
-                        android:background="@color/bgColorGray"
-                        android:orientation="horizontal">
-
-                    </LinearLayout>
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/basketRecycler"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:visibility="visible">
-
-                    </androidx.recyclerview.widget.RecyclerView>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="8dp"
-                        android:background="@color/bgColorGray"
-                        android:orientation="horizontal">
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginRight="16dp"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="52sp"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/basketOriginalPriceTitle"
-                                style="@style/TextView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_weight="1"
-                                android:includeFontPadding="false"
-                                android:text="상품금액"
-                                android:textSize="16sp" />
-
-                            <TextView
-                                android:id="@+id/basketOriginalPriceText"
-                                style="@style/NumberTextView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_weight="1"
-                                android:gravity="right"
-                                android:includeFontPadding="false"
-                                android:text="@string/basket_price_zero"
-                                android:textSize="18sp" />
-
-                            <TextView
-                                android:id="@+id/basketOriginalPriceSubText"
-                                style="@style/TextView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginStart="4dp"
-                                android:includeFontPadding="false"
-                                android:text="@string/basket_price_sub"
-                                android:textSize="16sp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="52dp"
-                            android:layout_weight="1"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/basketEventPriceTitle"
-                                style="@style/TextView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_weight="1"
-                                android:includeFontPadding="false"
-                                android:text="상품할인금액"
-                                android:textSize="16sp" />
-
-                            <TextView
-                                android:id="@+id/basketEventPriceText"
-                                style="@style/NumberTextView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_weight="1"
-                                android:gravity="right"
-                                android:includeFontPadding="false"
-                                android:text="@string/basket_price_zero"
-                                android:textSize="18sp" />
-
-                            <TextView
-                                android:id="@+id/basketEventPriceSubText"
-                                style="@style/TextView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginStart="4dp"
-                                android:includeFontPadding="false"
-                                android:text="@string/basket_price_sub"
-                                android:textSize="16sp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="52dp"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/basketShippingPriceTitle"
-                                style="@style/TextView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_weight="1"
-                                android:includeFontPadding="false"
-                                android:text="배송비"
-                                android:textSize="16sp" />
-
-                            <TextView
-                                android:id="@+id/basketShippingPriceText"
-                                style="@style/NumberTextView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_weight="1"
-                                android:gravity="right"
-                                android:includeFontPadding="false"
-                                android:text="@string/basket_price_zero"
-                                android:textSize="18sp" />
-
-                            <TextView
-                                android:id="@+id/basketShippingPriceSubText"
-                                style="@style/TextView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginStart="4dp"
-                                android:includeFontPadding="false"
-                                android:text="@string/basket_price_sub"
-                                android:textSize="16sp" />
-                        </LinearLayout>
-
-                        <com.google.android.material.divider.MaterialDivider
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:layout_marginBottom="4dp"
-                            app:dividerColor="#F4F4F4" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="52dp"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/basketBePaidPriceTitle"
-                                style="@style/TextView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_weight="1"
-                                android:includeFontPadding="false"
-                                android:text="결제예정금액"
-                                android:textSize="16sp" />
-
-                            <TextView
-                                android:id="@+id/basketBePaidPriceText"
-                                style="@style/NumberTextView.Bold"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_weight="1"
-                                android:gravity="right"
-                                android:includeFontPadding="false"
-                                android:text="@string/basket_price_zero"
-                                android:textSize="22sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:id="@+id/basketBePaidPriceSubText"
-                                style="@style/TextView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginStart="4dp"
-                                android:includeFontPadding="false"
-                                android:text="@string/basket_price_sub"
-                                android:textSize="16sp" />
-                        </LinearLayout>
-                    </LinearLayout>
+                    android:layout_height="8dp"
+                    android:background="@color/bgColorGray"
+                    android:orientation="horizontal">
 
                 </LinearLayout>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/basketEmptyContainer"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/basketRecycler"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:visibility="gone">
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:visibility="visible">
 
-                    <TextView
-                        android:id="@+id/basketEmptyText"
-                        style="@style/TextView.Light"
-                        android:layout_width="wrap_content"
+                </androidx.recyclerview.widget.RecyclerView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:background="@color/bgColorGray"
+                    android:orientation="horizontal">
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="16dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="52sp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/basketOriginalPriceTitle"
+                            style="@style/TextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:includeFontPadding="false"
+                            android:text="상품금액"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/basketOriginalPriceText"
+                            style="@style/NumberTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:includeFontPadding="false"
+                            android:text="@string/basket_price_zero"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/basketOriginalPriceSubText"
+                            style="@style/TextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="4dp"
+                            android:includeFontPadding="false"
+                            android:text="@string/basket_price_sub"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/basketEventPriceTitle"
+                            style="@style/TextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:includeFontPadding="false"
+                            android:text="상품할인금액"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/basketEventPriceText"
+                            style="@style/NumberTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:includeFontPadding="false"
+                            android:text="@string/basket_price_zero"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/basketEventPriceSubText"
+                            style="@style/TextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="4dp"
+                            android:includeFontPadding="false"
+                            android:text="@string/basket_price_sub"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/basketShippingPriceTitle"
+                            style="@style/TextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:includeFontPadding="false"
+                            android:text="배송비"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/basketShippingPriceText"
+                            style="@style/NumberTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:includeFontPadding="false"
+                            android:text="@string/basket_price_zero"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/basketShippingPriceSubText"
+                            style="@style/TextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="4dp"
+                            android:includeFontPadding="false"
+                            android:text="@string/basket_price_sub"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/basket_empty"
-                        android:textSize="16sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
+                        app:dividerColor="#F4F4F4" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/basketBePaidPriceTitle"
+                            style="@style/TextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:includeFontPadding="false"
+                            android:text="결제예정금액"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/basketBePaidPriceText"
+                            style="@style/NumberTextView.Bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:includeFontPadding="false"
+                            android:text="@string/basket_price_zero"
+                            android:textSize="22sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/basketBePaidPriceSubText"
+                            style="@style/TextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="4dp"
+                            android:includeFontPadding="false"
+                            android:text="@string/basket_price_sub"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="78dp" />
 
             </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/basketEmptyContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/basketEmptyText"
+                    style="@style/TextView.Light"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/basket_empty"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
         android:id="@+id/basketBottomBtnContainer"
         android:layout_width="match_parent"
         android:layout_height="62dp"
-        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="4dp"
+        android:layout_marginBottom="8dp"
         android:background="@color/bgColorWhite"
         android:orientation="horizontal">
 
@@ -342,4 +339,5 @@
             android:text="Button"
             android:textSize="16sp" />
     </LinearLayout>
-</RelativeLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -262,7 +262,7 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="70dp" />
+                android:layout_height="78dp" />
         </LinearLayout>
     </ScrollView>
 
@@ -273,7 +273,7 @@
         android:layout_gravity="bottom"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="4dp"
+        android:layout_marginBottom="8dp"
         android:background="@android:color/transparent">
 
         <xyz.hanks.library.bang.SmallBangView
@@ -432,7 +432,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="62dp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="8dp"
             android:orientation="horizontal">
 
             <Button

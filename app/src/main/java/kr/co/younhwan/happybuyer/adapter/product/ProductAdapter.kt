@@ -40,7 +40,7 @@ class ProductAdapter(private val usingBy: String?) :
     override fun notifyAdapterByRange(start:Int, count:Int) = notifyItemRangeInserted(start, count)
 
     override fun notifyLastItemRemoved() {
-        notifyItemRemoved(productItemList.lastIndex)
+        notifyItemRemoved(productItemList.lastIndex + 1)
     }
 
     override fun addItems(productItems: ArrayList<ProductItem>) {
