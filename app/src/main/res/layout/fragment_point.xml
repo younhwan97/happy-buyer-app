@@ -6,7 +6,7 @@
     android:padding="10dp" >
 
     <TextView
-        android:id="@+id/textView18"
+        android:id="@+id/pointTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -14,25 +14,21 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/editTextNumber"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/pointEditText"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textView18"
-        android:layout_marginTop="13dp"
-        android:backgroundTint="@color/black"
-        android:ems="10"
-        android:inputType="number"
-        android:maxLength="4"
-        android:textCursorDrawable="@drawable/color_cursor" />
+        android:layout_below="@id/pointTitle"
+        android:layout_marginTop="16dp">
 
-    <TextView
-        android:id="@+id/textView19"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/editTextNumber"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone"
+            android:maxLength="13" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button3"

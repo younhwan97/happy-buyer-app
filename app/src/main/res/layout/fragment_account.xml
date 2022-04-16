@@ -204,41 +204,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:dividerColor="@color/LineColorLightGray2" />
-
-            <LinearLayout
-                android:id="@+id/accountProfilePhoneContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/accountProfilePhoneText"
-                    style="@style/TextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingStart="4dp"
-                    android:paddingEnd="4dp"
-                    android:text="@string/account_profile_phone_title"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/accountProfilePhone"
-                    style="@style/NumberTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="end"
-                    android:text="@string/account_profile_phone_text"
-                    android:textSize="16sp" />
-            </LinearLayout>
-
-            <com.google.android.material.divider.MaterialDivider
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:dividerColor="@color/LineColorLightGray2" />
         </LinearLayout>
 
         <com.google.android.material.divider.MaterialDivider
@@ -331,23 +296,6 @@
                 app:dividerColor="@color/LineColorLightGray2" />
 
             <TextView
-                android:id="@+id/accountEctWithdrawalBtn"
-                style="@style/TextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:paddingStart="4dp"
-                android:paddingEnd="4dp"
-                android:text="@string/account_etc_withdrawal_text"
-                android:textSize="16sp" />
-
-            <com.google.android.material.divider.MaterialDivider
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:dividerColor="@color/LineColorLightGray2" />
-
-            <TextView
                 android:id="@+id/accountEctLogoutBtn"
                 style="@style/TextView"
                 android:layout_width="match_parent"
@@ -359,8 +307,22 @@
                 android:text="@string/account_etc_logout_text"
                 android:textSize="16sp" />
 
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:dividerColor="@color/LineColorLightGray2" />
+
+            <TextView
+                android:id="@+id/accountEctWithdrawalBtn"
+                style="@style/TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:text="@string/account_etc_withdrawal_text"
+                android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
-
-
 </ScrollView>

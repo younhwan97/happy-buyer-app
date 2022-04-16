@@ -3,27 +3,27 @@ package kr.co.younhwan.happybuyer.data.source.user
 import kr.co.younhwan.happybuyer.data.UserItem
 
 interface UserSource {
+    fun create(kakaoAccountId: Long, kakaoNickname:String?, createCallback: CreateCallback?)
+
     interface CreateCallback {
         fun onCreate(isSuccess: Boolean)
     }
 
-    fun create(kakaoAccountId: Long, kakaoNickname:String?, createCallback: CreateCallback?)
+    fun read(kakaoAccountId: Long, readCallback: ReadCallback?)
 
     interface ReadCallback{
         fun onRead(userItem: UserItem?)
     }
 
-    fun read(kakaoAccountId: Long, readCallback: ReadCallback?)
+    fun update(kakaoAccountId: Long, updateTarget: String, newContent: String, updateCallback: UpdateCallback?)
 
-    interface UpdateUserCallback {
-        fun onUpdateUser(isSuccess: Boolean)
+    interface UpdateCallback {
+        fun onUpdate(isSuccess: Boolean)
     }
 
-    fun updateUser(kakaoAccountId: Long, target: String, newContent: String, updateUserCallback: UpdateUserCallback?)
+    fun deleteUser(kakaoAccountId: Long, deleteUserCallback: DeleteUserCallback?)
 
     interface DeleteUserCallback{
         fun onDeleteUser(isSuccess: Boolean)
     }
-
-    fun deleteUser(kakaoAccountId: Long, deleteUserCallback: DeleteUserCallback?)
 }

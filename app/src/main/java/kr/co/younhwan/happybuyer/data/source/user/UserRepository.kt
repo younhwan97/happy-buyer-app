@@ -32,19 +32,19 @@ object UserRepository : UserSource {
         })
     }
 
-    override fun updateUser(
+    override fun update(
         kakaoAccountId: Long,
-        target: String,
+        updateTarget: String,
         newContent: String,
-        updateUserCallback: UserSource.UpdateUserCallback?
+        updateCallback: UserSource.UpdateCallback?
     ) {
-        userRemoteDataSource.updateUser(
+        userRemoteDataSource.update(
             kakaoAccountId,
-            target,
+            updateTarget,
             newContent,
-            object : UserSource.UpdateUserCallback {
-                override fun onUpdateUser(isSuccess: Boolean) {
-                    updateUserCallback?.onUpdateUser(isSuccess)
+            object : UserSource.UpdateCallback {
+                override fun onUpdate(isSuccess: Boolean) {
+                    updateCallback?.onUpdate(isSuccess)
                 }
             })
     }

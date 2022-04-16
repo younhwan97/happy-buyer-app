@@ -83,19 +83,13 @@ class AccountFragment : Fragment(), AccountContract.View {
 
         viewDataBinding.accountProfileNicknameContainer.setOnClickListener {
             val updateIntent = Intent(requireContext(), UpdateActivity::class.java)
-            updateIntent.putExtra("target", "nickname")
+            updateIntent.putExtra("update_target", "nickname")
             startForResult.launch(updateIntent)
         }
 
         viewDataBinding.accountProfilePointContainer.setOnClickListener {
             val updateIntent = Intent(requireContext(), UpdateActivity::class.java)
-            updateIntent.putExtra("target", "point")
-            startActivity(updateIntent)
-        }
-
-        viewDataBinding.accountProfilePhoneContainer.setOnClickListener {
-            val updateIntent = Intent(requireContext(), UpdateActivity::class.java)
-            updateIntent.putExtra("target", "phone")
+            updateIntent.putExtra("update_target", "point")
             startActivity(updateIntent)
         }
 

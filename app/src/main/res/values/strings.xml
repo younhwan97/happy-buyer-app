@@ -83,6 +83,10 @@
     <string name="account_etc_withdrawal_text">회원 탈퇴</string>
     <string name="account_etc_logout_text">로그아웃</string>
 
+    <!-- Update -->
+    <string name="update_nickname_title">닉네임</string>
+    <string name="update_nickname_btn_text">저장</string>
+    <string name="update_nickname_helper_text">최대 10글자까지 입력 가능합니다.</string>
 
 
     <!-- HappyBuyer wished view -->

@@ -1,9 +1,7 @@
 package kr.co.younhwan.happybuyer.data.source.user
 
-import android.util.Log
 import kotlinx.coroutines.*
 import kr.co.younhwan.happybuyer.data.UserItem
-import kr.co.younhwan.happybuyer.data.source.wished.WishedRemoteDataSource
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -110,34 +108,42 @@ object UserRemoteDataSource : UserSource {
         }
     }
 
-    override fun updateUser(
+    override fun update(
         kakaoAccountId: Long,
-        target: String,
+        updateTarget: String,
         newContent: String,
-        updateUserCallback: UserSource.UpdateUserCallback?
+        updateCallback: UserSource.UpdateCallback?
     ) {
         runBlocking {
             var isSuccess = false
 
-            val job = GlobalScope.launch {
+            launch {
                 // API 서버 주소
-                // target : nickname, basket, phone, point, address
-                val site =
-                    "http://happybuyer.co.kr/auth/api/app/update?id=${kakaoAccountId}&target=${target}&content=${newContent}"
+                val site = serverInfo
+
+                // 데이터 수정을 위한 PUT Request 생성
+                val jsonData = JSONObject()
+                jsonData.put("id", kakaoAccountId)
+                jsonData.put("update_target", updateTarget)
+                jsonData.put("new_content", newContent)
+                val requestBody = jsonData.toString().toRequestBody(jsonMediaType)
+                val request = Request.Builder().url(site).put(requestBody).build()
 
                 // 응답
-                val request = Request.Builder().url(site).get().build()
-                val response = client.newCall(request).execute()
+                client.newCall(request).enqueue(object : Callback {
+                    override fun onFailure(call: Call, e: IOException) {
+                        updateCallback?.onUpdate(isSuccess)
+                    }
 
-                if (response.isSuccessful) {
-                    val resultText = response.body?.string()!!.trim()
-                    val json = JSONObject(resultText)
-                    isSuccess = json.getBoolean("success")
-                }
+                    override fun onResponse(call: Call, response: Response) {
+                        val resultText = response.body?.string()
+                        val json = JSONObject(resultText)
+
+                        isSuccess = json.getBoolean("success")
+                        updateCallback?.onUpdate(isSuccess)
+                    }
+                })
             }
-
-            job.join()
-            updateUserCallback?.onUpdateUser(isSuccess)
         }
     }
 

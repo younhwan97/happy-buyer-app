@@ -6,17 +6,27 @@
     android:layout_height="match_parent"
     tools:context=".view.update.UpdateActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/updateToolbar"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/updateAppbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:minHeight="?attr/actionBarSize" />
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/updateToolbar"
+            style="@style/Widget.App.Toolbar.Light"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="@drawable/ic_baseline_close_24"
+            app:title="업데이트"
+            app:titleCentered="true"
+            />
+    </com.google.android.material.appbar.AppBarLayout>
+
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerInUpdateAct"
         android:name="kr.co.younhwan.happybuyer.view.update.nickname.NicknameFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/updateToolbar" />
+        android:layout_below="@id/updateAppbar" />
 </RelativeLayout>
