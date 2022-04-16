@@ -12,6 +12,17 @@ class LoginPresenter(
     private val userData: UserRepository,
 ) : LoginContract.Model {
 
+    override fun loginWithKakao(context: Context) {
+        // 카카오톡이 설치되어 있으면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
+        if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
+            // 카카오톡이 설치되어 있을 때
+            UserApiClient.instance.loginWithKakaoTalk(context, callback = loginCallback)
+        } else {
+            // 카카오톡이 설치되지 않았을 때
+            UserApiClient.instance.loginWithKakaoAccount(context, callback = loginCallback)
+        }
+    }
+
     private val loginCallback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
         if (error != null) {
             view.loginResultCallback(false)
@@ -33,17 +44,6 @@ class LoginPresenter(
                         })
                 }
             }
-        }
-    }
-
-    override fun loginWithKakao(context: Context) {
-        // 카카오톡이 설치되어 있으면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
-        if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
-            // 카카오톡이 설치되어 있을 때
-            UserApiClient.instance.loginWithKakaoTalk(context, callback = loginCallback)
-        } else {
-            // 카카오톡이 설치되지 않았을 때
-            UserApiClient.instance.loginWithKakaoAccount(context, callback = loginCallback)
         }
     }
 }

@@ -26,8 +26,7 @@ class AccountPresenter(
                     app.isLogined = false
                     app.kakaoAccountId = 0L
                     app.nickname = "-"
-                    app.shippingAddress = "-"
-                    app.pointNumber = 0
+                    app.point = "-"
                     view.logoutResultCallback(true, null)
                 }
             }

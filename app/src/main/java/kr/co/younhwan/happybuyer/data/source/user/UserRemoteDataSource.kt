@@ -1,16 +1,17 @@
 package kr.co.younhwan.happybuyer.data.source.user
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import kr.co.younhwan.happybuyer.data.UserItem
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.IOException
 
 object UserRemoteDataSource : UserSource {
+    private val client = OkHttpClient() // 클라이언트
+    private const val serverInfo = "http://192.168.0.11/auth/api/user" // API 서버
+    private val jsonMediaType = "application/json; charset=utf-8".toMediaTypeOrNull()
 
     override fun createUser(
         kakaoAccountId: Long,
@@ -29,19 +30,60 @@ object UserRemoteDataSource : UserSource {
         }
     }
 
-    override fun readUser(
+    override fun read(
         kakaoAccountId: Long,
-        readUserCallback: UserSource.ReadUserCallback?
+        readCallback: UserSource.ReadCallback?
     ) {
         runBlocking {
             var user: UserItem? = null
 
-            val job = GlobalScope.launch {
-                user = read(kakaoAccountId)
-            }
+            launch {
+                // API 서버 주소
+                val site = "${serverInfo}?id=${kakaoAccountId}"
 
-            job.join()
-            readUserCallback?.onReadUser(user)
+                // 데이터를 얻기 위한 GET Request 생성
+                val request = Request.Builder().url(site).get().build()
+
+                // 응답
+                client.newCall(request).enqueue(object : Callback {
+                    override fun onFailure(call: Call, e: IOException) {
+                        readCallback?.onRead(user)
+                    }
+
+                    override fun onResponse(call: Call, response: Response) {
+                        val resultText = response.body?.string()
+                        val json = JSONObject(resultText)
+
+                        val success = json.getBoolean("success")
+                        if (success) {
+                            val data = JSONArray(json["data"].toString())
+
+                            for (i in 0 until data.length()) {
+                                val obj = data.getJSONObject(i)
+                                val userId = obj.getLong("id")
+
+                                if (kakaoAccountId == userId) {
+                                    val nickname = obj.getString("name")
+                                    val point = obj.getString("point")
+                                    val activatedBasket =
+                                        if (obj.isNull("activated_basket")) "deactivated" else obj.getString(
+                                            "activated_basket"
+                                        )
+
+                                    user = UserItem(
+                                        userId,
+                                        nickname,
+                                        point,
+                                        activatedBasket
+                                    )
+                                    break
+                                }
+                            }
+                        }
+                        readCallback?.onRead(user)
+                    }
+                })
+            }
         }
     }
 
@@ -102,42 +144,6 @@ suspend fun create(kakaoAccountId: Long?, kakaoAccountNickname: String?): Boolea
     return isSuccess
 }
 
-suspend fun read(kakaoAccountId: Long): UserItem? {
-
-    // 클라이언트 생성
-    val client = OkHttpClient()
-
-    // 요청
-    val site =
-        "http://happybuyer.co.kr/auth/api/app/read?id=${kakaoAccountId}"
-    val request = Request.Builder().url(site).get().build()
-
-    // 응답
-    val response = client.newCall(request).execute()
-
-    if (response.isSuccessful) {
-        val resultText = response.body?.string()!!.trim()
-        val json = JSONObject(resultText)
-        val data = JSONArray(json["data"].toString()).getJSONObject(0)
-
-        val id = if (data.isNull("id")) 0L else data.getLong("id")
-
-        if (kakaoAccountId == id) {
-            val nickname = if (data.isNull("name")) "-" else data.getString("name")
-            val pointNumber = if (data.isNull("point_number")) 0 else data.getInt("point_number")
-            val shippingAddress =
-                if (data.isNull("shipping_address")) null else data.getString("shipping_address")
-            val activatedBasket =
-                if (data.isNull("activated_basket")) "deactivated" else data.getString("activated_basket")
-
-            return UserItem(id, nickname, pointNumber, shippingAddress, activatedBasket)
-        }
-    }
-
-    // 서버에 문제가 있어 응답을 받지 못한 경우
-    return null
-}
-
 suspend fun update(kakaoAccountId: Long, target: String, newContent: String): Boolean {
 
     // 클라이언트 생성
@@ -163,7 +169,6 @@ suspend fun update(kakaoAccountId: Long, target: String, newContent: String): Bo
 }
 
 suspend fun delete(kakaoAccountId: Long): Boolean {
-
 
 
     return false

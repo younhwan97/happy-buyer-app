@@ -21,13 +21,13 @@ object UserRepository : UserSource {
             })
     }
 
-    override fun readUser(
+    override fun read(
         kakaoAccountId: Long,
-        readUserCallback: UserSource.ReadUserCallback?
+        readCallback: UserSource.ReadCallback?
     ) {
-        userRemoteDataSource.readUser(kakaoAccountId, object : UserSource.ReadUserCallback {
-            override fun onReadUser(userItem: UserItem?) {
-                readUserCallback?.onReadUser(userItem)
+        userRemoteDataSource.read(kakaoAccountId, object : UserSource.ReadCallback {
+            override fun onRead(userItem: UserItem?) {
+                readCallback?.onRead(userItem)
             }
         })
     }

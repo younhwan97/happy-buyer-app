@@ -1,11 +1,6 @@
 package kr.co.younhwan.happybuyer
 
-import android.app.Activity
 import android.app.Application
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.widget.ImageView
-import androidx.appcompat.app.AppCompatDialog
 import com.kakao.sdk.common.KakaoSdk
 
 class GlobalApplication : Application() {
@@ -13,15 +8,14 @@ class GlobalApplication : Application() {
     var isLogined = false
     var kakaoAccountId: Long = -1L
     var nickname: String? = null
-    var pointNumber: Int? = null
-    var shippingAddress: String? = null
+    var point: String? = null
     var activatedBasket: String? = "deactivate"
-
-    // 장바구니
-    var basketItemCount : Int = 0
 
     // 찜
     var wishedProductId : ArrayList<Int> = ArrayList<Int>()
+
+    // 장바구니
+    var basketItemCount : Int = 0
 
     override fun onCreate() {
         super.onCreate()

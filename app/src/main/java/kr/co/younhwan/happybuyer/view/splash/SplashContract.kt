@@ -4,9 +4,10 @@ interface SplashContract{
 
     interface View{
 
-        fun finishSplashActivity()
-
         fun getAct() : SplashActivity
+
+        fun finishSplashAct()
+
     }
 
     interface Model{
