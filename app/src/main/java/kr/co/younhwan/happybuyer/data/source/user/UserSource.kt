@@ -3,11 +3,11 @@ package kr.co.younhwan.happybuyer.data.source.user
 import kr.co.younhwan.happybuyer.data.UserItem
 
 interface UserSource {
-    interface CreateUserCallback {
-        fun onCreateUser(isSuccess: Boolean)
+    interface CreateCallback {
+        fun onCreate(isSuccess: Boolean)
     }
 
-    fun createUser(kakaoAccountId: Long, kakaoNickname:String?, createUserCallback: CreateUserCallback?)
+    fun create(kakaoAccountId: Long, kakaoNickname:String?, createCallback: CreateCallback?)
 
     interface ReadCallback{
         fun onRead(userItem: UserItem?)

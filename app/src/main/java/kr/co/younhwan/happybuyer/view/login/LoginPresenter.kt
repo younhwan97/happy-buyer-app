@@ -5,7 +5,6 @@ import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
 import kr.co.younhwan.happybuyer.data.source.user.UserRepository
 import kr.co.younhwan.happybuyer.data.source.user.UserSource
-import kr.co.younhwan.happybuyer.view.login.LoginContract
 
 class LoginPresenter(
     private val view: LoginContract.View,
@@ -34,11 +33,12 @@ class LoginPresenter(
                     val kakaoAccountId: Long = user.id!!
                     val kakaoAccountNickname: String? = user.kakaoAccount?.profile?.nickname
 
-                    userData.createUser( // 유저를 실제 DB에 생성한다.
-                        kakaoAccountId,
-                        kakaoAccountNickname,
-                        object : UserSource.CreateUserCallback {
-                            override fun onCreateUser(isSuccess: Boolean) {
+                    // 로그인을 통해 얻은 유저 정보를 디비에 저장
+                    userData.create(
+                        kakaoAccountId = kakaoAccountId,
+                        kakaoNickname = kakaoAccountNickname,
+                        object : UserSource.CreateCallback {
+                            override fun onCreate(isSuccess: Boolean) {
                                 view.loginResultCallback(isSuccess)
                             }
                         })

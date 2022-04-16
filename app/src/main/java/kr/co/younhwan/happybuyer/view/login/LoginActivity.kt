@@ -10,15 +10,11 @@ import kr.co.younhwan.happybuyer.databinding.ActivityLoginBinding
 import kr.co.younhwan.happybuyer.view.splash.SplashActivity
 
 class LoginActivity : AppCompatActivity(), LoginContract.View {
-    /* View Binding */
     private lateinit var viewDataBinding: ActivityLoginBinding
 
-    /* Presenter */
     private val loginPresenter: LoginPresenter by lazy {
-        // View 영역은 사용자 이벤트 등에 대응하기 위해서 Presenter 변수가 필요하다.
-        // 실제 처리는 Presenter, Model 에서 이뤄지기 때문이다.
         LoginPresenter(
-            this,
+            view = this,
             userData = UserRepository,
         )
     }
@@ -28,37 +24,27 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
         viewDataBinding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(viewDataBinding.root)
 
-        // action -> tool bar
-        setSupportActionBar(viewDataBinding.loginToolbar)
-        supportActionBar?.run {
-            title = ""
-            setHomeButtonEnabled(true)
-            setDisplayHomeAsUpEnabled(true)
+        // 툴바
+        viewDataBinding.loginToolbar.setNavigationOnClickListener {
+            finish()
         }
 
-        // set event listener
+        // 카카오 로그인 버튼
         viewDataBinding.kakaoLoginBtn.setOnClickListener {
             loginPresenter.loginWithKakao(this)
         }
     }
 
-    /* set menu event listener */
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
     override fun loginResultCallback(success: Boolean) {
         if (success) {
-            // BackStack에 존재하는 Activity를 모두 제거후 Main Activity를 다시 생성
+            // 로그인에 성공했을 떼
+            // 백스택에 존재하는 엑티비티를 모두 제거후 메인 엑티비티를 다시 생성
             val splashIntent = Intent(this, SplashActivity::class.java)
             splashIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(splashIntent)
-        } else
+        } else{
+            // 로그인에 실패했을 때
             Snackbar.make(viewDataBinding.root, "로그인에 실패하였습니다.", Snackbar.LENGTH_SHORT).show()
+        }
     }
 }

@@ -2,8 +2,10 @@ package kr.co.younhwan.happybuyer.data.source.user
 
 import kotlinx.coroutines.*
 import kr.co.younhwan.happybuyer.data.UserItem
+import kr.co.younhwan.happybuyer.data.source.wished.WishedRemoteDataSource
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
@@ -13,20 +15,40 @@ object UserRemoteDataSource : UserSource {
     private const val serverInfo = "http://192.168.0.11/auth/api/user" // API 서버
     private val jsonMediaType = "application/json; charset=utf-8".toMediaTypeOrNull()
 
-    override fun createUser(
+    override fun create(
         kakaoAccountId: Long,
         kakaoNickname: String?,
-        createUserCallback: UserSource.CreateUserCallback?
+        createCallback: UserSource.CreateCallback?
     ) {
         runBlocking {
             var isSuccess = false
 
-            val job = GlobalScope.launch {
-                isSuccess = create(kakaoAccountId, kakaoNickname)
-            }
+            launch {
+                // API 서버 주소
+                val site = serverInfo
 
-            job.join()
-            createUserCallback?.onCreateUser(isSuccess)
+                // 데이터 생성을 위한 POST Request 생성
+                val jsonData = JSONObject()
+                jsonData.put("id", kakaoAccountId)
+                jsonData.put("nickname", kakaoNickname)
+                val requestBody = jsonData.toString().toRequestBody(jsonMediaType)
+                val request = Request.Builder().url(site).post(requestBody).build()
+
+                // 응답
+                client.newCall(request).enqueue(object : Callback {
+                    override fun onFailure(call: Call, e: IOException) {
+                        createCallback?.onCreate(isSuccess)
+                    }
+
+                    override fun onResponse(call: Call, response: Response) {
+                        val resultText = response.body?.string()
+                        val json = JSONObject(resultText)
+
+                        isSuccess = json.getBoolean("success")
+                        createCallback?.onCreate(isSuccess)
+                    }
+                })
+            }
         }
     }
 
@@ -120,28 +142,6 @@ object UserRemoteDataSource : UserSource {
             deleteUserCallback?.onDeleteUser(isSuccess)
         }
     }
-}
-
-suspend fun create(kakaoAccountId: Long?, kakaoAccountNickname: String?): Boolean {
-    // 클라이언트 생성
-    val client = OkHttpClient()
-
-    // 요청
-    val site =
-        "http://happybuyer.co.kr/auth/api/app/create?id=${kakaoAccountId}&nickname=${kakaoAccountNickname}"
-    val request = Request.Builder().url(site).get().build()
-
-    // 응답
-    val response = client.newCall(request).execute()
-    var isSuccess = false
-
-    if (response.isSuccessful) {
-        val resultText = response.body?.string()!!.trim()
-        val json = JSONObject(resultText)
-        isSuccess = json.getBoolean("success")
-    }
-
-    return isSuccess
 }
 
 suspend fun update(kakaoAccountId: Long, target: String, newContent: String): Boolean {

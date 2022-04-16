@@ -6,17 +6,17 @@ object UserRepository : UserSource {
 
     private val userRemoteDataSource = UserRemoteDataSource
 
-    override fun createUser(
+    override fun create(
         kakaoAccountId: Long,
         kakaoNickname: String?,
-        createUserCallback: UserSource.CreateUserCallback?
+        createCallback: UserSource.CreateCallback?
     ) {
-        userRemoteDataSource.createUser(
+        userRemoteDataSource.create(
             kakaoAccountId,
             kakaoNickname,
-            object : UserSource.CreateUserCallback {
-                override fun onCreateUser(isSuccess: Boolean) {
-                    createUserCallback?.onCreateUser(isSuccess)
+            object : UserSource.CreateCallback {
+                override fun onCreate(isSuccess: Boolean) {
+                    createCallback?.onCreate(isSuccess)
                 }
             })
     }
