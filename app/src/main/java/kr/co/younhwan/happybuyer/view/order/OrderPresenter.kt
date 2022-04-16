@@ -1,5 +1,6 @@
 package kr.co.younhwan.happybuyer.view.order
 
+import android.util.Log
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.data.AddressItem
 import kr.co.younhwan.happybuyer.data.BasketItem
@@ -11,10 +12,13 @@ import kr.co.younhwan.happybuyer.data.source.basket.BasketSource
 import kr.co.younhwan.happybuyer.data.source.order.OrderRepository
 import kr.co.younhwan.happybuyer.data.source.order.OrderSource
 import kr.co.younhwan.happybuyer.adapter.orderproduct.contract.OrderAdapterContract
+import kr.co.younhwan.happybuyer.data.source.user.UserRepository
+import kr.co.younhwan.happybuyer.data.source.user.UserSource
 
 class OrderPresenter(
     private val view: OrderContract.View,
     private val addressData: AddressRepository,
+    private val userData: UserRepository,
     private val basketData: BasketRepository,
     private val orderData: OrderRepository,
     private val orderAdapterModel: OrderAdapterContract.Model,
@@ -138,7 +142,26 @@ class OrderPresenter(
                                 deleteProductsCallback = object :
                                     BasketSource.DeleteProductsCallback {
                                     override fun onDeleteProducts(isSuccess: Boolean) {
-                                        view.createOrderCallback(orderItem)
+
+                                        // 고객의 포인트 번호가 없다면 포인트 번호를 업데이트
+                                        if ((app.point == null || app.point == "null") && orderItem.point != null && orderItem.point.isNotEmpty()) {
+                                            userData.update(
+                                                kakaoAccountId = app.kakaoAccountId,
+                                                updateTarget = "point",
+                                                newContent = orderItem.point,
+                                                updateCallback = object :
+                                                    UserSource.UpdateCallback {
+                                                    override fun onUpdate(isSuccess: Boolean) {
+                                                        if (isSuccess) {
+                                                            app.point = orderItem.point
+                                                        }
+                                                        view.createOrderCallback(orderItem)
+                                                    }
+                                                }
+                                            )
+                                        } else {
+                                            view.createOrderCallback(orderItem)
+                                        }
                                     }
                                 }
                             )

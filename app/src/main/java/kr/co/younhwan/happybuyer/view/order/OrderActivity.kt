@@ -9,6 +9,7 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.data.AddressItem
 import kr.co.younhwan.happybuyer.data.BasketItem
@@ -20,6 +21,7 @@ import kr.co.younhwan.happybuyer.databinding.ActivityOrderBinding
 import kr.co.younhwan.happybuyer.view.addeditaddress.AddAddressActivity
 import kr.co.younhwan.happybuyer.view.address.AddressActivity
 import kr.co.younhwan.happybuyer.adapter.orderproduct.OrderAdapter
+import kr.co.younhwan.happybuyer.data.source.user.UserRepository
 import kr.co.younhwan.happybuyer.view.order.dialog.OrderDialogFragment
 import kr.co.younhwan.happybuyer.view.ordersuccess.OrderSuccessActivity
 import java.text.DecimalFormat
@@ -31,6 +33,7 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
         OrderPresenter(
             view = this,
             addressData = AddressRepository,
+            userData = UserRepository,
             basketData = BasketRepository,
             orderData = OrderRepository,
             orderAdapterModel = orderAdapter,
@@ -50,6 +53,9 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
         super.onCreate(savedInstanceState)
         viewDataBinding = ActivityOrderBinding.inflate(layoutInflater)
         setContentView(viewDataBinding.root)
+
+        // 어플리케이션
+        val app = application as GlobalApplication
 
         // 로딩 뷰 셋팅
         viewDataBinding.orderView.visibility = View.GONE
@@ -140,6 +146,8 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
             }
 
             // 배달 요청사항
+            if (app.point != null && app.point != "null")
+                viewDataBinding.orderPointNumber.editText?.setText(app.point)
             viewDataBinding.orderPointNumber.editText?.addTextChangedListener(object :
                 PhoneNumberFormattingTextWatcher("KR") {
                 override fun afterTextChanged(s: Editable?) {
