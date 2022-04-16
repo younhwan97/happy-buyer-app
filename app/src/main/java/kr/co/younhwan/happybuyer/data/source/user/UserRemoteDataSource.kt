@@ -146,19 +146,4 @@ object UserRemoteDataSource : UserSource {
             }
         }
     }
-
-    override fun deleteUser(
-        kakaoAccountId: Long,
-        deleteUserCallback: UserSource.DeleteUserCallback?
-    ) {
-        runBlocking {
-            var isSuccess = false
-
-            launch {
-
-
-                deleteUserCallback?.onDeleteUser(isSuccess)
-            }
-        }
-    }
 }

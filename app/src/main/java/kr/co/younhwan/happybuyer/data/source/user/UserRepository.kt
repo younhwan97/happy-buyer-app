@@ -48,15 +48,4 @@ object UserRepository : UserSource {
                 }
             })
     }
-
-    override fun deleteUser(
-        kakaoAccountId: Long,
-        deleteUserCallback: UserSource.DeleteUserCallback?
-    ) {
-        userRemoteDataSource.deleteUser(kakaoAccountId, object : UserSource.DeleteUserCallback {
-            override fun onDeleteUser(isSuccess: Boolean) {
-                deleteUserCallback?.onDeleteUser(isSuccess)
-            }
-        })
-    }
 }

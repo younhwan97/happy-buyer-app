@@ -20,10 +20,4 @@ interface UserSource {
     interface UpdateCallback {
         fun onUpdate(isSuccess: Boolean)
     }
-
-    fun deleteUser(kakaoAccountId: Long, deleteUserCallback: DeleteUserCallback?)
-
-    interface DeleteUserCallback{
-        fun onDeleteUser(isSuccess: Boolean)
-    }
 }

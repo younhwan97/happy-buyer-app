@@ -17,6 +17,7 @@ import kr.co.younhwan.happybuyer.view.address.AddressActivity
 import kr.co.younhwan.happybuyer.view.main.MainActivity
 import kr.co.younhwan.happybuyer.view.main.account.presenter.AccountContract
 import kr.co.younhwan.happybuyer.view.main.account.presenter.AccountPresenter
+import kr.co.younhwan.happybuyer.view.splash.SplashActivity
 import kr.co.younhwan.happybuyer.view.update.UpdateActivity
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper
 
@@ -99,32 +100,59 @@ class AccountFragment : Fragment(), AccountContract.View {
 
         // 기타 (회원 탈퇴 및 로그아웃 버튼)
         viewDataBinding.accountEctLogoutBtn.setOnClickListener {
-            accountPresenter.logoutWithKakao(requireContext(), act)
+            accountPresenter.logoutWithKakao()
         }
 
         viewDataBinding.accountEctWithdrawalBtn.setOnClickListener {
-            accountPresenter.withdrawalWithKakao(requireContext(), act)
+            accountPresenter.withdrawalWithKakao()
         }
     }
 
+    override fun getAct() = activity as MainActivity
+
     override fun logoutResultCallback(success: Boolean, error: Throwable?) {
         if (success) {
-            val act = activity as MainActivity
-            Toast.makeText(context, "로그아웃에 성공하셨습니다.", Toast.LENGTH_SHORT)
+            // 토스트 메세지 출력
+            Toast.makeText(context, "로그아웃에 성공하셨습니다.", Toast.LENGTH_LONG)
                 .show()
+
+            // 메인 엑티비티 실행
             val mainIntent = Intent(context, MainActivity::class.java)
-            act.finish()
+            mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(mainIntent)
         } else {
-            Log.e("kakao", "로그아웃 실패. SDK에서 토큰 삭제됨", error)
+            Toast.makeText(context, "로그아웃에 실패하셨습니다.", Toast.LENGTH_LONG)
+                .show()
+
+            // 스팰리쉬 엑티비티 실행
+            val splashIntent = Intent(context, SplashActivity::class.java)
+            splashIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            splashIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(splashIntent)
         }
     }
 
     override fun withdrawalResultCallback(success: Boolean, error: Throwable?) {
         if (success) {
-            Log.e("kakao", "연결 끊기 실패", error)
+            // 토스트 메세지 출력
+            Toast.makeText(context, "회원탈퇴에 성공하셨습니다.", Toast.LENGTH_SHORT)
+                .show()
+
+            // 메인 엑티비티 실행
+            val mainIntent = Intent(context, MainActivity::class.java)
+            mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(mainIntent)
         } else {
-            Log.i("kakao", "연결 끊기 성공. SDK에서 토큰 삭제 됨")
+            Toast.makeText(context, "회원탈퇴에 실패하셨습니다.", Toast.LENGTH_LONG)
+                .show()
+
+            // 스팰리쉬 엑티비티 실행
+            val splashIntent = Intent(context, SplashActivity::class.java)
+            splashIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            splashIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(splashIntent)
         }
     }
 }

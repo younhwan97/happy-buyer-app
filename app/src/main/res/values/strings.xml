@@ -82,6 +82,12 @@
     <string name="account_etc_title">기타</string>
     <string name="account_etc_withdrawal_text">회원 탈퇴</string>
     <string name="account_etc_logout_text">로그아웃</string>
+    <string name="account_etc_logout_message">로그아웃하시겠습니까?</string>
+    <string name="account_etc_logout_cancel_btn_text">닫기</string>
+    <string name="account_etc_logout_confirm_btn_text">확인</string>
+    <string name="account_etc_withdrawal_message">정말 회원탈퇴를 하시겠습니까?</string>
+    <string name="account_etc_withdrawal_cancel_btn_text">닫기</string>
+    <string name="account_etc_withdrawal_confirm_btn_text">확인</string>
 
     <!-- Update -->
     <string name="update_nickname_title">닉네임</string>

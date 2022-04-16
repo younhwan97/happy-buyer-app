@@ -56,7 +56,7 @@ class PointFragment : Fragment(), PointContract.View {
 
             override fun afterTextChanged(s: Editable?) {
                 super.afterTextChanged(s)
-                if (s != null && s.isNotEmpty()) {
+                if (s != null && s.isNotEmpty() && s.length > 7) {
                     viewDataBinding.pointBtn.isEnabled = true
                     viewDataBinding.pointBtn.setTextColor(
                         ContextCompat.getColor(

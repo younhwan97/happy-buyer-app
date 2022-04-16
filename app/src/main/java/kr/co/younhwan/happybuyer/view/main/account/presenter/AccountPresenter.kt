@@ -1,58 +1,74 @@
 package kr.co.younhwan.happybuyer.view.main.account.presenter
 
-import android.app.AlertDialog
-import android.content.Context
-import android.content.DialogInterface
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.kakao.sdk.user.UserApiClient
 import kr.co.younhwan.happybuyer.GlobalApplication
-import kr.co.younhwan.happybuyer.view.main.MainActivity
+import kr.co.younhwan.happybuyer.R
 
 class AccountPresenter(
     private val view: AccountContract.View
 ) : AccountContract.Model {
 
-    override fun logoutWithKakao(context: Context, activity:MainActivity) {
-        val builder = AlertDialog.Builder(context)
+    private val act = view.getAct()
+    private val app = act.application as GlobalApplication
 
-        builder.setMessage("로그아웃하시겠습니까?")
-        builder.setPositiveButton("확인") { dialogInterface: DialogInterface, i: Int ->
-            UserApiClient.instance.logout { error ->
-                if (error != null) {
-                    // 로그아웃 실패
-                    view.logoutResultCallback(false, error)
-                } else {
-                    // 로그아웃 성공
-                    val app = activity.application as GlobalApplication
-                    app.isLogined = false
-                    app.kakaoAccountId = 0L
-                    app.nickname = "-"
-                    app.point = "-"
-                    view.logoutResultCallback(true, null)
+    override fun logoutWithKakao() {
+        MaterialAlertDialogBuilder(act)
+            .setTitle(act.resources.getString(R.string.account_etc_logout_text))
+            .setMessage(act.resources.getString(R.string.account_etc_logout_message))
+            .setNegativeButton(act.resources.getString(R.string.account_etc_logout_cancel_btn_text)) { _, _ ->
+                // Nothing to do
+            }
+            .setPositiveButton(act.resources.getString(R.string.account_etc_logout_confirm_btn_text)) { dialog, which ->
+                UserApiClient.instance.logout { error ->
+                    if (error != null) {
+                        // 로그아웃 실패
+                        view.logoutResultCallback(false, error)
+                    } else {
+                        // 로그아웃 성공
+                        // 어플리케이션 데이터 셋팅
+                        app.isLogined = false
+                        app.kakaoAccountId = -1L
+                        app.nickname = null
+                        app.point = null
+                        app.activatedBasket = "deactivate"
+                        app.wishedProductId = ArrayList()
+                        app.basketItemCount = 0
+
+                        view.logoutResultCallback(true, null)
+                    }
                 }
             }
-        }
-        
-        builder.setNegativeButton("닫기", null)
-        builder.show()
+            .show()
     }
 
-    override fun withdrawalWithKakao(context: Context, activity: MainActivity) {
-        val builder = AlertDialog.Builder(context)
+    override fun withdrawalWithKakao() {
+        MaterialAlertDialogBuilder(act)
+            .setTitle(act.resources.getString(R.string.account_etc_withdrawal_text))
+            .setMessage(act.resources.getString(R.string.account_etc_withdrawal_message))
+            .setNegativeButton(act.resources.getString(R.string.account_etc_withdrawal_cancel_btn_text)) { _, _ ->
+                // Nothing to do
+            }
+            .setPositiveButton(act.resources.getString(R.string.account_etc_withdrawal_confirm_btn_text)) { dialog, which ->
+                UserApiClient.instance.unlink { error ->
+                    if (error != null) {
+                        // 회원탈퇴 실패
+                        view.withdrawalResultCallback(false, error)
+                    } else {
+                        // 회원탈퇴 성공
+                        // 어플리케이션 데이터 셋팅
+                        app.isLogined = false
+                        app.kakaoAccountId = -1L
+                        app.nickname = null
+                        app.point = null
+                        app.activatedBasket = "deactivate"
+                        app.wishedProductId = ArrayList()
+                        app.basketItemCount = 0
 
-        builder.setMessage("회원 탈퇴하시겠습니까?")
-        builder.setPositiveButton("확인") { dialogInterface: DialogInterface, i: Int ->
-            UserApiClient.instance.unlink { error ->
-                if (error != null) {
-                    // 회원탈퇴 실패
-                    view.withdrawalResultCallback(false, error)
-                } else {
-                    // 회원탈퇴 성공
-                    view.withdrawalResultCallback(true, null)
+                        view.withdrawalResultCallback(true, null)
+                    }
                 }
             }
-        }
-        
-        builder.setNegativeButton("닫기", null)
-        builder.show()
+            .show()
     }
 }
