@@ -65,10 +65,23 @@
     <string name="product_total_price_sub_text_1">총 합계</string>
     <string name="product_basket_btn_text">-원 장바구니 담기</string>
 
-
-
-
-
+    <!-- Account -->
+    <string name="account_user_nickname_text">닉네임</string>
+    <string name="account_user_nickname_sub_text">님, 안녕하세요 :)</string>
+    <string name="account_address_text">배송지 관리</string>
+    <string name="account_inquiry_text">문의하기</string>
+    <string name="account_profile_title">프로필 관리</string>
+    <string name="account_profile_nickname_title">닉네임</string>
+    <string name="account_profile_nickname_text">-</string>
+    <string name="account_profile_point_title">포인트 번호</string>
+    <string name="account_profile_point_text">-</string>
+    <string name="account_profile_phone_title">휴대폰 번호</string>
+    <string name="account_profile_phone_text">-</string>
+    <string name="account_notification_title">알림 설정</string>
+    <string name="account_notification_get_title">알림 받기</string>
+    <string name="account_etc_title">기타</string>
+    <string name="account_etc_withdrawal_text">회원 탈퇴</string>
+    <string name="account_etc_logout_text">로그아웃</string>
 
 
 

@@ -1,5 +1,6 @@
 package kr.co.younhwan.happybuyer.view.splash
 
+import android.util.Log
 import com.kakao.sdk.user.UserApiClient
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.data.ProductItem

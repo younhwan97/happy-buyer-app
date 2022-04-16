@@ -1,5 +1,6 @@
 package kr.co.younhwan.happybuyer.data.source.user
 
+import android.util.Log
 import kotlinx.coroutines.*
 import kr.co.younhwan.happybuyer.data.UserItem
 import kr.co.younhwan.happybuyer.data.source.wished.WishedRemoteDataSource
@@ -119,7 +120,20 @@ object UserRemoteDataSource : UserSource {
             var isSuccess = false
 
             val job = GlobalScope.launch {
-                isSuccess = update(kakaoAccountId, target, newContent)
+                // API 서버 주소
+                // target : nickname, basket, phone, point, address
+                val site =
+                    "http://happybuyer.co.kr/auth/api/app/update?id=${kakaoAccountId}&target=${target}&content=${newContent}"
+
+                // 응답
+                val request = Request.Builder().url(site).get().build()
+                val response = client.newCall(request).execute()
+
+                if (response.isSuccessful) {
+                    val resultText = response.body?.string()!!.trim()
+                    val json = JSONObject(resultText)
+                    isSuccess = json.getBoolean("success")
+                }
             }
 
             job.join()
@@ -134,42 +148,11 @@ object UserRemoteDataSource : UserSource {
         runBlocking {
             var isSuccess = false
 
-            val job = GlobalScope.launch {
-                isSuccess = delete(kakaoAccountId)
-            }
+            launch {
 
-            job.join()
-            deleteUserCallback?.onDeleteUser(isSuccess)
+
+                deleteUserCallback?.onDeleteUser(isSuccess)
+            }
         }
     }
-}
-
-suspend fun update(kakaoAccountId: Long, target: String, newContent: String): Boolean {
-
-    // 클라이언트 생성
-    val client = OkHttpClient()
-
-    // 요청
-    // target : nickname, basket, phone, point, address
-    val site =
-        "http://happybuyer.co.kr/auth/api/app/update?id=${kakaoAccountId}&target=${target}&content=${newContent}"
-
-    // 응답
-    val request = Request.Builder().url(site).get().build()
-    val response = client.newCall(request).execute()
-    var isSuccess: Boolean = false
-
-    if (response.isSuccessful) {
-        val resultText = response.body?.string()!!.trim()
-        val json = JSONObject(resultText)
-        isSuccess = json.getBoolean("success")
-    }
-
-    return isSuccess
-}
-
-suspend fun delete(kakaoAccountId: Long): Boolean {
-
-
-    return false
 }

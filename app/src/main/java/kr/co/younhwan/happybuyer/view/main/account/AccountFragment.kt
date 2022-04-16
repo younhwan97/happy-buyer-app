@@ -21,14 +21,9 @@ import kr.co.younhwan.happybuyer.view.update.UpdateActivity
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper
 
 class AccountFragment : Fragment(), AccountContract.View {
-
-    /* View Binding */
     private lateinit var viewDataBinding: FragmentAccountBinding
 
-    /* Presenter */
     private val accountPresenter: AccountPresenter by lazy {
-        // View 영역은 사용자 이벤트 등에 대응하기 위해서 Presenter 변수가 필요하다.
-        // 실제 처리는 Presenter, Model 에서 이뤄지기 때문이다.
         AccountPresenter(
             this
         )
@@ -49,49 +44,38 @@ class AccountFragment : Fragment(), AccountContract.View {
         val act = activity as MainActivity
         val app = act.application as GlobalApplication
 
-        // set view
-        viewDataBinding.accountNickname.text =
-            if (app.nickname != null) app.nickname else "${app.kakaoAccountId}"
-
-        viewDataBinding.accountProfileNickname.text =
-            if (app.nickname != null) app.nickname else "${app.kakaoAccountId}"
-
         // 전체 컨테이너
         OverScrollDecoratorHelper.setUpOverScroll(viewDataBinding.accountContentContainer)
 
+        // 유저 닉네임
+        viewDataBinding.accountNickname.text =
+            if (app.nickname != null) app.nickname else "${app.kakaoAccountId}"
 
-
-        viewDataBinding.accountTopSecondBtn.setOnClickListener {
+        // 배송지 관리 및 문의하기 버튼
+        viewDataBinding.accountAddressBtn.setOnClickListener {
             val addressIntent = Intent(context, AddressActivity::class.java)
             addressIntent.putExtra("is_select_mode", false)
             startActivity(addressIntent)
+
         }
 
-//        viewDataBinding.accountTopFirstBtn.setOnClickListener {
-//            val orderHistoryIntent = Intent(context, OrderHistoryActivity::class.java)
-//            startActivity(orderHistoryIntent)
-//        }
-
-
-        // set event listener
-        viewDataBinding.accountTopThirdBtn.setOnClickListener {
+        viewDataBinding.accountInquiryBtn.setOnClickListener {
             val dialIntent = Intent(Intent.ACTION_DIAL)
             dialIntent.data = Uri.parse("tel:031-654-3320")
             startActivity(dialIntent)
         }
 
-        viewDataBinding.accountEctLogoutBtn.setOnClickListener {
-            accountPresenter.logoutWithKakao(requireContext(), act)
-        }
+        // 프로필
+        viewDataBinding.accountProfileNickname.text =
+            if (app.nickname != null && app.nickname != "null") app.nickname else "${app.kakaoAccountId}"
 
-        viewDataBinding.accountEctWithdrawalBtn.setOnClickListener {
-            accountPresenter.withdrawalWithKakao(requireContext(), act)
-        }
+        viewDataBinding.accountProfilePoint.text =
+            if (app.point != null && app.point != "null") app.point else "-"
 
-        val startForResult2 =
+
+        val startForResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode == RESULT_OK) {
-                    val app = activity?.application as GlobalApplication
                     viewDataBinding.accountProfileNickname.text = app.nickname
                     viewDataBinding.accountNickname.text = app.nickname
                 }
@@ -100,19 +84,31 @@ class AccountFragment : Fragment(), AccountContract.View {
         viewDataBinding.accountProfileNicknameContainer.setOnClickListener {
             val updateIntent = Intent(requireContext(), UpdateActivity::class.java)
             updateIntent.putExtra("target", "nickname")
-            startForResult2.launch(updateIntent)
+            startForResult.launch(updateIntent)
         }
 
         viewDataBinding.accountProfilePointContainer.setOnClickListener {
             val updateIntent = Intent(requireContext(), UpdateActivity::class.java)
-            updateIntent.putExtra("target", "pointNumber")
+            updateIntent.putExtra("target", "point")
             startActivity(updateIntent)
         }
 
         viewDataBinding.accountProfilePhoneContainer.setOnClickListener {
             val updateIntent = Intent(requireContext(), UpdateActivity::class.java)
-            updateIntent.putExtra("target", "phoneNumber")
+            updateIntent.putExtra("target", "phone")
             startActivity(updateIntent)
+        }
+
+        // 알림 설정
+        // ..
+
+        // 기타 (회원 탈퇴 및 로그아웃 버튼)
+        viewDataBinding.accountEctLogoutBtn.setOnClickListener {
+            accountPresenter.logoutWithKakao(requireContext(), act)
+        }
+
+        viewDataBinding.accountEctWithdrawalBtn.setOnClickListener {
+            accountPresenter.withdrawalWithKakao(requireContext(), act)
         }
     }
 

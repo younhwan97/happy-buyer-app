@@ -11,10 +11,8 @@ import kr.co.younhwan.happybuyer.view.update.phone.PhoneFragment
 import kr.co.younhwan.happybuyer.view.update.point.PointFragment
 
 class UpdateActivity : AppCompatActivity() {
-    /* View Binding */
     lateinit var viewDataBinding : ActivityUpdateBinding
 
-    /* UpdateActivity 에서 사용할 프래그먼트 */
     private val nicknameFragment : NicknameFragment by lazy {
         NicknameFragment()
     }
@@ -42,9 +40,9 @@ class UpdateActivity : AppCompatActivity() {
 
         val target = intent.getStringExtra("target")
 
-        if(target == "pointNumber"){
+        if(target == "point"){
             replace(R.id.fragmentContainerInUpdateAct, pointFragment)
-        } else if(target == "phoneNumber"){
+        } else if(target == "phone"){
             replace(R.id.fragmentContainerInUpdateAct, phoneFragment)
         }
     }
