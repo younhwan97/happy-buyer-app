@@ -37,10 +37,10 @@ class UpdateActivity : AppCompatActivity() {
 
             // 초기 프래그먼트 설정
             if (updateTarget == "point") {
-                viewDataBinding.updateToolbar.title = "포인트 번호 변경"
+                viewDataBinding.updateToolbar.title = "포인트 번호"
                 replace(R.id.fragmentContainerInUpdateAct, pointFragment)
             } else {
-                viewDataBinding.updateToolbar.title = "닉네임 변경"
+                viewDataBinding.updateToolbar.title = "닉네임"
                 replace(R.id.fragmentContainerInUpdateAct, nicknameFragment)
             }
         }

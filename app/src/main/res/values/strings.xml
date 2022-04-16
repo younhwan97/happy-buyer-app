@@ -87,6 +87,10 @@
     <string name="update_nickname_title">닉네임</string>
     <string name="update_nickname_btn_text">저장</string>
     <string name="update_nickname_helper_text">최대 10글자까지 입력 가능합니다.</string>
+    <string name="update_point_title">포인트 번호</string>
+    <string name="update_point_btn_text">저장</string>
+    <string name="update_point_helper_text">포인트 적립에 사용할 핸드폰 번호를 입력해주세요.</string>
+
 
 
     <!-- HappyBuyer wished view -->

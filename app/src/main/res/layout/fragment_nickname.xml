@@ -58,7 +58,7 @@
             android:enabled="false"
             android:insetTop="0dp"
             android:insetBottom="0dp"
-            android:text="@string/update_nickname_btn_text"
+            android:text="@string/update_point_btn_text"
             android:textColor="@color/fontColorWhite"
             android:textSize="16sp" />
     </LinearLayout>

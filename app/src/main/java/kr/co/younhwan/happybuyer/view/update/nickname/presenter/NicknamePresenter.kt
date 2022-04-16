@@ -6,7 +6,7 @@ import kr.co.younhwan.happybuyer.data.source.user.UserSource
 
 class NicknamePresenter(
     val view: NicknameContract.View,
-    private val userData: UserRepository,
+    private val userData: UserRepository
 ) : NicknameContract.Model {
 
     override fun updateUserNickname(newNickname: String) {
@@ -19,12 +19,9 @@ class NicknamePresenter(
                 newContent = newNickname,
                 updateCallback = object : UserSource.UpdateCallback {
                     override fun onUpdate(isSuccess: Boolean) {
-                        if (isSuccess) {
-                            app.nickname = newNickname
-                            view.updateResultCallback(true)
-                        } else {
-                            view.updateResultCallback(false)
-                        }
+                        if (isSuccess) app.nickname = newNickname
+
+                        view.updateResultCallback(isSuccess)
                     }
                 })
         } else {

@@ -78,6 +78,7 @@ class AccountFragment : Fragment(), AccountContract.View {
                 if (it.resultCode == RESULT_OK) {
                     viewDataBinding.accountProfileNickname.text = app.nickname
                     viewDataBinding.accountNickname.text = app.nickname
+                    viewDataBinding.accountProfilePoint.text = app.point
                 }
             }
 
@@ -90,7 +91,7 @@ class AccountFragment : Fragment(), AccountContract.View {
         viewDataBinding.accountProfilePointContainer.setOnClickListener {
             val updateIntent = Intent(requireContext(), UpdateActivity::class.java)
             updateIntent.putExtra("update_target", "point")
-            startActivity(updateIntent)
+            startForResult.launch(updateIntent)
         }
 
         // 알림 설정
