@@ -256,10 +256,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:checked="true"
                     android:fontFamily="@font/notosans_kr_regular"
                     android:showText="false"
                     android:textColor="@color/fontColorBlack"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    />
             </LinearLayout>
 
             <com.google.android.material.divider.MaterialDivider

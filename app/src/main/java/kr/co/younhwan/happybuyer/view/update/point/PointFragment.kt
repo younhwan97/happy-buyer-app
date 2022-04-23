@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.data.source.user.UserRepository
 import kr.co.younhwan.happybuyer.databinding.FragmentPointBinding
@@ -38,7 +39,14 @@ class PointFragment : Fragment(), PointContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 어플리케이션
+        val app = (activity as UpdateActivity).application as GlobalApplication
+
         // 에딧 텍스트
+        if(app.isLogined && app.point != null && app.point != "null"){
+            viewDataBinding.pointEditText.text = Editable.Factory.getInstance().newEditable(app.point)
+        }
+
         viewDataBinding.pointEditText.addTextChangedListener(object :
             PhoneNumberFormattingTextWatcher("KR") {
             override fun beforeTextChanged(

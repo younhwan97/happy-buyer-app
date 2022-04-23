@@ -50,27 +50,19 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
-    /* kakao */
-    implementation "com.kakao.sdk:v2-user:2.8.4" // 카카오 로그인
+    implementation "com.kakao.sdk:v2-user:2.8.4"
 
-    /* okHttp */
     implementation "com.squareup.okhttp3:okhttp:4.9.3"
 
-    /* Glide */
     implementation 'com.github.bumptech.glide:glide:4.9.0'
 
-    /* 코루틴 */
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0'
 
-    /* Lottie */
     implementation 'com.airbnb.android:lottie:5.0.2'
 
-    /* wished button animation */
     implementation 'pub.hanks:smallbang:1.2.2'
 
-    /* Power Spinner */
     implementation "com.github.skydoves:powerspinner:1.1.9"
 
-    /* overscroll-decor */
     implementation 'io.github.everythingme:overscroll-decor-android:1.1.1'
 }

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.data.source.user.UserRepository
 import kr.co.younhwan.happybuyer.databinding.FragmentNicknameBinding
@@ -38,7 +39,14 @@ class NicknameFragment : Fragment(), NicknameContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 어플리케이션
+        val app = (activity as UpdateActivity).application as GlobalApplication
+        
         // 에딧 텍스트
+        if(app.isLogined && app.nickname != null && app.nickname != "null"){
+            viewDataBinding.nicknameEditText.text = Editable.Factory.getInstance().newEditable(app.nickname)
+        }
+
         viewDataBinding.nicknameEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}

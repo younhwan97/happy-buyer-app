@@ -96,7 +96,13 @@ class AccountFragment : Fragment(), AccountContract.View {
         }
 
         // 알림 설정
-        // ..
+        viewDataBinding.accountNotificationGet.setOnCheckedChangeListener { compoundButton, isChecked ->
+            if(isChecked){
+
+            } else {
+
+            }
+        }
 
         // 기타 (회원 탈퇴 및 로그아웃 버튼)
         viewDataBinding.accountEctLogoutBtn.setOnClickListener {
