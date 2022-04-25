@@ -14,7 +14,6 @@ object BasketRemoteDataSource : BasketSource {
     private const val serverInfo = "http://happybuyer.co.kr/basket/api" // API 서버
     private val jsonMediaType = "application/json; charset=utf-8".toMediaTypeOrNull()
 
-    // CREATE
     override fun createOrUpdateProduct(
         kakaoAccountId: Long,
         productId: Int,
@@ -24,7 +23,7 @@ object BasketRemoteDataSource : BasketSource {
         runBlocking {
             var resultCount = 0
 
-            val job = GlobalScope.launch {
+            launch {
                 // API 서버 주소
                 val site = serverInfo
 
@@ -37,24 +36,31 @@ object BasketRemoteDataSource : BasketSource {
                 val request = Request.Builder().url(site).post(requestBody).build()
 
                 // 응답
-                val response = client.newCall(request).execute()
-                if (response.isSuccessful) {
-                    val resultText = response.body?.string()!!.trim()
-                    val json = JSONObject(resultText)
-                    val success = json.getBoolean("success")
-
-                    if (success) {
-                        resultCount = json.getInt("result_count")
+                client.newCall(request).enqueue(object : Callback {
+                    override fun onFailure(call: Call, e: IOException) {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            createOrUpdateProductCallback?.onCreateOrUpdateProduct(resultCount)
+                        }
                     }
-                }
-            }
 
-            job.join()
-            createOrUpdateProductCallback?.onCreateOrUpdateProduct(resultCount)
+                    override fun onResponse(call: Call, response: Response) {
+                        val resultText = response.body?.string()!!.trim()
+                        val json = JSONObject(resultText)
+
+                        val success = json.getBoolean("success")
+                        if (success) {
+                            resultCount = json.getInt("result_count")
+                        }
+
+                        CoroutineScope(Dispatchers.Main).launch {
+                            createOrUpdateProductCallback?.onCreateOrUpdateProduct(resultCount)
+                        }
+                    }
+                })
+            }
         }
     }
 
-    // READ
     override fun readProducts(
         kakaoAccountId: Long,
         readProductsCallback: BasketSource.ReadProductsCallback?
@@ -70,7 +76,7 @@ object BasketRemoteDataSource : BasketSource {
                 val request = Request.Builder().url(site).get().build()
 
                 // 응답
-                client.newCall(request).enqueue(object : Callback{
+                client.newCall(request).enqueue(object : Callback {
                     override fun onFailure(call: Call, e: IOException) {
                         CoroutineScope(Dispatchers.Main).launch {
                             readProductsCallback?.onReadProducts(list)
@@ -127,7 +133,6 @@ object BasketRemoteDataSource : BasketSource {
         }
     }
 
-    // UPDATE
     override fun updateProduct(
         kakaoAccountId: Long,
         productId: Int,
@@ -137,7 +142,7 @@ object BasketRemoteDataSource : BasketSource {
         runBlocking {
             var isSuccess = false
 
-            val job = GlobalScope.launch {
+            launch {
                 // API 서버 주소
                 val site = serverInfo
 
@@ -150,20 +155,27 @@ object BasketRemoteDataSource : BasketSource {
                 val request = Request.Builder().url(site).put(requestBody).build()
 
                 // 응답
-                val response = client.newCall(request).execute()
-                if (response.isSuccessful) {
-                    val resultText = response.body?.string()!!.trim()
-                    val json = JSONObject(resultText)
-                    isSuccess = json.getBoolean("success")
-                }
-            }
+                client.newCall(request).enqueue(object : Callback{
+                    override fun onFailure(call: Call, e: IOException) {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            updateProductCallback?.onUpdateProduct(isSuccess)
+                        }
+                    }
 
-            job.join()
-            updateProductCallback?.onUpdateProduct(isSuccess)
+                    override fun onResponse(call: Call, response: Response) {
+                        val resultText = response.body?.string()!!.trim()
+                        val json = JSONObject(resultText)
+                        isSuccess = json.getBoolean("success")
+
+                        CoroutineScope(Dispatchers.Main).launch {
+                            updateProductCallback?.onUpdateProduct(isSuccess)
+                        }
+                    }
+                })
+            }
         }
     }
 
-    // DELETE
     override fun deleteProducts(
         kakaoAccountId: Long,
         productId: ArrayList<Int>,
@@ -172,7 +184,7 @@ object BasketRemoteDataSource : BasketSource {
         runBlocking {
             var isSuccess = false
 
-            val job = GlobalScope.launch {
+            launch {
                 // API 서버 주소
                 val site = serverInfo
 
@@ -188,16 +200,24 @@ object BasketRemoteDataSource : BasketSource {
                 val request = Request.Builder().url(site).delete(requestBody).build()
 
                 // 응답
-                val response = client.newCall(request).execute()
-                if (response.isSuccessful) {
-                    val resultText = response.body?.string()!!.trim()
-                    val json = JSONObject(resultText)
-                    isSuccess = json.getBoolean("success")
-                }
-            }
+                client.newCall(request).enqueue(object : Callback{
+                    override fun onFailure(call: Call, e: IOException) {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            deleteProductsCallback?.onDeleteProducts(isSuccess)
+                        }
+                    }
 
-            job.join()
-            deleteProductsCallback?.onDeleteProducts(isSuccess)
+                    override fun onResponse(call: Call, response: Response) {
+                        val resultText = response.body?.string()!!.trim()
+                        val json = JSONObject(resultText)
+                        isSuccess = json.getBoolean("success")
+
+                        CoroutineScope(Dispatchers.Main).launch {
+                            deleteProductsCallback?.onDeleteProducts(isSuccess)
+                        }
+                    }
+                })
+            }
         }
     }
 }

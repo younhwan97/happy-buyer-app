@@ -42,7 +42,7 @@ class SplashActivity : AppCompatActivity(), SplashContract.View {
         // 메인 엑티비티 실행
         startActivity(Intent(this, MainActivity::class.java))
 
-        // 현재 엑티비티 제거
+        // 현재 엑티비티 종료
         finish()
     }
 }
