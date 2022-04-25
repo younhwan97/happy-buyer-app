@@ -23,20 +23,6 @@ import kr.co.younhwan.happybuyer.view.search.adapter.suggested.SuggestedAdapter
 class SearchActivity : AppCompatActivity(), SearchContract.View {
     lateinit var viewDataBinding: ActivitySearchBinding
 
-    private val recentAdapter: RecentAdapter by lazy {
-        RecentAdapter()
-    }
-
-    private val suggestedAdapter: SuggestedAdapter by lazy {
-        SuggestedAdapter()
-    }
-
-    private val resultAdapter: ProductAdapter by lazy {
-        ProductAdapter(
-            usingBy = "search"
-        )
-    }
-
     private val searchPresenter: SearchPresenter by lazy {
         SearchPresenter(
             view = this,
@@ -51,30 +37,56 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
         )
     }
 
+    private val recentAdapter: RecentAdapter by lazy {
+        RecentAdapter()
+    }
+
+    private val suggestedAdapter: SuggestedAdapter by lazy {
+        SuggestedAdapter()
+    }
+
+    private val resultAdapter: ProductAdapter by lazy {
+        ProductAdapter(
+            usingBy = "search"
+        )
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewDataBinding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(viewDataBinding.root)
 
+        // 인텐트에서 데이터 추출
         val keyword = intent.getStringExtra("keyword") // 검색어
 
-        searchPresenter.loadRecent() // 최근 검색어를 불러온다.
-        searchPresenter.loadSearchHistory() // 검색어 추천을 위해 (인기) 검색 기록을 불러온다.
-        searchPresenter.loadResultSearch(keyword) // 검색 결과를 불러온다.
+        // 데이터 로드
+        searchPresenter.loadRecent() // 최근 검색어
+        searchPresenter.loadSearchHistory() // 검색어 추천을 위한 검색 기록
+        searchPresenter.loadResultSearch(keyword) // 검색 결과
 
-        // 컨테이너
+        // 전체 컨테이너
         viewDataBinding.recentSearchContainer.visibility = View.GONE
         viewDataBinding.suggestedSearchContainer.visibility = View.GONE
         viewDataBinding.searchResultContainer.visibility = View.GONE
 
-        if (!keyword.isNullOrEmpty()) { // 검색어가 존재할 때
+        if (!keyword.isNullOrEmpty() && !keyword.isNullOrBlank()) {
+            // 검색어가 존재할 때
             viewDataBinding.searchViewInSearchToolbar.isIconified = true
             viewDataBinding.searchViewInSearchToolbar.setQuery(keyword, false)
-            viewDataBinding.searchResultContainer.visibility = View.VISIBLE // 검색 결과 컨테이너를 보여준다.
 
-        } else { // 검색어가 존재하지 않을 때
+            // 검색 결과 컨테이너를 보여주고, 로딩 뷰 셋팅
+            viewDataBinding.searchResultContainer.visibility = View.VISIBLE
+            viewDataBinding.searchResultTopContainer.visibility = View.GONE
+            viewDataBinding.searchResultRecycler.visibility = View.GONE
+            viewDataBinding.searchResultEmptyView.visibility = View.GONE
+            viewDataBinding.searchResultLoadingView.visibility = View.VISIBLE
+            viewDataBinding.searchResultLoadingImage.playAnimation()
+        } else {
+            // 검색어가 존재하지 않을 때
             viewDataBinding.searchViewInSearchToolbar.isIconified = false
-            viewDataBinding.recentSearchContainer.visibility = View.VISIBLE // 최근 검색 컨테이너를 보여준다.
+
+            // 최근 검색 컨테이너를 보여준다.
+            viewDataBinding.recentSearchContainer.visibility = View.VISIBLE
         }
 
         // 툴바
@@ -87,7 +99,7 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
         viewDataBinding.searchToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.basketInSearchMenu -> {
-                    createBasketActivity()
+                    startActivity(Intent(this, BasketActivity::class.java))
                     true
                 }
                 else -> false
@@ -97,7 +109,7 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
         viewDataBinding.searchViewInSearchToolbar.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
-                    if (!query.isNullOrEmpty()) {
+                    if (!query.isNullOrEmpty() && !query.isNullOrBlank()) {
                         searchPresenter.onClickListenerOfKeyword(query)
                         searchPresenter.createRecentWithHistory(query) // 최근 검색어에 저장한다.
                     }
@@ -107,10 +119,13 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
                 override fun onQueryTextChange(newText: String?): Boolean {
                     suggestedAdapter.filter.filter(newText) // 필터링
                     viewDataBinding.searchResultContainer.visibility = View.GONE
-                    if (newText.isNullOrEmpty()) { // 검색어가 존재하지 않을 때
+
+                    if (newText.isNullOrEmpty() || newText.isNullOrBlank()) {
+                        // 검색어가 존재하지 않을 때 -> 최근 검색어 제시
                         viewDataBinding.recentSearchContainer.visibility = View.VISIBLE
                         viewDataBinding.suggestedSearchContainer.visibility = View.GONE
-                    } else { // 검색어가 존재할 때
+                    } else {
+                        // 검색어가 존재할 때 -> 추천 검색어 제시
                         viewDataBinding.recentSearchContainer.visibility = View.GONE
                         viewDataBinding.suggestedSearchContainer.visibility = View.VISIBLE
                     }
@@ -121,7 +136,10 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
 
         // 최근 검색
         viewDataBinding.recentSearchRecycler.adapter = recentAdapter
-        viewDataBinding.recentSearchRecycler.layoutManager = GridLayoutManager(this, 2)
+        viewDataBinding.recentSearchRecycler.layoutManager = object : GridLayoutManager(this, 2) {
+            override fun canScrollHorizontally() = false
+            override fun canScrollVertically() = true
+        }
         viewDataBinding.recentSearchRecycler.addItemDecoration(recentAdapter.RecyclerDecoration())
 
         viewDataBinding.recentSearchDeleteAllBtn.setOnClickListener {
@@ -130,17 +148,23 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
 
         // 추천 검색
         viewDataBinding.suggestedSearchRecycler.adapter = suggestedAdapter
-        viewDataBinding.suggestedSearchRecycler.layoutManager = LinearLayoutManager(this)
+        viewDataBinding.suggestedSearchRecycler.layoutManager = object : LinearLayoutManager(this) {
+            override fun canScrollHorizontally() = false
+            override fun canScrollVertically() = true
+        }
 
         // 검색 결과
         viewDataBinding.searchResultRecycler.adapter = resultAdapter
-        viewDataBinding.searchResultRecycler.layoutManager = GridLayoutManager(this, 2)
+        viewDataBinding.searchResultRecycler.layoutManager = object : GridLayoutManager(this, 2) {
+            override fun canScrollHorizontally() = false
+            override fun canScrollVertically() = true
+        }
         viewDataBinding.searchResultRecycler.addItemDecoration(resultAdapter.RecyclerDecoration())
         viewDataBinding.searchResultSortingSpinner.selectItemByIndex(0) // 기본값 = 추천순
         viewDataBinding.searchResultSortingSpinner.lifecycleOwner = this // 메모리 누수 방지
 
         viewDataBinding.searchResultSortingSpinner.setOnSpinnerItemSelectedListener<String> { _, oldItem, _, newItem ->
-            if (oldItem != newItem) { // && (!oldItem.isNullOrEmpty() || (oldItem.isNullOrEmpty() && newItem != "추천순"))
+            if (oldItem != newItem) {
                 searchPresenter.sortSearchResult(newItem)
                 viewDataBinding.searchResultLoadingView.visibility = View.VISIBLE
                 viewDataBinding.searchResultLoadingImage.playAnimation()
@@ -149,16 +173,22 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
         }
     }
 
+    override fun getAct() = this
+
     override fun loadSearchResultCallback(size: Int) {
-        // 검색 결과 개수에 따라 다른 뷰를 보여준다.
-        if (size == 0) { // 검색 결과가 없을 때 -> empty view
+        if (size == 0) {
+            // 검색 결과가 없을 때 -> empty view
             viewDataBinding.searchResultEmptyView.visibility = View.VISIBLE
-            viewDataBinding.searchResultTopContainer.visibility = View.GONE
-            viewDataBinding.searchResultRecycler.visibility = View.GONE
-        } else { // 검색 결과가 있을 때 -> recycler view
-            viewDataBinding.searchResultEmptyView.visibility = View.GONE
+        } else {
+            // 검색 결과가 있을 때 -> recycler view
+            viewDataBinding.searchResultTopContainer.visibility = View.VISIBLE
+            viewDataBinding.searchResultRecycler.visibility = View.VISIBLE
             viewDataBinding.searchResultCountText.text = "총 ".plus(size.toString()).plus("개")
         }
+
+        // 로딩 뷰 종료
+        viewDataBinding.searchResultLoadingView.visibility = View.GONE
+        viewDataBinding.searchResultLoadingImage.pauseAnimation()
     }
 
     override fun sortSearchResultCallback() {
@@ -169,8 +199,6 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
             viewDataBinding.searchResultLoadingImage.pauseAnimation() // 메모리 낭비를 막기위해 퍼즈
         }, 500)
     }
-
-    override fun getAct() = this
 
     override fun createResultActivity(keyword: String) {
         val resultIntent = Intent(this, SearchActivity::class.java)
@@ -184,6 +212,4 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
         productIntent.putExtra("productItem", productItem)
         startActivity(productIntent)
     }
-
-    override fun createBasketActivity() = startActivity(Intent(this, BasketActivity::class.java))
 }

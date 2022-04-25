@@ -14,8 +14,6 @@ interface SearchContract{
         fun createResultActivity(keyword: String)
 
         fun createProductActivity(productItem: ProductItem)
-
-        fun createBasketActivity()
     }
 
     interface Model{

@@ -31,7 +31,6 @@ class AccountPresenter(
                         app.kakaoAccountId = -1L
                         app.nickname = null
                         app.point = null
-                        app.activatedBasket = "deactivate"
                         app.wishedProductId = ArrayList()
                         app.basketItemCount = 0
 
@@ -61,7 +60,6 @@ class AccountPresenter(
                         app.kakaoAccountId = -1L
                         app.nickname = null
                         app.point = null
-                        app.activatedBasket = "deactivate"
                         app.wishedProductId = ArrayList()
                         app.basketItemCount = 0
 

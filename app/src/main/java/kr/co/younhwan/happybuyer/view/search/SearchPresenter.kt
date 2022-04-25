@@ -64,7 +64,8 @@ class SearchPresenter(
     }
 
     override fun loadRecent() {
-        if (app.isLogined) { // 로그인한 유저의 최근 검색 기록을 읽어온다.
+        if (app.isLogined) {
+            // 로그인한 유저의 최근 검색 기록을 읽어온다.
             searchData.readRecent(
                 kakaoAccountId = app.kakaoAccountId,
                 readRecentCallback = object : SearchSource.ReadRecentCallback {
@@ -74,8 +75,8 @@ class SearchPresenter(
                     }
                 }
             )
-        } else { // 로그인하지 않은 유저
-            // list 가 비어있더라도 addItems, notifyAdapter 를 호출해야 에러가 발생하지 않는다.
+        } else {
+            // 로그인하지 않은 유저
             recentAdapterModel.addItems(ArrayList<RecentItem>())
             recentAdapterView.notifyAdapter()
         }
@@ -84,7 +85,7 @@ class SearchPresenter(
     override fun deleteAllRecent() {
         if (app.isLogined) {
             if (recentAdapterModel.getItemCount() != 0) { // 저장된 검색어가 있는 경우 (불필요한 api 호출 방지)
-                // keyword == null -> 모든 최근 검색어 삭제
+                // keyword  == null -> 모든 최근 검색어 삭제
                 // keyword !== null -> keyword 에 해당하는 검색어만 삭제
                 searchData.deleteRecent(
                     kakaoAccountId = app.kakaoAccountId,
@@ -104,7 +105,7 @@ class SearchPresenter(
 
     private fun onClickListenerOfDeleteBtn(keyword: String, position: Int) {
         if (app.isLogined) {
-            // keyword == null -> 모든 최근 검색어 삭제
+            // keyword  == null -> 모든 최근 검색어 삭제
             // keyword !== null -> keyword 에 해당하는 검색어만 삭제
             searchData.deleteRecent(
                 kakaoAccountId = app.kakaoAccountId,
@@ -138,14 +139,15 @@ class SearchPresenter(
 
     // 검색 결과
     override fun loadResultSearch(keyword: String?) {
-        if (keyword.isNullOrBlank()) {
-            // 키워드가 존재하지 않더라도 빈 배열을 추가해야 에러가 발생하지 않는다.
+        if (keyword.isNullOrBlank() || keyword.isNullOrEmpty()) {
+            // 키워드가 존재하지 않을 때
             view.loadSearchResultCallback(0)
             resultAdapterModel.addItems(ArrayList<ProductItem>())
             resultAdapterView.notifyAdapter()
-        } else { // 키워드가 존재할 때
+        } else { 
+            // 키워드가 존재할 때
             productData.readProducts(
-                selectedCategory = "total",
+                selectedCategory = "전체",
                 sortBy = null,
                 page= 1,
                 keyword = keyword,

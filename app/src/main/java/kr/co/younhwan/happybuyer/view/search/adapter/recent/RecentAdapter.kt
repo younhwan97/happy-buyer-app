@@ -11,32 +11,35 @@ import kr.co.younhwan.happybuyer.view.search.adapter.recent.contract.RecentAdapt
 
 class RecentAdapter : RecyclerView.Adapter<RecentViewHolder>(), RecentAdapterContract.Model, RecentAdapterContract.View {
 
-    private lateinit var recentRecentItem: ArrayList<RecentItem>
+    // 아이템
+    private var recentItemList: ArrayList<RecentItem> = ArrayList()
 
+    // 이벤트 리스너
     override var onClickFuncOfDeleteBtn: ((String, Int) -> Unit)? = null
 
     override var onClickFuncOfRecentSearch: ((String) -> Unit)? = null
 
-    override fun getItemCount() = recentRecentItem.size
+    // 메서드
+    override fun getItemCount() = recentItemList.size
 
-    override fun clearItem() = recentRecentItem.clear()
+    override fun clearItem() = recentItemList.clear()
 
-    override fun getItem(position: Int) = recentRecentItem[position]
+    override fun getItem(position: Int) = recentItemList[position]
 
     override fun notifyAdapter() = notifyDataSetChanged()
 
     override fun notifyRemoved(position: Int) = notifyItemRemoved(position)
 
-    override fun addItems(recentRecentItems: ArrayList<RecentItem>) {
-        this.recentRecentItem = recentRecentItems
+    override fun addItems(recentItems: ArrayList<RecentItem>) {
+        recentItemList.addAll(recentItems)
     }
 
     override fun deleteItem(position: Int) {
-        recentRecentItem.removeAt(position)
+        recentItemList.removeAt(position)
     }
 
     override fun onBindViewHolder(holder: RecentViewHolder, position: Int) {
-        recentRecentItem[position].let {
+        recentItemList[position].let {
             holder.onBind(it)
         }
     }
@@ -51,6 +54,7 @@ class RecentAdapter : RecyclerView.Adapter<RecentViewHolder>(), RecentAdapterCon
         )
     }
 
+    // 데코레이션
     inner class RecyclerDecoration :RecyclerView.ItemDecoration() {
         override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
             super.getItemOffsets(outRect, view, parent, state)

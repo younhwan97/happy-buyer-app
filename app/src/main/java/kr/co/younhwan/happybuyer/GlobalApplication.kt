@@ -9,13 +9,12 @@ class GlobalApplication : Application() {
     var kakaoAccountId: Long = -1L
     var nickname: String? = null
     var point: String? = null
-    var activatedBasket: String? = "deactivate"
 
     // 찜
     var wishedProductId: ArrayList<Int> = ArrayList<Int>()
 
     // 장바구니
-    var basketItemCount: Int = 0
+    var basketItemCount: Int = -1
 
     override fun onCreate() {
         super.onCreate()

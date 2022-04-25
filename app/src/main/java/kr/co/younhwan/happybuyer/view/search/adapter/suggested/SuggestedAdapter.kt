@@ -12,14 +12,16 @@ class SuggestedAdapter : RecyclerView.Adapter<SuggestedViewHolder>(), Filterable
     SuggestedAdapterContract.Model, SuggestedAdapterContract.View {
 
     // 리사이클러 뷰를 생성하는데 사용할 '필터링 된' 데이터
-    private lateinit var suggestedItemList: ArrayList<String>
+    private var suggestedItemList: ArrayList<String> = ArrayList()
 
     // 필터링 하기전 전체 데이터
     // -> 처음에 초기화 된 이후 변하면 안됨
     val searchHistoryItemList = ArrayList<String>()
 
+    // 이벤트 리스너
     override var onClickFuncOfSuggestedSearch: ((String) -> Unit)? = null
 
+    // 메서드
     override fun getItem(position: Int): String = suggestedItemList[position]
 
     override fun getItemCount() = suggestedItemList.size
@@ -29,7 +31,7 @@ class SuggestedAdapter : RecyclerView.Adapter<SuggestedViewHolder>(), Filterable
     override fun clearItem() = suggestedItemList.clear()
 
     override fun addItems(suggestedItems: ArrayList<String>) {
-        suggestedItemList = suggestedItems
+        suggestedItemList.addAll(suggestedItems)
     }
 
     override fun addItemsOnHistoryItemList(searchHistoryItems: ArrayList<String>) {

@@ -16,7 +16,7 @@ interface RecentAdapterContract {
 
     interface Model{
 
-        fun addItems(recentRecentItems: ArrayList<RecentItem>)
+        fun addItems(recentItems: ArrayList<RecentItem>)
 
         fun clearItem()
 
