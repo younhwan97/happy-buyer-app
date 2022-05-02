@@ -1,19 +1,21 @@
 package kr.co.younhwan.happybuyer.view.main
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import kr.co.younhwan.happybuyer.GlobalApplication
-import kr.co.younhwan.happybuyer.view.basket.BasketActivity
-import kr.co.younhwan.happybuyer.view.login.LoginActivity
 import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.databinding.ActivityMainBinding
 import kr.co.younhwan.happybuyer.util.replace
+import kr.co.younhwan.happybuyer.view.basket.BasketActivity
+import kr.co.younhwan.happybuyer.view.login.LoginActivity
 import kr.co.younhwan.happybuyer.view.main.account.AccountFragment
-import kr.co.younhwan.happybuyer.view.main.wished.WishedFragment
 import kr.co.younhwan.happybuyer.view.main.home.HomeFragment
 import kr.co.younhwan.happybuyer.view.main.orderhistory.OrderHistoryFragment
+import kr.co.younhwan.happybuyer.view.main.wished.WishedFragment
 
 class MainActivity : AppCompatActivity(), MainContract.View {
     lateinit var viewDataBinding: ActivityMainBinding
@@ -40,6 +42,8 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         AccountFragment()
     }
 
+    private lateinit var notificationBadgeOfBasketMenu: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewDataBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -65,17 +69,18 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         // 권한 요청
         mainPresenter.requestPermission()
 
-        // 툴바
-        viewDataBinding.mainToolbar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.basketInMain -> {
-                    val basketIntent = Intent(this, BasketActivity::class.java)
-                    startActivity(basketIntent)
-                    true
-                }
-                else -> false
-            }
+        // 툴바 & 메뉴
+        val menu = viewDataBinding.mainToolbar.menu
+        val basketItem = menu.findItem(R.id.basketInMain)
+        val actionView = basketItem.actionView
+
+        actionView.setOnClickListener {
+            val basketIntent = Intent(this, BasketActivity::class.java)
+            startActivity(basketIntent)
         }
+
+        notificationBadgeOfBasketMenu = actionView.findViewById(R.id.cart_badge)
+        setNotification()
 
         // 바텀 네비게이션
         viewDataBinding.mainBottomNavigation.setOnItemSelectedListener {
@@ -125,4 +130,9 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             if (it.resultCode == RESULT_CANCELED)
                 viewDataBinding.mainBottomNavigation.selectedItemId = R.id.homeInBottomNav
         }
+
+    fun setNotification() {
+        notificationBadgeOfBasketMenu.visibility =
+            if ((application as GlobalApplication).basketItemCount > 0) View.VISIBLE else View.GONE
+    }
 }

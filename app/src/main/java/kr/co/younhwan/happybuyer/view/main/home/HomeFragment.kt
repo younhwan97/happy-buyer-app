@@ -2,6 +2,7 @@ package kr.co.younhwan.happybuyer.view.main.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.adapter.product.ProductAdapter
 import kr.co.younhwan.happybuyer.data.CategoryItem
@@ -180,6 +182,12 @@ class HomeFragment : Fragment(), HomeContract.View {
     override fun createProductInBasketResultCallback(resultCount: Int) {
         val snack = when (resultCount) {
             1 -> {
+                val act = activity as MainActivity
+                val app = act.application as GlobalApplication
+
+                app.basketItemCount += 1
+                act.setNotification()
+
                 Snackbar.make(viewDataBinding.root, "장바구니에 상품을 담았습니다.", Snackbar.LENGTH_SHORT)
             }
 

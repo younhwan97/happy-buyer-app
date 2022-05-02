@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.data.source.basket.BasketRepository
 import kr.co.younhwan.happybuyer.data.source.wished.WishedRepository
@@ -125,6 +126,11 @@ class WishedFragment : Fragment(), WishedContract.View {
             }
 
             1 -> {
+                val app = (activity as MainActivity).application as GlobalApplication
+                app.basketItemCount += 1
+
+                (activity as MainActivity).setNotification()
+
                 Snackbar.make(
                     viewDataBinding.root,
                     "장바구니에 상품을 담았습니다.",

@@ -6,5 +6,7 @@
         android:id="@+id/basketInMain"
         android:icon="@drawable/ic_shopping_cart_black_24"
         android:title="@string/basket"
+        android:actionLayout="@layout/custom_action_item_layout"
+        app:actionLayout="@layout/custom_action_item_layout"
         app:showAsAction="always" />
 </menu>
