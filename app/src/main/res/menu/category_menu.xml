@@ -2,13 +2,13 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/searchIconInCategoryMenu"
+        android:id="@+id/searchInCategory"
         android:icon="@drawable/ic_search_24"
         android:title="검색"
         android:visible="true"
         app:showAsAction="always" />
     <item
-        android:id="@+id/baksetIconInCategoryMenu"
+        android:id="@+id/basketInCategory"
         android:icon="@drawable/ic_shopping_cart_black_24"
         android:title="장바구니"
         app:showAsAction="always" />

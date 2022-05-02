@@ -44,12 +44,12 @@ class CategoryActivity : AppCompatActivity() {
 
             viewDataBinding.categoryToolbar.setOnMenuItemClickListener {
                 when (it.itemId) {
-                    R.id.searchIconInCategoryMenu -> {
+                    R.id.searchInCategory -> {
                         val categoryIntent = Intent(this, SearchActivity::class.java)
                         startActivity(categoryIntent)
                         true
                     }
-                    R.id.baksetIconInCategoryMenu -> {
+                    R.id.basketInCategory -> {
                         val basketIntent = Intent(this, BasketActivity::class.java)
                         startActivity(basketIntent)
                         true

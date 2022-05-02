@@ -7,8 +7,10 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.widget.SearchView
+import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.adapter.product.ProductAdapter
 import kr.co.younhwan.happybuyer.data.ProductItem
@@ -51,6 +53,8 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
         )
     }
 
+    private lateinit var notificationBadgeOfBasketMenu: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewDataBinding = ActivitySearchBinding.inflate(layoutInflater)
@@ -89,21 +93,11 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
             viewDataBinding.recentSearchContainer.visibility = View.VISIBLE
         }
 
-        // 툴바
+        // 툴바 & 메뉴
         viewDataBinding.searchViewInSearchToolbar.isIconifiedByDefault = false
 
         viewDataBinding.searchToolbar.setNavigationOnClickListener {
             finish()
-        }
-
-        viewDataBinding.searchToolbar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.basketInSearchMenu -> {
-                    startActivity(Intent(this, BasketActivity::class.java))
-                    true
-                }
-                else -> false
-            }
         }
 
         viewDataBinding.searchViewInSearchToolbar.setOnQueryTextListener(
@@ -133,6 +127,18 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
                 }
             }
         )
+
+        val menu = viewDataBinding.searchToolbar.menu
+        val basketItem = menu.findItem(R.id.basketInSearch)
+        val actionView = basketItem.actionView
+
+        actionView.setOnClickListener {
+            val basketIntent = Intent(this, BasketActivity::class.java)
+            startActivity(basketIntent)
+        }
+
+        notificationBadgeOfBasketMenu = actionView.findViewById(R.id.cart_badge)
+        setNotificationBadge()
 
         // 최근 검색
         viewDataBinding.recentSearchRecycler.adapter = recentAdapter
@@ -211,5 +217,10 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
         val productIntent = Intent(this, ProductActivity::class.java)
         productIntent.putExtra("productItem", productItem)
         startActivity(productIntent)
+    }
+
+    private fun setNotificationBadge() {
+        notificationBadgeOfBasketMenu.visibility =
+            if ((application as GlobalApplication).basketItemCount > 0) View.VISIBLE else View.GONE
     }
 }
