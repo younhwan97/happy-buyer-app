@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/searchInCategory"
         android:icon="@drawable/ic_search_24"
@@ -9,7 +9,9 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/basketInCategory"
+        android:actionLayout="@layout/custom_action_item_layout"
         android:icon="@drawable/ic_shopping_cart_black_24"
-        android:title="장바구니"
+        android:title="@string/basket"
+        app:actionLayout="@layout/custom_action_item_layout"
         app:showAsAction="always" />
 </menu>

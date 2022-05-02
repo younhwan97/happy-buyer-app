@@ -9,11 +9,11 @@ interface CategoryContract {
 
         fun getAct(): CategoryActivity
 
-        fun createProductInBasketResultCallback(count: Int)
+        fun createOrUpdateProductInBasketCallback(resultCount: Int)
 
-        fun createLoginActivity()
+        fun createLoginAct()
 
-        fun createProductActivity(productItem: ProductItem)
+        fun createProductAct(productItem: ProductItem)
 
         fun loadProductsCallback(resultCount: Int)
     }

@@ -123,6 +123,12 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        setNotificationBadge()
+    }
+
     override fun getAct() = this
 
     private val startForResult =

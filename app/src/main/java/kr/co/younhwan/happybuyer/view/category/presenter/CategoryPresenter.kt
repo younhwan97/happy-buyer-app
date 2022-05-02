@@ -139,7 +139,7 @@ class CategoryPresenter(
     }
 
     private fun onClickListenerProduct(productItem: ProductItem) =
-        view.createProductActivity(productItem)
+        view.createProductAct(productItem)
 
     private fun onClickListenerOfBasketBtn(productId: Int) {
         val app = ((view.getAct()).application) as GlobalApplication
@@ -153,13 +153,13 @@ class CategoryPresenter(
                     override fun onCreateOrUpdateProduct(resultCount: Int) {
 
                         if (resultCount in 1..20) {
-                            view.createProductInBasketResultCallback(resultCount)
+                            view.createOrUpdateProductInBasketCallback(resultCount)
                         }
 
                     }
                 })
         } else {
-            view.createLoginActivity()
+            view.createLoginAct()
         }
     }
 }

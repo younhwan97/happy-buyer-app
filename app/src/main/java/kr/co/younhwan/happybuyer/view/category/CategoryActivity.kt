@@ -2,12 +2,15 @@ package kr.co.younhwan.happybuyer.view.category
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.databinding.ActivityCategoryBinding
 import kr.co.younhwan.happybuyer.util.reduceDragSensitivity
@@ -20,6 +23,8 @@ class CategoryActivity : AppCompatActivity() {
     val fragmentList = ArrayList<Fragment>()
 
     var sortBy : String = "추천순"
+
+    private lateinit var notificationBadgeOfBasketMenu: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +42,7 @@ class CategoryActivity : AppCompatActivity() {
         if (label == null || initPosition == -1) {
             finish()
         } else {
-            // 툴바
+            // 툴바 & 메뉴
             viewDataBinding.categoryToolbar.setNavigationOnClickListener {
                 finish()
             }
@@ -49,14 +54,21 @@ class CategoryActivity : AppCompatActivity() {
                         startActivity(categoryIntent)
                         true
                     }
-                    R.id.basketInCategory -> {
-                        val basketIntent = Intent(this, BasketActivity::class.java)
-                        startActivity(basketIntent)
-                        true
-                    }
                     else -> false
                 }
             }
+
+            val menu = viewDataBinding.categoryToolbar.menu
+            val basketItem = menu.findItem(R.id.basketInCategory)
+            val actionView = basketItem.actionView
+
+            actionView.setOnClickListener {
+                val basketIntent = Intent(this, BasketActivity::class.java)
+                startActivity(basketIntent)
+            }
+
+            notificationBadgeOfBasketMenu = actionView.findViewById(R.id.cart_badge)
+            setNotificationBadge()
 
             // ViewPager2에 셋팅할 프래그먼트 생성
             for (i in 1..label.size) {
@@ -104,5 +116,10 @@ class CategoryActivity : AppCompatActivity() {
                 }
             })
         }
+    }
+
+    fun setNotificationBadge() {
+        notificationBadgeOfBasketMenu.visibility =
+            if ((application as GlobalApplication).basketItemCount > 0) View.VISIBLE else View.GONE
     }
 }
