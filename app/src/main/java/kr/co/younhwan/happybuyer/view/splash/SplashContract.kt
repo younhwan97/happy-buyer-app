@@ -1,16 +1,16 @@
 package kr.co.younhwan.happybuyer.view.splash
 
-interface SplashContract{
+interface SplashContract {
 
-    interface View{
+    interface View {
 
-        fun getAct() : SplashActivity
+        fun getAct(): SplashActivity
 
         fun finishSplashAct()
 
     }
 
-    interface Model{
+    interface Model {
 
         fun loadUserInfo()
 

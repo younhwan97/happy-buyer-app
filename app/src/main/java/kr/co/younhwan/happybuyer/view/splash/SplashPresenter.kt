@@ -22,6 +22,7 @@ class SplashPresenter(
     override fun loadUserInfo() {
         val app = view.getAct().application as GlobalApplication
 
+        // 카카오 API를 이용해 유저의 토큰 정보를 읽어온다.
         UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
             if (error != null) {
                 // 토큰이 없을 때 (= 로그인 정보가 없을 때)

@@ -91,7 +91,7 @@ class WishedPresenter(
                 count = 1,
                 object : BasketSource.CreateOrUpdateProductCallback {
                     override fun onCreateOrUpdateProduct(resultCount: Int) {
-                        view.addBasketResultCallback(resultCount)
+                        view.createOrUpdateProductInBasketCallback(resultCount)
                     }
                 }
             )

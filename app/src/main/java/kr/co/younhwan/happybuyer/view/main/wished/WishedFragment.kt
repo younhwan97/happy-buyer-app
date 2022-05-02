@@ -64,6 +64,7 @@ class WishedFragment : Fragment(), WishedContract.View {
             override fun canScrollVertically() = true
         }
         viewDataBinding.wishedRecycler.addItemDecoration(wishedAdapter.RecyclerDecoration())
+
         OverScrollDecoratorHelper.setUpOverScroll(
             viewDataBinding.wishedRecycler,
             OverScrollDecoratorHelper.ORIENTATION_VERTICAL
@@ -115,25 +116,28 @@ class WishedFragment : Fragment(), WishedContract.View {
         snack.show()
     }
 
-    override fun addBasketResultCallback(count: Int) {
-        val snack = when (count) {
-            0 -> {
-                Snackbar.make(
-                    viewDataBinding.root,
-                    "알 수 없는 에러가 발생했습니다.",
-                    Snackbar.LENGTH_SHORT
-                )
-            }
-
+    override fun createOrUpdateProductInBasketCallback(resultCount: Int) {
+        val snack = when (resultCount) {
             1 -> {
-                val app = (activity as MainActivity).application as GlobalApplication
-                app.basketItemCount += 1
+                // 상품이 기존에 존재하지 않았으나 처음 추가되었을 때
+                val act = activity as MainActivity
+                val app = act.application as GlobalApplication
 
-                (activity as MainActivity).setNotification()
+                app.basketItemCount += 1
+                act.setNotificationBadge()
 
                 Snackbar.make(
                     viewDataBinding.root,
                     "장바구니에 상품을 담았습니다.",
+                    Snackbar.LENGTH_SHORT
+                )
+            }
+
+            in 2..19 -> {
+                // 기존에 장바구니에 존재한 상품이 갯수만 늘었을 때
+                Snackbar.make(
+                    viewDataBinding.root,
+                    "한 번 더 담으셨네요! \n담긴 수량이 ${resultCount}개가 되었습니다.",
                     Snackbar.LENGTH_SHORT
                 )
             }
@@ -147,11 +151,7 @@ class WishedFragment : Fragment(), WishedContract.View {
             }
 
             else -> {
-                Snackbar.make(
-                    viewDataBinding.root,
-                    "한 번 더 담으셨네요! \n담긴 수량이 ${count}개가 되었습니다.",
-                    Snackbar.LENGTH_SHORT
-                )
+                Snackbar.make(viewDataBinding.root, "알 수 없는 에러가 발생했습니다.", Snackbar.LENGTH_SHORT)
             }
         }
 

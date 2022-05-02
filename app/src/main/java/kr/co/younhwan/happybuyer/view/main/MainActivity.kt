@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         }
 
         notificationBadgeOfBasketMenu = actionView.findViewById(R.id.cart_badge)
-        setNotification()
+        setNotificationBadge()
 
         // 바텀 네비게이션
         viewDataBinding.mainBottomNavigation.setOnItemSelectedListener {
@@ -131,7 +131,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                 viewDataBinding.mainBottomNavigation.selectedItemId = R.id.homeInBottomNav
         }
 
-    fun setNotification() {
+    fun setNotificationBadge() {
         notificationBadgeOfBasketMenu.visibility =
             if ((application as GlobalApplication).basketItemCount > 0) View.VISIBLE else View.GONE
     }

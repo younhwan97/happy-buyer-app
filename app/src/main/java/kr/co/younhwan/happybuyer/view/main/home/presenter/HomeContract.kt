@@ -7,30 +7,32 @@ import kr.co.younhwan.happybuyer.view.main.MainActivity
 
 interface HomeContract {
     interface View {
+
+        fun getAct(): MainActivity
+
         fun loadCategoriesCallback(list: ArrayList<CategoryItem>)
 
         fun loadEventProductsCallback(resultCount: Int)
 
         fun loadPopularProductsCallback(resultCount: Int)
 
+        fun createCategoryAct(adapterPosition: Int)
 
-        fun createCategoryActivity(adapterPosition: Int)
+        fun createLoginAct()
 
-        fun createLoginActivity()
+        fun createProductAct(productItem: ProductItem)
 
-        fun createProductActivity(productItem: ProductItem)
+        fun createOrUpdateProductInBasketCallback(resultCount: Int)
 
-        fun createProductInBasketResultCallback(resultCount: Int)
-
-        fun getAct() : MainActivity
     }
 
     interface Presenter {
-        // Presenter method
+
         fun loadCategories(isClear: Boolean, context: Context)
 
         fun loadEventProducts(isClear: Boolean)
 
         fun loadPopularProducts(isClear: Boolean)
+
     }
 }

@@ -2,7 +2,6 @@ package kr.co.younhwan.happybuyer.view.main.home
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -76,9 +75,6 @@ class HomeFragment : Fragment(), HomeContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 엑티비티
-        val act = activity as MainActivity
-
         // 카테고리, 행사 상품 및 인기 상품 로드
         homePresenter.loadCategories(true, requireContext())
         homePresenter.loadEventProducts(true)
@@ -89,6 +85,7 @@ class HomeFragment : Fragment(), HomeContract.View {
 
         // 검색
         viewDataBinding.homeSearchContainer.setOnClickListener {
+            val act = activity as MainActivity
             act.startActivity(Intent(act, SearchActivity::class.java))
         }
 
@@ -110,13 +107,14 @@ class HomeFragment : Fragment(), HomeContract.View {
             }
         viewDataBinding.homeEventRecycler.addItemDecoration(eventAdapter.RecyclerDecoration())
         viewDataBinding.homeEventRecycler.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+
         OverScrollDecoratorHelper.setUpOverScroll(
             viewDataBinding.homeEventRecycler,
             OverScrollDecoratorHelper.ORIENTATION_HORIZONTAL
         )
 
         viewDataBinding.homeEventMoreBtn.setOnClickListener {
-            createCategoryActivity(0)
+            createCategoryAct(0)
         }
 
         // 인기 상품
@@ -128,6 +126,7 @@ class HomeFragment : Fragment(), HomeContract.View {
             }
         viewDataBinding.homePopularRecycler.addItemDecoration(popularAdapter.RecyclerDecoration())
         viewDataBinding.homePopularRecycler.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+
         OverScrollDecoratorHelper.setUpOverScroll(
             viewDataBinding.homePopularRecycler,
             OverScrollDecoratorHelper.ORIENTATION_HORIZONTAL
@@ -144,22 +143,16 @@ class HomeFragment : Fragment(), HomeContract.View {
     }
 
     override fun loadEventProductsCallback(resultCount: Int) {
-        if (resultCount == 0) {
-            viewDataBinding.homeEventContainer.visibility = View.GONE
-        } else {
-            viewDataBinding.homeEventContainer.visibility = View.VISIBLE
-        }
+        viewDataBinding.homeEventContainer.visibility =
+            if (resultCount == 0) View.GONE else View.VISIBLE
     }
 
     override fun loadPopularProductsCallback(resultCount: Int) {
-        if (resultCount == 0) {
-            viewDataBinding.homePopularContainer.visibility = View.GONE
-        } else {
-            viewDataBinding.homePopularContainer.visibility = View.VISIBLE
-        }
+        viewDataBinding.homePopularContainer.visibility =
+            if (resultCount == 0) View.GONE else View.VISIBLE
     }
 
-    override fun createCategoryActivity(adapterPosition: Int) {
+    override fun createCategoryAct(adapterPosition: Int) {
         val act = activity as MainActivity
         val categoryIntent = Intent(act, CategoryActivity::class.java)
         categoryIntent.putExtra("init_position", adapterPosition)
@@ -167,31 +160,33 @@ class HomeFragment : Fragment(), HomeContract.View {
         act.startActivity(categoryIntent)
     }
 
-    override fun createProductActivity(productItem: ProductItem) {
+    override fun createProductAct(productItem: ProductItem) {
         val act = activity as MainActivity
         val productIntent = Intent(act, ProductActivity::class.java)
         productIntent.putExtra("product", productItem)
         act.startActivity(productIntent)
     }
 
-    override fun createLoginActivity() =
+    override fun createLoginAct() =
         startActivity(Intent(requireContext(), LoginActivity::class.java))
 
     override fun getAct() = activity as MainActivity
 
-    override fun createProductInBasketResultCallback(resultCount: Int) {
+    override fun createOrUpdateProductInBasketCallback(resultCount: Int) {
         val snack = when (resultCount) {
             1 -> {
+                // 상품이 기존에 존재하지 않았으나 처음 추가되었을 때
                 val act = activity as MainActivity
                 val app = act.application as GlobalApplication
 
                 app.basketItemCount += 1
-                act.setNotification()
+                act.setNotificationBadge()
 
                 Snackbar.make(viewDataBinding.root, "장바구니에 상품을 담았습니다.", Snackbar.LENGTH_SHORT)
             }
 
             in 2..19 -> {
+                // 기존에 장바구니에 존재한 상품이 갯수만 늘었을 때
                 Snackbar.make(
                     viewDataBinding.root,
                     "한 번 더 담으셨네요! \n담긴 수량이 ${resultCount}개가 되었습니다.",

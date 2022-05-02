@@ -14,7 +14,7 @@ class GlobalApplication : Application() {
     var wishedProductId: ArrayList<Int> = ArrayList<Int>()
 
     // 장바구니
-    var basketItemCount: Int = -1
+    var basketItemCount: Int = 0
 
     override fun onCreate() {
         super.onCreate()

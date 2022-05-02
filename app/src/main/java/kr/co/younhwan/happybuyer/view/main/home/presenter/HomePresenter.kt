@@ -73,7 +73,7 @@ class HomePresenter(
             })
     }
 
-    private fun onClickListenerCategoryItem(position: Int) = view.createCategoryActivity(position)
+    private fun onClickListenerCategoryItem(position: Int) = view.createCategoryAct(position)
 
     override fun loadEventProducts(isClear: Boolean) {
         eventData.readProducts(
@@ -116,22 +116,24 @@ class HomePresenter(
     }
 
     private fun onClickListenerOfProduct(productItem: ProductItem) =
-        view.createProductActivity(productItem)
+        view.createProductAct(productItem)
 
     private fun onClickListenerOfBasketBtn(productId: Int) {
         if (app.isLogined) {
+            // 로그인 상태일 때
             basketData.createOrUpdateProduct(
                 kakaoAccountId = app.kakaoAccountId,
                 productId = productId,
                 count = 1,
                 object : BasketSource.CreateOrUpdateProductCallback {
                     override fun onCreateOrUpdateProduct(resultCount: Int) {
-                        view.createProductInBasketResultCallback(resultCount)
+                        view.createOrUpdateProductInBasketCallback(resultCount)
                     }
                 }
             )
         } else {
-            view.createLoginActivity()
+            // 로그인 상태가 아닐 때
+            view.createLoginAct()
         }
     }
 }
