@@ -2,6 +2,7 @@ package kr.co.younhwan.happybuyer.view.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
@@ -104,9 +105,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                 }
 
                 R.id.accountInBottomNav -> {
-                    val app = application as GlobalApplication
-
-                    if (app.isLogined) {
+                    if ((application as GlobalApplication).isLogined) {
                         // 로그인 상태
                         viewDataBinding.mainToolbar.title = "계정"
                         replace(R.id.mainContentContainer, accountFragment)
@@ -126,6 +125,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     override fun onResume() {
         super.onResume()
 
+        // (다른 엑티비티에서) 장바구니에 상품이 담겼을 경우를 대비
         setNotificationBadge()
     }
 

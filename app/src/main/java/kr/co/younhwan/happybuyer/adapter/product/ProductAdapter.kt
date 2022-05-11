@@ -97,6 +97,7 @@ class ProductAdapter(private val usingBy: String?) :
         }
     }
 
+    // 아이템 데코레이션
     inner class RecyclerDecoration : RecyclerView.ItemDecoration() {
         override fun getItemOffsets(
             outRect: Rect,

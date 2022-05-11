@@ -1,5 +1,6 @@
 package kr.co.younhwan.happybuyer.view.splash
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,7 @@ import kr.co.younhwan.happybuyer.data.source.wished.WishedRepository
 import kr.co.younhwan.happybuyer.databinding.ActivitySplashBinding
 import kr.co.younhwan.happybuyer.view.main.MainActivity
 
+@SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity(), SplashContract.View {
     lateinit var viewDataBinding: ActivitySplashBinding
 

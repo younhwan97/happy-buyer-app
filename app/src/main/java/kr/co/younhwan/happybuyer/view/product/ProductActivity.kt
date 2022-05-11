@@ -13,7 +13,7 @@ import com.google.android.material.snackbar.Snackbar
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.data.ProductItem
-import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
+import kr.co.younhwan.happybuyer.data.source.basket.BasketRepository
 import kr.co.younhwan.happybuyer.data.source.wished.WishedRepository
 import kr.co.younhwan.happybuyer.databinding.ActivityProductBinding
 import kr.co.younhwan.happybuyer.view.login.LoginActivity
@@ -26,7 +26,7 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
     private val productPresenter: ProductPresenter by lazy {
         ProductPresenter(
             view = this,
-            productData = ProductRepository,
+            basketData = BasketRepository,
             wishedData = WishedRepository
         )
     }
@@ -95,6 +95,21 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
             bottomSheetBehavior = BottomSheetBehavior.from(viewDataBinding.productBottomSheet)
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
+            // 찜하기 버튼
+            for (item in (application as GlobalApplication).wishedProductId) {
+                if (item == product.productId) {
+                    viewDataBinding.productWishedImage.isSelected = true
+                    break
+                }
+            }
+
+            viewDataBinding.productWishedBtn.setOnClickListener {
+                it.isEnabled = false
+                productPresenter.clickWishedBtn(
+                    productId = product.productId
+                )
+            }
+
             // 구매 버튼
             viewDataBinding.productPurchaseBtn.setOnClickListener {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -117,7 +132,7 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
             viewDataBinding.productBottomSheetPlusBtn.setOnClickListener {
                 var count = (viewDataBinding.productBottomSheetCount.text).toString().toInt()
 
-                if (count < 20) {
+                if (count in 1..19) {
                     count = count.plus(1)
                     viewDataBinding.productBottomSheetCount.text = count.toString()
 
@@ -162,6 +177,13 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
                 viewDataBinding.productBottomSheetBtn.text =
                     decimal.format(product.productPrice).plus("원 장바구니 담기")
             }
+
+            viewDataBinding.productBottomSheetBtn.setOnClickListener {
+                productPresenter.createProductInBasket(
+                    productId = product.productId,
+                    count = (viewDataBinding.productBottomSheetCount.text).toString().toInt()
+                )
+            }
         }
     }
 
@@ -181,13 +203,13 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
     override fun createProductInWishedResultCallback(productId: Int, perform: String?) {
         val app = application as GlobalApplication
 
-        when (perform) {
+        val snack = when (perform) {
             "create" -> {
                 // application 찜 리스트 업데이트
                 app.wishedProductId.add(productId)
 
                 // 뷰 업데이트
-                // viewDataBinding.image.isSelected = true
+                viewDataBinding.productWishedImage.isSelected = true
                 viewDataBinding.productWishedBtn.likeAnimation()
 
                 // 스낵바 리턴
@@ -208,7 +230,7 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
                 }
 
                 // 뷰 업데이트
-                //viewDataBinding.image.isSelected = false
+                viewDataBinding.productWishedImage.isSelected = false
 
                 // 스낵바 리턴
                 Snackbar.make(
@@ -219,25 +241,37 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
             }
 
             else -> {
-                Snackbar.make(viewDataBinding.root, "알 수 없는 에러가 발생했습니다.", Snackbar.LENGTH_SHORT)
+                // 스낵바 리턴
+                Snackbar.make(
+                    viewDataBinding.root,
+                    "알 수 없는 에러가 발생했습니다.",
+                    Snackbar.LENGTH_SHORT
+                )
             }
-        }.apply {
-            setAnchorView(R.id.productBottomBtnContainer)
-            show()
         }
+
+        viewDataBinding.productWishedBtn.isEnabled = true
+        snack.setAnchorView(R.id.productBottomBtnContainer)
+        snack.show()
     }
 
-    override fun createProductInBasketResultCallback(count: Int) {
-        when (count) {
-            0 -> {
-                Snackbar.make(viewDataBinding.root, "알 수 없는 에러가 발생했습니다.", Snackbar.LENGTH_SHORT)
-            }
+    override fun createProductInBasketResultCallback(resultCount: Int, basketItemCount: Int) {
+        val app = application as GlobalApplication
 
-            1 -> {
-                Snackbar.make(viewDataBinding.root, "장바구니에 상품을 담았습니다.", Snackbar.LENGTH_SHORT)
+        val snack = when (resultCount) {
+            in 1..19 -> {
+                app.basketItemCount = basketItemCount
+
+                Snackbar.make(
+                    viewDataBinding.root,
+                    "장바구니에 상품을 ${resultCount}개 담았습니다.",
+                    Snackbar.LENGTH_SHORT
+                )
             }
 
             20 -> {
+                app.basketItemCount = basketItemCount
+
                 Snackbar.make(
                     viewDataBinding.root,
                     "같은 종류의 상품은 최대 20개까지 담을 수 있습니다.",
@@ -246,15 +280,13 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
             }
 
             else -> {
-                Snackbar.make(
-                    viewDataBinding.root,
-                    "한 번 더 담으셨네요! \n담긴 수량이 ${count}개가 되었습니다.",
-                    Snackbar.LENGTH_SHORT
-                )
+                Snackbar.make(viewDataBinding.root, "알 수 없는 에러가 발생했습니다.", Snackbar.LENGTH_SHORT)
             }
-        }.apply {
-            show()
         }
+
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        snack.setAnchorView(R.id.productBottomBtnContainer)
+        snack.show()
     }
 }
 

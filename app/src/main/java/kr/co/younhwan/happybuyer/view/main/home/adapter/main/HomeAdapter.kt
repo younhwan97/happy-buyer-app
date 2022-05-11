@@ -46,6 +46,7 @@ class HomeAdapter :
         }
     }
 
+    // 아이템 데코레이션
     inner class RecyclerDecoration :RecyclerView.ItemDecoration() {
         override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
             super.getItemOffsets(outRect, view, parent, state)
@@ -59,5 +60,4 @@ class HomeAdapter :
             outRect.bottom = spaceByPx
         }
     }
-
 }

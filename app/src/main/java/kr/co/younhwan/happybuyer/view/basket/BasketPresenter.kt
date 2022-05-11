@@ -34,8 +34,9 @@ class BasketPresenter(
 
     val app = view.getAct().application as GlobalApplication
 
-    override fun loadBasketProduct(isClear: Boolean) { // 장바구니에 존재하는 상품을 가져온다.
-        if (app.isLogined) { // 로그인 상태
+    override fun loadBasketProducts(isClear: Boolean) {
+        if (app.isLogined) {
+            // 로그인 상태
             basketData.readProducts(
                 kakaoAccountId = app.kakaoAccountId,
                 readProductsCallback = object : BasketSource.ReadProductsCallback {
@@ -49,7 +50,8 @@ class BasketPresenter(
                     }
                 }
             )
-        } else { // 비로그인 상태
+        } else {
+            // 비로그인 상태
             basketAdapterModel.addItems(ArrayList<BasketItem>())
             basketAdapterView.notifyAdapter()
             calculatePrice()
@@ -82,7 +84,8 @@ class BasketPresenter(
     }
 
     override fun checkAllBasketProduct(newStatus: Boolean) {
-        if (app.isLogined && basketAdapterModel.getItemCount() != 0) { // 로그인 상태이며 장바구니에 상품이 있을 때
+        if (app.isLogined && basketAdapterModel.getItemCount() != 0) {
+            // 로그인 상태이며 장바구니에 상품이 있을 때
             for (index in 0 until basketAdapterModel.getItemCount()) {
                 if (basketAdapterModel.getItem(index).productStatus != "품절") {
                     basketAdapterModel.updateItemChecked(index, newStatus)
@@ -172,17 +175,20 @@ class BasketPresenter(
 
     private fun onClickListenerOfDeleteBtn(basketItem: BasketItem, position: Int) {
         if (app.isLogined) {
-            val productIdList = ArrayList<Int>()
-            productIdList.add(basketItem.productId)
+            val selectedItemIdList = ArrayList<Int>()
+            selectedItemIdList.add(basketItem.productId)
 
             if (basketItem.productStatus == "품절") {
+                // 품절 상품을 장바구니에서 삭제하고자 할 때
+                // -> 다이얼로그를 띄우지 않고 바로 제거
                 basketData.deleteProducts(
                     kakaoAccountId = app.kakaoAccountId,
-                    productId = productIdList,
+                    productId = selectedItemIdList,
                     deleteProductsCallback = object :
                         BasketSource.DeleteProductsCallback {
                         override fun onDeleteProducts(isSuccess: Boolean) {
                             if (isSuccess) {
+                                view.deleteProductInBasketCallback(1)
                                 basketAdapterModel.deleteItem(position)
 
                                 calculatePrice()
@@ -191,18 +197,19 @@ class BasketPresenter(
                     }
                 )
             } else {
+                // 품절 상태가 아닌 상품을 장바구니에서 삭제하고자 할 때
+                // -> 다이얼로그를 통해 재확인 후 제거
                 MaterialAlertDialogBuilder(view.getAct())
                     .setMessage("상품을 삭제하시겠습니까?")
-                    .setNegativeButton("취소") { dialog, which ->
-                        // Respond to negative button press
-                    }
-                    .setPositiveButton("확인") { dialog, which ->
+                    .setNegativeButton("취소") { _, _ -> }
+                    .setPositiveButton("확인") { _, _ ->
                         basketData.deleteProducts(
                             kakaoAccountId = app.kakaoAccountId,
-                            productId = productIdList,
+                            productId = selectedItemIdList,
                             deleteProductsCallback = object : BasketSource.DeleteProductsCallback {
                                 override fun onDeleteProducts(isSuccess: Boolean) {
                                     if (isSuccess) {
+                                        view.deleteProductInBasketCallback(1)
                                         basketAdapterModel.deleteItem(position)
 
                                         calculatePrice()
@@ -210,8 +217,7 @@ class BasketPresenter(
                                 }
                             }
                         )
-                    }
-                    .show()
+                    }.show()
             }
         }
     }
@@ -219,31 +225,30 @@ class BasketPresenter(
     override fun deleteSelectedItems() {
         if (app.isLogined) {
             val newBasketItemList = ArrayList<BasketItem>()
-            val selectedItemList = ArrayList<Int>()
+            val selectedItemIdList = ArrayList<Int>()
 
             for (index in 0 until basketAdapterModel.getItemCount()) {
                 val basketItem = basketAdapterModel.getItem(index)
 
                 if (basketItem.isChecked) {
-                    selectedItemList.add(basketItem.productId)
+                    selectedItemIdList.add(basketItem.productId)
                 } else {
                     newBasketItemList.add(basketItem)
                 }
             }
 
-            if (selectedItemList.size != 0) {
+            if (selectedItemIdList.size != 0) {
                 MaterialAlertDialogBuilder(view.getAct())
                     .setMessage("선택된 상품을 삭제하시겠습니까?")
-                    .setNegativeButton("취소") { dialog, which ->
-                        // Respond to negative button press
-                    }
-                    .setPositiveButton("확인") { dialog, which ->
+                    .setNegativeButton("취소") { _, _ -> }
+                    .setPositiveButton("확인") { _, _ ->
                         basketData.deleteProducts(
                             kakaoAccountId = app.kakaoAccountId,
-                            productId = selectedItemList,
+                            productId = selectedItemIdList,
                             deleteProductsCallback = object : BasketSource.DeleteProductsCallback {
                                 override fun onDeleteProducts(isSuccess: Boolean) {
                                     if (isSuccess) {
+                                        view.deleteProductInBasketCallback(selectedItemIdList.size)
                                         basketAdapterModel.addItems(newBasketItemList)
                                         basketAdapterView.notifyAdapter()
                                         calculatePrice()
@@ -251,8 +256,7 @@ class BasketPresenter(
                                 }
                             }
                         )
-                    }
-                    .show()
+                    }.show()
             }
         }
     }

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.data.BasketItem
 import kr.co.younhwan.happybuyer.data.source.basket.BasketRepository
@@ -35,7 +36,8 @@ class BasketActivity : AppCompatActivity(), BasketContract.View {
         viewDataBinding = ActivityBasketBinding.inflate(layoutInflater)
         setContentView(viewDataBinding.root)
 
-        basketPresenter.loadBasketProduct(false)
+        // 장바구니 상품 로드
+        basketPresenter.loadBasketProducts(false)
 
         // 툴바
         viewDataBinding.basketToolbar.setNavigationOnClickListener {
@@ -83,6 +85,7 @@ class BasketActivity : AppCompatActivity(), BasketContract.View {
         basketItemCount: Int
     ) {
         val decimal = DecimalFormat("#,###")
+
         viewDataBinding.basketOriginalPriceText.text = decimal.format(originalTotalPrice)
         viewDataBinding.basketEventPriceText.text = decimal.format(totalPrice - originalTotalPrice)
         viewDataBinding.basketBePaidPriceText.text = decimal.format(totalPrice)
@@ -136,5 +139,9 @@ class BasketActivity : AppCompatActivity(), BasketContract.View {
         } else {
 
         }
+    }
+
+    override fun deleteProductInBasketCallback(deletedItemCount: Int) {
+        (application as GlobalApplication).basketItemCount -= deletedItemCount
     }
 }

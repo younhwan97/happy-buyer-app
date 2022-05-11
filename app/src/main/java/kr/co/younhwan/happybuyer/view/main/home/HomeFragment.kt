@@ -101,7 +101,7 @@ class HomeFragment : Fragment(), HomeContract.View {
         // 행사 상품
         viewDataBinding.homeEventRecycler.adapter = eventAdapter
         viewDataBinding.homeEventRecycler.layoutManager =
-            object : LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false) {
+            object : LinearLayoutManager(context, HORIZONTAL, false) {
                 override fun canScrollHorizontally() = true
                 override fun canScrollVertically() = false
             }
@@ -120,7 +120,7 @@ class HomeFragment : Fragment(), HomeContract.View {
         // 인기 상품
         viewDataBinding.homePopularRecycler.adapter = popularAdapter
         viewDataBinding.homePopularRecycler.layoutManager =
-            object : LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false) {
+            object : LinearLayoutManager(context, HORIZONTAL, false) {
                 override fun canScrollHorizontally() = true
                 override fun canScrollVertically() = false
             }
@@ -132,6 +132,8 @@ class HomeFragment : Fragment(), HomeContract.View {
             OverScrollDecoratorHelper.ORIENTATION_HORIZONTAL
         )
     }
+
+    override fun getAct() = activity as MainActivity
 
     override fun loadCategoriesCallback(list: ArrayList<CategoryItem>) {
         val temp = ArrayList<String>()
@@ -169,8 +171,6 @@ class HomeFragment : Fragment(), HomeContract.View {
 
     override fun createLoginAct() =
         startActivity(Intent(requireContext(), LoginActivity::class.java))
-
-    override fun getAct() = activity as MainActivity
 
     override fun createOrUpdateProductInBasketCallback(resultCount: Int) {
         val snack = when (resultCount) {

@@ -118,6 +118,12 @@ class CategoryActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        setNotificationBadge()
+    }
+
     fun setNotificationBadge() {
         notificationBadgeOfBasketMenu.visibility =
             if ((application as GlobalApplication).basketItemCount > 0) View.VISIBLE else View.GONE

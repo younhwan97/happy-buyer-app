@@ -1,6 +1,5 @@
 package kr.co.younhwan.happybuyer.view.main.orderhistory.presenter
 
-import android.util.Log
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.data.OrderItem
 import kr.co.younhwan.happybuyer.data.source.order.OrderRepository

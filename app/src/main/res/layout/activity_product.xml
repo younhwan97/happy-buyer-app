@@ -284,6 +284,7 @@
             android:background="@drawable/bg_product_wished_btn">
 
             <ImageView
+                android:id="@+id/productWishedImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

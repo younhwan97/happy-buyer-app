@@ -12,14 +12,14 @@ interface ProductContract {
 
         fun createProductInWishedResultCallback(productId: Int, perform: String?)
 
-        fun createProductInBasketResultCallback(count:Int)
+        fun createProductInBasketResultCallback(resultCount: Int, basketItemCount: Int)
     }
 
     interface Model {
 
         fun clickWishedBtn(productId: Int)
 
-        fun createProductInBasket(kakaoAccountId:Long, productId: Int, count:Int)
+        fun createProductInBasket(productId: Int, count: Int)
 
     }
 }
