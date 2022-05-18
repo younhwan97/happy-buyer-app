@@ -30,6 +30,7 @@ class WishedPresenter(
 
     override fun loadWishedProducts(isClear: Boolean) {
         if (app.isLogined) {
+            // 로그인 상태일 때
             wishedData.readProducts(
                 kakaoAccountId = app.kakaoAccountId,
                 readProductsCallback = object : WishedSource.ReadProductsCallback {
@@ -45,6 +46,7 @@ class WishedPresenter(
                 }
             )
         } else {
+            // 로그인 상태가 아닐 때
             view.loadWishedProductsCallback(0)
             wishedAdapterModel.addItems(ArrayList<ProductItem>())
             wishedAdapterView.notifyAdapter()
@@ -53,6 +55,7 @@ class WishedPresenter(
 
     private fun onClickListenerOfDeleteBtn(productId: Int, position: Int) {
         if (app.isLogined) {
+            // 로그인 상태일 때
             wishedData.createOrDeleteProduct(
                 kakaoAccountId = app.kakaoAccountId,
                 productId = productId,
@@ -60,7 +63,7 @@ class WishedPresenter(
                     WishedSource.CreateOrDeleteProductCallback {
                     override fun onCreateOrDeleteProduct(perform: String?) {
                         if (perform == null || perform == "error") {
-                            view.deleteWishedProductCallback(perform, 0)
+                            view.deleteProductInWishedCallback(perform, 0)
                         } else if (perform == "delete") {
                             for (index in 0 until app.wishedProductId.size) {
                                 if (app.wishedProductId[index] == productId) {
@@ -70,7 +73,7 @@ class WishedPresenter(
                             }
 
                             wishedAdapterModel.deleteItem(position)
-                            view.deleteWishedProductCallback(
+                            view.deleteProductInWishedCallback(
                                 perform,
                                 wishedAdapterModel.getItemCount()
                             )
@@ -79,12 +82,14 @@ class WishedPresenter(
                 }
             )
         } else {
-            view.deleteWishedProductCallback("error", 0)
+            // 로그인 상태가 아닐 때
+            view.deleteProductInWishedCallback("error", 0)
         }
     }
 
     private fun onClickListenerOfBasketBtn(productId: Int) {
         if (app.isLogined) {
+            // 로그인 상태일 때
             basketData.createOrUpdateProduct(
                 kakaoAccountId = app.kakaoAccountId,
                 productId = productId,
