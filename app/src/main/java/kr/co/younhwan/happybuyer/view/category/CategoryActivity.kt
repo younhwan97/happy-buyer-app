@@ -54,6 +54,7 @@ class CategoryActivity : AppCompatActivity() {
                         startActivity(categoryIntent)
                         true
                     }
+
                     else -> false
                 }
             }

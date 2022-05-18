@@ -1,6 +1,5 @@
 package kr.co.younhwan.happybuyer.data.source.product
 
-import android.util.Log
 import kotlinx.coroutines.*
 import kr.co.younhwan.happybuyer.data.ProductItem
 import okhttp3.*
@@ -10,7 +9,7 @@ import java.io.IOException
 
 object ProductRemoteDataSource : ProductSource {
     private val client = OkHttpClient() // 클라이언트
-    private const val serverInfo = "http://192.168.0.11/products/api" // API 서버
+    private const val serverInfo = "http://192.168.35.92/products/api" // API 서버
 
     override fun readProducts(
         selectedCategory: String,

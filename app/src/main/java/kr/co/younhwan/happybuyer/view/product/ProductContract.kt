@@ -10,16 +10,17 @@ interface ProductContract {
 
         fun createLoginActivity()
 
-        fun createProductInWishedResultCallback(productId: Int, perform: String?)
+        fun createOrDeleteProductInWishedCallback(productId: Int, perform: String?)
 
-        fun createProductInBasketResultCallback(resultCount: Int, basketItemCount: Int)
+        fun createOrUpdateProductInBasketCallback(resultCount: Int, basketItemCount: Int)
+
     }
 
     interface Model {
 
         fun clickWishedBtn(productId: Int)
 
-        fun createProductInBasket(productId: Int, count: Int)
+        fun createOrUpdateProductInBasket(productId: Int, count: Int)
 
     }
 }

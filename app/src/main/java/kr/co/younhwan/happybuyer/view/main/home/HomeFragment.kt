@@ -2,6 +2,7 @@ package kr.co.younhwan.happybuyer.view.main.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -180,9 +181,16 @@ class HomeFragment : Fragment(), HomeContract.View {
                 val app = act.application as GlobalApplication
 
                 app.basketItemCount += 1
-                act.setNotificationBadge()
 
-                Snackbar.make(viewDataBinding.root, "장바구니에 상품을 담았습니다.", Snackbar.LENGTH_SHORT)
+                if (app.basketItemCount == 1) {
+                    act.setNotificationBadge()
+                }
+
+                Snackbar.make(
+                    viewDataBinding.root,
+                    "장바구니에 상품을 담았습니다.",
+                    Snackbar.LENGTH_SHORT
+                )
             }
 
             in 2..19 -> {
@@ -203,7 +211,11 @@ class HomeFragment : Fragment(), HomeContract.View {
             }
 
             else -> {
-                Snackbar.make(viewDataBinding.root, "알 수 없는 에러가 발생했습니다.", Snackbar.LENGTH_SHORT)
+                Snackbar.make(
+                    viewDataBinding.root,
+                    "알 수 없는 에러가 발생했습니다.",
+                    Snackbar.LENGTH_SHORT
+                )
             }
         }
 

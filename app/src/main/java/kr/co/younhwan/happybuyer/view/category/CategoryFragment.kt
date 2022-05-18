@@ -237,7 +237,10 @@ class CategoryFragment : Fragment(), CategoryContract.View {
                 val app = act.application as GlobalApplication
 
                 app.basketItemCount += 1
-                act.setNotificationBadge()
+
+                if (app.basketItemCount == 1) {
+                    act.setNotificationBadge()
+                }
 
                 Snackbar.make(
                     viewDataBinding.root,

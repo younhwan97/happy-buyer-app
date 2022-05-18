@@ -69,7 +69,7 @@ class SplashPresenter(
                                     }
                                 )
 
-                                // (유저 아이디를 이용해) 유저의 장바구니 목록을 읽어온다.
+                                // (유저 아이디를 이용해) 유저의 장바구니 상품 목록의 개수를 읽어온다.
                                 basketData.readProducts(
                                     kakaoAccountId = app.kakaoAccountId,
                                     readProductsCallback = object :

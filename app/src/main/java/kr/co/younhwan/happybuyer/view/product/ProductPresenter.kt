@@ -23,7 +23,7 @@ class ProductPresenter(
                 productId = productId,
                 createOrDeleteProductCallback = object : WishedSource.CreateOrDeleteProductCallback {
                     override fun onCreateOrDeleteProduct(perform: String?) {
-                        view.createProductInWishedResultCallback(productId, perform)
+                        view.createOrDeleteProductInWishedCallback(productId, perform)
                     }
                 }
             )
@@ -33,7 +33,7 @@ class ProductPresenter(
         }
     }
 
-    override fun createProductInBasket(productId: Int, count: Int) {
+    override fun createOrUpdateProductInBasket(productId: Int, count: Int) {
         if(app.isLogined){
             // 로그인 상태일 때
             basketData.createOrUpdateProduct(
@@ -42,12 +42,12 @@ class ProductPresenter(
                 count = count,
                 createOrUpdateProductCallback = object : BasketSource.CreateOrUpdateProductCallback {
                     override fun onCreateOrUpdateProduct(resultCount: Int) {
-
+                        // 장바구니에 상품을 추가 하고, 장바구니에 담긴 상품 종류의 개수를 읽어온다.
                         basketData.readProducts(
                             kakaoAccountId = app.kakaoAccountId,
                             readProductsCallback = object : BasketSource.ReadProductsCallback {
                                 override fun onReadProducts(list: ArrayList<BasketItem>) {
-                                    view.createProductInBasketResultCallback(
+                                    view.createOrUpdateProductInBasketCallback(
                                         resultCount = resultCount,
                                         basketItemCount = list.size
                                     )

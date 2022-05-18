@@ -127,8 +127,10 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
             // (바텀 시트) 상품 이름
             viewDataBinding.productBottomSheetName.text = product.productName
 
-            // (바텀 시트) 상품 개수 및 개수 조절 버튼
-            viewDataBinding.productBottomSheetCount.text = "1"
+            // (바텀 시트) 상품 개수 및 개수 조절(+, -) 버튼
+            val initCount = 1
+            viewDataBinding.productBottomSheetCount.text = initCount.toString()
+
             viewDataBinding.productBottomSheetPlusBtn.setOnClickListener {
                 var count = (viewDataBinding.productBottomSheetCount.text).toString().toInt()
 
@@ -179,7 +181,7 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
             }
 
             viewDataBinding.productBottomSheetBtn.setOnClickListener {
-                productPresenter.createProductInBasket(
+                productPresenter.createOrUpdateProductInBasket(
                     productId = product.productId,
                     count = (viewDataBinding.productBottomSheetCount.text).toString().toInt()
                 )
@@ -197,10 +199,12 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
 
     override fun getAct() = this
 
-    override fun createLoginActivity() =
+    override fun createLoginActivity(){
+        viewDataBinding.productWishedBtn.isEnabled = true
         startActivity(Intent(this, LoginActivity::class.java))
+    }
 
-    override fun createProductInWishedResultCallback(productId: Int, perform: String?) {
+    override fun createOrDeleteProductInWishedCallback(productId: Int, perform: String?) {
         val app = application as GlobalApplication
 
         val snack = when (perform) {
@@ -255,13 +259,15 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
         snack.show()
     }
 
-    override fun createProductInBasketResultCallback(resultCount: Int, basketItemCount: Int) {
+    override fun createOrUpdateProductInBasketCallback(resultCount: Int, basketItemCount: Int) {
         val app = application as GlobalApplication
 
         val snack = when (resultCount) {
             in 1..19 -> {
+                // 어플리케이션 장바구니 상품 개수 업데이트
                 app.basketItemCount = basketItemCount
 
+                // 스낵바 리턴
                 Snackbar.make(
                     viewDataBinding.root,
                     "장바구니에 상품을 ${resultCount}개 담았습니다.",
@@ -270,8 +276,10 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
             }
 
             20 -> {
+                // 어플리케이션 장바구니 상품 개수 업데이트
                 app.basketItemCount = basketItemCount
 
+                // 스낵바 리턴
                 Snackbar.make(
                     viewDataBinding.root,
                     "같은 종류의 상품은 최대 20개까지 담을 수 있습니다.",
@@ -280,7 +288,12 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
             }
 
             else -> {
-                Snackbar.make(viewDataBinding.root, "알 수 없는 에러가 발생했습니다.", Snackbar.LENGTH_SHORT)
+                // 스낵바 리턴
+                Snackbar.make(
+                    viewDataBinding.root, 
+                    "알 수 없는 에러가 발생했습니다.", 
+                    Snackbar.LENGTH_SHORT
+                )
             }
         }
 
@@ -289,9 +302,3 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
         snack.show()
     }
 }
-
-
-
-
-
-

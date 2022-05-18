@@ -1,8 +1,8 @@
 package kr.co.younhwan.happybuyer.view.main
 
+import android.Manifest
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
@@ -18,14 +18,8 @@ import kr.co.younhwan.happybuyer.view.main.home.HomeFragment
 import kr.co.younhwan.happybuyer.view.main.orderhistory.OrderHistoryFragment
 import kr.co.younhwan.happybuyer.view.main.wished.WishedFragment
 
-class MainActivity : AppCompatActivity(), MainContract.View {
+class MainActivity : AppCompatActivity() {
     lateinit var viewDataBinding: ActivityMainBinding
-
-    private val mainPresenter: MainPresenter by lazy {
-        MainPresenter(
-            view = this
-        )
-    }
 
     private val homeFragment: HomeFragment by lazy {
         HomeFragment()
@@ -50,6 +44,16 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         viewDataBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewDataBinding.root)
 
+        // 권한 요청
+        requestPermissions(
+            arrayOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.INTERNET,
+                Manifest.permission.ACCESS_NETWORK_STATE
+            ), 0
+        )
+
         // 인텐트에서 데이터 추출 및 프래그먼트 셋팅
         if (intent.hasExtra("init_frag")) {
             when (intent.getStringExtra("init_frag")) {
@@ -66,9 +70,6 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         } else {
             replace(R.id.mainContentContainer, homeFragment)
         }
-
-        // 권한 요청
-        mainPresenter.requestPermission()
 
         // 툴바 & 메뉴
         val menu = viewDataBinding.mainToolbar.menu
@@ -128,8 +129,6 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         // (다른 엑티비티에서) 장바구니에 상품이 담겼을 경우를 대비
         setNotificationBadge()
     }
-
-    override fun getAct() = this
 
     private val startForResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
