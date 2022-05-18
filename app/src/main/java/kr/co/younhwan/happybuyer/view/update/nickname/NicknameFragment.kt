@@ -88,10 +88,10 @@ class NicknameFragment : Fragment(), NicknameContract.View {
 
     override fun getAct() = activity as UpdateActivity
 
-    override fun updateResultCallback(success: Boolean) {
+    override fun updateResultCallback(isSuccess: Boolean) {
         val act = activity as UpdateActivity
 
-        if (success) {
+        if (isSuccess) {
             act.setResult(Activity.RESULT_OK)
         } else {
             act.setResult(Activity.RESULT_CANCELED)

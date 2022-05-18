@@ -5,7 +5,7 @@ import kr.co.younhwan.happybuyer.view.update.UpdateActivity
 interface NicknameContract{
     interface View {
 
-        fun updateResultCallback(success:Boolean)
+        fun updateResultCallback(isSuccess:Boolean)
 
         fun getAct(): UpdateActivity
 

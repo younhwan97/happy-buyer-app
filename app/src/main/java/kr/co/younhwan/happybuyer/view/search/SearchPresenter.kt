@@ -138,7 +138,7 @@ class SearchPresenter(
     fun onClickListenerOfKeyword(keyword: String) = view.createResultActivity(keyword)
 
     // 검색 결과
-    override fun loadResultSearch(keyword: String?) {
+    override fun loadResultSearch(isClear:Boolean, keyword: String?, page: Int) {
         if (keyword.isNullOrBlank() || keyword.isNullOrEmpty()) {
             // 키워드가 존재하지 않을 때
             view.loadSearchResultCallback(0)
@@ -149,13 +149,51 @@ class SearchPresenter(
             productData.readProducts(
                 selectedCategory = "전체",
                 sortBy = null,
-                page= 1,
+                page= page,
+                keyword = keyword,
+                readProductsCallback = object : ProductSource.ReadProductsCallback {
+                    override fun onReadProducts(list: ArrayList<ProductItem>) {
+                        if (isClear)
+                            resultAdapterModel.clearItem()
+
+                        view.loadSearchResultCallback(list.size)
+                        resultAdapterModel.addItems(list)
+                        resultAdapterView.notifyAdapter()
+                    }
+                }
+            )
+        }
+    }
+
+    override fun loadMoreResultSearch(keyword: String?, page: Int) {
+        if (keyword.isNullOrBlank() || keyword.isNullOrEmpty()) {
+            // 키워드가 존재하지 않을 때
+            view.loadSearchResultCallback(0)
+            resultAdapterModel.addItems(ArrayList<ProductItem>())
+            resultAdapterView.notifyAdapter()
+        } else {
+            // 키워드가 존재할 때
+            productData.readProducts(
+                selectedCategory = "전체",
+                sortBy = null,
+                page = page,
                 keyword = keyword,
                 readProductsCallback = object : ProductSource.ReadProductsCallback {
                     override fun onReadProducts(list: ArrayList<ProductItem>) {
                         view.loadSearchResultCallback(list.size)
-                        resultAdapterModel.addItems(list)
-                        resultAdapterView.notifyAdapter()
+                        resultAdapterView.deleteLoading()
+
+                        if (list.size == 0) {
+                            // 더 이상 로드할 데이터가 없는 경우 리사이클러 뷰 마지막에 들어가 있는 로딩뷰만 제거
+                            resultAdapterView.notifyLastItemRemoved()
+                        } else {
+                            // 디비로 부터 얻은 데이터를 어댑터에 추가하고 추가된 데이터의 범위 만큼 업데이트
+                            resultAdapterModel.addItems(list)
+                            resultAdapterView.notifyAdapterByRange(
+                                start = resultAdapterModel.getItemCount() - list.size - 1,
+                                count = list.size
+                            )
+                        }
                     }
                 }
             )

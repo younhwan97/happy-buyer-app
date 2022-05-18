@@ -7,7 +7,7 @@ interface SearchContract{
 
         fun getAct() : SearchActivity
 
-        fun loadSearchResultCallback(size: Int)
+        fun loadSearchResultCallback(resultCount: Int)
 
         fun sortSearchResultCallback()
 
@@ -26,7 +26,9 @@ interface SearchContract{
 
         fun loadSearchHistory()
 
-        fun loadResultSearch(keyword: String?)
+        fun loadResultSearch(isClear:Boolean, keyword: String?, page:Int)
+
+        fun loadMoreResultSearch(keyword: String?, page:Int)
 
         fun sortSearchResult(newItem: String)
     }

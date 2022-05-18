@@ -13,19 +13,22 @@ class PointPresenter(
         val app = view.getAct().application as GlobalApplication
 
         if (app.isLogined) {
+            // 로그인 상태일 때
             userData.update(
                 kakaoAccountId = app.kakaoAccountId,
                 updateTarget = "point",
                 newContent = newPoint,
                 updateCallback = object : UserSource.UpdateCallback {
                     override fun onUpdate(isSuccess: Boolean) {
-                        if (isSuccess) app.point = newPoint
+                        if (isSuccess)
+                            app.point = newPoint
 
                         view.updateUserPointCallback(isSuccess)
                     }
                 }
             )
         } else {
+            // 로그인 상태가 아닐 때
             view.updateUserPointCallback(false)
         }
     }

@@ -10,6 +10,7 @@ import android.widget.SearchView
 import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.adapter.product.ProductAdapter
@@ -21,6 +22,7 @@ import kr.co.younhwan.happybuyer.view.basket.BasketActivity
 import kr.co.younhwan.happybuyer.view.product.ProductActivity
 import kr.co.younhwan.happybuyer.view.search.adapter.recent.RecentAdapter
 import kr.co.younhwan.happybuyer.view.search.adapter.suggested.SuggestedAdapter
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper
 
 class SearchActivity : AppCompatActivity(), SearchContract.View {
     lateinit var viewDataBinding: ActivitySearchBinding
@@ -53,6 +55,8 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
         )
     }
 
+    private var nowPage = 1 // 페이징
+
     private lateinit var notificationBadgeOfBasketMenu: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,7 +70,7 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
         // 데이터 로드
         searchPresenter.loadRecent() // 최근 검색어
         searchPresenter.loadSearchHistory() // 검색어 추천을 위한 검색 기록
-        searchPresenter.loadResultSearch(keyword) // 검색 결과
+        searchPresenter.loadResultSearch(true, keyword, nowPage) // 검색 결과
 
         // 전체 컨테이너
         viewDataBinding.recentSearchContainer.visibility = View.GONE
@@ -160,12 +164,6 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
         }
 
         // 검색 결과
-        viewDataBinding.searchResultRecycler.adapter = resultAdapter
-        viewDataBinding.searchResultRecycler.layoutManager = object : GridLayoutManager(this, 2) {
-            override fun canScrollHorizontally() = false
-            override fun canScrollVertically() = true
-        }
-        viewDataBinding.searchResultRecycler.addItemDecoration(resultAdapter.RecyclerDecoration())
         viewDataBinding.searchResultSortingSpinner.selectItemByIndex(0) // 기본값 = 추천순
         viewDataBinding.searchResultSortingSpinner.lifecycleOwner = this // 메모리 누수 방지
 
@@ -177,19 +175,53 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
                 viewDataBinding.searchResultRecycler.visibility = View.GONE
             }
         }
+
+        viewDataBinding.searchResultRecycler.adapter = resultAdapter
+        viewDataBinding.searchResultRecycler.layoutManager = object : GridLayoutManager(this, 2) {
+            override fun canScrollHorizontally() = false
+            override fun canScrollVertically() = true
+        }
+        viewDataBinding.searchResultRecycler.addItemDecoration(resultAdapter.RecyclerDecoration())
+
+        viewDataBinding.searchResultRecycler.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                if (!recyclerView.canScrollVertically(1)) {
+                    // 제일 끝까지 스크롤 했을 때
+                    if (nowPage != -1) {
+                        nowPage += 1
+                        searchPresenter.loadMoreResultSearch(
+                            keyword = keyword,
+                            page = nowPage
+                        )
+                    }
+                }
+            }
+        })
+
+        OverScrollDecoratorHelper.setUpOverScroll(
+            viewDataBinding.searchResultRecycler,
+            OverScrollDecoratorHelper.ORIENTATION_VERTICAL
+        )
     }
 
     override fun getAct() = this
 
-    override fun loadSearchResultCallback(size: Int) {
-        if (size == 0) {
-            // 검색 결과가 없을 때 -> empty view
-            viewDataBinding.searchResultEmptyView.visibility = View.VISIBLE
+    override fun loadSearchResultCallback(resultCount: Int) {
+        if (resultCount == 0) {
+            if (nowPage == 1) {
+                // 키워드를 포함한 상품이 하나도 없을 때
+                viewDataBinding.searchResultEmptyView.visibility = View.VISIBLE
+            }
+            // 더이상 로드할 상품이 없을 때
+            nowPage = -1
         } else {
             // 검색 결과가 있을 때 -> recycler view
             viewDataBinding.searchResultTopContainer.visibility = View.VISIBLE
             viewDataBinding.searchResultRecycler.visibility = View.VISIBLE
-            viewDataBinding.searchResultCountText.text = "총 ".plus(size.toString()).plus("개")
+            viewDataBinding.searchResultCountText.text = "총 ".plus(resultCount.toString()).plus("개")
         }
 
         // 로딩 뷰 종료

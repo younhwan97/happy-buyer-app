@@ -4,7 +4,6 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,6 +41,7 @@ class AccountFragment : Fragment(), AccountContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 엑티비티 및 어플리케이션
         val act = activity as MainActivity
         val app = act.application as GlobalApplication
 
@@ -57,7 +57,6 @@ class AccountFragment : Fragment(), AccountContract.View {
             val addressIntent = Intent(context, AddressActivity::class.java)
             addressIntent.putExtra("is_select_mode", false)
             startActivity(addressIntent)
-
         }
 
         viewDataBinding.accountInquiryBtn.setOnClickListener {
@@ -73,12 +72,11 @@ class AccountFragment : Fragment(), AccountContract.View {
         viewDataBinding.accountProfilePoint.text =
             if (app.point != null && app.point != "null") app.point else "-"
 
-
         val startForResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode == RESULT_OK) {
-                    viewDataBinding.accountProfileNickname.text = app.nickname
                     viewDataBinding.accountNickname.text = app.nickname
+                    viewDataBinding.accountProfileNickname.text = app.nickname
                     viewDataBinding.accountProfilePoint.text = app.point
                 }
             }

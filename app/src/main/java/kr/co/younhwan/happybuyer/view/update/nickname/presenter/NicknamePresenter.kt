@@ -13,18 +13,21 @@ class NicknamePresenter(
         val app = view.getAct().application as GlobalApplication
 
         if (app.isLogined) {
+            // 로그인 상태일 때
             userData.update(
                 kakaoAccountId = app.kakaoAccountId,
                 updateTarget = "nickname",
                 newContent = newNickname,
                 updateCallback = object : UserSource.UpdateCallback {
                     override fun onUpdate(isSuccess: Boolean) {
-                        if (isSuccess) app.nickname = newNickname
+                        if (isSuccess)
+                            app.nickname = newNickname
 
                         view.updateResultCallback(isSuccess)
                     }
                 })
         } else {
+            // 로그인 상태가 아닐 때
             view.updateResultCallback(false)
         }
     }
