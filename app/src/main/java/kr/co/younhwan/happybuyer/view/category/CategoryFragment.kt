@@ -126,7 +126,7 @@ class CategoryFragment : Fragment(), CategoryContract.View {
                 OverScrollDecoratorHelper.ORIENTATION_VERTICAL
             )
 
-            // 리사이클러 뷰 스크롤 이벤트 리스너
+            // 리사이클러 뷰 스크롤 이벤트 리스너 (= endless scroll)
             viewDataBinding.itemContainer.addOnScrollListener(object :
                 RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -242,6 +242,7 @@ class CategoryFragment : Fragment(), CategoryContract.View {
                     act.setNotificationBadge()
                 }
 
+                // 스낵바 리턴
                 Snackbar.make(
                     viewDataBinding.root,
                     "장바구니에 상품을 담았습니다.",
@@ -251,6 +252,7 @@ class CategoryFragment : Fragment(), CategoryContract.View {
 
             in 2..19 -> {
                 // 기존에 장바구니에 존재한 상품이 갯수만 늘었을 때
+                // 스낵바 리턴
                 Snackbar.make(
                     viewDataBinding.root,
                     "한 번 더 담으셨네요! \n담긴 수량이 ${resultCount}개가 되었습니다.",
@@ -259,6 +261,7 @@ class CategoryFragment : Fragment(), CategoryContract.View {
             }
 
             20 -> {
+                // 스낵바 리턴
                 Snackbar.make(
                     viewDataBinding.root,
                     "같은 종류의 상품은 최대 20개까지 담을 수 있습니다.",
@@ -267,7 +270,12 @@ class CategoryFragment : Fragment(), CategoryContract.View {
             }
 
             else -> {
-                Snackbar.make(viewDataBinding.root, "알 수 없는 에러가 발생했습니다.", Snackbar.LENGTH_SHORT)
+                // 스낵바 리턴
+                Snackbar.make(
+                    viewDataBinding.root,
+                    "알 수 없는 에러가 발생했습니다.",
+                    Snackbar.LENGTH_SHORT
+                )
             }
         }
 
