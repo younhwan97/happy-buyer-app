@@ -26,6 +26,7 @@ class OrderHistoryPresenter(
 
     override fun loadOrderHistory(isClear: Boolean, page: Int) {
         if (app.isLogined) {
+            // 로그인 상태일 때
             orderData.read(
                 kakaoAccountId = app.kakaoAccountId,
                 pageNum = page,
@@ -42,6 +43,7 @@ class OrderHistoryPresenter(
                 }
             )
         } else {
+            // 로그인 상태가 아닐 때
             view.loadOrderHistoryCallback(0)
             orderHistoryAdapterModel.addItems(ArrayList())
             orderHistoryAdapterView.notifyAdapter()
@@ -50,6 +52,7 @@ class OrderHistoryPresenter(
 
     override fun loadMoreOrderHistory(page: Int) {
         if (app.isLogined) {
+            // 로그인 상태일 때
             orderData.read(
                 kakaoAccountId = app.kakaoAccountId,
                 pageNum = page,
@@ -73,6 +76,7 @@ class OrderHistoryPresenter(
                 }
             )
         } else {
+            // 로그인 상태가 아닐 때
             view.loadOrderHistoryCallback(0)
             orderHistoryAdapterModel.addItems(ArrayList())
             orderHistoryAdapterView.notifyAdapter()

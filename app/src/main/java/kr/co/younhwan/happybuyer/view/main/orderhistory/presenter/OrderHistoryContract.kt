@@ -5,16 +5,20 @@ import kr.co.younhwan.happybuyer.view.main.MainActivity
 
 interface OrderHistoryContract {
     interface View {
+
         fun loadOrderHistoryCallback(resultCount: Int)
 
-        fun getAct() : MainActivity
+        fun getAct(): MainActivity
 
         fun createOrderDetailAct(orderHistoryItem: OrderItem)
+
     }
 
     interface Model {
-        fun loadOrderHistory(isClear:Boolean, page:Int)
+
+        fun loadOrderHistory(isClear: Boolean, page: Int)
 
         fun loadMoreOrderHistory(page: Int)
+
     }
 }

@@ -2,7 +2,6 @@ package kr.co.younhwan.happybuyer.view.main.orderhistory
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,7 +34,7 @@ class OrderHistoryFragment : Fragment(), OrderHistoryContract.View {
         OrderHistoryAdapter()
     }
 
-    private var nowPage = 1
+    private var nowPage = 1 // 페이징
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,10 +49,7 @@ class OrderHistoryFragment : Fragment(), OrderHistoryContract.View {
         super.onViewCreated(view, savedInstanceState)
 
         // 로딩 뷰 셋팅
-        viewDataBinding.orderHistoryRecycler.visibility = View.GONE
-        viewDataBinding.orderHistoryEmptyView.visibility = View.GONE
-        viewDataBinding.orderHistoryLoadingView.visibility = View.VISIBLE
-        viewDataBinding.orderHistoryLoadingImage.playAnimation()
+        setLoadingView()
 
         // (첫번째 페이지) 주문내역 로드
         nowPage = 1
@@ -67,12 +63,14 @@ class OrderHistoryFragment : Fragment(), OrderHistoryContract.View {
                 override fun canScrollVertically() = true
             }
         viewDataBinding.orderHistoryRecycler.addItemDecoration(orderHistoryAdapter.RecyclerDecoration())
+        
+        // 리사이클러 뷰 바운스 효과
         OverScrollDecoratorHelper.setUpOverScroll(
             viewDataBinding.orderHistoryRecycler,
             OverScrollDecoratorHelper.ORIENTATION_VERTICAL
         )
 
-        // 주문 내역 리사이클러 뷰 스크롤 이벤트 리스너
+        // 주문 내역 리사이클러 뷰 스크롤 이벤트 리스너 (= endless scroll)
         viewDataBinding.orderHistoryRecycler.addOnScrollListener(object :
             RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -87,6 +85,13 @@ class OrderHistoryFragment : Fragment(), OrderHistoryContract.View {
                 }
             }
         })
+    }
+
+    private fun setLoadingView() {
+        viewDataBinding.orderHistoryRecycler.visibility = View.GONE
+        viewDataBinding.orderHistoryEmptyView.visibility = View.GONE
+        viewDataBinding.orderHistoryLoadingView.visibility = View.VISIBLE
+        viewDataBinding.orderHistoryLoadingImage.playAnimation()
     }
 
     override fun loadOrderHistoryCallback(resultCount: Int) {
