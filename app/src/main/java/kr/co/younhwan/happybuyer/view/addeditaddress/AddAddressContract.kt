@@ -23,5 +23,6 @@ interface AddAddressContract {
         fun addAddress(addressItem: AddressItem)
 
         fun deleteAddress(addressId: Int)
+        
     }
 }

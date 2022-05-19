@@ -10,6 +10,7 @@ import android.view.View
 import kr.co.younhwan.happybuyer.data.AddressItem
 import kr.co.younhwan.happybuyer.data.source.address.AddressRepository
 import kr.co.younhwan.happybuyer.databinding.ActivityAddAddressBinding
+import kr.co.younhwan.happybuyer.view.addeditaddress.dialog.AddAddressDialogFragment
 
 class AddAddressActivity : AppCompatActivity(), AddAddressContract.View {
     lateinit var viewDataBinding: ActivityAddAddressBinding
@@ -21,20 +22,20 @@ class AddAddressActivity : AppCompatActivity(), AddAddressContract.View {
         )
     }
 
+    private val addAddressDialog = AddAddressDialogFragment()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewDataBinding = ActivityAddAddressBinding.inflate(layoutInflater)
         setContentView(viewDataBinding.root)
 
         // 로딩 뷰 셋팅
-        viewDataBinding.addAddressView.visibility = View.GONE
-        viewDataBinding.addAddressLoadingView.visibility = View.VISIBLE
-        viewDataBinding.addAddressLoadingImage.playAnimation()
+        setLoadingView()
 
         // 인텐트에서 데이터 추출
         val oldAddressItem = if (intent.hasExtra("address")) {
             // 기존 주소를 수정하는 경우
-            intent.getParcelableExtra<AddressItem>("address")
+            intent.getParcelableExtra("address")
         } else {
             // 새롭게 주소를 추가하는 경우
             AddressItem(
@@ -69,6 +70,7 @@ class AddAddressActivity : AppCompatActivity(), AddAddressContract.View {
             })
 
             if (!oldAddressItem.addressReceiver.isNullOrBlank()) {
+                // 기존에 존재하던 배송지를 수정하는 경우
                 viewDataBinding.addAddressReceiver.editText?.text =
                     Editable.Factory.getInstance().newEditable(oldAddressItem.addressReceiver)
             }
@@ -96,6 +98,7 @@ class AddAddressActivity : AppCompatActivity(), AddAddressContract.View {
             })
 
             if (!oldAddressItem.addressPhone.isNullOrBlank()) {
+                // 기존에 존재하던 배송지를 수정하는 경우
                 viewDataBinding.addAddressPhone.editText?.text =
                     Editable.Factory.getInstance().newEditable(oldAddressItem.addressPhone)
             }
@@ -112,6 +115,7 @@ class AddAddressActivity : AppCompatActivity(), AddAddressContract.View {
             })
 
             if (!oldAddressItem.address.isNullOrBlank()) {
+                // 기존에 존재하던 배송지를 수정하는 경우
                 viewDataBinding.addAddressAddress.editText?.text =
                     Editable.Factory.getInstance().newEditable(oldAddressItem.address)
             }
@@ -130,18 +134,23 @@ class AddAddressActivity : AppCompatActivity(), AddAddressContract.View {
             // 저장 버튼
             viewDataBinding.addAddressBtn.isEnabled = false
             viewDataBinding.addAddressBtn.setOnClickListener {
-                val receiver = viewDataBinding.addAddressReceiver.editText?.text?.trim().toString()
-                val phone = viewDataBinding.addAddressPhone.editText?.text?.trim().toString()
-                val address = viewDataBinding.addAddressAddress.editText?.text?.trim().toString()
-                val isDefault = viewDataBinding.addAddressDefaultAddressCheckBox.isChecked
+                // 다이얼로그 시작
+                addAddressDialog.isCancelable = false
+                addAddressDialog.show(supportFragmentManager, "add_address_dialog")
+
+                // 중복 저장 방지
+                it.isEnabled = false
 
                 addAddressPresenter.addAddress(
                     AddressItem(
                         addressId = oldAddressItem.addressId,
-                        address = address,
-                        addressPhone = phone,
-                        addressReceiver = receiver,
-                        isDefault = isDefault
+                        address = viewDataBinding.addAddressAddress.editText?.text?.trim()
+                            .toString(),
+                        addressPhone = viewDataBinding.addAddressPhone.editText?.text?.trim()
+                            .toString(),
+                        addressReceiver = viewDataBinding.addAddressReceiver.editText?.text?.trim()
+                            .toString(),
+                        isDefault = viewDataBinding.addAddressDefaultAddressCheckBox.isChecked
                     )
                 )
             }
@@ -154,16 +163,29 @@ class AddAddressActivity : AppCompatActivity(), AddAddressContract.View {
             }
 
             viewDataBinding.addAddressDeleteBtn.setOnClickListener {
+                // 다이얼로그 시작
+                addAddressDialog.isCancelable = false
+                addAddressDialog.show(supportFragmentManager, "add_address_dialog")
+
+                // 중복 삭제 방지
+                it.isEnabled = false
+
                 addAddressPresenter.deleteAddress(oldAddressItem.addressId)
             }
         }
+    }
+
+    private fun setLoadingView() {
+        viewDataBinding.addAddressView.visibility = View.GONE
+        viewDataBinding.addAddressLoadingView.visibility = View.VISIBLE
+        viewDataBinding.addAddressLoadingImage.playAnimation()
     }
 
     override fun getAct() = this
 
     override fun checkHasDefaultAddressCallback(hasDefaultAddress: Boolean) {
         if (!hasDefaultAddress) {
-            // 기본 배송지를 가지고 있지 않은 경우
+            // 기본 배송지를 가지고 있지 않은 경우 (= 추가될 배송지를 무조건 기본 배송지로 만든다)
             viewDataBinding.addAddressDefaultAddressCheckBox.isChecked = true
             viewDataBinding.addAddressDefaultAddressCheckBox.isClickable = false
             viewDataBinding.addAddressDefaultAddressCheckBox.visibility = View.GONE
@@ -185,6 +207,10 @@ class AddAddressActivity : AppCompatActivity(), AddAddressContract.View {
     }
 
     override fun addAddressCallback(addressItem: AddressItem, isSuccess: Boolean) {
+        // 다이얼로그 종료
+        addAddressDialog.isCancelable = true
+        addAddressDialog.dismiss()
+
         if (isSuccess) {
             // 정상적으로 주소가 추가되거나 수정되었을 때
             val resultIntent = Intent()
@@ -194,16 +220,23 @@ class AddAddressActivity : AppCompatActivity(), AddAddressContract.View {
             // 정상적으로 주소가 추가되거나 수정되지 않았을 때
             setResult(RESULT_CANCELED)
         }
+
         finish()
     }
 
     override fun deleteAddressCallback(isSuccess: Boolean) {
-        if (!isSuccess) {
-            // 정상적으로 주소가 삭제되지 않았을 때
+        // 다이얼로그 종료
+        addAddressDialog.isCancelable = true
+        addAddressDialog.dismiss()
 
+        if (isSuccess) {
+            // 정상적으로 주소가 삭제되었을 때
+            setResult(RESULT_OK)
+        } else {
+            // 정상적으로 주소가 삭제되지 않았을 때
+            setResult(RESULT_CANCELED)
         }
 
-        setResult(RESULT_OK)
         finish()
     }
 }

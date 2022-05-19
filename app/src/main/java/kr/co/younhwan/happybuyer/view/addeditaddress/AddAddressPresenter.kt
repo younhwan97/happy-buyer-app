@@ -1,6 +1,5 @@
 package kr.co.younhwan.happybuyer.view.addeditaddress
 
-import android.util.Log
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.data.AddressItem
 import kr.co.younhwan.happybuyer.data.source.address.AddressRepository
@@ -47,11 +46,11 @@ class AddAddressPresenter(
                     addressItem = addressItem,
                     createCallback = object : AddressSource.CreateCallback {
                         override fun onCreate(addressId: Int) {
+                            addressItem.addressId = addressId
+
                             if (addressId == -1) {
-                                addressItem.addressId = addressId
                                 view.addAddressCallback(addressItem, false)
                             } else {
-                                addressItem.addressId = addressId
                                 view.addAddressCallback(addressItem, true)
                             }
                         }
@@ -73,18 +72,16 @@ class AddAddressPresenter(
     }
 
     override fun deleteAddress(addressId: Int) {
-        if (app.isLogined) {
-            if (addressId != -1) {
-                addressData.delete(
-                    kakaoAccountId = app.kakaoAccountId,
-                    addressId = addressId,
-                    deleteCallback = object : AddressSource.DeleteCallback{
-                        override fun onDelete(isSuccess: Boolean) {
-                            view.deleteAddressCallback(isSuccess)
-                        }
+        if (app.isLogined && addressId != -1) {
+            addressData.delete(
+                kakaoAccountId = app.kakaoAccountId,
+                addressId = addressId,
+                deleteCallback = object : AddressSource.DeleteCallback {
+                    override fun onDelete(isSuccess: Boolean) {
+                        view.deleteAddressCallback(isSuccess)
                     }
-                )
-            }
+                }
+            )
         }
     }
 }

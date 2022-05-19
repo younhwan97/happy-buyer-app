@@ -11,7 +11,7 @@ import java.io.IOException
 
 object AddressRemoteDataSource : AddressSource {
     private val client = OkHttpClient() // 클라이언트
-    private const val serverInfo = "http://happybuyer.co.kr/address/api" // API 서버
+    private const val serverInfo = "http://192.168.35.92/address/api" // API 서버
     private val jsonMediaType = "application/json; charset=utf-8".toMediaTypeOrNull()
 
     // CREATE
@@ -23,7 +23,7 @@ object AddressRemoteDataSource : AddressSource {
         runBlocking {
             var addressId = -1
 
-            val job = GlobalScope.launch {
+            launch {
                 // API 서버 주소
                 val site = serverInfo
 
@@ -38,19 +38,27 @@ object AddressRemoteDataSource : AddressSource {
                 val request = Request.Builder().url(site).post(requestBody).build()
 
                 // 응답
-                val response = client.newCall(request).execute()
-                if (response.isSuccessful) {
-                    val resultText = response.body?.string()!!.trim()
-                    val json = JSONObject(resultText)
-                    val success = json.getBoolean("success")
-                    if (success) {
-                        addressId = json.getInt("address_id")
+                client.newCall(request).enqueue(object : Callback {
+                    override fun onFailure(call: Call, e: IOException) {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            createCallback?.onCreate(addressId)
+                        }
                     }
-                }
-            }
 
-            job.join()
-            createCallback?.onCreate(addressId)
+                    override fun onResponse(call: Call, response: Response) {
+                        val resultText = response.body?.string()!!.trim()
+                        val json = JSONObject(resultText)
+                        val success = json.getBoolean("success")
+                        if (success) {
+                            addressId = json.getInt("address_id")
+                        }
+
+                        CoroutineScope(Dispatchers.Main).launch {
+                            createCallback?.onCreate(addressId)
+                        }
+                    }
+                })
+            }
         }
     }
 
@@ -127,7 +135,7 @@ object AddressRemoteDataSource : AddressSource {
         runBlocking {
             var isSuccess = false
 
-            val job = GlobalScope.launch {
+            launch {
                 // API 서버 주소
                 val site = serverInfo
 
@@ -143,16 +151,24 @@ object AddressRemoteDataSource : AddressSource {
                 val request = Request.Builder().url(site).put(requestBody).build()
 
                 // 응답
-                val response = client.newCall(request).execute()
-                if (response.isSuccessful) {
-                    val resultText = response.body?.string()!!.trim()
-                    val json = JSONObject(resultText)
-                    isSuccess = json.getBoolean("success")
-                }
-            }
+                client.newCall(request).enqueue(object : Callback {
+                    override fun onFailure(call: Call, e: IOException) {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            updateCallback?.onUpdate(isSuccess)
+                        }
+                    }
 
-            job.join()
-            updateCallback?.onUpdate(isSuccess)
+                    override fun onResponse(call: Call, response: Response) {
+                        val resultText = response.body?.string()!!.trim()
+                        val json = JSONObject(resultText)
+                        isSuccess = json.getBoolean("success")
+
+                        CoroutineScope(Dispatchers.Main).launch {
+                            updateCallback?.onUpdate(isSuccess)
+                        }
+                    }
+                })
+            }
         }
     }
 
@@ -165,7 +181,7 @@ object AddressRemoteDataSource : AddressSource {
         runBlocking {
             var isSuccess = false
 
-            val job = GlobalScope.launch {
+            launch {
                 // API 서버 주소
                 val site = serverInfo
 
@@ -177,16 +193,24 @@ object AddressRemoteDataSource : AddressSource {
                 val request = Request.Builder().url(site).delete(requestBody).build()
 
                 // 응답
-                val response = client.newCall(request).execute()
-                if (response.isSuccessful) {
-                    val resultText = response.body?.string()!!.trim()
-                    val json = JSONObject(resultText)
-                    isSuccess = json.getBoolean("success")
-                }
-            }
+                client.newCall(request).enqueue(object : Callback {
+                    override fun onFailure(call: Call, e: IOException) {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            deleteCallback?.onDelete(isSuccess)
+                        }
+                    }
 
-            job.join()
-            deleteCallback?.onDelete(isSuccess)
+                    override fun onResponse(call: Call, response: Response) {
+                        val resultText = response.body?.string()!!.trim()
+                        val json = JSONObject(resultText)
+                        isSuccess = json.getBoolean("success")
+
+                        CoroutineScope(Dispatchers.Main).launch {
+                            deleteCallback?.onDelete(isSuccess)
+                        }
+                    }
+                })
+            }
         }
     }
 }

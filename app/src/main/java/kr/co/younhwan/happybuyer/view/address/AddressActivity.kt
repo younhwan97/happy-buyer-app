@@ -12,6 +12,7 @@ import kr.co.younhwan.happybuyer.data.source.address.AddressRepository
 import kr.co.younhwan.happybuyer.databinding.ActivityAddressBinding
 import kr.co.younhwan.happybuyer.view.addeditaddress.AddAddressActivity
 import kr.co.younhwan.happybuyer.view.address.adapter.AddressAdapter
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper
 
 class AddressActivity : AppCompatActivity(), AddressContract.View {
     lateinit var viewDataBinding: ActivityAddressBinding
@@ -37,10 +38,7 @@ class AddressActivity : AppCompatActivity(), AddressContract.View {
         setContentView(viewDataBinding.root)
 
         // 로딩 뷰 셋팅
-        viewDataBinding.addressEmptyView.visibility = View.GONE
-        viewDataBinding.addressRecycler.visibility = View.GONE
-        viewDataBinding.addressLoadingView.visibility = View.VISIBLE
-        viewDataBinding.addressLoadingImage.playAnimation()
+        setLoadingView()
 
         // 인텐트에서 데이터 추출
         // 주소록 모드를 설정
@@ -67,18 +65,43 @@ class AddressActivity : AppCompatActivity(), AddressContract.View {
                     startAddAddressActForResult.launch(addAddressIntent)
                     true
                 }
+
                 else -> false
             }
         }
 
-        // 리사이클러 뷰
+        // 주소록 리사이클러 뷰
         viewDataBinding.addressRecycler.adapter = addressAdapter
         viewDataBinding.addressRecycler.layoutManager = object : LinearLayoutManager(this) {
             override fun canScrollHorizontally() = false
             override fun canScrollVertically() = false
         }
+
         viewDataBinding.addressRecycler.addItemDecoration(addressAdapter.RecyclerDecoration())
+
+        OverScrollDecoratorHelper.setUpOverScroll(
+            viewDataBinding.addressRecycler,
+            OverScrollDecoratorHelper.ORIENTATION_VERTICAL
+        )
     }
+
+    private fun setLoadingView() {
+        viewDataBinding.addressEmptyView.visibility = View.GONE
+        viewDataBinding.addressRecycler.visibility = View.GONE
+        viewDataBinding.addressLoadingView.visibility = View.VISIBLE
+        viewDataBinding.addressLoadingImage.playAnimation()
+    }
+
+    private val startAddAddressActForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == RESULT_OK) {
+                // 로딩 뷰 셋팅
+                setLoadingView()
+
+                // 주소록 로드
+                addressPresenter.loadAddress(isSelectMode)
+            }
+        }
 
     override fun getAct() = this
 
@@ -110,17 +133,4 @@ class AddressActivity : AppCompatActivity(), AddressContract.View {
         setResult(RESULT_OK, resultIntent)
         finish()
     }
-
-    private val startAddAddressActForResult =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if (it.resultCode == RESULT_OK) {
-                // 로딩 뷰 셋팅
-                viewDataBinding.addressEmptyView.visibility = View.GONE
-                viewDataBinding.addressRecycler.visibility = View.GONE
-                viewDataBinding.addressLoadingView.visibility = View.VISIBLE
-                viewDataBinding.addressLoadingImage.playAnimation()
-
-                addressPresenter.loadAddress(isSelectMode)
-            }
-        }
 }
