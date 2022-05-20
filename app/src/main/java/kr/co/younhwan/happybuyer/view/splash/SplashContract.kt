@@ -6,7 +6,7 @@ interface SplashContract {
 
         fun getAct(): SplashActivity
 
-        fun finishSplashAct()
+        fun loadUserInfoCallback()
 
     }
 

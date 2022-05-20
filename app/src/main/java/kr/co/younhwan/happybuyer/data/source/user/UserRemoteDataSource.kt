@@ -14,6 +14,7 @@ object UserRemoteDataSource : UserSource {
     private const val serverInfo = "http://192.168.35.92/auth/api/user" // API 서버
     private val jsonMediaType = "application/json; charset=utf-8".toMediaTypeOrNull()
 
+    // CREATE
     override fun create(
         kakaoAccountId: Long,
         kakaoNickname: String?,
@@ -51,6 +52,7 @@ object UserRemoteDataSource : UserSource {
         }
     }
 
+    // READ
     override fun read(
         kakaoAccountId: Long,
         readCallback: UserSource.ReadCallback?
@@ -86,17 +88,13 @@ object UserRemoteDataSource : UserSource {
                                 if (kakaoAccountId == userId) {
                                     val nickname = obj.getString("name")
                                     val point = obj.getString("point")
-                                    val activatedBasket =
-                                        if (obj.isNull("activated_basket")) "deactivated" else obj.getString(
-                                            "activated_basket"
-                                        )
 
                                     user = UserItem(
                                         userId,
                                         nickname,
-                                        point,
-                                        activatedBasket
+                                        point
                                     )
+
                                     break
                                 }
                             }
@@ -108,6 +106,7 @@ object UserRemoteDataSource : UserSource {
         }
     }
 
+    // UPDATE
     override fun update(
         kakaoAccountId: Long,
         updateTarget: String,

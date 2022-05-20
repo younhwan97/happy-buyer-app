@@ -19,15 +19,15 @@ class SplashPresenter(
     private val basketData: BasketRepository
 ) : SplashContract.Model {
 
-    override fun loadUserInfo() {
-        val app = view.getAct().application as GlobalApplication
+    val app = view.getAct().application as GlobalApplication
 
+    override fun loadUserInfo() {
         // 카카오 API를 이용해 유저의 토큰 정보를 읽어온다.
         UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
             if (error != null) {
                 // 토큰이 없을 때 (= 로그인 정보가 없을 때)
                 app.isLogined = false
-                view.finishSplashAct()
+                view.loadUserInfoCallback()
             } else if (tokenInfo != null) {
                 // 토큰이 있을 때 (= 로그인 정보가 있을 때)
                 app.isLogined = true
@@ -61,7 +61,7 @@ class SplashPresenter(
                                             app.wishedProductId = productIdList
 
                                             if (completeLoadUserData) {
-                                                view.finishSplashAct()
+                                                view.loadUserInfoCallback()
                                             } else {
                                                 completeLoadUserData = true
                                             }
@@ -78,7 +78,7 @@ class SplashPresenter(
                                             app.basketItemCount = list.size
 
                                             if (completeLoadUserData) {
-                                                view.finishSplashAct()
+                                                view.loadUserInfoCallback()
                                             } else {
                                                 completeLoadUserData = true
                                             }
@@ -87,7 +87,7 @@ class SplashPresenter(
                                 )
                             } else {
                                 // 유저 정보를 읽어오는데 실패했을 때
-                                view.finishSplashAct()
+                                view.loadUserInfoCallback()
                             }
                         }
                     })

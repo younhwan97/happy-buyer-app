@@ -29,15 +29,17 @@ class SplashActivity : AppCompatActivity(), SplashContract.View {
         setContentView(viewDataBinding.root)
 
         // 로딩 뷰 셋팅
-        viewDataBinding.splashImage.playAnimation()
+        setLoadingView()
 
         // 유저 정보 로드
         splashPresenter.loadUserInfo()
     }
 
+    private fun setLoadingView() = viewDataBinding.splashImage.playAnimation()
+
     override fun getAct() = this
 
-    override fun finishSplashAct() {
+    override fun loadUserInfoCallback() {
         // 로딩 뷰 종료
         viewDataBinding.splashImage.pauseAnimation()
 

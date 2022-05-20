@@ -6,6 +6,7 @@ object UserRepository : UserSource {
 
     private val userRemoteDataSource = UserRemoteDataSource
 
+    // CREATE
     override fun create(
         kakaoAccountId: Long,
         kakaoNickname: String?,
@@ -21,6 +22,7 @@ object UserRepository : UserSource {
             })
     }
 
+    // READ
     override fun read(
         kakaoAccountId: Long,
         readCallback: UserSource.ReadCallback?
@@ -32,6 +34,7 @@ object UserRepository : UserSource {
         })
     }
 
+    // UPDATE
     override fun update(
         kakaoAccountId: Long,
         updateTarget: String,
