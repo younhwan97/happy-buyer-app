@@ -58,10 +58,7 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
         val app = application as GlobalApplication
 
         // 로딩 뷰 셋팅
-        viewDataBinding.orderView.visibility = View.GONE
-        viewDataBinding.orderBottomBtnContainer.visibility = View.GONE
-        viewDataBinding.orderLoadingView.visibility = View.VISIBLE
-        viewDataBinding.orderLoadingImage.playAnimation()
+        setLoadingView()
 
         // 인텐트에서 데이터 추출
         val orderProducts = if (intent.hasExtra("selected_item_list")) {
@@ -91,12 +88,11 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
                 registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                     if (it.resultCode == RESULT_OK) {
                         // 로딩 뷰 셋팅
-                        viewDataBinding.orderView.visibility = View.GONE
-                        viewDataBinding.orderBottomBtnContainer.visibility = View.GONE
-                        viewDataBinding.orderLoadingView.visibility = View.VISIBLE
-                        viewDataBinding.orderLoadingImage.playAnimation()
+                        setLoadingView()
+
                         completeAsyncTask = true
 
+                        // 기본 배송지 셋팅
                         orderPresenter.loadDefaultAddress()
                     }
                 }
@@ -110,8 +106,10 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
                 registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                     if (it.resultCode == RESULT_OK) {
                         val snack = if (it.data?.hasExtra("address") == true) {
+                            // 새로운 주소 추출
                             val newAddress = it.data?.getParcelableExtra<AddressItem>("address")
 
+                            // 주소 변경
                             runOnUiThread {
                                 viewDataBinding.orderAddressReceiver.text =
                                     newAddress?.addressReceiver
@@ -119,6 +117,7 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
                                 viewDataBinding.orderAddressPhone.text = newAddress?.addressPhone
                             }
 
+                            // 스백바 리턴
                             Snackbar.make(
                                 viewDataBinding.root,
                                 "주소가 변경되었습니다.",
@@ -127,6 +126,7 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
                         } else {
                             orderPresenter.loadDefaultAddress()
 
+                            // 스백바 리턴
                             Snackbar.make(
                                 viewDataBinding.root,
                                 "알 수 없는 에러로 주소가 변경되지 않았습니다. ",
@@ -145,9 +145,14 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
                 startAddressActForResult.launch(addressIntent)
             }
 
+            // 결제수단
+            viewDataBinding.orderPaymentRadioOptionCard.isChecked = true
+            viewDataBinding.orderPaymentRadioOptionCash.isChecked = false
+
             // 배달 요청사항
             if (app.point != null && app.point != "null")
                 viewDataBinding.orderPointNumber.editText?.setText(app.point)
+
             viewDataBinding.orderPointNumber.editText?.addTextChangedListener(object :
                 PhoneNumberFormattingTextWatcher("KR") {
                 override fun afterTextChanged(s: Editable?) {
@@ -167,12 +172,9 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
                     super.onTextChanged(s, start, before, count)
                 }
             })
+
             viewDataBinding.orderDefectiveHandlingOption1.isChecked = true
             viewDataBinding.orderDefectiveHandlingOption2.isChecked = false
-
-            // 결제수단
-            viewDataBinding.orderPaymentRadioOptionCard.isChecked = true
-            viewDataBinding.orderPaymentRadioOptionCash.isChecked = false
 
             // 주문 상품 확인
             viewDataBinding.orderProductRecycler.adapter = orderAdapter
@@ -181,6 +183,7 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
                     override fun canScrollHorizontally() = false
                     override fun canScrollVertically() = false
                 }
+
             viewDataBinding.orderProductRecycler.addItemDecoration(orderAdapter.RecyclerDecoration())
 
             // 주문 버튼
@@ -194,12 +197,12 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
                 it.isEnabled = false
 
                 // 주문정보
-                val status = "주문접수"
                 val name = if (orderProducts.size == 1) {
                     orderProducts[0].productName
                 } else {
                     "${orderProducts[0].productName} 외 ${orderProducts.size - 1}건"
                 }
+                val status = "주문접수"
 
                 // 배달정보
                 val receiver = viewDataBinding.orderAddressReceiver.text.toString()
@@ -249,6 +252,13 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
                 )
             }
         }
+    }
+
+    private fun setLoadingView() {
+        viewDataBinding.orderView.visibility = View.GONE
+        viewDataBinding.orderBottomBtnContainer.visibility = View.GONE
+        viewDataBinding.orderLoadingView.visibility = View.VISIBLE
+        viewDataBinding.orderLoadingImage.playAnimation()
     }
 
     override fun getAct() = this

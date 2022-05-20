@@ -34,7 +34,7 @@ class OrderHistoryAdapter :
     }
 
     override fun notifyLastItemRemoved() {
-        notifyItemRemoved(orderHistoryItemList.lastIndex)
+        notifyItemRemoved(orderHistoryItemList.lastIndex + 1)
     }
 
     override fun notifyAdapterByRange(start: Int, count: Int) = notifyItemRangeInserted(start, count)

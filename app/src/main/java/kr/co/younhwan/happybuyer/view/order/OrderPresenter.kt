@@ -29,7 +29,6 @@ class OrderPresenter(
 
     override fun loadDefaultAddress() {
         if (app.isLogined) {
-            // 로그인 상태일 때
             addressData.read(
                 kakaoAccountId = app.kakaoAccountId,
                 readCallback = object : AddressSource.ReadCallback {
@@ -54,7 +53,6 @@ class OrderPresenter(
         var passValidationCheck = true
 
         if (app.isLogined) {
-            // 로그인 상태일 때
             if (!selectedItemList.isNullOrEmpty()) {
                 // 장바구니에서 고객이 선택한 아이템 정보가 정상적으로 넘어왔을 때
                 basketData.readProducts(
@@ -87,7 +85,6 @@ class OrderPresenter(
                 view.setOrderProductsCallback(!passValidationCheck)
             }
         } else {
-            // 로그인 상태가 아닐 때
             view.setOrderProductsCallback(!passValidationCheck)
         }
     }
@@ -99,8 +96,8 @@ class OrderPresenter(
         for (index in 0 until orderAdapterModel.getItemCount()) {
             val orderItem = orderAdapterModel.getItem(index)
 
-            if (orderItem.isChecked && orderItem.productStatus != "품절") { // 품절상품은 고려하지 않음
-                totalPrice += if (orderItem.onSale) { // 상품이 할인중이라면 할인된 가격을 더한다.
+            if (orderItem.isChecked && orderItem.productStatus != "품절") {
+                totalPrice += if (orderItem.onSale) {
                     orderItem.eventPrice * orderItem.countInBasket
                 } else {
                     orderItem.productPrice * orderItem.countInBasket
@@ -119,7 +116,6 @@ class OrderPresenter(
 
     override fun createOrder(orderItem: OrderItem) {
         if (app.isLogined) {
-            // 로그인 상태일 때
             orderData.create(
                 kakaoAccountId = app.kakaoAccountId,
                 orderItem = orderItem,
@@ -173,7 +169,6 @@ class OrderPresenter(
                 }
             )
         } else {
-            // 로그인 상태가 아닐 때
             view.createOrderCallback(orderItem)
         }
     }

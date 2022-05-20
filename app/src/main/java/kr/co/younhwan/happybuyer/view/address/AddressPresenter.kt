@@ -67,7 +67,7 @@ class AddressPresenter(
         } else {
             view.loadAddressCallback(0)
             addressAdapterModel.setSelectMode(false)
-            addressAdapterModel.addItems(ArrayList<AddressItem>())
+            addressAdapterModel.addItems(ArrayList())
             addressAdapterView.notifyAdapter()
         }
     }

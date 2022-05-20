@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.R
 import kr.co.younhwan.happybuyer.data.BasketItem
@@ -172,7 +173,21 @@ class BasketActivity : AppCompatActivity(), BasketContract.View {
             orderIntent.putExtra("selected_item_list", selectedBasketItem)
             startActivity(orderIntent)
         } else {
+            // 로딩 뷰 셋팅
+            setLoadingView()
+
+            // 장바구니 상품을 다시 로드
             basketPresenter.loadBasketProducts(true)
+
+            // 스낵바
+            val snack = Snackbar.make(
+                viewDataBinding.root,
+                "장바구니에 담긴 상품의 정보가 유효하지 않습니다.",
+                Snackbar.LENGTH_LONG
+            )
+
+            snack.anchorView = viewDataBinding.basketPurchaseBtn
+            snack.show()
         }
     }
 

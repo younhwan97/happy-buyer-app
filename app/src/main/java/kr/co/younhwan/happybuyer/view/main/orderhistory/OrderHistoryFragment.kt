@@ -2,6 +2,7 @@ package kr.co.younhwan.happybuyer.view.main.orderhistory
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -63,7 +64,7 @@ class OrderHistoryFragment : Fragment(), OrderHistoryContract.View {
                 override fun canScrollVertically() = true
             }
         viewDataBinding.orderHistoryRecycler.addItemDecoration(orderHistoryAdapter.RecyclerDecoration())
-        
+
         // 리사이클러 뷰 바운스 효과
         OverScrollDecoratorHelper.setUpOverScroll(
             viewDataBinding.orderHistoryRecycler,
