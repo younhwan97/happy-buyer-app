@@ -36,7 +36,6 @@ class BasketPresenter(
 
     override fun loadBasketProducts(isClear: Boolean) {
         if (app.isLogined) {
-            // 로그인 상태
             basketData.readProducts(
                 kakaoAccountId = app.kakaoAccountId,
                 readProductsCallback = object : BasketSource.ReadProductsCallback {
@@ -44,6 +43,7 @@ class BasketPresenter(
                         if (isClear)
                             basketAdapterModel.clearItem()
 
+                        view.loadBasketProductsCallback(list.size)
                         basketAdapterModel.addItems(list)
                         basketAdapterView.notifyAdapter()
                         calculatePrice()
@@ -51,8 +51,7 @@ class BasketPresenter(
                 }
             )
         } else {
-            // 비로그인 상태
-            basketAdapterModel.addItems(ArrayList<BasketItem>())
+            basketAdapterModel.addItems(ArrayList())
             basketAdapterView.notifyAdapter()
             calculatePrice()
         }
@@ -65,14 +64,14 @@ class BasketPresenter(
         for (index in 0 until basketAdapterModel.getItemCount()) {
             val basketItem = basketAdapterModel.getItem(index)
 
-            if (basketItem.isChecked && basketItem.productStatus != "품절") { // 품절상품은 고려하지 않음
-                totalPrice += if (basketItem.onSale) { // 상품이 할인중이라면 할인된 가격을 더한다.
+            if (basketItem.isChecked && basketItem.productStatus != "품절") {
+                originalTotalPrice += basketItem.productPrice * basketItem.countInBasket
+
+                totalPrice += if (basketItem.onSale) {
                     basketItem.eventPrice * basketItem.countInBasket
                 } else {
                     basketItem.productPrice * basketItem.countInBasket
                 }
-
-                originalTotalPrice += basketItem.productPrice * basketItem.countInBasket
             }
         }
 
@@ -130,7 +129,10 @@ class BasketPresenter(
                         if (resultCount == basketItem.countInBasket + 1) {
                             for (index in 0 until basketAdapterModel.getItemCount()) {
                                 if (basketAdapterModel.getItem(index).productId == basketItem.productId) {
-                                    basketAdapterModel.updateItemCount(position, resultCount)
+                                    basketAdapterModel.updateItemCount(
+                                        position,
+                                        resultCount
+                                    )
                                     basketAdapterView.notifyItemByUsingPayload(position, "plus")
                                     break
                                 }

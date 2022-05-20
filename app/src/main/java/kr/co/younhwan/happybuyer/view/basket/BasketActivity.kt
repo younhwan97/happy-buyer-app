@@ -36,6 +36,9 @@ class BasketActivity : AppCompatActivity(), BasketContract.View {
         viewDataBinding = ActivityBasketBinding.inflate(layoutInflater)
         setContentView(viewDataBinding.root)
 
+        // 로딩 뷰 셋팅
+        setLoadingView()
+
         // 장바구니 상품 로드
         basketPresenter.loadBasketProducts(false)
 
@@ -68,12 +71,46 @@ class BasketActivity : AppCompatActivity(), BasketContract.View {
         viewDataBinding.basketRecycler.addItemDecoration(basketAdapter.RecyclerDecoration())
 
         // 주문하기 버튼
+        viewDataBinding.basketPurchaseBtn.isEnabled = false
+        viewDataBinding.basketPurchaseBtn.setTextColor(
+            ContextCompat.getColor(
+                this,
+                R.color.white
+            )
+        )
+
         viewDataBinding.basketPurchaseBtn.setOnClickListener {
             basketPresenter.createOrderAct()
         }
     }
 
+    private fun setLoadingView() {
+        viewDataBinding.basketView.visibility = View.GONE
+        viewDataBinding.basketEmptyView.visibility = View.GONE
+        viewDataBinding.basketTopContainer.visibility = View.GONE
+        viewDataBinding.basketLoadingView.visibility  =View.VISIBLE
+        viewDataBinding.basketLoadingImage.playAnimation()
+    }
+
     override fun getAct() = this
+
+    override fun loadBasketProductsCallback(resultCount: Int) {
+        if(resultCount == 0) {
+            // 장바구니에 담긴 상품이 하나도 없을 때
+            viewDataBinding.basketEmptyView.visibility = View.VISIBLE
+            viewDataBinding.basketTopContainer.visibility = View.GONE
+            viewDataBinding.basketView.visibility = View.GONE
+        } else {
+            // 장바구니에 담긴 상품이 존재할 때
+            viewDataBinding.basketEmptyView.visibility = View.GONE
+            viewDataBinding.basketTopContainer.visibility = View.VISIBLE
+            viewDataBinding.basketView.visibility = View.VISIBLE
+        }
+        
+        // 로딩 뷰 종료
+        viewDataBinding.basketLoadingView.visibility = View.GONE
+        viewDataBinding.basketLoadingImage.pauseAnimation()
+    }
 
     override fun onClickCheckBoxCallback(isCheckedAllBasketItem: Boolean) {
         viewDataBinding.basketChechBox.isChecked = isCheckedAllBasketItem
@@ -90,17 +127,15 @@ class BasketActivity : AppCompatActivity(), BasketContract.View {
         viewDataBinding.basketEventPriceText.text = decimal.format(totalPrice - originalTotalPrice)
         viewDataBinding.basketBePaidPriceText.text = decimal.format(totalPrice)
 
-        viewDataBinding.basketTopContainer.visibility = View.VISIBLE
-        viewDataBinding.basketContentContainer.visibility = View.VISIBLE
         when (totalPrice) {
             in 0..49999 -> {
                 if (basketItemCount == 0) {
                     // 장바구니에 상품이 아무것도 없어서 총 금액이 0원인 경우
-                    viewDataBinding.basketPurchaseBtn.text = "상품을 담아주세요"
-
+                    viewDataBinding.basketEmptyView.visibility = View.VISIBLE
                     viewDataBinding.basketTopContainer.visibility = View.GONE
-                    viewDataBinding.basketContentContainer.visibility = View.GONE
-                    viewDataBinding.basketEmptyContainer.visibility = View.VISIBLE
+                    viewDataBinding.basketView.visibility = View.GONE
+
+                    viewDataBinding.basketPurchaseBtn.text = "상품을 담아주세요"
                 } else {
                     // 장바구니에 상품이 존재하나 선택된 상품 금액의 총합이 5만원 미만인 경우
                     viewDataBinding.basketPurchaseBtn.text = "5만원부터 주문할 수 있어요"
@@ -137,7 +172,7 @@ class BasketActivity : AppCompatActivity(), BasketContract.View {
             orderIntent.putExtra("selected_item_list", selectedBasketItem)
             startActivity(orderIntent)
         } else {
-
+            basketPresenter.loadBasketProducts(true)
         }
     }
 

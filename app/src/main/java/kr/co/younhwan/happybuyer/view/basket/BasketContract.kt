@@ -7,6 +7,8 @@ interface BasketContract{
 
         fun getAct(): BasketActivity
 
+        fun loadBasketProductsCallback(resultCount: Int)
+
         fun calculatePriceCallback(totalPrice: Int, originalTotalPrice: Int, basketItemCount: Int)
 
         fun onClickCheckBoxCallback(isCheckedAllBasketItem: Boolean)
