@@ -23,7 +23,7 @@ class AccountPresenter(
                 UserApiClient.instance.logout { error ->
                     if (error != null) {
                         // 로그아웃 실패
-                        view.logoutResultCallback(false, error)
+                        view.logoutWithKakaoCallback(false, error)
                     } else {
                         // 로그아웃 성공
                         // 어플리케이션 데이터 셋팅
@@ -34,7 +34,7 @@ class AccountPresenter(
                         app.wishedProductId = ArrayList()
                         app.basketItemCount = 0
 
-                        view.logoutResultCallback(true, null)
+                        view.logoutWithKakaoCallback(true, null)
                     }
                 }
             }
@@ -52,7 +52,7 @@ class AccountPresenter(
                 UserApiClient.instance.unlink { error ->
                     if (error != null) {
                         // 회원탈퇴 실패
-                        view.withdrawalResultCallback(false, error)
+                        view.withdrawalWithKakaoCallback(false, error)
                     } else {
                         // 회원탈퇴 성공
                         // 어플리케이션 데이터 셋팅
@@ -63,7 +63,7 @@ class AccountPresenter(
                         app.wishedProductId = ArrayList()
                         app.basketItemCount = 0
 
-                        view.withdrawalResultCallback(true, null)
+                        view.withdrawalWithKakaoCallback(true, null)
                     }
                 }
             }

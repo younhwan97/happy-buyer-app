@@ -25,7 +25,7 @@ class AccountFragment : Fragment(), AccountContract.View {
 
     private val accountPresenter: AccountPresenter by lazy {
         AccountPresenter(
-            this
+            view = this
         )
     }
 
@@ -48,7 +48,7 @@ class AccountFragment : Fragment(), AccountContract.View {
         // 전체 컨테이너
         OverScrollDecoratorHelper.setUpOverScroll(viewDataBinding.accountContentContainer)
 
-        // 유저 닉네임
+        // 닉네임
         viewDataBinding.accountNickname.text =
             if (app.nickname != null) app.nickname else "${app.kakaoAccountId}"
 
@@ -65,7 +65,7 @@ class AccountFragment : Fragment(), AccountContract.View {
             startActivity(dialIntent)
         }
 
-        // 프로필
+        // 프로필 관리
         viewDataBinding.accountProfileNickname.text =
             if (app.nickname != null && app.nickname != "null") app.nickname else "${app.kakaoAccountId}"
 
@@ -75,6 +75,7 @@ class AccountFragment : Fragment(), AccountContract.View {
         val startForResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode == RESULT_OK) {
+                    // 업데이트 엑티비티에서 유저 정보가 변경되었을 때
                     viewDataBinding.accountNickname.text = app.nickname
                     viewDataBinding.accountProfileNickname.text = app.nickname
                     viewDataBinding.accountProfilePoint.text = app.point
@@ -82,27 +83,27 @@ class AccountFragment : Fragment(), AccountContract.View {
             }
 
         viewDataBinding.accountProfileNicknameContainer.setOnClickListener {
-            val updateIntent = Intent(requireContext(), UpdateActivity::class.java)
+            val updateIntent = Intent(context, UpdateActivity::class.java)
             updateIntent.putExtra("update_target", "nickname")
             startForResult.launch(updateIntent)
         }
 
         viewDataBinding.accountProfilePointContainer.setOnClickListener {
-            val updateIntent = Intent(requireContext(), UpdateActivity::class.java)
+            val updateIntent = Intent(context, UpdateActivity::class.java)
             updateIntent.putExtra("update_target", "point")
             startForResult.launch(updateIntent)
         }
 
         // 알림 설정
         viewDataBinding.accountNotificationGet.setOnCheckedChangeListener { compoundButton, isChecked ->
-            if(isChecked){
+            if (isChecked) {
 
             } else {
 
             }
         }
 
-        // 기타 (회원 탈퇴 및 로그아웃 버튼)
+        // 기타
         viewDataBinding.accountEctLogoutBtn.setOnClickListener {
             accountPresenter.logoutWithKakao()
         }
@@ -114,9 +115,9 @@ class AccountFragment : Fragment(), AccountContract.View {
 
     override fun getAct() = activity as MainActivity
 
-    override fun logoutResultCallback(success: Boolean, error: Throwable?) {
-        if (success) {
-            // 토스트 메세지 출력
+    override fun logoutWithKakaoCallback(isSuccess: Boolean, error: Throwable?) {
+        if (isSuccess) {
+            // 토스트 메시지 출력
             Toast.makeText(context, "로그아웃에 성공하셨습니다.", Toast.LENGTH_LONG)
                 .show()
 
@@ -126,10 +127,11 @@ class AccountFragment : Fragment(), AccountContract.View {
             mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(mainIntent)
         } else {
+            // 토스트 메시지 출력
             Toast.makeText(context, "로그아웃에 실패하셨습니다.", Toast.LENGTH_LONG)
                 .show()
 
-            // 스팰리쉬 엑티비티 실행
+            // 스플래쉬 엑티비티 실행
             val splashIntent = Intent(context, SplashActivity::class.java)
             splashIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             splashIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -137,8 +139,8 @@ class AccountFragment : Fragment(), AccountContract.View {
         }
     }
 
-    override fun withdrawalResultCallback(success: Boolean, error: Throwable?) {
-        if (success) {
+    override fun withdrawalWithKakaoCallback(isSuccess: Boolean, error: Throwable?) {
+        if (isSuccess) {
             // 토스트 메세지 출력
             Toast.makeText(context, "회원탈퇴에 성공하셨습니다.", Toast.LENGTH_SHORT)
                 .show()
@@ -152,7 +154,7 @@ class AccountFragment : Fragment(), AccountContract.View {
             Toast.makeText(context, "회원탈퇴에 실패하셨습니다.", Toast.LENGTH_LONG)
                 .show()
 
-            // 스팰리쉬 엑티비티 실행
+            // 스플래쉬 엑티비티 실행
             val splashIntent = Intent(context, SplashActivity::class.java)
             splashIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             splashIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
