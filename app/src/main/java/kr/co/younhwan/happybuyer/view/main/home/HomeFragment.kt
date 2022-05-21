@@ -2,7 +2,6 @@ package kr.co.younhwan.happybuyer.view.main.home
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -90,22 +89,24 @@ class HomeFragment : Fragment(), HomeContract.View {
             act.startActivity(Intent(act, SearchActivity::class.java))
         }
 
-        // 카테고리
+        // 카테고리 리사이클러 뷰
         viewDataBinding.homeCategoryRecycler.adapter = homeAdapter
         viewDataBinding.homeCategoryRecycler.layoutManager =
             object : GridLayoutManager(context, 4) {
                 override fun canScrollHorizontally() = false
                 override fun canScrollVertically() = false
             }
+
         viewDataBinding.homeCategoryRecycler.addItemDecoration(homeAdapter.RecyclerDecoration())
 
-        // 행사 상품
+        // 행사 상품 리사이클러 뷰
         viewDataBinding.homeEventRecycler.adapter = eventAdapter
         viewDataBinding.homeEventRecycler.layoutManager =
             object : LinearLayoutManager(context, HORIZONTAL, false) {
                 override fun canScrollHorizontally() = true
                 override fun canScrollVertically() = false
             }
+
         viewDataBinding.homeEventRecycler.addItemDecoration(eventAdapter.RecyclerDecoration())
         viewDataBinding.homeEventRecycler.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
 
@@ -118,13 +119,14 @@ class HomeFragment : Fragment(), HomeContract.View {
             createCategoryAct(0)
         }
 
-        // 인기 상품
+        // 인기 상품 리사이클러 뷰
         viewDataBinding.homePopularRecycler.adapter = popularAdapter
         viewDataBinding.homePopularRecycler.layoutManager =
             object : LinearLayoutManager(context, HORIZONTAL, false) {
                 override fun canScrollHorizontally() = true
                 override fun canScrollVertically() = false
             }
+
         viewDataBinding.homePopularRecycler.addItemDecoration(popularAdapter.RecyclerDecoration())
         viewDataBinding.homePopularRecycler.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
 
@@ -186,6 +188,7 @@ class HomeFragment : Fragment(), HomeContract.View {
                     act.setNotificationBadge()
                 }
 
+                // 스낵바 리턴
                 Snackbar.make(
                     viewDataBinding.root,
                     "장바구니에 상품을 담았습니다.",
@@ -195,6 +198,7 @@ class HomeFragment : Fragment(), HomeContract.View {
 
             in 2..19 -> {
                 // 기존에 장바구니에 존재한 상품이 갯수만 늘었을 때
+                // 스낵바 리턴
                 Snackbar.make(
                     viewDataBinding.root,
                     "한 번 더 담으셨네요! \n담긴 수량이 ${resultCount}개가 되었습니다.",
@@ -203,6 +207,7 @@ class HomeFragment : Fragment(), HomeContract.View {
             }
 
             20 -> {
+                // 스낵바 리턴
                 Snackbar.make(
                     viewDataBinding.root,
                     "같은 종류의 상품은 최대 20개까지 담을 수 있습니다.",
@@ -211,6 +216,7 @@ class HomeFragment : Fragment(), HomeContract.View {
             }
 
             else -> {
+                // 스낵바 리턴
                 Snackbar.make(
                     viewDataBinding.root,
                     "알 수 없는 에러가 발생했습니다.",

@@ -47,28 +47,22 @@ class MainActivity : AppCompatActivity() {
         // 권한 요청
         requestPermissions(
             arrayOf(
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.INTERNET,
                 Manifest.permission.ACCESS_NETWORK_STATE
             ), 0
         )
 
-        // 인텐트에서 데이터 추출 및 프래그먼트 셋팅
-        if (intent.hasExtra("init_frag")) {
-            when (intent.getStringExtra("init_frag")) {
-                "order_history" -> {
-                    viewDataBinding.mainBottomNavigation.selectedItemId =
-                        R.id.orderHistoryInBottomNav
-                    replace(R.id.mainContentContainer, orderHistoryFragment)
-                }
-
-                else -> {
-                    replace(R.id.mainContentContainer, homeFragment)
-                }
+        // 인텐트에서 데이터 추출 및 초기 프래그먼트 셋팅
+        when (intent.getStringExtra("init_frag")) {
+            "order_history" -> {
+                viewDataBinding.mainBottomNavigation.selectedItemId =
+                    R.id.orderHistoryInBottomNav
+                replace(R.id.mainContentContainer, orderHistoryFragment)
             }
-        } else {
-            replace(R.id.mainContentContainer, homeFragment)
+
+            else -> {
+                replace(R.id.mainContentContainer, homeFragment)
+            }
         }
 
         // 툴바 & 메뉴
@@ -126,7 +120,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        // (다른 엑티비티에서) 장바구니에 상품이 담겼을 경우를 대비
+        // 다른 엑티비티에서 장바구니에 상품이 담겼을 때
         setNotificationBadge()
     }
 

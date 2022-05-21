@@ -1,7 +1,6 @@
 package kr.co.younhwan.happybuyer.view.main.home.presenter
 
 import android.content.Context
-import android.util.Log
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.adapter.product.contract.ProductAdapterContract
 import kr.co.younhwan.happybuyer.data.CategoryItem
@@ -55,6 +54,31 @@ class HomePresenter(
 
     val app = view.getAct().application as GlobalApplication
 
+    private fun onClickListenerCategoryItem(position: Int) {
+        view.createCategoryAct(position)
+    }
+
+    private fun onClickListenerOfProduct(productItem: ProductItem) {
+        view.createProductAct(productItem)
+    }
+
+    private fun onClickListenerOfBasketBtn(productId: Int) {
+        if (app.isLogined) {
+            basketData.createOrUpdateProduct(
+                kakaoAccountId = app.kakaoAccountId,
+                productId = productId,
+                count = 1,
+                object : BasketSource.CreateOrUpdateProductCallback {
+                    override fun onCreateOrUpdateProduct(resultCount: Int) {
+                        view.createOrUpdateProductInBasketCallback(resultCount)
+                    }
+                }
+            )
+        } else {
+            view.createLoginAct()
+        }
+    }
+
     override fun loadCategories(isClear: Boolean, context: Context) {
         categoryData.readCategories(
             context = context,
@@ -72,8 +96,6 @@ class HomePresenter(
                 }
             })
     }
-
-    private fun onClickListenerCategoryItem(position: Int) = view.createCategoryAct(position)
 
     override fun loadEventProducts(isClear: Boolean) {
         eventData.readProducts(
@@ -104,36 +126,12 @@ class HomePresenter(
                     if (isClear)
                         popularAdapterModel.clearItem()
 
-                    val sortedList = ArrayList(list.sortedBy { it.sales }.reversed())
-
-                    view.loadPopularProductsCallback(sortedList.size)
-                    popularAdapterModel.addItems(sortedList)
+                    view.loadPopularProductsCallback(list.size)
+                    popularAdapterModel.addItems(list)
                     popularAdapterView.deleteLoading()
                     popularAdapterView.notifyAdapter()
                 }
             }
         )
-    }
-
-    private fun onClickListenerOfProduct(productItem: ProductItem) =
-        view.createProductAct(productItem)
-
-    private fun onClickListenerOfBasketBtn(productId: Int) {
-        if (app.isLogined) {
-            // 로그인 상태일 때
-            basketData.createOrUpdateProduct(
-                kakaoAccountId = app.kakaoAccountId,
-                productId = productId,
-                count = 1,
-                object : BasketSource.CreateOrUpdateProductCallback {
-                    override fun onCreateOrUpdateProduct(resultCount: Int) {
-                        view.createOrUpdateProductInBasketCallback(resultCount)
-                    }
-                }
-            )
-        } else {
-            // 로그인 상태가 아닐 때
-            view.createLoginAct()
-        }
     }
 }
