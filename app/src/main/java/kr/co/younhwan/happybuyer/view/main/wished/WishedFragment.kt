@@ -1,5 +1,6 @@
 package kr.co.younhwan.happybuyer.view.main.wished
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.R
+import kr.co.younhwan.happybuyer.data.ProductItem
 import kr.co.younhwan.happybuyer.data.source.basket.BasketRepository
 import kr.co.younhwan.happybuyer.data.source.wished.WishedRepository
 import kr.co.younhwan.happybuyer.databinding.FragmentWishedBinding
@@ -16,6 +18,7 @@ import kr.co.younhwan.happybuyer.view.main.MainActivity
 import kr.co.younhwan.happybuyer.view.main.wished.adapter.WishedAdapter
 import kr.co.younhwan.happybuyer.view.main.wished.presenter.WishedContract
 import kr.co.younhwan.happybuyer.view.main.wished.presenter.WishedPresenter
+import kr.co.younhwan.happybuyer.view.product.ProductActivity
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper
 
 class WishedFragment : Fragment(), WishedContract.View {
@@ -59,6 +62,7 @@ class WishedFragment : Fragment(), WishedContract.View {
             override fun canScrollHorizontally() = false
             override fun canScrollVertically() = true
         }
+
         viewDataBinding.wishedRecycler.addItemDecoration(wishedAdapter.RecyclerDecoration())
 
         OverScrollDecoratorHelper.setUpOverScroll(
@@ -80,14 +84,14 @@ class WishedFragment : Fragment(), WishedContract.View {
     override fun loadWishedProductsCallback(resultCount: Int) {
         if (resultCount == 0) {
             // 찜한 상품이 없을 때
-            viewDataBinding.wishedEmptyView.visibility = View.VISIBLE
             viewDataBinding.wishedItemCountContainer.visibility = View.GONE
             viewDataBinding.wishedRecycler.visibility = View.GONE
+            viewDataBinding.wishedEmptyView.visibility = View.VISIBLE
         } else {
             // 찜한 상품이 있을 때
-            viewDataBinding.wishedEmptyView.visibility = View.GONE
             viewDataBinding.wishedItemCountContainer.visibility = View.VISIBLE
             viewDataBinding.wishedRecycler.visibility = View.VISIBLE
+            viewDataBinding.wishedEmptyView.visibility = View.GONE
 
             viewDataBinding.wishedItemCount.text = resultCount.toString()
         }
@@ -97,37 +101,10 @@ class WishedFragment : Fragment(), WishedContract.View {
         viewDataBinding.wishedLoadingImage.pauseAnimation()
     }
 
-    override fun deleteProductInWishedCallback(perform: String?, resultCount: Int) {
-        val snack = when (perform) {
-            "delete" -> {
-                if (resultCount != 0) {
-                    viewDataBinding.wishedItemCount.text = resultCount.toString()
-                } else {
-                    viewDataBinding.wishedEmptyView.visibility = View.VISIBLE
-                    viewDataBinding.wishedItemCountContainer.visibility = View.GONE
-                    viewDataBinding.wishedRecycler.visibility = View.GONE
-                }
-
-                // 스낵바 리턴
-                Snackbar.make(
-                    viewDataBinding.root, 
-                    "상품을 찜 목록에서 제외했습니다.", 
-                    Snackbar.LENGTH_SHORT
-                )
-            }
-
-            else -> {
-                // 스낵바 리턴
-                Snackbar.make(
-                    viewDataBinding.root, 
-                    "알 수 없는 에러가 발생했습니다.", 
-                    Snackbar.LENGTH_SHORT
-                )
-            }
-        }
-
-        snack.setAnchorView(R.id.mainBottomNavigation)
-        snack.show()
+    override fun createProductAct(productItem: ProductItem) {
+        val productIntent = Intent(context, ProductActivity::class.java)
+        productIntent.putExtra("product", productItem)
+        startActivity(productIntent)
     }
 
     override fun createOrUpdateProductInBasketCallback(resultCount: Int) {
@@ -175,6 +152,39 @@ class WishedFragment : Fragment(), WishedContract.View {
                 Snackbar.make(
                     viewDataBinding.root,
                     "알 수 없는 에러가 발생했습니다.",
+                    Snackbar.LENGTH_SHORT
+                )
+            }
+        }
+
+        snack.setAnchorView(R.id.mainBottomNavigation)
+        snack.show()
+    }
+
+    override fun deleteProductInWishedCallback(perform: String?, resultCount: Int) {
+        val snack = when (perform) {
+            "delete" -> {
+                if (resultCount == 0) {
+                    viewDataBinding.wishedItemCountContainer.visibility = View.GONE
+                    viewDataBinding.wishedRecycler.visibility = View.GONE
+                    viewDataBinding.wishedEmptyView.visibility = View.VISIBLE
+                } else {
+                    viewDataBinding.wishedItemCount.text = resultCount.toString()
+                }
+
+                // 스낵바 리턴
+                Snackbar.make(
+                    viewDataBinding.root, 
+                    "상품을 찜 목록에서 제외했습니다.", 
+                    Snackbar.LENGTH_SHORT
+                )
+            }
+
+            else -> {
+                // 스낵바 리턴
+                Snackbar.make(
+                    viewDataBinding.root, 
+                    "알 수 없는 에러가 발생했습니다.", 
                     Snackbar.LENGTH_SHORT
                 )
             }

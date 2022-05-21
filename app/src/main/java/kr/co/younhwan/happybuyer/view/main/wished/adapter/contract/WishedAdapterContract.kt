@@ -5,6 +5,8 @@ import kr.co.younhwan.happybuyer.data.ProductItem
 interface WishedAdapterContract {
     interface View {
 
+        var onClickFunOfProduct: ((ProductItem) -> Unit)?
+
         var onClickFuncOfDeleteBtn: ((Int, Int) -> Unit)?
 
         var onClickFuncOfBasketBtn: ((Int) -> Unit)?

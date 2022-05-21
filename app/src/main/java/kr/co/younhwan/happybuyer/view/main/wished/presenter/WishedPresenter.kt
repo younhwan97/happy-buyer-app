@@ -17,8 +17,12 @@ class WishedPresenter(
 ) : WishedContract.Presenter {
 
     init {
-        wishedAdapterView.onClickFuncOfBasketBtn = { i ->
-            onClickListenerOfBasketBtn(i)
+        wishedAdapterView.onClickFunOfProduct = {
+            onClickListenerOfProduct(it)
+        }
+
+        wishedAdapterView.onClickFuncOfBasketBtn = {
+            onClickListenerOfBasketBtn(it)
         }
 
         wishedAdapterView.onClickFuncOfDeleteBtn = { i, j ->
@@ -28,34 +32,27 @@ class WishedPresenter(
 
     val app = view.getAct().application as GlobalApplication
 
-    override fun loadWishedProducts(isClear: Boolean) {
-        if (app.isLogined) {
-            // 로그인 상태일 때
-            wishedData.readProducts(
-                kakaoAccountId = app.kakaoAccountId,
-                readProductsCallback = object : WishedSource.ReadProductsCallback {
-                    override fun onReadProducts(list: ArrayList<ProductItem>) {
-                        if (isClear) {
-                            wishedAdapterModel.clearItem()
-                        }
+    private fun onClickListenerOfProduct(productItem: ProductItem) {
+        view.createProductAct(productItem)
+    }
 
-                        view.loadWishedProductsCallback(list.size)
-                        wishedAdapterModel.addItems(list)
-                        wishedAdapterView.notifyAdapter()
+    private fun onClickListenerOfBasketBtn(productId: Int) {
+        if (app.isLogined) {
+            basketData.createOrUpdateProduct(
+                kakaoAccountId = app.kakaoAccountId,
+                productId = productId,
+                count = 1,
+                object : BasketSource.CreateOrUpdateProductCallback {
+                    override fun onCreateOrUpdateProduct(resultCount: Int) {
+                        view.createOrUpdateProductInBasketCallback(resultCount)
                     }
                 }
             )
-        } else {
-            // 로그인 상태가 아닐 때
-            view.loadWishedProductsCallback(0)
-            wishedAdapterModel.addItems(ArrayList<ProductItem>())
-            wishedAdapterView.notifyAdapter()
         }
     }
 
     private fun onClickListenerOfDeleteBtn(productId: Int, position: Int) {
         if (app.isLogined) {
-            // 로그인 상태일 때
             wishedData.createOrDeleteProduct(
                 kakaoAccountId = app.kakaoAccountId,
                 productId = productId,
@@ -82,24 +79,27 @@ class WishedPresenter(
                 }
             )
         } else {
-            // 로그인 상태가 아닐 때
             view.deleteProductInWishedCallback("error", 0)
         }
     }
 
-    private fun onClickListenerOfBasketBtn(productId: Int) {
+    override fun loadWishedProducts(isClear: Boolean) {
         if (app.isLogined) {
-            // 로그인 상태일 때
-            basketData.createOrUpdateProduct(
+            wishedData.readProducts(
                 kakaoAccountId = app.kakaoAccountId,
-                productId = productId,
-                count = 1,
-                object : BasketSource.CreateOrUpdateProductCallback {
-                    override fun onCreateOrUpdateProduct(resultCount: Int) {
-                        view.createOrUpdateProductInBasketCallback(resultCount)
+                readProductsCallback = object : WishedSource.ReadProductsCallback {
+                    override fun onReadProducts(list: ArrayList<ProductItem>) {
+                        if (isClear)
+                            wishedAdapterModel.clearItem()
+
+                        view.loadWishedProductsCallback(list.size)
+                        wishedAdapterModel.addItems(list)
+                        wishedAdapterView.notifyAdapter()
                     }
                 }
             )
+        } else {
+            view.loadWishedProductsCallback(0)
         }
     }
 }

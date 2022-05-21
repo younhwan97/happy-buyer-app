@@ -89,7 +89,7 @@ class HomeFragment : Fragment(), HomeContract.View {
             act.startActivity(Intent(act, SearchActivity::class.java))
         }
 
-        // 카테고리 리사이클러 뷰
+        // 카테고리 리사이클러뷰
         viewDataBinding.homeCategoryRecycler.adapter = homeAdapter
         viewDataBinding.homeCategoryRecycler.layoutManager =
             object : GridLayoutManager(context, 4) {
@@ -99,7 +99,7 @@ class HomeFragment : Fragment(), HomeContract.View {
 
         viewDataBinding.homeCategoryRecycler.addItemDecoration(homeAdapter.RecyclerDecoration())
 
-        // 행사 상품 리사이클러 뷰
+        // 행사 상품 리사이클러뷰
         viewDataBinding.homeEventRecycler.adapter = eventAdapter
         viewDataBinding.homeEventRecycler.layoutManager =
             object : LinearLayoutManager(context, HORIZONTAL, false) {
@@ -119,7 +119,7 @@ class HomeFragment : Fragment(), HomeContract.View {
             createCategoryAct(0)
         }
 
-        // 인기 상품 리사이클러 뷰
+        // 인기 상품 리사이클러뷰
         viewDataBinding.homePopularRecycler.adapter = popularAdapter
         viewDataBinding.homePopularRecycler.layoutManager =
             object : LinearLayoutManager(context, HORIZONTAL, false) {
@@ -158,18 +158,16 @@ class HomeFragment : Fragment(), HomeContract.View {
     }
 
     override fun createCategoryAct(adapterPosition: Int) {
-        val act = activity as MainActivity
-        val categoryIntent = Intent(act, CategoryActivity::class.java)
+        val categoryIntent = Intent(context, CategoryActivity::class.java)
         categoryIntent.putExtra("init_position", adapterPosition)
         categoryIntent.putExtra("label", categoryLabelList)
-        act.startActivity(categoryIntent)
+        startActivity(categoryIntent)
     }
 
     override fun createProductAct(productItem: ProductItem) {
-        val act = activity as MainActivity
-        val productIntent = Intent(act, ProductActivity::class.java)
+        val productIntent = Intent(context, ProductActivity::class.java)
         productIntent.putExtra("product", productItem)
-        act.startActivity(productIntent)
+        startActivity(productIntent)
     }
 
     override fun createLoginAct() =

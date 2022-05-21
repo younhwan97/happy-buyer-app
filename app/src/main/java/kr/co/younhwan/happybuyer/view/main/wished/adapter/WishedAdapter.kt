@@ -14,7 +14,9 @@ class WishedAdapter :
     WishedAdapterContract.Model,
     WishedAdapterContract.View {
 
-    private lateinit var productItemList: ArrayList<ProductItem>
+    private var productItemList: ArrayList<ProductItem> = ArrayList()
+
+    override var onClickFunOfProduct: ((ProductItem) -> Unit)? = null
 
     override var onClickFuncOfDeleteBtn: ((Int, Int) -> Unit)? = null
 
@@ -48,6 +50,7 @@ class WishedAdapter :
         return WishedViewHolder(
             parent,
             itemBinding,
+            onClickFunOfProduct,
             onClickFuncOfDeleteBtn,
             onClickFuncOfBasketBtn
         )

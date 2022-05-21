@@ -13,6 +13,7 @@ import java.text.DecimalFormat
 class WishedViewHolder(
     private val parent: ViewGroup,
     wishedItemBinding: RecyclerWishedItemBinding,
+    private val listenerFuncOfProduct: ((ProductItem) -> Unit)?,
     private val listenerFuncOfDeleteBtn: ((Int, Int) -> Unit)?,
     private val listenerFuncOfBasketBtn: ((Int) -> Unit)?
 ) : RecyclerView.ViewHolder(wishedItemBinding.root) {
@@ -68,6 +69,11 @@ class WishedViewHolder(
     private val decimal = DecimalFormat("#,###")
 
     fun onBind(productItem: ProductItem) {
+        // 상품
+        itemView.setOnClickListener {
+            listenerFuncOfProduct?.invoke(productItem)
+        }
+
         // 상품 이미지
         Glide.with(this.itemView.context)
             .load(productItem.productImageUrl)
