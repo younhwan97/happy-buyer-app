@@ -6,9 +6,9 @@ import kr.co.younhwan.happybuyer.view.main.MainActivity
 interface OrderHistoryContract {
     interface View {
 
-        fun loadOrderHistoryCallback(resultCount: Int)
-
         fun getAct(): MainActivity
+
+        fun loadOrderHistoryCallback(resultCount: Int)
 
         fun createOrderDetailAct(orderHistoryItem: OrderItem)
 

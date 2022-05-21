@@ -2,7 +2,6 @@ package kr.co.younhwan.happybuyer.view.main.orderhistory
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,7 +34,7 @@ class OrderHistoryFragment : Fragment(), OrderHistoryContract.View {
         OrderHistoryAdapter()
     }
 
-    private var nowPage = 1 // 페이징
+    private var nowPage = 1
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,33 +51,32 @@ class OrderHistoryFragment : Fragment(), OrderHistoryContract.View {
         // 로딩 뷰 셋팅
         setLoadingView()
 
-        // (첫번째 페이지) 주문내역 로드
+        // 주문내역 로드
         nowPage = 1
         orderHistoryPresenter.loadOrderHistory(true, nowPage)
 
-        // 주문 내역 리사이클러 뷰
+        // 주문내역 리사이클러뷰
         viewDataBinding.orderHistoryRecycler.adapter = orderHistoryAdapter
         viewDataBinding.orderHistoryRecycler.layoutManager =
             object : LinearLayoutManager(activity) {
                 override fun canScrollHorizontally() = false
                 override fun canScrollVertically() = true
             }
+
         viewDataBinding.orderHistoryRecycler.addItemDecoration(orderHistoryAdapter.RecyclerDecoration())
 
-        // 리사이클러 뷰 바운스 효과
         OverScrollDecoratorHelper.setUpOverScroll(
             viewDataBinding.orderHistoryRecycler,
             OverScrollDecoratorHelper.ORIENTATION_VERTICAL
         )
 
-        // 주문 내역 리사이클러 뷰 스크롤 이벤트 리스너 (= endless scroll)
         viewDataBinding.orderHistoryRecycler.addOnScrollListener(object :
             RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
+                // 무한 스크롤
                 if (!recyclerView.canScrollVertically(1)) {
-                    // 제일 끝까지 스크롤 했을 때
                     if (nowPage != -1) {
                         nowPage += 1
                         orderHistoryPresenter.loadMoreOrderHistory(nowPage)
@@ -94,6 +92,8 @@ class OrderHistoryFragment : Fragment(), OrderHistoryContract.View {
         viewDataBinding.orderHistoryLoadingView.visibility = View.VISIBLE
         viewDataBinding.orderHistoryLoadingImage.playAnimation()
     }
+
+    override fun getAct() = activity as MainActivity
 
     override fun loadOrderHistoryCallback(resultCount: Int) {
         if (resultCount == 0) {
@@ -115,10 +115,8 @@ class OrderHistoryFragment : Fragment(), OrderHistoryContract.View {
         viewDataBinding.orderHistoryLoadingImage.pauseAnimation()
     }
 
-    override fun getAct() = activity as MainActivity
-
     override fun createOrderDetailAct(orderHistoryItem: OrderItem) {
-        val orderDetailIntent = Intent(requireContext(), OrderDetailActivity::class.java)
+        val orderDetailIntent = Intent(context, OrderDetailActivity::class.java)
         orderDetailIntent.putExtra("order", orderHistoryItem)
         startActivity(orderDetailIntent)
     }
