@@ -13,11 +13,10 @@ class ProductPresenter(
     private val wishedData: WishedRepository,
 ) : ProductContract.Model {
 
-    val app = view.getAct().application as GlobalApplication
+    private val app = view.getAct().application as GlobalApplication
 
     override fun clickWishedBtn(productId: Int) {
         if (app.isLogined) {
-            // 로그인 상태일 때
             wishedData.createOrDeleteProduct(
                 kakaoAccountId = app.kakaoAccountId,
                 productId = productId,
@@ -28,14 +27,12 @@ class ProductPresenter(
                 }
             )
         } else {
-            // 로그인 상태가 아닐 때
             view.createLoginActivity()
         }
     }
 
     override fun createOrUpdateProductInBasket(productId: Int, count: Int) {
         if(app.isLogined){
-            // 로그인 상태일 때
             basketData.createOrUpdateProduct(
                 kakaoAccountId = app.kakaoAccountId,
                 productId = productId,
@@ -58,7 +55,6 @@ class ProductPresenter(
                 }
             )
         } else {
-            // 로그인 상태가 아닐 때
             view.createLoginActivity()
         }
     }

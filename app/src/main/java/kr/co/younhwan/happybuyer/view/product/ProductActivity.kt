@@ -199,7 +199,7 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
 
     override fun getAct() = this
 
-    override fun createLoginActivity(){
+    override fun createLoginActivity() {
         viewDataBinding.productWishedBtn.isEnabled = true
         startActivity(Intent(this, LoginActivity::class.java))
     }
@@ -290,8 +290,8 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
             else -> {
                 // 스낵바 리턴
                 Snackbar.make(
-                    viewDataBinding.root, 
-                    "알 수 없는 에러가 발생했습니다.", 
+                    viewDataBinding.root,
+                    "알 수 없는 에러가 발생했습니다.",
                     Snackbar.LENGTH_SHORT
                 )
             }
