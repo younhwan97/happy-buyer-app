@@ -42,7 +42,7 @@ class AddressActivity : AppCompatActivity(), AddressContract.View {
 
         // 인텐트에서 데이터 추출
         // 주소록 모드를 설정
-        // 주소록 엑티비티가 주문 엑티비티에서 호출된 경우  -> select mode
+        // 주소록 엑티비티가 주문 엑티비티에서 호출된 경우 -> select mode
         // 주소록 엑티비티가 계정 프래그먼트에서 호출된 경우 -> not select mode
         isSelectMode = if (intent.hasExtra("is_select_mode")) {
             intent.getBooleanExtra("is_select_mode", false)
@@ -85,13 +85,6 @@ class AddressActivity : AppCompatActivity(), AddressContract.View {
         )
     }
 
-    private fun setLoadingView() {
-        viewDataBinding.addressEmptyView.visibility = View.GONE
-        viewDataBinding.addressRecycler.visibility = View.GONE
-        viewDataBinding.addressLoadingView.visibility = View.VISIBLE
-        viewDataBinding.addressLoadingImage.playAnimation()
-    }
-
     private val startAddAddressActForResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == RESULT_OK) {
@@ -102,6 +95,13 @@ class AddressActivity : AppCompatActivity(), AddressContract.View {
                 addressPresenter.loadAddress(isSelectMode)
             }
         }
+
+    private fun setLoadingView() {
+        viewDataBinding.addressEmptyView.visibility = View.GONE
+        viewDataBinding.addressRecycler.visibility = View.GONE
+        viewDataBinding.addressLoadingView.visibility = View.VISIBLE
+        viewDataBinding.addressLoadingImage.playAnimation()
+    }
 
     override fun getAct() = this
 

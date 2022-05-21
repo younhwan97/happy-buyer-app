@@ -23,15 +23,17 @@ class AddressPresenter(
         }
     }
 
-    private fun onClickListenerOfEditBtn(addressItem: AddressItem) =
-        view.createAddAddressAct(addressItem)
+    private val app = view.getAct().application as GlobalApplication
 
-    private fun onClickListenerOfSelectBtn(addressItem: AddressItem) =
+    private fun onClickListenerOfEditBtn(addressItem: AddressItem) {
+        view.createAddAddressAct(addressItem)
+    }
+
+    private fun onClickListenerOfSelectBtn(addressItem: AddressItem) {
         view.finishAct(addressItem)
+    }
 
     override fun loadAddress(isSelectMode: Boolean) {
-        val app = view.getAct().application as GlobalApplication
-
         if (app.isLogined) {
             addressData.read(
                 kakaoAccountId = app.kakaoAccountId,
@@ -66,9 +68,6 @@ class AddressPresenter(
             )
         } else {
             view.loadAddressCallback(0)
-            addressAdapterModel.setSelectMode(false)
-            addressAdapterModel.addItems(ArrayList())
-            addressAdapterView.notifyAdapter()
         }
     }
 }

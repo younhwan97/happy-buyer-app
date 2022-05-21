@@ -19,7 +19,7 @@ class OrderHistoryPresenter(
         }
     }
 
-    val app = view.getAct().application as GlobalApplication
+    private val app = view.getAct().application as GlobalApplication
 
     private fun onClickListener(orderHistoryItem: OrderItem) {
         view.createOrderDetailAct(orderHistoryItem)

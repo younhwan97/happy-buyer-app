@@ -52,7 +52,7 @@ class HomePresenter(
 
     }
 
-    val app = view.getAct().application as GlobalApplication
+    private val app = view.getAct().application as GlobalApplication
 
     private fun onClickListenerCategoryItem(position: Int) {
         view.createCategoryAct(position)

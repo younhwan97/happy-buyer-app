@@ -12,6 +12,7 @@ interface AddressContract {
         fun createAddAddressAct(addressItem: AddressItem)
 
         fun finishAct(addressItem: AddressItem)
+
     }
 
     interface Model {

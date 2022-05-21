@@ -30,7 +30,7 @@ class WishedPresenter(
         }
     }
 
-    val app = view.getAct().application as GlobalApplication
+    private val app = view.getAct().application as GlobalApplication
 
     private fun onClickListenerOfProduct(productItem: ProductItem) {
         view.createProductAct(productItem)
