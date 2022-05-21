@@ -10,7 +10,7 @@ class AddAddressPresenter(
     private val addressData: AddressRepository
 ) : AddAddressContract.Model {
 
-    val app = view.getAct().application as GlobalApplication
+    private val app = view.getAct().application as GlobalApplication
 
     override fun checkHasDefaultAddress() {
         if (app.isLogined) {
@@ -20,12 +20,10 @@ class AddAddressPresenter(
                     override fun onRead(list: ArrayList<AddressItem>) {
                         var hasDefaultAddress = false
 
-                        if (list.size != 0) {
-                            for (item in list) {
-                                if (item.isDefault == true) {
-                                    hasDefaultAddress = true
-                                    break
-                                }
+                        for (item in list) {
+                            if (item.isDefault == true) {
+                                hasDefaultAddress = true
+                                break
                             }
                         }
 
@@ -38,7 +36,6 @@ class AddAddressPresenter(
 
     override fun addAddress(addressItem: AddressItem) {
         if (app.isLogined) {
-            // address id(primary key)에 따라 주소를 새롭게 추가하거나 수정
             if (addressItem.addressId == -1) {
                 // 주소를 새롭게 추가하는 경우
                 addressData.create(

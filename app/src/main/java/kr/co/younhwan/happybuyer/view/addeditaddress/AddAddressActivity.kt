@@ -141,6 +141,7 @@ class AddAddressActivity : AppCompatActivity(), AddAddressContract.View {
                 // 중복 저장 방지
                 it.isEnabled = false
 
+                // 주소 저장
                 addAddressPresenter.addAddress(
                     AddressItem(
                         addressId = oldAddressItem.addressId,
@@ -170,7 +171,10 @@ class AddAddressActivity : AppCompatActivity(), AddAddressContract.View {
                 // 중복 삭제 방지
                 it.isEnabled = false
 
-                addAddressPresenter.deleteAddress(oldAddressItem.addressId)
+                // 주소 삭제
+                addAddressPresenter.deleteAddress(
+                    addressId = oldAddressItem.addressId
+                )
             }
         }
     }

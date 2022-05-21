@@ -5,15 +5,16 @@ import kr.co.younhwan.happybuyer.data.AddressItem
 interface AddAddressContract {
     interface View {
 
-        fun checkHasDefaultAddressCallback(hasDefaultAddress: Boolean)
-
         fun getAct(): AddAddressActivity
+
+        fun checkHasDefaultAddressCallback(hasDefaultAddress: Boolean)
 
         fun checkValidation()
 
         fun addAddressCallback(addressItem: AddressItem, isSuccess: Boolean)
 
         fun deleteAddressCallback(isSuccess: Boolean)
+
     }
 
     interface Model {
@@ -23,6 +24,6 @@ interface AddAddressContract {
         fun addAddress(addressItem: AddressItem)
 
         fun deleteAddress(addressId: Int)
-        
+
     }
 }
