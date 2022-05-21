@@ -80,15 +80,17 @@ class NicknameFragment : Fragment(), NicknameContract.View {
                 R.color.fontColorWhite
             )
         )
+
         viewDataBinding.nicknameBtn.setOnClickListener {
-            val newNickname = viewDataBinding.nicknameEditText.text.toString()
-            nicknamePresenter.updateUserNickname(newNickname)
+            nicknamePresenter.updateUserNickname(
+                newNickname = viewDataBinding.nicknameEditText.text.toString()
+            )
         }
     }
 
     override fun getAct() = activity as UpdateActivity
 
-    override fun updateResultCallback(isSuccess: Boolean) {
+    override fun updateUserNicknameCallback(isSuccess: Boolean) {
         val act = activity as UpdateActivity
 
         if (isSuccess) {

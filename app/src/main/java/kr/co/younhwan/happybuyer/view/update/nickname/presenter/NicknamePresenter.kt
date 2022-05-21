@@ -9,11 +9,10 @@ class NicknamePresenter(
     private val userData: UserRepository
 ) : NicknameContract.Model {
 
-    override fun updateUserNickname(newNickname: String) {
-        val app = view.getAct().application as GlobalApplication
+    val app = view.getAct().application as GlobalApplication
 
+    override fun updateUserNickname(newNickname: String) {
         if (app.isLogined) {
-            // 로그인 상태일 때
             userData.update(
                 kakaoAccountId = app.kakaoAccountId,
                 updateTarget = "nickname",
@@ -23,12 +22,11 @@ class NicknamePresenter(
                         if (isSuccess)
                             app.nickname = newNickname
 
-                        view.updateResultCallback(isSuccess)
+                        view.updateUserNicknameCallback(isSuccess)
                     }
                 })
         } else {
-            // 로그인 상태가 아닐 때
-            view.updateResultCallback(false)
+            view.updateUserNicknameCallback(false)
         }
     }
 }

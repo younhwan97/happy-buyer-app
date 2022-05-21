@@ -9,11 +9,10 @@ class PointPresenter(
     private val userData: UserRepository
 ) : PointContract.Model {
 
-    override fun updateUserPoint(newPoint: String) {
-        val app = view.getAct().application as GlobalApplication
+    val app = view.getAct().application as GlobalApplication
 
+    override fun updateUserPoint(newPoint: String) {
         if (app.isLogined) {
-            // 로그인 상태일 때
             userData.update(
                 kakaoAccountId = app.kakaoAccountId,
                 updateTarget = "point",
@@ -28,7 +27,6 @@ class PointPresenter(
                 }
             )
         } else {
-            // 로그인 상태가 아닐 때
             view.updateUserPointCallback(false)
         }
     }

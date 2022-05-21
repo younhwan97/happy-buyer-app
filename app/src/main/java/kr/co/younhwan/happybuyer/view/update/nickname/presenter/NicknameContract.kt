@@ -2,16 +2,16 @@ package kr.co.younhwan.happybuyer.view.update.nickname.presenter
 
 import kr.co.younhwan.happybuyer.view.update.UpdateActivity
 
-interface NicknameContract{
+interface NicknameContract {
     interface View {
-
-        fun updateResultCallback(isSuccess:Boolean)
 
         fun getAct(): UpdateActivity
 
+        fun updateUserNicknameCallback(isSuccess: Boolean)
+
     }
 
-    interface Model{
+    interface Model {
 
         fun updateUserNickname(newNickname: String)
 

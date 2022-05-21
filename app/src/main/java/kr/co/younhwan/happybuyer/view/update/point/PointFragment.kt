@@ -43,8 +43,9 @@ class PointFragment : Fragment(), PointContract.View {
         val app = (activity as UpdateActivity).application as GlobalApplication
 
         // 에딧 텍스트
-        if(app.isLogined && app.point != null && app.point != "null"){
-            viewDataBinding.pointEditText.text = Editable.Factory.getInstance().newEditable(app.point)
+        if (app.isLogined && app.point != null && app.point != "null") {
+            viewDataBinding.pointEditText.text =
+                Editable.Factory.getInstance().newEditable(app.point)
         }
 
         viewDataBinding.pointEditText.addTextChangedListener(object :
@@ -92,9 +93,11 @@ class PointFragment : Fragment(), PointContract.View {
                 R.color.fontColorWhite
             )
         )
+
         viewDataBinding.pointBtn.setOnClickListener {
-            val newPoint = viewDataBinding.pointEditText.text.toString()
-            pointPresenter.updateUserPoint(newPoint)
+            pointPresenter.updateUserPoint(
+                newPoint = viewDataBinding.pointEditText.text.toString()
+            )
         }
     }
 

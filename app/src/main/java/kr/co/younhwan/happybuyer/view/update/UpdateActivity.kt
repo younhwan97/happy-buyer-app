@@ -24,33 +24,26 @@ class UpdateActivity : AppCompatActivity() {
         viewDataBinding = ActivityUpdateBinding.inflate(layoutInflater)
         setContentView(viewDataBinding.root)
 
-        // 인텐트에서 데이터 추출
-        val updateTarget = intent.getStringExtra("update_target") ?: ""
+        // 인텐트에서 데이터 추출 및 초기 프래그먼트 셋팅
+        when (intent.getStringExtra("update_target")) {
+            "nickname" -> {
+                viewDataBinding.updateToolbar.title = "닉네임"
+                replace(R.id.fragmentContainerInUpdateAct, nicknameFragment)
+            }
 
-        if (updateTarget == "") {
-            finish()
-        } else {
-            // 툴바
-            viewDataBinding.updateToolbar.setNavigationOnClickListener {
+            "point" -> {
+                viewDataBinding.updateToolbar.title = "포인트 번호"
+                replace(R.id.fragmentContainerInUpdateAct, pointFragment)
+            }
+
+            else -> {
                 finish()
             }
+        }
 
-            // 초기 프래그먼트 설정
-            when (updateTarget) {
-                "nickname" -> {
-                    viewDataBinding.updateToolbar.title = "닉네임"
-                    replace(R.id.fragmentContainerInUpdateAct, nicknameFragment)
-                }
-
-                "point" -> {
-                    viewDataBinding.updateToolbar.title = "포인트 번호"
-                    replace(R.id.fragmentContainerInUpdateAct, pointFragment)
-                }
-
-                else -> {
-                    finish()
-                }
-            }
+        // 툴바
+        viewDataBinding.updateToolbar.setNavigationOnClickListener {
+            finish()
         }
     }
 }
