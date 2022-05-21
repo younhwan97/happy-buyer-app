@@ -16,7 +16,6 @@ class CategoryPresenter(
     private val productData: ProductRepository,
     private val eventData: EventRepository,
     private val basketData: BasketRepository,
-    private val userData: UserRepository,
     private val adapterModel: ProductAdapterContract.Model,
     private val adapterView: ProductAdapterContract.View,
 ) : CategoryContract.Model {
@@ -31,7 +30,27 @@ class CategoryPresenter(
         }
     }
 
-    val app = view.getAct().application as GlobalApplication
+    private val app = view.getAct().application as GlobalApplication
+
+    private fun onClickListenerProduct(productItem: ProductItem) {
+        view.createProductAct(productItem)
+    }
+
+    private fun onClickListenerOfBasketBtn(productId: Int) {
+        if (app.isLogined) {
+            basketData.createOrUpdateProduct(
+                kakaoAccountId = app.kakaoAccountId,
+                productId = productId,
+                count = 1,
+                object : BasketSource.CreateOrUpdateProductCallback {
+                    override fun onCreateOrUpdateProduct(resultCount: Int) {
+                        view.createOrUpdateProductInBasketCallback(resultCount)
+                    }
+                })
+        } else {
+            view.createLoginAct()
+        }
+    }
 
     override fun loadProducts(
         isClear: Boolean,
@@ -39,9 +58,8 @@ class CategoryPresenter(
         sortBy: String,
         page: Int
     ) {
-        // 초기 상품을 셋팅할 때 호출되는 메서드
         if (selectedCategory == "행사") {
-            // 행사 카테고리가 선택된 경우 행사 데이터를 담당하는 모델에 분기
+            // 행사 카테고리가 선택된 경우
             eventData.readProducts(
                 sortBy = sortBy,
                 page = page,
@@ -57,7 +75,7 @@ class CategoryPresenter(
                 }
             )
         } else {
-            // 행사 카테고리가 아닌 나머지 카테고리의 경우 일반 카테고리를 처리하는 모델에 분기
+            // 행사 카테고리가 아닌 나머지 카테고리의 경우
             productData.readProducts(
                 selectedCategory = selectedCategory,
                 sortBy = sortBy,
@@ -81,9 +99,8 @@ class CategoryPresenter(
         sortBy: String,
         page: Int
     ) {
-        // 상품을 추가로 셋팅할 때 호출되는 메서드
         if (selectedCategory == "행사") {
-            // 행사 카테고리가 선택된 경우 행사 데이터를 담당하는 모델에 분기
+            // 행사 카테고리가 선택된 경우
             eventData.readProducts(
                 sortBy = sortBy,
                 page = page,
@@ -107,7 +124,7 @@ class CategoryPresenter(
                 }
             )
         } else {
-            // 행사 카테고리가 아닌 나머지 카테고리의 경우 일반 카테고리를 처리하는 모델에 분기
+            // 행사 카테고리가 아닌 나머지 카테고리의 경우
             productData.readProducts(
                 selectedCategory = selectedCategory,
                 sortBy = sortBy,
@@ -131,35 +148,6 @@ class CategoryPresenter(
                         }
                     }
                 })
-        }
-    }
-
-    override fun sortCategoryProducts(newItem: String) {
-
-    }
-
-    private fun onClickListenerProduct(productItem: ProductItem) =
-        view.createProductAct(productItem)
-
-    private fun onClickListenerOfBasketBtn(productId: Int) {
-        val app = ((view.getAct()).application) as GlobalApplication
-
-        if (app.isLogined) {
-            basketData.createOrUpdateProduct(
-                kakaoAccountId = app.kakaoAccountId,
-                productId = productId,
-                count = 1,
-                object : BasketSource.CreateOrUpdateProductCallback {
-                    override fun onCreateOrUpdateProduct(resultCount: Int) {
-
-                        if (resultCount in 1..20) {
-                            view.createOrUpdateProductInBasketCallback(resultCount)
-                        }
-
-                    }
-                })
-        } else {
-            view.createLoginAct()
         }
     }
 }

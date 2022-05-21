@@ -22,8 +22,7 @@ class CategoryActivity : AppCompatActivity() {
 
     val fragmentList = ArrayList<Fragment>()
 
-    var sortBy : String = "추천순"
-
+    var sortBy: String = "추천순"
     private lateinit var notificationBadgeOfBasketMenu: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,13 +32,14 @@ class CategoryActivity : AppCompatActivity() {
 
         // 인텐트에서 데이터 추출
         val initPosition = intent.getIntExtra("init_position", -1)
+
         val label = if (intent.hasExtra("label")) {
             intent.getStringArrayListExtra("label")
         } else {
             null
         }
 
-        if (label == null || initPosition == -1) {
+        if (initPosition == -1 || label == null) {
             finish()
         } else {
             // 툴바 & 메뉴
@@ -122,6 +122,7 @@ class CategoryActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
+        // 다른 엑티비티에서 장바구니에 상품이 담겼을 때
         setNotificationBadge()
     }
 

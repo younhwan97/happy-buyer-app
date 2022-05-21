@@ -8,19 +8,17 @@ interface CategoryContract {
 
         fun getAct(): CategoryActivity
 
-        fun createOrUpdateProductInBasketCallback(resultCount: Int)
+        fun loadProductsCallback(resultCount: Int)
 
         fun createLoginAct()
 
         fun createProductAct(productItem: ProductItem)
 
-        fun loadProductsCallback(resultCount: Int)
+        fun createOrUpdateProductInBasketCallback(resultCount: Int)
 
     }
 
     interface Model {
-
-        fun sortCategoryProducts(newItem: String)
 
         fun loadProducts(isClear: Boolean, selectedCategory: String, sortBy: String, page: Int)
 

@@ -13,12 +13,10 @@ import kr.co.younhwan.happybuyer.data.ProductItem
 import kr.co.younhwan.happybuyer.data.source.basket.BasketRepository
 import kr.co.younhwan.happybuyer.data.source.event.EventRepository
 import kr.co.younhwan.happybuyer.data.source.product.ProductRepository
-import kr.co.younhwan.happybuyer.data.source.user.UserRepository
 import kr.co.younhwan.happybuyer.databinding.FragmentCategoryBinding
 import kr.co.younhwan.happybuyer.view.category.presenter.CategoryContract
 import kr.co.younhwan.happybuyer.view.category.presenter.CategoryPresenter
 import kr.co.younhwan.happybuyer.view.login.LoginActivity
-import kr.co.younhwan.happybuyer.view.main.MainActivity
 import kr.co.younhwan.happybuyer.view.product.ProductActivity
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper
 
@@ -27,11 +25,10 @@ class CategoryFragment : Fragment(), CategoryContract.View {
 
     private val categoryPresenter: CategoryPresenter by lazy {
         CategoryPresenter(
-            this,
+            view = this,
             productData = ProductRepository,
             eventData = EventRepository,
             basketData = BasketRepository,
-            userData = UserRepository,
             adapterModel = productAdapter,
             adapterView = productAdapter
         )
@@ -41,9 +38,9 @@ class CategoryFragment : Fragment(), CategoryContract.View {
         ProductAdapter("category")
     }
 
-    private var nowPage = 1 // 페이징
-    lateinit var selectedCategory: String // 프래그먼트 카테고리
-    lateinit var selectedSortingOption: String  // 카테고리 상품 정렬 옵션
+    private var nowPage = 1
+    lateinit var selectedCategory: String
+    lateinit var selectedSortingOption: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,7 +66,7 @@ class CategoryFragment : Fragment(), CategoryContract.View {
         if (selectedCategory == "") {
             act.finish()
         } else {
-            // (페이징에 따라) 상품 로드
+            // 상품 로드
             nowPage = 1
             categoryPresenter.loadProducts(
                 isClear = true,
@@ -101,7 +98,7 @@ class CategoryFragment : Fragment(), CategoryContract.View {
                 }
             }
 
-            // 리사이클러 뷰의 어댑터 및 레이아웃 매니저 셋팅
+            // 상품 리사이클러뷰
             val gridLayoutManager = object : GridLayoutManager(act, 2) {
                 override fun canScrollHorizontally() = false
                 override fun canScrollVertically() = true
@@ -117,23 +114,20 @@ class CategoryFragment : Fragment(), CategoryContract.View {
             viewDataBinding.itemContainer.adapter = productAdapter
             viewDataBinding.itemContainer.layoutManager = gridLayoutManager
 
-            // 리사이클러 뷰 데코레이션
             viewDataBinding.itemContainer.addItemDecoration(productAdapter.RecyclerDecoration())
 
-            // 리사이클러 뷰 바운스 효과
             OverScrollDecoratorHelper.setUpOverScroll(
                 viewDataBinding.itemContainer,
                 OverScrollDecoratorHelper.ORIENTATION_VERTICAL
             )
 
-            // 리사이클러 뷰 스크롤 이벤트 리스너 (= endless scroll)
             viewDataBinding.itemContainer.addOnScrollListener(object :
                 RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
 
+                    // 무한 스크롤
                     if (!recyclerView.canScrollVertically(1)) {
-                        // 제일 끝까지 스크롤 했을 때
                         if (nowPage != -1) {
                             nowPage += 1
                             categoryPresenter.loadMoreProducts(
@@ -227,7 +221,13 @@ class CategoryFragment : Fragment(), CategoryContract.View {
     }
 
     override fun createLoginAct() =
-        startActivity(Intent(requireContext(), LoginActivity::class.java))
+        startActivity(Intent(context, LoginActivity::class.java))
+
+    override fun createProductAct(productItem: ProductItem) {
+        val productIntent = Intent(context, ProductActivity::class.java)
+        productIntent.putExtra("product", productItem)
+        startActivity(productIntent)
+    }
 
     override fun createOrUpdateProductInBasketCallback(resultCount: Int) {
         val snack = when (resultCount) {
@@ -280,12 +280,5 @@ class CategoryFragment : Fragment(), CategoryContract.View {
         }
 
         snack.show()
-    }
-
-    override fun createProductAct(productItem: ProductItem) {
-        val act = activity as CategoryActivity
-        val productIntent = Intent(act, ProductActivity::class.java)
-        productIntent.putExtra("product", productItem)
-        act.startActivity(productIntent)
     }
 }
