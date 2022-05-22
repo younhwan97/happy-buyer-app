@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HappyBuyer</string>
+    <string name="app_name">코코마트</string>
 
     <!-- Home -->
     <string name="home_search_text">찾는 상품이 뭐예요?</string>

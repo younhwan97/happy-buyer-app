@@ -71,7 +71,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
                         android:background="@color/white"
-                        app:srcCompat="@drawable/category_fastfood" />
+                        app:srcCompat="@drawable/ic_truck" />
 
                     <TextView
                         android:id="@+id/accountAddressBtnText"
@@ -95,7 +95,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
                         android:background="@color/white"
-                        app:srcCompat="@drawable/category_fastfood" />
+                        app:srcCompat="@drawable/ic_call" />
 
                     <TextView
                         android:id="@+id/accountInquiryBtnText"

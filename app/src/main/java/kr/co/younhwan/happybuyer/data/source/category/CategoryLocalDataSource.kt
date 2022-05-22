@@ -15,11 +15,11 @@ object CategoryLocalDataSource : CategorySource {
     )
 
     private val imageNameList = arrayListOf<String>(
-        "category_event","category_fruit", "category_meat", "category_vegetable",
-        "category_fish", "category_fastfood", "category_milk",  "category_water",
-        "category_seasoning", "category_ramen",  "category_kitchen", "category_tissue",
-        "category_chips", "category_rice", "category_chips",  "category_chips",
-        "category_chips"
+        "ic_category_sale","ic_category_fruit", "ic_category_meat", "ic_category_vegetable",
+        "ic_category_fish", "ic_category_fastfood", "ic_category_milk",  "ic_category_water",
+        "ic_category_sauce", "ic_category_ramen",  "ic_category_kitchen", "ic_category_tissue",
+        "ic_category_chips", "ic_category_rice", "ic_category_pet",  "ic_category_kimchi",
+        "ic_category_etc"
     )
 
     override fun readCategories(context: Context, loadImageCallback: CategorySource.ReadCategoryCallback?) {
