@@ -9,7 +9,7 @@ import java.io.IOException
 
 object ProductRemoteDataSource : ProductSource {
     private val client = OkHttpClient() // 클라이언트
-    private const val serverInfo = "http://192.168.35.92/products/api" // API 서버
+    private const val serverInfo = "http://happybuyer.co.kr/products/api" // API 서버
 
     override fun readProducts(
         selectedCategory: String,

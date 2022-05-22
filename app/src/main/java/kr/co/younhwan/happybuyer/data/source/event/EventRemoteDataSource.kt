@@ -9,7 +9,7 @@ import java.io.IOException
 
 object EventRemoteDataSource : EventSource {
     private val client = OkHttpClient() // 클라이언트
-    private const val serverInfo = "http://192.168.35.92/event/api" // API 서버
+    private const val serverInfo = "http://happybuyer.co.kr/event/api" // API 서버
 
     // READ
     override fun readProducts(

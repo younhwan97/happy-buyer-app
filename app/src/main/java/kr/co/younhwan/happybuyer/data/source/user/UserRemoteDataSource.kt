@@ -11,7 +11,7 @@ import java.io.IOException
 
 object UserRemoteDataSource : UserSource {
     private val client = OkHttpClient() // 클라이언트
-    private const val serverInfo = "http://192.168.35.92/auth/api/user" // API 서버
+    private const val serverInfo = "http://happybuyer.co.kr/auth/api/user" // API 서버
     private val jsonMediaType = "application/json; charset=utf-8".toMediaTypeOrNull()
 
     // CREATE
