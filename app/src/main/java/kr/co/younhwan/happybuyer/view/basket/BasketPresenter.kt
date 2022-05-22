@@ -32,73 +32,10 @@ class BasketPresenter(
         }
     }
 
-    val app = view.getAct().application as GlobalApplication
-
-    override fun loadBasketProducts(isClear: Boolean) {
-        if (app.isLogined) {
-            basketData.readProducts(
-                kakaoAccountId = app.kakaoAccountId,
-                readProductsCallback = object : BasketSource.ReadProductsCallback {
-                    override fun onReadProducts(list: ArrayList<BasketItem>) {
-                        if (isClear)
-                            basketAdapterModel.clearItem()
-
-                        view.loadBasketProductsCallback(list.size)
-                        basketAdapterModel.addItems(list)
-                        basketAdapterView.notifyAdapter()
-                        calculatePrice()
-                    }
-                }
-            )
-        } else {
-            basketAdapterModel.addItems(ArrayList())
-            basketAdapterView.notifyAdapter()
-            calculatePrice()
-        }
-    }
-
-    override fun calculatePrice() {
-        var totalPrice = 0 // 결제 예정 금액
-        var originalTotalPrice = 0 // 상품을 할인 받기전 원래 금액
-
-        for (index in 0 until basketAdapterModel.getItemCount()) {
-            val basketItem = basketAdapterModel.getItem(index)
-
-            if (basketItem.isChecked && basketItem.productStatus != "품절") {
-                originalTotalPrice += basketItem.productPrice * basketItem.countInBasket
-
-                totalPrice += if (basketItem.onSale) {
-                    basketItem.eventPrice * basketItem.countInBasket
-                } else {
-                    basketItem.productPrice * basketItem.countInBasket
-                }
-            }
-        }
-
-        view.calculatePriceCallback(
-            totalPrice = totalPrice,
-            originalTotalPrice = originalTotalPrice,
-            basketItemCount = basketAdapterModel.getItemCount()
-        )
-    }
-
-    override fun checkAllBasketProduct(newStatus: Boolean) {
-        if (app.isLogined && basketAdapterModel.getItemCount() != 0) {
-            // 로그인 상태이며 장바구니에 상품이 있을 때
-            for (index in 0 until basketAdapterModel.getItemCount()) {
-                if (basketAdapterModel.getItem(index).productStatus != "품절") {
-                    basketAdapterModel.updateItemChecked(index, newStatus)
-                }
-            }
-
-            basketAdapterView.notifyAdapter()
-            calculatePrice()
-        }
-    }
-
+    private val app = view.getAct().application as GlobalApplication
 
     private fun onClickListenerOfCheckBox(productId: Int, newStatus: Boolean) {
-        var isCheckedAllBasketItem = true // 품절 상품을 제외하고 장바구니에 존재하는 모든상품이 체크상태인지
+        var isCheckedAllBasketItem = true // 품절 상품을 제외하고 장바구니에 존재하는 모든상품이 체크상태인지 확인
 
         for (index in 0 until basketAdapterModel.getItemCount()) {
             if (basketAdapterModel.getItem(index).productId == productId && basketAdapterModel.getItem(
@@ -224,6 +161,38 @@ class BasketPresenter(
         }
     }
 
+    override fun loadBasketProducts(isClear: Boolean) {
+        if (app.isLogined) {
+            basketData.readProducts(
+                kakaoAccountId = app.kakaoAccountId,
+                readProductsCallback = object : BasketSource.ReadProductsCallback {
+                    override fun onReadProducts(list: ArrayList<BasketItem>) {
+                        if (isClear)
+                            basketAdapterModel.clearItem()
+
+                        view.loadBasketProductsCallback(list.size)
+                        basketAdapterModel.addItems(list)
+                        basketAdapterView.notifyAdapter()
+                        calculatePrice()
+                    }
+                }
+            )
+        }
+    }
+
+    override fun checkAllBasketProduct(newStatus: Boolean) {
+        if (app.isLogined && basketAdapterModel.getItemCount() != 0) {
+            for (index in 0 until basketAdapterModel.getItemCount()) {
+                if (basketAdapterModel.getItem(index).productStatus != "품절") {
+                    basketAdapterModel.updateItemChecked(index, newStatus)
+                }
+            }
+
+            basketAdapterView.notifyAdapter()
+            calculatePrice()
+        }
+    }
+
     override fun deleteSelectedItems() {
         if (app.isLogined) {
             val newBasketItemList = ArrayList<BasketItem>()
@@ -263,6 +232,31 @@ class BasketPresenter(
         }
     }
 
+    override fun calculatePrice() {
+        var totalPrice = 0 // 결제 예정 금액
+        var originalTotalPrice = 0 // 상품을 할인 받기전 원래 금액
+
+        for (index in 0 until basketAdapterModel.getItemCount()) {
+            val basketItem = basketAdapterModel.getItem(index)
+
+            if (basketItem.isChecked && basketItem.productStatus != "품절") {
+                originalTotalPrice += basketItem.productPrice * basketItem.countInBasket
+
+                totalPrice += if (basketItem.onSale) {
+                    basketItem.eventPrice * basketItem.countInBasket
+                } else {
+                    basketItem.productPrice * basketItem.countInBasket
+                }
+            }
+        }
+
+        view.calculatePriceCallback(
+            totalPrice = totalPrice,
+            originalTotalPrice = originalTotalPrice,
+            basketItemCount = basketAdapterModel.getItemCount()
+        )
+    }
+
     override fun createOrderAct() {
         if (app.isLogined) {
             basketData.readProducts(
@@ -294,6 +288,8 @@ class BasketPresenter(
                     }
                 }
             )
+        } else {
+            view.createOrderActCallback(false, ArrayList())
         }
     }
 }

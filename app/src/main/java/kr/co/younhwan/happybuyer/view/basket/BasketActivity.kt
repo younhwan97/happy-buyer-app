@@ -41,7 +41,7 @@ class BasketActivity : AppCompatActivity(), BasketContract.View {
         setLoadingView()
 
         // 장바구니 상품 로드
-        basketPresenter.loadBasketProducts(false)
+        basketPresenter.loadBasketProducts(true)
 
         // 툴바
         viewDataBinding.basketToolbar.setNavigationOnClickListener {
@@ -63,12 +63,13 @@ class BasketActivity : AppCompatActivity(), BasketContract.View {
             basketPresenter.deleteSelectedItems()
         }
 
-        // 장바구니
+        // 장바구니 리사이클러뷰
         viewDataBinding.basketRecycler.adapter = basketAdapter
         viewDataBinding.basketRecycler.layoutManager = object : LinearLayoutManager(this) {
             override fun canScrollHorizontally() = false
             override fun canScrollVertically() = false
         }
+        
         viewDataBinding.basketRecycler.addItemDecoration(basketAdapter.RecyclerDecoration())
 
         // 주문하기 버튼
@@ -81,6 +82,7 @@ class BasketActivity : AppCompatActivity(), BasketContract.View {
         )
 
         viewDataBinding.basketPurchaseBtn.setOnClickListener {
+            it.isEnabled = false
             basketPresenter.createOrderAct()
         }
     }
@@ -164,10 +166,16 @@ class BasketActivity : AppCompatActivity(), BasketContract.View {
         }
     }
 
+    override fun deleteProductInBasketCallback(deletedItemCount: Int) {
+        (application as GlobalApplication).basketItemCount -= deletedItemCount
+    }
+
     override fun createOrderActCallback(
         passValidationCheck: Boolean,
         selectedBasketItem: ArrayList<BasketItem>
     ) {
+        viewDataBinding.basketPurchaseBtn.isEnabled = true
+
         if (passValidationCheck) {
             val orderIntent = Intent(this, OrderActivity::class.java)
             orderIntent.putExtra("selected_item_list", selectedBasketItem)
@@ -189,9 +197,5 @@ class BasketActivity : AppCompatActivity(), BasketContract.View {
             snack.anchorView = viewDataBinding.basketPurchaseBtn
             snack.show()
         }
-    }
-
-    override fun deleteProductInBasketCallback(deletedItemCount: Int) {
-        (application as GlobalApplication).basketItemCount -= deletedItemCount
     }
 }
