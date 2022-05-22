@@ -10,12 +10,12 @@ class OrderSuccessPresenter(
     private val orderData: OrderRepository
 ) : OrderSuccessContract.Model {
 
+    private val app = view.getAct().application as GlobalApplication
+
     override fun checkValidation(order: OrderItem) {
-        val app = view.getAct().application as GlobalApplication
         var passValidationCheck = false
 
         if (app.isLogined) {
-            // 로그인 상태일 때
             orderData.read(
                 kakaoAccountId = app.kakaoAccountId,
                 pageNum = 1,
@@ -37,7 +37,6 @@ class OrderSuccessPresenter(
                 }
             )
         } else {
-            // 로그인 상태가 아닐 때
             view.checkValidationCallback(passValidationCheck)
         }
     }
