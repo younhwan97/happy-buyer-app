@@ -104,14 +104,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="50dp">
 
-                        <TextView
-                            android:id="@+id/searchResultCountText"
-                            style="@style/TextView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:text="@string/result_item_count" />
-
                         <com.skydoves.powerspinner.PowerSpinnerView
                             android:id="@+id/searchResultSortingSpinner"
                             android:layout_width="wrap_content"

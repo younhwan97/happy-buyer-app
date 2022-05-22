@@ -3,8 +3,6 @@ package kr.co.younhwan.happybuyer.view.search
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import android.widget.SearchView
 import android.widget.TextView
@@ -55,8 +53,8 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
         )
     }
 
-    private var nowPage = 1 // 페이징
-
+    private var nowPage = 1
+    private lateinit var selectedSortingOption: String
     private lateinit var notificationBadgeOfBasketMenu: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,18 +66,26 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
         val keyword = intent.getStringExtra("keyword") // 검색어
 
         // 데이터 로드
+        nowPage = 1
         searchPresenter.loadRecent() // 최근 검색어
         searchPresenter.loadSearchHistory() // 검색어 추천을 위한 검색 기록
-        searchPresenter.loadResultSearch(true, keyword, nowPage) // 검색 결과
+        searchPresenter.loadSearchResult(true, keyword, null, nowPage) // 검색 결과
 
         // 전체 컨테이너
         viewDataBinding.recentSearchContainer.visibility = View.GONE
         viewDataBinding.suggestedSearchContainer.visibility = View.GONE
         viewDataBinding.searchResultContainer.visibility = View.GONE
 
-        if (!keyword.isNullOrEmpty() && !keyword.isNullOrBlank()) {
+        // 툴바 & 메뉴
+        if (keyword.isNullOrEmpty() || keyword.isNullOrBlank()) {
+            // 검색어가 존재하지 않을 때
+            viewDataBinding.searchViewInSearchToolbar.isIconified = false // focusing
+
+            // 최근 검색 컨테이너를 보여준다.
+            viewDataBinding.recentSearchContainer.visibility = View.VISIBLE
+        } else {
             // 검색어가 존재할 때
-            viewDataBinding.searchViewInSearchToolbar.isIconified = true
+            viewDataBinding.searchViewInSearchToolbar.isIconified = true // focusing
             viewDataBinding.searchViewInSearchToolbar.setQuery(keyword, false)
 
             // 검색 결과 컨테이너를 보여주고, 로딩 뷰 셋팅
@@ -89,15 +95,8 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
             viewDataBinding.searchResultEmptyView.visibility = View.GONE
             viewDataBinding.searchResultLoadingView.visibility = View.VISIBLE
             viewDataBinding.searchResultLoadingImage.playAnimation()
-        } else {
-            // 검색어가 존재하지 않을 때
-            viewDataBinding.searchViewInSearchToolbar.isIconified = false
-
-            // 최근 검색 컨테이너를 보여준다.
-            viewDataBinding.recentSearchContainer.visibility = View.VISIBLE
         }
 
-        // 툴바 & 메뉴
         viewDataBinding.searchViewInSearchToolbar.isIconifiedByDefault = false
 
         viewDataBinding.searchToolbar.setNavigationOnClickListener {
@@ -150,6 +149,7 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
             override fun canScrollHorizontally() = false
             override fun canScrollVertically() = true
         }
+
         viewDataBinding.recentSearchRecycler.addItemDecoration(recentAdapter.RecyclerDecoration())
 
         viewDataBinding.recentSearchDeleteAllBtn.setOnClickListener {
@@ -164,47 +164,89 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
         }
 
         // 검색 결과
-        viewDataBinding.searchResultSortingSpinner.selectItemByIndex(0) // 기본값 = 추천순
-        viewDataBinding.searchResultSortingSpinner.lifecycleOwner = this // 메모리 누수 방지
-
-        viewDataBinding.searchResultSortingSpinner.setOnSpinnerItemSelectedListener<String> { _, oldItem, _, newItem ->
-            if (oldItem != newItem) {
-                searchPresenter.sortSearchResult(newItem)
-                viewDataBinding.searchResultLoadingView.visibility = View.VISIBLE
-                viewDataBinding.searchResultLoadingImage.playAnimation()
-                viewDataBinding.searchResultRecycler.visibility = View.GONE
-            }
-        }
-
         viewDataBinding.searchResultRecycler.adapter = resultAdapter
         viewDataBinding.searchResultRecycler.layoutManager = object : GridLayoutManager(this, 2) {
             override fun canScrollHorizontally() = false
             override fun canScrollVertically() = true
         }
+
         viewDataBinding.searchResultRecycler.addItemDecoration(resultAdapter.RecyclerDecoration())
+
+        OverScrollDecoratorHelper.setUpOverScroll(
+            viewDataBinding.searchResultRecycler,
+            OverScrollDecoratorHelper.ORIENTATION_VERTICAL
+        )
 
         viewDataBinding.searchResultRecycler.addOnScrollListener(object :
             RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
+                // 무한스크롤
                 if (!recyclerView.canScrollVertically(1)) {
-                    // 제일 끝까지 스크롤 했을 때
                     if (nowPage != -1) {
                         nowPage += 1
-                        searchPresenter.loadMoreResultSearch(
+                        searchPresenter.loadMoreSearchResult(
                             keyword = keyword,
-                            page = nowPage
+                            page = nowPage,
+                            sortBy = selectedSortingOption
                         )
                     }
                 }
             }
         })
 
-        OverScrollDecoratorHelper.setUpOverScroll(
-            viewDataBinding.searchResultRecycler,
-            OverScrollDecoratorHelper.ORIENTATION_VERTICAL
-        )
+        setSortingOption("추천순")
+        viewDataBinding.searchResultSortingSpinner.lifecycleOwner = this // 메모리 누수 방지
+        viewDataBinding.searchResultSortingSpinner.setOnSpinnerItemSelectedListener<String> { _, oldItem, _, newItem ->
+            if (oldItem != newItem) {
+                // 로딩뷰 셋팅
+                viewDataBinding.searchResultLoadingView.visibility = View.VISIBLE
+                viewDataBinding.searchResultLoadingImage.playAnimation()
+                viewDataBinding.searchResultRecycler.visibility = View.GONE
+
+                // 새로운 정렬 기준 저장
+                setSortingOption(newItem)
+
+                // 새로운 정렬 기준에 따라 검색 결과 로드
+                nowPage = 1
+                searchPresenter.loadSearchResult(
+                    isClear = true,
+                    keyword = keyword,
+                    sortBy = selectedSortingOption,
+                    page = nowPage
+                )
+            }
+        }
+    }
+
+    private fun setSortingOption(sortBy: String) {
+        when (sortBy) {
+            "판매순" -> {
+                viewDataBinding.searchResultSortingSpinner.selectItemByIndex(1)
+                selectedSortingOption = "판매순"
+            }
+
+            "낮은 가격순" -> {
+                viewDataBinding.searchResultSortingSpinner.selectItemByIndex(2)
+                selectedSortingOption = "낮은 가격순"
+            }
+
+            "높은 가격순" -> {
+                viewDataBinding.searchResultSortingSpinner.selectItemByIndex(3)
+                selectedSortingOption = "높은 가격순"
+            }
+
+            else -> {
+                viewDataBinding.searchResultSortingSpinner.selectItemByIndex(0)
+                selectedSortingOption = "추천순"
+            }
+        }
+    }
+
+    private fun setNotificationBadge() {
+        notificationBadgeOfBasketMenu.visibility =
+            if ((application as GlobalApplication).basketItemCount > 0) View.VISIBLE else View.GONE
     }
 
     override fun getAct() = this
@@ -221,7 +263,6 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
             // 검색 결과가 있을 때 -> recycler view
             viewDataBinding.searchResultTopContainer.visibility = View.VISIBLE
             viewDataBinding.searchResultRecycler.visibility = View.VISIBLE
-            viewDataBinding.searchResultCountText.text = "총 ".plus(resultCount.toString()).plus("개")
         }
 
         // 로딩 뷰 종료
@@ -229,19 +270,10 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
         viewDataBinding.searchResultLoadingImage.pauseAnimation()
     }
 
-    override fun sortSearchResultCallback() {
-        // 로딩 뷰를 숨기고 정렬된 검색 결과 뷰를 보인다.
-        Handler(Looper.getMainLooper()).postDelayed({
-            viewDataBinding.searchResultLoadingView.visibility = View.GONE
-            viewDataBinding.searchResultRecycler.visibility = View.VISIBLE
-            viewDataBinding.searchResultLoadingImage.pauseAnimation() // 메모리 낭비를 막기위해 퍼즈
-        }, 500)
-    }
-
     override fun createResultActivity(keyword: String) {
         val resultIntent = Intent(this, SearchActivity::class.java)
         resultIntent.putExtra("keyword", keyword)
-        finish() // 현재 엑티비티를 종료!
+        finish()
         startActivity(resultIntent)
     }
 
@@ -249,10 +281,5 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
         val productIntent = Intent(this, ProductActivity::class.java)
         productIntent.putExtra("productItem", productItem)
         startActivity(productIntent)
-    }
-
-    private fun setNotificationBadge() {
-        notificationBadgeOfBasketMenu.visibility =
-            if ((application as GlobalApplication).basketItemCount > 0) View.VISIBLE else View.GONE
     }
 }

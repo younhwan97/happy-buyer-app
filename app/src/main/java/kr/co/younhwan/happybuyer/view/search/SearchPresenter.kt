@@ -41,66 +41,14 @@ class SearchPresenter(
         }
     }
 
-    val app = view.getAct().application as GlobalApplication
+    private val app = view.getAct().application as GlobalApplication
 
-    // 최근 검색
-    override fun createRecentWithHistory(keyword: String) {
-        if (app.isLogined) { // 로그인 상태에서만 최근 검색 기록을 생성
-            var alreadyExistsKeyword = false
-            for (i in 0 until recentAdapterModel.getItemCount()) {
-                if (recentAdapterModel.getItem(i).keyword == keyword) {
-                    alreadyExistsKeyword = true
-                    break
-                }
-            }
-
-            if (!alreadyExistsKeyword) {
-                searchData.createRecentWithHistory(
-                    kakaoAccountId = app.kakaoAccountId,
-                    keyword = keyword
-                )
-            }
-        }
+    fun onClickListenerOfKeyword(keyword: String) {
+        view.createResultActivity(keyword)
     }
 
-    override fun loadRecent() {
-        if (app.isLogined) {
-            // 로그인한 유저의 최근 검색 기록을 읽어온다.
-            searchData.readRecent(
-                kakaoAccountId = app.kakaoAccountId,
-                readRecentCallback = object : SearchSource.ReadRecentCallback {
-                    override fun onReadRecent(list: ArrayList<RecentItem>) {
-                        recentAdapterModel.addItems(list)
-                        recentAdapterView.notifyAdapter()
-                    }
-                }
-            )
-        } else {
-            // 로그인하지 않은 유저
-            recentAdapterModel.addItems(ArrayList<RecentItem>())
-            recentAdapterView.notifyAdapter()
-        }
-    }
-
-    override fun deleteAllRecent() {
-        if (app.isLogined) {
-            if (recentAdapterModel.getItemCount() != 0) { // 저장된 검색어가 있는 경우 (불필요한 api 호출 방지)
-                // keyword  == null -> 모든 최근 검색어 삭제
-                // keyword !== null -> keyword 에 해당하는 검색어만 삭제
-                searchData.deleteRecent(
-                    kakaoAccountId = app.kakaoAccountId,
-                    keyword = null,
-                    deleteRecentCallback = object : SearchSource.DeleteRecentCallback {
-                        override fun onDeleteRecent(isSuccess: Boolean) {
-                            if (isSuccess) {
-                                recentAdapterModel.clearItem()
-                                recentAdapterView.notifyAdapter()
-                            }
-                        }
-                    }
-                )
-            }
-        }
+    private fun onClickListenerOfProduct(productItem: ProductItem) {
+        view.createProductActivity(productItem)
     }
 
     private fun onClickListenerOfDeleteBtn(keyword: String, position: Int) {
@@ -122,7 +70,40 @@ class SearchPresenter(
         }
     }
 
-    // 추천 검색
+    override fun createRecentWithHistory(keyword: String) {
+        if (app.isLogined) {
+            var alreadyExistsKeyword = false
+
+            for (i in 0 until recentAdapterModel.getItemCount()) {
+                if (recentAdapterModel.getItem(i).keyword == keyword) {
+                    alreadyExistsKeyword = true
+                    break
+                }
+            }
+
+            if (!alreadyExistsKeyword) {
+                searchData.createRecentWithHistory(
+                    kakaoAccountId = app.kakaoAccountId,
+                    keyword = keyword
+                )
+            }
+        }
+    }
+
+    override fun loadRecent() {
+        if (app.isLogined) {
+            searchData.readRecent(
+                kakaoAccountId = app.kakaoAccountId,
+                readRecentCallback = object : SearchSource.ReadRecentCallback {
+                    override fun onReadRecent(list: ArrayList<RecentItem>) {
+                        recentAdapterModel.addItems(list)
+                        recentAdapterView.notifyAdapter()
+                    }
+                }
+            )
+        }
+    }
+
     override fun loadSearchHistory() {
         searchData.readHistory(
             readHistoryCallback = object : SearchSource.ReadHistoryCallback {
@@ -135,21 +116,16 @@ class SearchPresenter(
         )
     }
 
-    fun onClickListenerOfKeyword(keyword: String) = view.createResultActivity(keyword)
-
-    // 검색 결과
-    override fun loadResultSearch(isClear:Boolean, keyword: String?, page: Int) {
+    override fun loadSearchResult(isClear: Boolean, keyword: String?, sortBy: String?, page: Int) {
         if (keyword.isNullOrBlank() || keyword.isNullOrEmpty()) {
             // 키워드가 존재하지 않을 때
             view.loadSearchResultCallback(0)
-            resultAdapterModel.addItems(ArrayList<ProductItem>())
-            resultAdapterView.notifyAdapter()
-        } else { 
+        } else {
             // 키워드가 존재할 때
             productData.readProducts(
                 selectedCategory = "전체",
                 sortBy = null,
-                page= page,
+                page = page,
                 keyword = keyword,
                 readProductsCallback = object : ProductSource.ReadProductsCallback {
                     override fun onReadProducts(list: ArrayList<ProductItem>) {
@@ -165,12 +141,10 @@ class SearchPresenter(
         }
     }
 
-    override fun loadMoreResultSearch(keyword: String?, page: Int) {
+    override fun loadMoreSearchResult(keyword: String?, sortBy: String?, page: Int) {
         if (keyword.isNullOrBlank() || keyword.isNullOrEmpty()) {
             // 키워드가 존재하지 않을 때
             view.loadSearchResultCallback(0)
-            resultAdapterModel.addItems(ArrayList<ProductItem>())
-            resultAdapterView.notifyAdapter()
         } else {
             // 키워드가 존재할 때
             productData.readProducts(
@@ -200,38 +174,24 @@ class SearchPresenter(
         }
     }
 
-    private fun onClickListenerOfProduct(productItem: ProductItem) = view.createProductActivity(productItem)
-
-    override fun sortSearchResult(newItem: String) {
-        if(resultAdapterModel.getItemCount() > 1){
-            val oldList: ArrayList<ProductItem> = resultAdapterModel.getItems()
-            val sortedList = when(newItem){
-                "추천순" -> {
-                    ArrayList(oldList.sortedBy { it.productId })
-                }
-
-                "판매순" -> {
-                    ArrayList(oldList.sortedBy { it.sales })
-                }
-
-                "낮은 가격순" -> {
-                    ArrayList(oldList.sortedBy { it.productPrice })
-                }
-
-                "높은 가격순" ->{
-                    ArrayList(oldList.sortedBy { it.productPrice }.reversed())
-                }
-
-                else -> {
-                    oldList
-                }
+    override fun deleteAllRecent() {
+        if (app.isLogined) {
+            if (recentAdapterModel.getItemCount() != 0) { // 저장된 검색어가 있는 경우 (불필요한 api 호출 방지)
+                // keyword  == null -> 모든 최근 검색어 삭제
+                // keyword !== null -> keyword 에 해당하는 검색어만 삭제
+                searchData.deleteRecent(
+                    kakaoAccountId = app.kakaoAccountId,
+                    keyword = null,
+                    deleteRecentCallback = object : SearchSource.DeleteRecentCallback {
+                        override fun onDeleteRecent(isSuccess: Boolean) {
+                            if (isSuccess) {
+                                recentAdapterModel.clearItem()
+                                recentAdapterView.notifyAdapter()
+                            }
+                        }
+                    }
+                )
             }
-
-            resultAdapterModel.clearItem()
-            resultAdapterModel.addItems(sortedList)
-            resultAdapterView.notifyAdapter()
         }
-
-        view.sortSearchResultCallback()
     }
 }
