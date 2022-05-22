@@ -1,6 +1,7 @@
 package kr.co.younhwan.happybuyer.view.login
 
 import android.content.Context
+import android.util.Log
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
 import kr.co.younhwan.happybuyer.data.source.user.UserRepository
