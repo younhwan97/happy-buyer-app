@@ -13,11 +13,10 @@ class OrderDetailPresenter(
     private val orderAdapterView: OrderAdapterContract.View
 ) : OrderDetailContract.Model {
 
-    override fun loadOrderProducts(orderId: Int) {
-        val app = view.getAct().application as GlobalApplication
+    private val app = view.getAct().application as GlobalApplication
 
+    override fun loadOrderProducts(orderId: Int) {
         if (app.isLogined) {
-            // 로그인 상태일 때
             orderData.readProducts(
                 orderId = orderId,
                 readProductsCallback = object : OrderSource.ReadProductsCallback {
@@ -35,10 +34,7 @@ class OrderDetailPresenter(
                 }
             )
         } else {
-            // 로그인 상태가 아닐 때
             view.loadOrderProductsCallback(false)
-            orderAdapterModel.addItems(ArrayList())
-            orderAdapterView.notifyAdapter()
         }
     }
 }

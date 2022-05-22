@@ -34,9 +34,7 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailContract.View {
         setContentView(viewDataBinding.root)
 
         // 로딩 뷰 셋팅
-        viewDataBinding.orderDetailView.visibility = View.GONE
-        viewDataBinding.orderDetailLoadingView.visibility = View.VISIBLE
-        viewDataBinding.orderDetailLoadingImage.playAnimation()
+        setLoadingView()
 
         // 인텐트에서 데이터 추출
         val orderInfo = if (intent.hasExtra("order")) {
@@ -63,13 +61,14 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailContract.View {
             viewDataBinding.orderDetailStatus.text = orderInfo.status
             viewDataBinding.orderDetailDate.text = "(".plus(orderInfo.date).plus(")")
 
-            // 주문 상품
+            // 주문 상품 리사이클러뷰
             viewDataBinding.orderDetailProductRecycler.adapter = orderAdapter
             viewDataBinding.orderDetailProductRecycler.layoutManager =
                 object : LinearLayoutManager(this) {
                     override fun canScrollHorizontally() = false
                     override fun canScrollVertically() = false
                 }
+
             viewDataBinding.orderDetailProductRecycler.addItemDecoration(orderAdapter.RecyclerDecoration())
 
             // 가격
@@ -147,6 +146,12 @@ class OrderDetailActivity : AppCompatActivity(), OrderDetailContract.View {
             // 현재 엑티비티가 첫번째 엑티비티가 아닐 때 (= 백스택에 다른 엑티비티가 존재할 때)
             finish()
         }
+    }
+
+    private fun setLoadingView() {
+        viewDataBinding.orderDetailView.visibility = View.GONE
+        viewDataBinding.orderDetailLoadingView.visibility = View.VISIBLE
+        viewDataBinding.orderDetailLoadingImage.playAnimation()
     }
 
     override fun getAct() = this
