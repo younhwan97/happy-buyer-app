@@ -178,7 +178,6 @@ class BasketPresenter(
                 }
             )
         } else {
-            // test
             view.loadBasketProductsCallback(0)
         }
     }
