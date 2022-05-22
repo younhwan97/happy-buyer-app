@@ -1,6 +1,5 @@
 package kr.co.younhwan.happybuyer.view.order
 
-import android.util.Log
 import kr.co.younhwan.happybuyer.GlobalApplication
 import kr.co.younhwan.happybuyer.data.AddressItem
 import kr.co.younhwan.happybuyer.data.BasketItem
@@ -25,7 +24,7 @@ class OrderPresenter(
     private val orderAdapterView: OrderAdapterContract.View
 ) : OrderContract.Model {
 
-    val app = view.getAct().application as GlobalApplication
+    private val app = view.getAct().application as GlobalApplication
 
     override fun loadDefaultAddress() {
         if (app.isLogined) {
@@ -52,39 +51,34 @@ class OrderPresenter(
     override fun setOrderProducts(selectedItemList: ArrayList<BasketItem>?) {
         var passValidationCheck = true
 
-        if (app.isLogined) {
-            if (!selectedItemList.isNullOrEmpty()) {
-                // 장바구니에서 고객이 선택한 아이템 정보가 정상적으로 넘어왔을 때
-                basketData.readProducts(
-                    kakaoAccountId = app.kakaoAccountId,
-                    readProductsCallback = object : BasketSource.ReadProductsCallback {
-                        override fun onReadProducts(list: ArrayList<BasketItem>) {
-
-                            for (index in 0 until list.size) {
-                                for (item in selectedItemList) {
-                                    if (list[index].productId == item.productId) {
-                                        if (list[index] != item) {
-                                            passValidationCheck = false
-                                            break
-                                        }
+        if (app.isLogined && !selectedItemList.isNullOrEmpty()) {
+            // 장바구니에서 고객이 선택한 아이템 정보가 정상적으로 넘어왔을 때
+            basketData.readProducts(
+                kakaoAccountId = app.kakaoAccountId,
+                readProductsCallback = object : BasketSource.ReadProductsCallback {
+                    override fun onReadProducts(list: ArrayList<BasketItem>) {
+                        for (index in 0 until list.size) {
+                            for (item in selectedItemList) {
+                                if (list[index].productId == item.productId) {
+                                    if (list[index] != item) {
+                                        passValidationCheck = false
+                                        break
                                     }
                                 }
-
-                                if (!passValidationCheck) break
                             }
 
-                            view.setOrderProductsCallback(passValidationCheck)
-                            orderAdapterModel.addItems(selectedItemList)
-                            orderAdapterView.notifyAdapter()
-                            calculatePrice()
+                            if (!passValidationCheck) break
                         }
+
+                        view.setOrderProductsCallback(passValidationCheck)
+                        orderAdapterModel.addItems(selectedItemList)
+                        orderAdapterView.notifyAdapter()
+                        calculatePrice()
                     }
-                )
-            } else {
-                // 장바구니에서 고객이 선택한 아이템 정보가 넘어오지 않았을 때
-                view.setOrderProductsCallback(!passValidationCheck)
-            }
+                }
+            )
         } else {
+            // 장바구니에서 고객이 선택한 아이템 정보가 넘어오지 않았을 때
             view.setOrderProductsCallback(!passValidationCheck)
         }
     }

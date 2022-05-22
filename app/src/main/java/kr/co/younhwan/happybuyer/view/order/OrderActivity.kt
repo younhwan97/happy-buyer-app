@@ -46,7 +46,6 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
     }
 
     private var completeAsyncTask = false
-
     private val orderDialog = OrderDialogFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,9 +89,8 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
                         // 로딩 뷰 셋팅
                         setLoadingView()
 
-                        completeAsyncTask = true
-
                         // 기본 배송지 셋팅
+                        completeAsyncTask = true
                         orderPresenter.loadDefaultAddress()
                     }
                 }
@@ -189,12 +187,12 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
             // 주문 버튼
             viewDataBinding.orderBtn.isEnabled = true
             viewDataBinding.orderBtn.setOnClickListener {
+                // 중복 주문 생성 방지
+                it.isEnabled = false
+
                 // 다이얼로그 시작
                 orderDialog.isCancelable = false
                 orderDialog.show(supportFragmentManager, "order_dialog")
-
-                // 중복 주문 생성 방지
-                it.isEnabled = false
 
                 // 주문정보
                 val name = if (orderProducts.size == 1) {
@@ -264,7 +262,13 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
     override fun getAct() = this
 
     override fun loadDefaultAddressCallback(defaultAddressItem: AddressItem?) {
-        if (defaultAddressItem != null) {
+        if (defaultAddressItem == null) {
+            // 기본 배송지가 존재하지 않을 경우
+            viewDataBinding.orderAddressContent.visibility = View.GONE
+            viewDataBinding.orderAddressEmptyContent.visibility = View.VISIBLE
+
+            viewDataBinding.orderBtn.isEnabled = false
+        } else {
             // 기본 배송지가 존재할 경우
             viewDataBinding.orderAddressContent.visibility = View.VISIBLE
             viewDataBinding.orderAddressEmptyContent.visibility = View.GONE
@@ -272,14 +276,6 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
             viewDataBinding.orderAddressReceiver.text = defaultAddressItem.addressReceiver
             viewDataBinding.orderAddress.text = defaultAddressItem.address
             viewDataBinding.orderAddressPhone.text = defaultAddressItem.addressPhone
-
-            viewDataBinding.orderBtn.isEnabled = true
-        } else {
-            // 기본 배송지가 존재하지 않을 경우
-            viewDataBinding.orderAddressContent.visibility = View.GONE
-            viewDataBinding.orderAddressEmptyContent.visibility = View.VISIBLE
-
-            viewDataBinding.orderBtn.isEnabled = false
         }
 
         if (completeAsyncTask) {
@@ -288,6 +284,9 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
             viewDataBinding.orderBottomBtnContainer.visibility = View.VISIBLE
             viewDataBinding.orderLoadingView.visibility = View.GONE
             viewDataBinding.orderLoadingImage.pauseAnimation()
+
+            // 주문 버튼 활성화
+            viewDataBinding.orderBtn.isEnabled = true
         } else {
             completeAsyncTask = true
         }
@@ -301,6 +300,9 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
                 viewDataBinding.orderBottomBtnContainer.visibility = View.VISIBLE
                 viewDataBinding.orderLoadingView.visibility = View.GONE
                 viewDataBinding.orderLoadingImage.pauseAnimation()
+
+                // 주문 버튼 활성화
+                viewDataBinding.orderBtn.isEnabled = true
             } else {
                 completeAsyncTask = true
             }
@@ -316,6 +318,7 @@ class OrderActivity : AppCompatActivity(), OrderContract.View {
         basketItemCount: Int
     ) {
         val decimal = DecimalFormat("#,###")
+
         viewDataBinding.orderOriginalPrice.text = decimal.format(originalTotalPrice)
         viewDataBinding.orderEventPrice.text = decimal.format(totalPrice - originalTotalPrice)
         viewDataBinding.orderBePaidPrice.text = decimal.format(totalPrice)
