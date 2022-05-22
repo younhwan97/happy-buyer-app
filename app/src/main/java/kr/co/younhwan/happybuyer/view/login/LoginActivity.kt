@@ -3,7 +3,6 @@ package kr.co.younhwan.happybuyer.view.login
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
 import com.google.android.material.snackbar.Snackbar
 import kr.co.younhwan.happybuyer.data.source.user.UserRepository
 import kr.co.younhwan.happybuyer.databinding.ActivityLoginBinding
@@ -35,16 +34,19 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
         }
     }
 
-    override fun loginResultCallback(success: Boolean) {
-        if (success) {
-            // 로그인에 성공했을 떼
+    override fun loginWithKakaoCallback(isSuccess: Boolean) {
+        if (isSuccess) {
             // 백스택에 존재하는 엑티비티를 모두 제거후 메인 엑티비티를 다시 생성
             val splashIntent = Intent(this, SplashActivity::class.java)
-            splashIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            splashIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            splashIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(splashIntent)
-        } else{
-            // 로그인에 실패했을 때
-            Snackbar.make(viewDataBinding.root, "로그인에 실패하였습니다.", Snackbar.LENGTH_SHORT).show()
+        } else {
+            Snackbar.make(
+                viewDataBinding.root,
+                "로그인에 실패하였습니다.",
+                Snackbar.LENGTH_SHORT
+            ).show()
         }
     }
 }

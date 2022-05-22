@@ -24,11 +24,11 @@ class LoginPresenter(
 
     private val loginCallback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
         if (error != null) {
-            view.loginResultCallback(false)
+            view.loginWithKakaoCallback(false)
         } else if (token != null) {
             UserApiClient.instance.me { user, error ->
                 if (error != null) {
-                    view.loginResultCallback(false)
+                    view.loginWithKakaoCallback(false)
                 } else if (user != null) {
                     val kakaoAccountId: Long = user.id!!
                     val kakaoAccountNickname: String? = user.kakaoAccount?.profile?.nickname
@@ -39,7 +39,7 @@ class LoginPresenter(
                         kakaoNickname = kakaoAccountNickname,
                         object : UserSource.CreateCallback {
                             override fun onCreate(isSuccess: Boolean) {
-                                view.loginResultCallback(isSuccess)
+                                view.loginWithKakaoCallback(isSuccess)
                             }
                         })
                 }
