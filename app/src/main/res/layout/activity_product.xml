@@ -15,7 +15,7 @@
             style="@style/Widget.App.Toolbar.Light"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:navigationIcon="@drawable/ic_back_24"
+            app:navigationIcon="@drawable/ic_arrow_back_24"
             app:title="코코마트"
             app:titleCentered="true" />
     </com.google.android.material.appbar.AppBarLayout>
@@ -325,7 +325,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/bgColorWhite"
-                app:srcCompat="@drawable/ic_down_arrow_24" />
+                app:srcCompat="@drawable/ic_arrow_down_24" />
         </RelativeLayout>
 
         <LinearLayout

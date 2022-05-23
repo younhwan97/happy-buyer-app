@@ -20,7 +20,7 @@
                 style="@style/Widget.App.Toolbar.Light"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:navigationIcon="@drawable/ic_baseline_close_24"
+                app:navigationIcon="@drawable/ic_close_24"
                 app:title="주문완료"
                 app:titleCentered="true" />
         </com.google.android.material.appbar.AppBarLayout>

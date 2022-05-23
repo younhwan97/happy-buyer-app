@@ -43,7 +43,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="16dp"
             android:background="@color/bgColorWhite"
-            android:src="@drawable/ic_baseline_close_18" />
+            android:src="@drawable/ic_close_18" />
     </LinearLayout>
 
     <ImageView

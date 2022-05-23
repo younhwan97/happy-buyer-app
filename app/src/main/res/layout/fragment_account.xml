@@ -71,7 +71,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
                         android:background="@color/white"
-                        app:srcCompat="@drawable/ic_truck" />
+                        app:srcCompat="@drawable/ic_truck_64" />
 
                     <TextView
                         android:id="@+id/accountAddressBtnText"
@@ -79,7 +79,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="@string/account_address_text" />
+                        android:text="@string/account_address_text"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -103,7 +104,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="@string/account_inquiry_text" />
+                        android:text="@string/account_inquiry_text"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

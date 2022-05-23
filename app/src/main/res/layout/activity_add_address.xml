@@ -21,7 +21,7 @@
                 style="@style/Widget.App.Toolbar.Light"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:navigationIcon="@drawable/ic_back_24"
+                app:navigationIcon="@drawable/ic_arrow_back_24"
                 app:title="배송지 추가/수정"
                 app:titleCentered="true" />
 

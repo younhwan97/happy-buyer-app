@@ -143,7 +143,7 @@
                 android:includeFontPadding="false"
                 android:text="@string/wished_item_basket_btn"
                 android:textColor="@color/hbPrimaryDarkColor"
-                app:icon="@drawable/ic_shopping_cart_black_18"
+                app:icon="@drawable/ic_shopping_cart_18"
                 app:iconGravity="textStart"
                 app:iconTint="@color/hbPrimaryDarkColor"
                 app:strokeColor="@color/hbPrimaryDarkColor" />

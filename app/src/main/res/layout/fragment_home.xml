@@ -128,7 +128,7 @@
                         android:text="@string/home_event_more_btn_text"
                         android:textColor="@color/hbPrimaryDarkColor"
                         android:textStyle="bold"
-                        app:icon="@drawable/ic_baseline_keyboard_arrow_right_primary_dark_24"
+                        app:icon="@drawable/ic_arrow_right_accent_24"
                         app:iconGravity="textEnd"
                         app:iconPadding="0dp"
                         app:iconTint="@color/hbPrimaryDarkColor" />

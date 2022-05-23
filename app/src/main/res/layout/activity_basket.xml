@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:elevation="0dp"
-            app:navigationIcon="@drawable/ic_back_24"
+            app:navigationIcon="@drawable/ic_arrow_back_24"
             app:title="장바구니"
             app:titleCentered="true" />
 

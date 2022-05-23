@@ -5,7 +5,7 @@
     <item
         android:id="@+id/basketInSearch"
         android:actionLayout="@layout/custom_action_item_layout"
-        android:icon="@drawable/ic_shopping_cart_black_24"
+        android:icon="@drawable/ic_shopping_cart_24"
         android:title="@string/basket"
         app:actionLayout="@layout/custom_action_item_layout"
         app:showAsAction="always" />

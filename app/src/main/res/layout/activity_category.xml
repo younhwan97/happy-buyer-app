@@ -22,7 +22,7 @@
                 android:elevation="0dp"
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:menu="@menu/category_menu"
-                app:navigationIcon="@drawable/ic_back_24"
+                app:navigationIcon="@drawable/ic_arrow_back_24"
                 app:title="상품"
                 app:titleCentered="true">
 

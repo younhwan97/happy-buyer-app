@@ -37,7 +37,7 @@
             android:id="@+id/imageView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_baseline_keyboard_arrow_right_24" />
+            app:srcCompat="@drawable/ic_arrow_right_24" />
     </LinearLayout>
 
     <com.google.android.material.divider.MaterialDivider
