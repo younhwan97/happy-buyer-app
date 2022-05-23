@@ -69,7 +69,7 @@ class ProductActivity : AppCompatActivity(), ProductContract.View {
                 viewDataBinding.productEventPriceContainer.visibility = View.VISIBLE
                 viewDataBinding.productEventPrice.text = decimal.format(product.eventPrice)
                 viewDataBinding.productEventPercent.text =
-                    ((100 - (product.productPrice / product.eventPrice)).toString())
+                    (100 - product.eventPrice * 100 / product.productPrice).toString()
 
                 viewDataBinding.productPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
                 viewDataBinding.productPriceSubText.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG

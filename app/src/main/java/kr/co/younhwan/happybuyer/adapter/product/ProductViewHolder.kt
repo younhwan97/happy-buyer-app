@@ -58,10 +58,10 @@ class ProductViewHolder(
         DecimalFormat("#,###")
     }
 
-    fun onBind(productItem: ProductItem, usingBy: String?){
+    fun onBind(productItem: ProductItem, usingBy: String?) {
         // 이름
         productName.text = productItem.productName
-        
+
         // 가격
         productPrice.text = decimal.format(productItem.productPrice)
         productPrice.paintFlags = 0
@@ -73,7 +73,7 @@ class ProductViewHolder(
         productPriceSubText.textSize = 14F
 
         productEvent.visibility = View.GONE
-        if(productItem.onSale){ // 세일 중인 상품의 경우
+        if (productItem.onSale) { // 세일 중인 상품의 경우
             productPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
             productPrice.setTextAppearance(R.style.NumberTextView_Light)
             productPrice.textSize = 12F
@@ -84,7 +84,8 @@ class ProductViewHolder(
             productEvent.visibility = View.VISIBLE
             productEventPrice.text = decimal.format(productItem.eventPrice)
             productEventPrice.setTextAppearance(R.style.NumberTextView_Bold)
-            productEventPercent.text = ((100 - (productItem.productPrice / productItem.eventPrice)).toString())
+            productEventPercent.text =
+                (100 - productItem.eventPrice * 100 / productItem.productPrice).toString()
         }
 
 
@@ -95,7 +96,7 @@ class ProductViewHolder(
         }
 
         // 이미지
-        if(usingBy == "home"){
+        if (usingBy == "home") {
             // 사용되는 엑티비티에 따라 이미지 컨테이너의 크기를 변경
             // 홈 -> 152dp, 194dp / 카테고리 -> match_parent, 224dp (default)
             val density = parent.resources.displayMetrics.density
