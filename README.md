@@ -19,13 +19,13 @@
 
 <table>
   <tr>
-    <td><img width="226px" height="452px" src="https://user-images.githubusercontent.com/78298663/170346661-440b12b3-fa0d-4257-89ed-41521e00f9fc.gif"/></td>
-    <td><img width="226px" height="452px" src="https://user-images.githubusercontent.com/78298663/170339483-2f327599-0f1e-4f71-8e2b-9a99edfee0b1.png"/></td>
-    <td><img width="226px" height="452px" src="https://user-images.githubusercontent.com/78298663/170341307-c16a3b34-159d-4e46-baec-27956ca3f0fe.png"/></td>
+    <td><img width="226px" height="452px" src="https://github.com/younhwan97/happy-buyer-app/blob/develop/happy_buyer_app_screen_shot.gif?raw=true"/></td>
+    <td><img width="226px" height="452px" src="https://github.com/younhwan97/happy-buyer-app/blob/develop/happy_buyer_app_screen_shot_1.png?raw=true"/></td>
+    <td><img width="226px" height="452px" src="https://github.com/younhwan97/happy-buyer-app/blob/develop/happy_buyer_app_screen_shot_2.png?raw=true"/></td>
   </tr>
   <tr>
-     <td><img width="226px" height="452px" src="https://user-images.githubusercontent.com/78298663/170342481-9ea0ac6d-c32b-40a7-a1ab-3c4dad834d67.png"/></td>
-    <td><img width="226px" height="452px" src="https://user-images.githubusercontent.com/78298663/170342712-1dd97334-425f-4600-8a23-e94d851bb26b.png"/></td>
-    <td><img width="226px" height="452px" src="https://user-images.githubusercontent.com/78298663/170343731-c330bceb-e3fd-406e-be00-c76133fc6af5.png"/></td>
+     <td><img width="226px" height="452px" src="https://github.com/younhwan97/happy-buyer-app/blob/develop/happy_buyer_app_screen_shot_3.png?raw=true"/></td>
+    <td><img width="226px" height="452px" src="https://github.com/younhwan97/happy-buyer-app/blob/develop/happy_buyer_app_screen_shot_4.png?raw=true"/></td>
+    <td><img width="226px" height="452px" src="https://github.com/younhwan97/happy-buyer-app/blob/develop/happy_buyer_app_screen_shot_5.png?raw=true"/></td>
   </tr>    
  </table>
