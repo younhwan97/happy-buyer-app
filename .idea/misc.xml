@@ -34,6 +34,7 @@
         <entry key="app/src/main/res/drawable/ic_shopping_cart_white_36.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_temp.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_truck.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/layout_bg.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_category.xml" value="0.18888888888888888" />
         <entry key="app/src/main/res/layout/activity_update.xml" value="0.18888888888888888" />
         <entry key="app/src/main/res/layout/fragment_account.xml" value="0.25" />

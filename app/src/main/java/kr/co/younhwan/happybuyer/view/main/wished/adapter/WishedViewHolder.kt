@@ -116,8 +116,7 @@ class WishedViewHolder(
             itemEventPriceSubText.textSize = 16F
 
             // 행사 퍼센트
-            itemEventPercent.text =
-                (100 - (productItem.productPrice / productItem.eventPrice)).toString()
+            itemEventPercent.text = (100 - productItem.eventPrice * 100 / productItem.productPrice).toString()
             itemEventPercent.paintFlags = 0
             itemEventPercent.textSize = 16F
             itemEventPercentSubText.text = "%"
