@@ -2,9 +2,9 @@
 
 ![앱 그래픽 이미지](https://github.com/younhwan97/happy-buyer-app/blob/develop/happy_buyer_app_graphic_img.png?raw=true)
 
-- [🔗 코코마트 앱 다운로드(등록중)]()
+- [🔗 Google Play 스토어(등록중)]()
 
-- [🔗 코코마트 웹 사이트 바로가기](http://happybuyer.co.kr)
+- [🔗 코코마트 웹 사이트](http://happybuyer.co.kr)
 
 <br>
 
@@ -43,4 +43,15 @@
 
 ### 🛠 Tech Stack
 
-`Kotlin`, `DataBinding`, `OkHttp`, `Glide`, `Coroutine`, `` 
+`Kotlin`, `DataBinding`, `OkHttp`, `Glide`, `Coroutine`, `OAuth`, `MaterialDesign`, `RecylerView`, `ViewPager2`
+
+<br>
+
+## 🤚🏻 Part
+
+- **개인 프로젝트 (기획, 개발, 디자인 등)**
+
+<br>
+
+## 🤔 Learned
+
