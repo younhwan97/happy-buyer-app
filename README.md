@@ -2,7 +2,7 @@
 
 ![앱 그래픽 이미지](https://github.com/younhwan97/happy-buyer-app/blob/develop/happy_buyer_app_graphic_img.png?raw=true)
 
-- [🔗 Google Play 스토어(등록중)]()
+- [🔗 Google Play 스토어](https://play.google.com/store/apps/details?id=kr.co.younhwan.happybuyer)
 
 - [🔗 코코마트 웹 사이트](http://happybuyer.co.kr)
 
@@ -51,7 +51,7 @@
 
 ## 🤚🏻 Part
 
-- **개인 프로젝트 (기획, 개발, 디자인 등)**
+- 개인 프로젝트 (기획, 개발, 디자인 등)
 
 <br>
 
