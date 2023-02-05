@@ -1,6 +1,6 @@
 # **코코마트 - HappyBuyer**
 
-![앱 그래픽 이미지](https://github.com/younhwan97/happy-buyer-app/blob/develop/happy_buyer_app_graphic_img.png?raw=true)
+![앱 그래픽 이미지](image/happy_buyer_app_graphic_img.png?raw=true)
 
 - [🔗 Google Play 스토어](https://play.google.com/store/apps/details?id=kr.co.younhwan.happybuyer)
 
@@ -24,14 +24,14 @@
 
 <table>
   <tr>
-    <td><img width="226px" height="452px" src="https://github.com/younhwan97/happy-buyer-app/blob/develop/happy_buyer_app_screen_shot.gif?raw=true"/></td>
-    <td><img width="226px" height="452px" src="https://github.com/younhwan97/happy-buyer-app/blob/develop/happy_buyer_app_screen_shot_1.png?raw=true"/></td>
-    <td><img width="226px" height="452px" src="https://github.com/younhwan97/happy-buyer-app/blob/develop/happy_buyer_app_screen_shot_2.png?raw=true"/></td>
+    <td><img width="226px" height="452px" src="image/happy_buyer_app_screen_shot.gif?raw=true"/></td>
+    <td><img width="226px" height="452px" src="image/happy_buyer_app_screen_shot_1.png?raw=true"/></td>
+    <td><img width="226px" height="452px" src="image/happy_buyer_app_screen_shot_2.png?raw=true"/></td>
   </tr>
   <tr>
-     <td><img width="226px" height="452px" src="https://github.com/younhwan97/happy-buyer-app/blob/develop/happy_buyer_app_screen_shot_3.png?raw=true"/></td>
-    <td><img width="226px" height="452px" src="https://github.com/younhwan97/happy-buyer-app/blob/develop/happy_buyer_app_screen_shot_4.png?raw=true"/></td>
-    <td><img width="226px" height="452px" src="https://github.com/younhwan97/happy-buyer-app/blob/develop/happy_buyer_app_screen_shot_5.png?raw=true"/></td>
+     <td><img width="226px" height="452px" src="image/happy_buyer_app_screen_shot_3.png?raw=true"/></td>
+    <td><img width="226px" height="452px" src="image//happy_buyer_app_screen_shot_4.png?raw=true"/></td>
+    <td><img width="226px" height="452px" src="image/happy_buyer_app_screen_shot_5.png?raw=true"/></td>
   </tr>    
  </table>
 
