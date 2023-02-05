@@ -8,7 +8,7 @@
 
 <br>
 
-## 💁🏻‍♂️ 서비스 소개
+## 📌 HappyBuyer란?
 
 > 동네마트 배달 앱
 
@@ -20,7 +20,7 @@
 
 <br>
 
-## 📷 사진
+## 📷 핵심 기능 사진
 
 <table>
   <tr>
@@ -39,17 +39,14 @@
 
 ## 🚀 기술
 
-### ⚙️ 아키텍쳐
-
-`MVP`
-
-### 🛠 테크
-
-`Kotlin`, `DataBinding`, `OkHttp`, `Glide`, `Coroutine`, `OAuth`, `MaterialDesign`, `RecylerView`, `ViewPager2`
+- **Android:** `Kotlin` / `MVP` / `DataBinding`, `Coroutine`, `OkHttp3`, `Glide`, `ViewPager2`, `RecylerView`, `OAuth`
+- **Front-end:** `HTML/CSS/JS`, `Bootstrap`
+- **Back-end:** `Node.js`
+- **AWS:** `EC2`, `RDS`, `S3`, `IAM`, `Route53`
 
 <br>
 
-## 🤚🏻 역할
+## 🔥 성과
 
 - 개인 프로젝트로 모든 개발을 혼자서 진행
 
